@@ -15,8 +15,12 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'RecycleHub',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
+          appBarTheme: AppBarTheme(color: Color(0xFF62C848)),
+          primarySwatch: Colors.blue,
+          bottomNavigationBarTheme: BottomNavigationBarThemeData(
+              unselectedItemColor: Color(0xFF8D8D8D),
+              backgroundColor: Color(0xFFFFFF),
+              selectedItemColor: Color(0xFF62C848))),
       home: MainScreen(),
     );
   }
@@ -26,9 +30,9 @@ _checkPermissions() async {
   var status = await Permission.location.status;
   var status1 = await Permission.locationAlways.status;
 
-  if ((await Permission.accessMediaLocation.isUndetermined)) {
+  /*if ((await Permission.accessMediaLocation.isUndetermined)) {
     Permission.accessMediaLocation.request();
-  }
+  }*/
 
   if (!status1.isGranted) {
     await Permission.locationAlways.request();
@@ -40,8 +44,8 @@ _checkPermissions() async {
   }
 
 // You can can also directly ask the permission about its status.
-  if (await Permission.location.isRestricted) {
+  /*if (await Permission.location.isRestricted) {
     // The OS restricts access, for example because of parental controls.
     await Permission.location.request();
-  }
+  }*/
 }

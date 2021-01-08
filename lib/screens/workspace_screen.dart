@@ -47,21 +47,36 @@ class _WorkSpaceState extends State<WorkSpaceScreen> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed:(){ },
-        child: Icon(Icons.qr_code),
-      ), 
+        elevation: 0,
+        backgroundColor: Color(0xFF62C848),
+        onPressed: () {},
+        child: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: const Alignment(0.7, -0.5),
+              end: const Alignment(0.6, 0.5),
+              colors: [
+                Color(0xFF53a78c),
+                Color(0xFF62C848),
+              ],
+            ),
+          ),
+          child: Icon(
+            Icons.qr_code,
+          ),
+        ),
+      ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-    
       bottomNavigationBar: StreamBuilder(
         stream: bottomNavBarBloc.itemStream,
         initialData: bottomNavBarBloc.defaultItem,
         builder: (BuildContext context, AsyncSnapshot<NavBarItem> snapshot) {
           return Container(
             child: ClipRRect(
+              borderRadius: BorderRadius.circular(10.0),
               child: BottomNavigationBar(
-           
+                backgroundColor: Color(0xFFFFFF),
                 type: BottomNavigationBarType.fixed,
-               
                 currentIndex: snapshot.data.index,
                 onTap: (int i) {
                   bottomNavBarBloc.pickItem(i);
