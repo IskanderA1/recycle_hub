@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:recycle_hub/screens/main_screen.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:recycle_hub/style/theme.dart';
+import 'package:flutter/services.dart';
 
 void main() {
   runApp(MyApp());
@@ -14,13 +16,7 @@ class MyApp extends StatelessWidget {
     _checkPermissions();
     return MaterialApp(
       title: 'RecycleHub',
-      theme: ThemeData(
-          appBarTheme: AppBarTheme(color: Color(0xFF62C848)),
-          primarySwatch: Colors.blue,
-          bottomNavigationBarTheme: BottomNavigationBarThemeData(
-              unselectedItemColor: Color(0xFF8D8D8D),
-              backgroundColor: Color(0xFFFFFF),
-              selectedItemColor: Color(0xFF62C848))),
+      theme: kAppThemeData(),
       home: MainScreen(),
     );
   }

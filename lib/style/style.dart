@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 class Style {
-
   const Style();
 
   static const Color mainColor = const Color(0xFFFFFFFF);
@@ -11,12 +10,13 @@ class Style {
   static const Color titleColor = const Color(0xFF001629);
   static const Color standardTextColor = const Color(0xFF00d08c);
   static const primaryGradient = const LinearGradient(
-    colors: const [ Color(0xFF111428), Color(0xFF29304a)],
+    colors: const [Color(0xFF111428), Color(0xFF29304a)],
     stops: const [0.0, 1.0],
     begin: Alignment.centerLeft,
     end: Alignment.centerRight,
   );
 }
+
 final kHintTextStyle = TextStyle(
   color: Color(0xFFc5c8cf),
   fontFamily: 'OpenSans',
@@ -51,7 +51,6 @@ final kListItemBoxDecorationStyle = BoxDecoration(
     ),
   ],
 );
-
 
 final kAppBarTextStyle = TextStyle(
   color: Style.titleColor,
@@ -109,4 +108,4 @@ final kBoxImageBackgroundStyle = BoxDecoration(
 
 final kLeftButtonBottomRadius = BorderRadius.only(topLeft: Radius.circular(10));
 final kRightButtonBottomRadius =
-BorderRadius.only(topRight: Radius.circular(10));
+    BorderRadius.only(topRight: Radius.circular(10));

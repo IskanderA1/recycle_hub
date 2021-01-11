@@ -55,13 +55,6 @@ class _MapScreenState extends State<MapScreen> {
             _googleMap(),
           ],
         ),
-        floatingActionButton: null
-        /*FloatingActionButton.extended(
-          onPressed: _goToTheLake,
-          label: Text('To the lake!'),
-          icon: Icon(Icons.directions_boat),
-        )*/
-        ,
         drawer: Drawer(
           child: ListView(
             padding: EdgeInsets.zero,

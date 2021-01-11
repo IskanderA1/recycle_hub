@@ -77,6 +77,10 @@ class _MapFilterDetailScreenState extends State<MapFilterDetailScreen> {
                       ),
                     ),
                   ),
+                  VerticalDivider(
+                    width: 1,
+                    color: Color(0xFFFF62C848),
+                  ),
                   Expanded(
                     child: GestureDetector(
                       onTap: () => markerWorkModeBloc.pickEvent(MODE.FREE),
@@ -94,6 +98,10 @@ class _MapFilterDetailScreenState extends State<MapFilterDetailScreen> {
                       ),
                     ),
                   ),
+                  VerticalDivider(
+                    width: 1,
+                    color: Color(0xFFFF62C848),
+                  ),
                   Expanded(
                     child: GestureDetector(
                       onTap: () => markerWorkModeBloc.pickEvent(MODE.ROUND),
@@ -110,6 +118,10 @@ class _MapFilterDetailScreenState extends State<MapFilterDetailScreen> {
                                     : Color(0xFF62C848))),
                       ),
                     ),
+                  ),
+                  VerticalDivider(
+                    width: 1,
+                    color: Color(0xFFFF62C848),
                   ),
                   Expanded(
                     child: GestureDetector(

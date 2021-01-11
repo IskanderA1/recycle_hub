@@ -30,7 +30,6 @@ class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Style.mainColor,
       body: StreamBuilder(
           stream: authBloc.subject,
           // ignore: missing_return
@@ -42,10 +41,10 @@ class _MainScreenState extends State<MainScreen> {
                   return buildLoadingWidget();
                 }
                 if (snapshot.data.error == "Авторизуйтесь") {
-                  //TODO: Заменить на AuthScreen после того как сделаем 
+                  //TODO: Заменить на AuthScreen после того как сделаем
                   return WorkSpaceScreen();
                 }
-                 //TODO: Заменить на AuthScreen после того как сделаем 
+                //TODO: Заменить на AuthScreen после того как сделаем
                 return WorkSpaceScreen();
               }
 
@@ -53,7 +52,7 @@ class _MainScreenState extends State<MainScreen> {
                 child: WorkSpaceScreen(),
               );
             } else if (snapshot.hasError) {
-               //TODO: Заменить на AuthScreen после того как сделаем 
+              //TODO: Заменить на AuthScreen после того как сделаем
               return WorkSpaceScreen();
             } else {
               return buildLoadingWidget();
