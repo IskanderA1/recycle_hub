@@ -1,9 +1,8 @@
-//import 'dart:html';
-
 import 'package:flutter/material.dart';
+import 'package:recycle_hub/bloc/hide_nav_bar_bloc.dart';
+import 'package:recycle_hub/elements/drawer.dart';
 import 'package:recycle_hub/screens/tabs/map/filter_detail_screen.dart';
 import 'dart:async';
-import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class MapScreen extends StatefulWidget {
@@ -12,6 +11,7 @@ class MapScreen extends StatefulWidget {
 }
 
 class _MapScreenState extends State<MapScreen> {
+  GlobalKey<ScaffoldState> _drawerKey = GlobalKey();
   Completer<GoogleMapController> _controller = Completer();
 
   static final CameraPosition _kGooglePlex = CameraPosition(
@@ -33,49 +33,38 @@ class _MapScreenState extends State<MapScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text("RecycleHub"),
-          centerTitle: true,
-          actions: [
-            IconButton(
-              icon: Icon(Icons.filter_alt),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) {
-                    return MapFilterDetailScreen();
-                  }),
-                );
-              },
-            )
-          ],
+      key: _drawerKey,
+      drawer: customDrawer,
+      appBar: AppBar(
+        leading: IconButton(
+          icon: Icon(Icons.menu),
+          onPressed: () {
+            _drawerKey.currentState.openDrawer();
+            navBarStateBloc.pickState(1); //hide bottom nav bar
+          },
         ),
-        body: Stack(
-          children: [
-            _googleMap(),
-          ],
-        ),
-        drawer: Drawer(
-          child: ListView(
-            padding: EdgeInsets.zero,
-            children: <Widget>[
-              DrawerHeader(
-                child: Text('Drawer Header'),
-                decoration: BoxDecoration(
-                  color: Colors.blue,
-                ),
-              ),
-              ListTile(
-                title: Text('Item 1'),
-                onTap: () {},
-              ),
-              ListTile(
-                title: Text('Item 2'),
-                onTap: () {},
-              ),
-            ],
-          ),
-        ));
+        title: Text("RecycleHub"),
+        centerTitle: true,
+        actions: [
+          IconButton(
+            icon: Icon(Icons.filter_alt),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) {
+                  return MapFilterDetailScreen();
+                }),
+              );
+            },
+          )
+        ],
+      ),
+      body: Stack(
+        children: [
+          _googleMap(),
+        ],
+      ),
+    );
   }
 
   Widget _googleMap() {

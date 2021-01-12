@@ -9,12 +9,12 @@ class Style {
   static const Color background = const Color(0xFFf0f1f6);
   static const Color titleColor = const Color(0xFF001629);
   static const Color standardTextColor = const Color(0xFF00d08c);
-  static const primaryGradient = const LinearGradient(
-    colors: const [Color(0xFF111428), Color(0xFF29304a)],
-    stops: const [0.0, 1.0],
-    begin: Alignment.centerLeft,
-    end: Alignment.centerRight,
-  );
+  // static const primaryGradient = const LinearGradient(
+  //   colors: const [Color(0xFF111428), Color(0xFF29304a)],
+  //   stops: const [0.0, 1.0],
+  //   begin: Alignment.centerLeft,
+  //   end: Alignment.centerRight,
+  // );
 }
 
 final kHintTextStyle = TextStyle(

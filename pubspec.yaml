@@ -21,12 +21,15 @@ dependencies:
   google_maps_flutter: ^1.0.6
   http: ^0.12.2
   permission_handler: ^5.0.1+1
+  flutter_svg:
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
 
 flutter:
+  assets:
+  - svg/
 
   uses-material-design: true
 

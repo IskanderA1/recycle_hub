@@ -15,7 +15,8 @@ ThemeData kAppThemeData() {
           color: Color(0xFFF2F2F2),
           //size: 20
         ),
-        color: Color(0xFF62C848)),
+        color: Color(0xFF62C848),
+        ),
     bottomNavigationBarTheme: BottomNavigationBarThemeData(
       selectedIconTheme: IconThemeData(color: Color(0xFF62C848), size: 28),
       type: BottomNavigationBarType.fixed,
@@ -28,5 +29,7 @@ ThemeData kAppThemeData() {
         color: Color(0xFFF2F2F2), shape: CircularNotchedRectangle()),
     backgroundColor: Color(0xFFF2F2F2),
     canvasColor: Color(0xFFF2F2F2),
+    tabBarTheme: TabBarTheme(labelColor: kColorGreyLight),
+    iconTheme: IconThemeData(color: kColorWhite)
   );
 }

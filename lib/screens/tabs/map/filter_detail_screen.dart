@@ -11,39 +11,47 @@ class MapFilterDetailScreen extends StatefulWidget {
 }
 
 class _MapFilterDetailScreenState extends State<MapFilterDetailScreen> {
-  TextEditingController _searchController = TextEditingController();
+  final TextEditingController _searchController = TextEditingController();
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          title: Text("Фильтр"),
-          centerTitle: true,
-        ),
-        body: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: EdgeInsets.all(8),
-              child: TextField(
-                  controller: _searchController,
-                  decoration: inputDecorWidget()),
-            ),
-            Padding(
-              padding: EdgeInsets.fromLTRB(15, 10, 15, 10),
-              child: _garbCollectTypeWidget(),
-            ),
-            Padding(
-              padding: EdgeInsets.fromLTRB(15, 10, 15, 10),
-              child: _markerModeCheck(),
-            ),
-            Expanded(
-              child: Container(
-                alignment: Alignment.center,
-                child: Text("Список"),
+    return GestureDetector(
+      onTap: () {
+        FocusScopeNode currentFocus = FocusScope.of(context);
+        if (!currentFocus.hasPrimaryFocus) {
+          currentFocus.unfocus();
+        }
+      },
+      child: Scaffold(
+          appBar: AppBar(
+            title: Text("Фильтр"),
+            centerTitle: true,
+          ),
+          body: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: EdgeInsets.all(8),
+                child: TextField(
+                    controller: _searchController,
+                    decoration: inputDecorWidget()),
               ),
-            )
-          ],
-        ));
+              Padding(
+                padding: EdgeInsets.fromLTRB(15, 10, 15, 10),
+                child: _garbCollectTypeWidget(),
+              ),
+              Padding(
+                padding: EdgeInsets.fromLTRB(15, 10, 15, 10),
+                child: _markerModeCheck(),
+              ),
+              Expanded(
+                child: Container(
+                  alignment: Alignment.center,
+                  child: Text("Список"),
+                ),
+              )
+            ],
+          )),
+    );
   }
 
   _markerModeCheck() {
