@@ -12,19 +12,6 @@ class MapScreen extends StatefulWidget {
 }
 
 class _MapScreenState extends State<MapScreen> {
-  Completer<GoogleMapController> _controller = Completer();
-
-  static final CameraPosition _kGooglePlex = CameraPosition(
-    target: LatLng(37.42796133580664, -122.085749655962),
-    zoom: 14.4746,
-  );
-
-  static final CameraPosition _kLake = CameraPosition(
-      bearing: 192.8334901395799,
-      target: LatLng(37.43296265331129, -122.08832357078792),
-      tilt: 59.440717697143555,
-      zoom: 19.151926040649414);
-
   @override
   void initState() {
     super.initState();
@@ -33,53 +20,71 @@ class _MapScreenState extends State<MapScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text("RecycleHub"),
-          centerTitle: true,
-          actions: [
-            IconButton(
-              icon: Icon(Icons.filter_alt),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) {
-                    return MapFilterDetailScreen();
-                  }),
-                );
-              },
-            )
-          ],
-        ),
-        body: Stack(
-          children: [
-            _googleMap(),
-          ],
-        ),
-        drawer: Drawer(
-          child: ListView(
-            padding: EdgeInsets.zero,
-            children: <Widget>[
-              DrawerHeader(
-                child: Text('Drawer Header'),
-                decoration: BoxDecoration(
-                  color: Colors.blue,
-                ),
-              ),
-              ListTile(
-                title: Text('Item 1'),
-                onTap: () {},
-              ),
-              ListTile(
-                title: Text('Item 2'),
-                onTap: () {},
-              ),
-            ],
-          ),
-        ));
+        appBar: mapScreenAppBar(context),
+        body: googleMap(context),
+        drawer: mapScreenDrawer());
   }
+}
 
-  Widget _googleMap() {
-    return Container(
+Drawer mapScreenDrawer() {
+  return Drawer(
+    child: ListView(
+      padding: EdgeInsets.zero,
+      children: <Widget>[
+        DrawerHeader(
+          child: Text('Drawer Header'),
+          decoration: BoxDecoration(
+            color: Colors.blue,
+          ),
+        ),
+        ListTile(
+          title: Text('Item 1'),
+          onTap: () {},
+        ),
+        ListTile(
+          title: Text('Item 2'),
+          onTap: () {},
+        ),
+      ],
+    ),
+  );
+}
+
+AppBar mapScreenAppBar(BuildContext context) {
+  return AppBar(
+    title: Text("RecycleHub"),
+    centerTitle: true,
+    actions: [
+      IconButton(
+        icon: Icon(Icons.filter_alt),
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) {
+              return MapFilterDetailScreen();
+            }),
+          );
+        },
+      )
+    ],
+  );
+}
+
+Widget googleMap(BuildContext context) {
+  Completer<GoogleMapController> _controller = Completer();
+
+  final CameraPosition _kGooglePlex = CameraPosition(
+    target: LatLng(37.42796133580664, -122.085749655962),
+    zoom: 14.4746,
+  );
+
+  final CameraPosition _kLake = CameraPosition(
+      bearing: 192.8334901395799,
+      target: LatLng(37.43296265331129, -122.08832357078792),
+      tilt: 59.440717697143555,
+      zoom: 19.151926040649414);
+  return Stack(children: [
+    Container(
       height: MediaQuery.of(context).size.height,
       width: MediaQuery.of(context).size.width,
       child: GoogleMap(
@@ -92,16 +97,6 @@ class _MapScreenState extends State<MapScreen> {
         myLocationEnabled: true,
         markers: {},
       ),
-    );
-  }
-
-  Future<void> _goToTheLake() async {
-    final GoogleMapController controller = await _controller.future;
-    controller.animateCamera(CameraUpdate.newCameraPosition(_kLake));
-  }
-  /*Marker firstMaeker(){
-    return Marker(
-      markerId: MarkerId("firstMarker",
-      ),)
-  }*/
+    ),
+  ]);
 }

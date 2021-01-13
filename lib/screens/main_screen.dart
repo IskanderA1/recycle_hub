@@ -29,8 +29,8 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: StreamBuilder(
+    return SafeArea(
+      child: StreamBuilder(
           stream: authBloc.subject,
           // ignore: missing_return
           builder: (context, AsyncSnapshot<UserResponse> snapshot) {

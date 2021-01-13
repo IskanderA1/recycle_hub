@@ -10,11 +10,9 @@ class BottomNavBarV2 extends StatefulWidget {
   final IconThemeData selectedIconThemeData;
   final int currentItem;
   final Color backgraundColor;
-  Widget child;
 
   BottomNavBarV2(
-      {this.child,
-      @required this.selectedIconThemeData,
+      {@required this.selectedIconThemeData,
       @required this.unselectedIconThemeData,
       @required this.currentItem,
       @required this.backgraundColor});
@@ -26,114 +24,110 @@ class _BottomNavBarV2State extends State<BottomNavBarV2> {
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
-    return Scaffold(
-      backgroundColor: Colors.white.withAlpha(55),
-      body: Stack(
-        children: [
-          widget.child,
-          Positioned(
-            bottom: 0,
-            left: 0,
-            child: Container(
-              width: size.width,
-              height: 70,
-              child: Stack(
-                overflow: Overflow.visible,
-                children: [
-                  CustomPaint(
-                    size: Size(size.width, 80),
-                    painter: BNBCustomPainter(),
-                  ),
-                  Center(
-                    heightFactor: 0.3,
-                    child: FloatingActionButton(
-                      elevation: 0,
-                      backgroundColor: kColorGreen,
-                      onPressed: () {},
-                      child: Container(
-                        child: Icon(
-                          Icons.qr_code,
-                        ),
+    return Stack(
+      children: [
+        Positioned(
+          bottom: 0,
+          left: 0,
+          child: Container(
+            width: size.width,
+            height: 70,
+            child: Stack(
+              overflow: Overflow.visible,
+              children: [
+                CustomPaint(
+                  size: Size(size.width, 70),
+                  painter: BNBCustomPainter(),
+                ),
+                Center(
+                  heightFactor: 0.3,
+                  child: FloatingActionButton(
+                    elevation: 0,
+                    backgroundColor: kColorGreen,
+                    onPressed: () {},
+                    child: Container(
+                      child: Icon(
+                        Icons.qr_code,
                       ),
                     ),
                   ),
-                  Container(
-                    width: size.width,
-                    height: 70,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.only(top: 15),
-                          child: IconButtonV2(
-                            label: "Карта",
-                            icon: Icon(Icons.map_outlined),
-                            selectedIconThemeData: widget.selectedIconThemeData,
-                            unselectedIconThemeData:
-                                widget.unselectedIconThemeData,
-                            isActive: widget.currentItem == 0 ? true : false,
-                            ontap: () {
-                              bottomNavBarBloc.pickItem(0);
-                            },
-                          ),
+                ),
+                Container(
+                  width: size.width,
+                  height: 70,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.only(top: 15),
+                        child: IconButtonV2(
+                          label: "Карта",
+                          icon: Icon(Icons.map_outlined),
+                          selectedIconThemeData: widget.selectedIconThemeData,
+                          unselectedIconThemeData:
+                              widget.unselectedIconThemeData,
+                          isActive: widget.currentItem == 0 ? true : false,
+                          ontap: () {
+                            bottomNavBarBloc.pickItem(0);
+                          },
                         ),
-                        Padding(
-                          padding: EdgeInsets.only(top: 15),
-                          child: IconButtonV2(
-                            label: "ЭкоГид",
-                            icon: Icon(Icons.school_outlined),
-                            selectedIconThemeData: widget.selectedIconThemeData,
-                            unselectedIconThemeData:
-                                widget.unselectedIconThemeData,
-                            isActive: widget.currentItem == 1 ? true : false,
-                            ontap: () {
-                              bottomNavBarBloc.pickItem(1);
-                            },
-                          ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(top: 15),
+                        child: IconButtonV2(
+                          label: "ЭкоГид",
+                          icon: Icon(Icons.school_outlined),
+                          selectedIconThemeData: widget.selectedIconThemeData,
+                          unselectedIconThemeData:
+                              widget.unselectedIconThemeData,
+                          isActive: widget.currentItem == 1 ? true : false,
+                          ontap: () {
+                            bottomNavBarBloc.pickItem(1);
+                          },
                         ),
-                        Padding(
-                          padding: EdgeInsets.only(top: 15),
-                          child: Container(
-                            width: 20,
-                          ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(top: 15),
+                        child: Container(
+                          width: 20,
                         ),
-                        Padding(
-                          padding: EdgeInsets.only(top: 15),
-                          child: IconButtonV2(
-                            label: "ЭкоКоин",
-                            icon: Icon(Icons.copyright_outlined),
-                            selectedIconThemeData: widget.selectedIconThemeData,
-                            unselectedIconThemeData:
-                                widget.unselectedIconThemeData,
-                            isActive: widget.currentItem == 2 ? true : false,
-                            ontap: () {
-                              bottomNavBarBloc.pickItem(2);
-                            },
-                          ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(top: 15),
+                        child: IconButtonV2(
+                          label: "ЭкоКоин",
+                          icon: Icon(Icons.copyright_outlined),
+                          selectedIconThemeData: widget.selectedIconThemeData,
+                          unselectedIconThemeData:
+                              widget.unselectedIconThemeData,
+                          isActive: widget.currentItem == 2 ? true : false,
+                          ontap: () {
+                            bottomNavBarBloc.pickItem(2);
+                          },
                         ),
-                        Padding(
-                          padding: EdgeInsets.only(top: 15),
-                          child: IconButtonV2(
-                            label: "Профиль",
-                            icon: Icon(Icons.person_outlined),
-                            selectedIconThemeData: widget.selectedIconThemeData,
-                            unselectedIconThemeData:
-                                widget.unselectedIconThemeData,
-                            isActive: widget.currentItem == 3 ? true : false,
-                            ontap: () {
-                              bottomNavBarBloc.pickItem(3);
-                            },
-                          ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(top: 15),
+                        child: IconButtonV2(
+                          label: "Профиль",
+                          icon: Icon(Icons.person_outlined),
+                          selectedIconThemeData: widget.selectedIconThemeData,
+                          unselectedIconThemeData:
+                              widget.unselectedIconThemeData,
+                          isActive: widget.currentItem == 3 ? true : false,
+                          ontap: () {
+                            bottomNavBarBloc.pickItem(3);
+                          },
                         ),
-                      ],
-                    ),
-                  )
-                ],
-              ),
+                      ),
+                    ],
+                  ),
+                )
+              ],
             ),
-          )
-        ],
-      ),
+          ),
+        )
+      ],
     );
   }
 }
