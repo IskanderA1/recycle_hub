@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:recycle_hub/bloc/navigation_bloc.dart';
+import 'package:recycle_hub/repo/eco_quide_repo.dart';
 import 'package:recycle_hub/screens/tabs/eco_coin/eco_coin_screen.dart';
-import 'package:recycle_hub/screens/tabs/eco_gide/eco_gide_screen.dart';
+import 'package:recycle_hub/screens/tabs/eco_gide/eco_guide_tabs/main_eco_guide_screen.dart';
+import 'package:recycle_hub/screens/tabs/eco_gide/main_eco_screen.dart';
 import 'package:recycle_hub/screens/tabs/map/map_screen.dart';
 import 'package:recycle_hub/screens/tabs/profile/profile_screen.dart';
-import 'package:recycle_hub/style/theme.dart';
 import 'package:recycle_hub/widgets/fab_buttom.dart';
 
 class WorkSpaceScreen extends StatefulWidget {
@@ -44,7 +45,7 @@ class _WorkSpaceState extends State<WorkSpaceScreen> {
                 return googleMap(context);
                 break;
               case NavBarItem.ECO_GIDE:
-                return EcoGideScreen();
+                return MainEcoGuideScreen();
                 break;
               case NavBarItem.ECO_COIN:
                 return EcoCoinScreen();

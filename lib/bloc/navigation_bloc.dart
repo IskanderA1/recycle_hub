@@ -23,9 +23,6 @@ class BottomNavBarBloc {
       case 3:
         _navBarController.sink.add(NavBarItem.PROFILE);
         break;
-      // case 3:
-      //   _navBarController.sink.add(NavBarItem.MESSENGER);
-      //   break;
     }
   }
 

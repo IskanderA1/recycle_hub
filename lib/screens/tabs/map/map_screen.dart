@@ -1,9 +1,8 @@
-//import 'dart:html';
-
 import 'package:flutter/material.dart';
+import 'package:recycle_hub/bloc/hide_nav_bar_bloc.dart';
+import 'package:recycle_hub/elements/drawer.dart';
 import 'package:recycle_hub/screens/tabs/map/filter_detail_screen.dart';
 import 'dart:async';
-import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class MapScreen extends StatefulWidget {

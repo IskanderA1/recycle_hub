@@ -1,6 +1,4 @@
-//import 'dart:js';
 import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:recycle_hub/bloc/navigation_bloc.dart';
 import 'package:recycle_hub/style/theme.dart';

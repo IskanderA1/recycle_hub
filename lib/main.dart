@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:recycle_hub/screens/main_screen.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:recycle_hub/style/theme.dart';
-import 'package:flutter/services.dart';
 
 void main() {
   runApp(MyApp());
@@ -15,6 +14,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     _checkPermissions();
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'RecycleHub',
       theme: kAppThemeData(),
       home: MainScreen(),
