@@ -13,3 +13,7 @@ class _EcoCoinScreenState extends State<EcoCoinScreen> {
     );
   }
 }
+
+ecoCoinScreenAppBar() {
+  return AppBar();
+}

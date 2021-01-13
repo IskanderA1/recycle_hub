@@ -1,21 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:recycle_hub/bloc/eco_guide_blocs/eco_menu_bloc.dart';
 import 'package:recycle_hub/elements/drawer.dart';
-import 'package:recycle_hub/screens/tabs/eco_gide/eco_guide_tabs/advice_screen.dart';
-import 'package:recycle_hub/screens/tabs/eco_gide/eco_guide_tabs/container_screen.dart';
-import 'package:recycle_hub/screens/tabs/eco_gide/eco_guide_tabs/do_test_screen.dart';
-import 'package:recycle_hub/screens/tabs/eco_gide/eco_guide_tabs/question_answer.dart';
-import 'package:recycle_hub/screens/tabs/eco_gide/eco_guide_tabs/reference_book_screen.dart';
-import 'package:recycle_hub/screens/tabs/eco_gide/eco_guide_tabs/search_screen.dart';
-import 'package:recycle_hub/style/style.dart';
 
-import '../../../../style/theme.dart';
-import '../../../../style/theme.dart';
-import '../../../../style/theme.dart';
-import '../../../../style/theme.dart';
-import '../../../../style/theme.dart';
-import '../../../../style/theme.dart';
-import '../../../../style/theme.dart';
 import '../../../../style/theme.dart';
 
 List<String> titles = [
@@ -83,9 +69,7 @@ List<Container> _buildButton(BuildContext context) {
       margin: EdgeInsets.only(left: 12, right: 12, top: 8),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
-        border: Border.all(
-          color: kColorGreyLight
-        ),
+        border: Border.all(color: kColorGreyLight),
       ),
       width: MediaQuery.of(context).size.width,
       child: GestureDetector(

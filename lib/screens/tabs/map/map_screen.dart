@@ -1,8 +1,10 @@
+//import 'dart:html';
+
 import 'package:flutter/material.dart';
-import 'package:recycle_hub/bloc/hide_nav_bar_bloc.dart';
 import 'package:recycle_hub/elements/drawer.dart';
 import 'package:recycle_hub/screens/tabs/map/filter_detail_screen.dart';
 import 'dart:async';
+import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class MapScreen extends StatefulWidget {
@@ -21,7 +23,7 @@ class _MapScreenState extends State<MapScreen> {
     return Scaffold(
         appBar: mapScreenAppBar(context),
         body: googleMap(context),
-        drawer: mapScreenDrawer());
+        drawer: customDrawer);
   }
 }
 
@@ -73,15 +75,10 @@ Widget googleMap(BuildContext context) {
   Completer<GoogleMapController> _controller = Completer();
 
   final CameraPosition _kGooglePlex = CameraPosition(
-    target: LatLng(37.42796133580664, -122.085749655962),
-    zoom: 14.4746,
+    target: LatLng(55.7887, 49.1221),
+    zoom: 12.5,
   );
 
-  final CameraPosition _kLake = CameraPosition(
-      bearing: 192.8334901395799,
-      target: LatLng(37.43296265331129, -122.08832357078792),
-      tilt: 59.440717697143555,
-      zoom: 19.151926040649414);
   return Stack(children: [
     Container(
       height: MediaQuery.of(context).size.height,

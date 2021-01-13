@@ -13,3 +13,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 }
+
+profileScreenAppBar() {
+  return AppBar();
+}
