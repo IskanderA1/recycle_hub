@@ -1,5 +1,6 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:recycle_hub/bloc/markers_collection_bloc.dart';
 import 'package:recycle_hub/bloc/navigation_bloc.dart';
 import 'package:recycle_hub/style/theme.dart';
 
@@ -42,7 +43,9 @@ class _BottomNavBarV2State extends State<BottomNavBarV2> {
                   child: FloatingActionButton(
                     elevation: 0,
                     backgroundColor: kColorGreen,
-                    onPressed: () {},
+                    onPressed: () {
+                      markersCollectionBloc.loadMarkers();
+                    },
                     child: Container(
                       child: Icon(
                         Icons.qr_code,

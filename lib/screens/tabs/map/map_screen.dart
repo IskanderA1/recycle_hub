@@ -79,20 +79,18 @@ Widget googleMap(BuildContext context) {
     zoom: 12.5,
   );
 
-  return Stack(children: [
-    Container(
-      height: MediaQuery.of(context).size.height,
-      width: MediaQuery.of(context).size.width,
-      child: GoogleMap(
-        mapType: MapType.normal,
-        initialCameraPosition: _kGooglePlex,
-        onMapCreated: (GoogleMapController controller) {
-          _controller.complete(controller);
-        },
-        myLocationButtonEnabled: true,
-        myLocationEnabled: true,
-        markers: {},
-      ),
+  return Container(
+    height: MediaQuery.of(context).size.height,
+    width: MediaQuery.of(context).size.width,
+    child: GoogleMap(
+      mapType: MapType.normal,
+      initialCameraPosition: _kGooglePlex,
+      onMapCreated: (GoogleMapController controller) {
+        _controller.complete(controller);
+      },
+      myLocationButtonEnabled: true,
+      myLocationEnabled: true,
+      markers: {},
     ),
-  ]);
+  );
 }
