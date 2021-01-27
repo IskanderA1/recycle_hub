@@ -6,15 +6,15 @@ import 'package:rxdart/rxdart.dart';
 
 class MarkersCollectionBloc {
   GoogleMapRepo _repo = GoogleMapRepo();
-  BehaviorSubject<MarkersCollection> _behaviorSubject =
-      BehaviorSubject<MarkersCollection>();
+  BehaviorSubject<MarkersCollectionResponse> _behaviorSubject =
+      BehaviorSubject<MarkersCollectionResponse>();
 
   MarkerCollectionResponseLoading defaultItem =
       MarkerCollectionResponseLoading();
 
-  Stream<MarkersCollection> get stream => _behaviorSubject.stream;
+  Stream<MarkersCollectionResponse> get stream => _behaviorSubject.stream;
 
-  pickEvent(MarkersCollection type) {
+  pickEvent(MarkersCollectionResponse type) {
     _behaviorSubject.sink.add(type);
   }
 

@@ -6,7 +6,7 @@ import 'package:recycle_hub/model/map_models.dart/accept_types.dart';
 import 'package:recycle_hub/model/map_models.dart/coord.dart';
 import 'package:recycle_hub/model/map_models.dart/work_time.dart';
 
-class Marker {
+class CustMarker {
   String id;
   List<AcceptType> acceptTypes;
   String address;
@@ -16,7 +16,7 @@ class Marker {
   List<String> images;
   String name;
   WorkingTime workTime;
-  Marker({
+  CustMarker({
     this.id,
     this.acceptTypes,
     this.address,
@@ -28,7 +28,7 @@ class Marker {
     this.workTime,
   });
 
-  Marker copyWith({
+  CustMarker copyWith({
     String id,
     List<AcceptType> acceptTypes,
     String address,
@@ -39,7 +39,7 @@ class Marker {
     String name,
     WorkingTime workTime,
   }) {
-    return Marker(
+    return CustMarker(
       id: id ?? this.id,
       acceptTypes: acceptTypes ?? this.acceptTypes,
       address: address ?? this.address,
@@ -66,26 +66,23 @@ class Marker {
     };
   }
 
-  factory Marker.fromMap(Map<String, dynamic> map) {
-    if (map == null) return null;
-
-    return Marker(
-      id: map['_id'],
-      acceptTypes: List<AcceptType>.from(
-          map['accept_types']?.map((x) => AcceptType.fromMap(x))),
-      address: map['address'],
-      contacts: map['contacts'],
-      coords: Coords.fromMap(map['coords']),
-      description: map['description'],
-      images: List<String>.from(map['images']),
-      name: map['name'],
-      workTime: WorkingTime.fromMap(map['work_time']),
-    );
+  CustMarker.fromMap(Map<String, dynamic> map) {
+    id = map['_id'];
+    acceptTypes = List<AcceptType>.from(
+        map['accept_types']?.map((x) => AcceptType.fromMap(x)));
+    address = map['address'];
+    contacts = map['contacts'];
+    coords = Coords.fromMap(map['coords']);
+    description = map['description'];
+    images = List<String>.from(map['images']);
+    name = map['name'];
+    workTime = WorkingTime.fromMap(map['work_time']);
   }
 
   String toJson() => json.encode(toMap());
 
-  factory Marker.fromJson(String source) => Marker.fromMap(json.decode(source));
+  factory CustMarker.fromJson(String source) =>
+      CustMarker.fromMap(json.decode(source));
 
   @override
   String toString() {
@@ -96,7 +93,7 @@ class Marker {
   bool operator ==(Object o) {
     if (identical(this, o)) return true;
 
-    return o is Marker &&
+    return o is CustMarker &&
         o.id == id &&
         listEquals(o.acceptTypes, acceptTypes) &&
         o.address == address &&

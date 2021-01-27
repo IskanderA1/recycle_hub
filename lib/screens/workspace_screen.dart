@@ -36,7 +36,7 @@ class _WorkSpaceState extends State<WorkSpaceScreen> {
         builder: (context, AsyncSnapshot<NavBarItem> snapshot) {
           switch (snapshot.data) {
             case NavBarItem.MAP:
-              return googleMap(context);
+              return MapScreen();
               break;
             case NavBarItem.ECO_GIDE:
               return EcoMainScreen();

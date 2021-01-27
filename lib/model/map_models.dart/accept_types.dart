@@ -47,10 +47,10 @@ class AcceptType {
 
     return AcceptType(
       id: map['_id'],
-      badWords: List<String>.from(map['badWords']),
-      keyWords: List<String>.from(map['keyWords']),
+      badWords: List<String>.from(map['bad_words']),
+      keyWords: List<String>.from(map['key_words']),
       name: map['name'],
-      varName: map['varName'],
+      varName: map['var_name'],
     );
   }
 

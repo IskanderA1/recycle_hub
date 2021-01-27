@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:recycle_hub/model/working_days_mode.dart';
+import 'package:recycle_hub/model/working_days_model.dart';
 
 class MarkerModel {
   String name;

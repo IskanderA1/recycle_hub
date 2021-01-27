@@ -5,13 +5,13 @@ import 'package:flutter/foundation.dart';
 import 'package:recycle_hub/model/map_models.dart/marker.dart';
 
 class MarkersCollection {
-  List<Marker> markers;
+  final List<CustMarker> markers;
   MarkersCollection({
     this.markers,
   });
 
   MarkersCollection copyWith({
-    List<Marker> markers,
+    List<CustMarker> markers,
   }) {
     return MarkersCollection(
       markers: markers ?? this.markers,
@@ -24,19 +24,11 @@ class MarkersCollection {
     };
   }
 
-  factory MarkersCollection.fromMap(Map<String, dynamic> map) {
-    if (map == null) return null;
-
-    return MarkersCollection(
-      markers: List<Marker>.from(map['markers']?.map((x) => Marker.fromMap(x))),
-    );
-  }
+  MarkersCollection.fromMap(List map)
+      : this.markers =
+            List<CustMarker>.from(map?.map((x) => CustMarker.fromMap(x)));
 
   String toJson() => json.encode(toMap());
-
-  MarkersCollection.fromJson(String source) {
-    MarkersCollection.fromMap(json.decode(source));
-  }
 
   @override
   String toString() => 'MarkersCollection(markers: $markers)';

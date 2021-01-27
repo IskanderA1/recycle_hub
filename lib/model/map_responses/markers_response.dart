@@ -1,14 +1,22 @@
 import 'package:recycle_hub/model/map_models.dart/markers_collection.dart';
 
-class MarkersCollectionResponseOk extends MarkersCollection {
-  MarkersCollectionResponseOk(var data) : super.fromJson(data);
+class MarkersCollectionResponse {
+  final MarkersCollection markers;
+  MarkersCollectionResponse(var data)
+      : this.markers = MarkersCollection.fromMap(data);
+
+  MarkersCollectionResponse.withError() : markers = null;
 }
 
-class MarkerCollectionResponseWithError extends MarkersCollection {
+class MarkersCollectionResponseOk extends MarkersCollectionResponse {
+  MarkersCollectionResponseOk(var data) : super(data);
+}
+
+class MarkerCollectionResponseWithError extends MarkersCollectionResponse {
   final String err;
-  MarkerCollectionResponseWithError({this.err});
+  MarkerCollectionResponseWithError({this.err}) : super.withError();
 }
 
-class MarkerCollectionResponseLoading extends MarkersCollection {
-  MarkerCollectionResponseLoading();
+class MarkerCollectionResponseLoading extends MarkersCollectionResponse {
+  MarkerCollectionResponseLoading() : super.withError();
 }

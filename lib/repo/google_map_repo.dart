@@ -9,7 +9,7 @@ class GoogleMapRepo {
   static String mainUrl = "http://eco.loliallen.com";
   GoogleMapRepo();
 
-  Future<MarkersCollection> loadMarkersFrom4Coords(
+  Future<MarkersCollectionResponse> loadMarkersFrom4Coords(
     Coords x1,
     Coords x2,
     Coords x3,
@@ -17,8 +17,10 @@ class GoogleMapRepo {
   ) async {
     try {
       print("Запрос отправлен");
-      var response = await http.get("$mainUrl/api/rec_points",
-          headers: {'coords': "[[33, 33],[60, 33],[60, 60],[33, 60]]"});
+      var response = await http.get("$mainUrl/api/rec_points", headers: {
+        'coords':
+            "[[${x1.lat}, ${x1.lng}],[${x2.lat}, ${x2.lng}],[${x3.lat}, ${x3.lng}],[${x4.lat}, ${x4.lng}]]"
+      });
       var data = jsonDecode(response.body);
       print(data);
       if (data.isNotEmpty) {
