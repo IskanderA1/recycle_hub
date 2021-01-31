@@ -1,31 +1,74 @@
 import 'package:flutter/material.dart';
 import 'package:recycle_hub/bloc/map_screen_blocs/marker_info_bloc.dart';
 import 'package:recycle_hub/bloc/map_screen_blocs/markers_collection_bloc.dart';
+import 'package:recycle_hub/bloc/navigation_bloc.dart';
 import 'package:recycle_hub/elements/drawer.dart';
 import 'package:recycle_hub/model/map_models.dart/marker.dart';
 import 'package:recycle_hub/model/map_responses/markers_response.dart';
+import 'package:recycle_hub/screens/tabs/bottom_nav_bar.dart';
 import 'package:recycle_hub/screens/tabs/map/filter_detail_screen.dart';
 import 'dart:async';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:bottom_sheet/bottom_sheet.dart';
+import 'package:recycle_hub/style/theme.dart';
 
 class MapScreen extends StatefulWidget {
+  /*final Widget child;
+  MapScreen({this.child});*/
   @override
   _MapScreenState createState() => _MapScreenState();
 }
 
-class _MapScreenState extends State<MapScreen> {
+class _MapScreenState extends State<MapScreen>
+    with AutomaticKeepAliveClientMixin {
+  bool keepAlive = true;
+
+  @override
+  bool get wantKeepAlive => true;
+
   @override
   void initState() {
+    keepAlive = true;
     super.initState();
   }
 
+  /*Future doAsyncStuff() async {
+    keepAlive = true;
+    updateKeepAlive();
+
+    ///Поддержание состояния виджета
+
+    keepAlive = false;
+    updateKeepAlive();
+  }*/
+
+  Widget _map = googleMap();
+
   @override
   Widget build(BuildContext context) {
+    //if (_map == null) {
+    //_map = googleMap();
+    //}
+    super.build(context);
     return Scaffold(
-        appBar: mapScreenAppBar(context),
-        body: googleMap(context),
-        drawer: customDrawer);
+      appBar: mapScreenAppBar(context),
+      body: _map,
+      drawer: customDrawer,
+      /*floatingActionButton: FloatingActionButton(
+        elevation: 0,
+        backgroundColor: kColorGreen,
+        onPressed: () {
+          markersCollectionBloc.loadMarkers();
+        },
+        child: Container(
+          child: Icon(
+            Icons.qr_code,
+          ),
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,*/
+      //bottomNavigationBar: BottomNavBarV2(),
+    );
   }
 }
 
@@ -73,7 +116,7 @@ AppBar mapScreenAppBar(BuildContext context) {
   );
 }
 
-Widget googleMap(BuildContext context) {
+Widget googleMap(/*BuildContext context*/) {
   Completer<GoogleMapController> _controller = Completer();
 
   final CameraPosition _kGooglePlex = CameraPosition(
@@ -82,8 +125,8 @@ Widget googleMap(BuildContext context) {
   );
 
   return Container(
-    height: MediaQuery.of(context).size.height,
-    width: MediaQuery.of(context).size.width,
+    //height: MediaQuery.of(context).size.height,
+    //width: MediaQuery.of(context).size.width,
     child: StreamBuilder<MarkersCollectionResponse>(
         stream: markersCollectionBloc.stream,
         initialData: markersCollectionBloc.defaultItem,
@@ -239,6 +282,7 @@ class _BuildBodyState extends State<BuildBody> {
   }
 }
 
+/*Отрисовка headerа bottomsheet'а*/
 Widget _buildHeader(BuildContext context, double bottomSheetOffset) {
   return AnimatedContainer(
       duration: const Duration(milliseconds: 300),
@@ -259,128 +303,3 @@ Widget _buildHeader(BuildContext context, double bottomSheetOffset) {
         ),
       ]));
 }
-
-/*Widget _buildFlexibleBottomSheet(
-    BuildContext context, double bottomSheetOffset) {
-  return SafeArea(
-    child: Material(
-      borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(35), topRight: Radius.circular(35)),
-      child: Container(
-        child: Column(
-          children: [
-            Icon(
-              Icons.drag_handle,
-              color: Colors.black26,
-            ),
-            DefaultTabController(
-              initialIndex: 0,
-              length: 2,
-              child: Scaffold(
-                body: Column(children: [
-                  Container(
-                    child: PreferredSize(
-                      preferredSize:
-                          Size(MediaQuery.of(context).size.width, 200),
-                      child: TabBar(
-                        tabs: [
-                          Tab(
-                            child: Text("ИНФО"),
-                          ),
-                          Tab(
-                            child: Text("ОТЗЫВЫ"),
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
-                  Expanded(
-                    child: TabBarView(children: [
-                      Text("Some text"),
-                      Text("Some text"),
-                    ]),
-                  )
-                ]),
-              ),
-            ),
-          ],
-        ),
-      ),
-    ),
-  );
-}*/
-
-/*DefaultTabController tabController(ScrollController scrollController) {
-  return DefaultTabController(
-    length: 2,
-    child: Scaffold(
-      appBar: AppBar(
-        title: Icon(Icons.drag_handle),
-        centerTitle: true,
-        bottom: TabBar(
-          tabs: [
-            Tab(
-              child: Text("ИНФО"),
-            ),
-            Tab(
-              child: Text("ОТЗЫВЫ"),
-            )
-          ],
-        ),
-      ),
-      body: TabBarView(children: [
-        SingleChildScrollView(
-            controller: scrollController,
-            child: Center(
-                child: Column(
-              children: [
-                Text("Some text"),
-                Text("Some text"),
-                Text("Some text"),
-                Text("Some text"),
-                Text("Some text"),
-                Text("Some text"),
-                Text("Some text"),
-                Text("Some text"),
-                Text("Some text"),
-                Text("Some text"),
-                Text("Some text"),
-                Text("Some text"),
-                Text("Some text"),
-                Text("Some text"),
-                Text("Some text"),
-                Text("Some text"),
-                Text("Some text"),
-                Text("Some text"),
-                Text("Some text"),
-                Text("Some text"),
-                Text("Some text"),
-                Text("Some text"),
-                Text("Some text"),
-                Text("Some text"),
-                Text("Some text"),
-                Text("Some text"),
-                Text("Some text"),
-                Text("Some text"),
-                Text("Some text"),
-                Text("Some text"),
-                Text("Some text"),
-                Text("Some text"),
-                Text("Some text"),
-                Text("Some text"),
-                Text("Some text"),
-              ],
-            ))),
-        Column(
-          children: [
-            Text("Some text"),
-            Text("Some text"),
-            Text("Some text"),
-            Text("Some text"),
-            Text("Some text"),
-          ],
-        )
-      ]),
-    ),
-  );
-}*/

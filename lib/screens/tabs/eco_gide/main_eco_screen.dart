@@ -9,6 +9,8 @@ import 'package:recycle_hub/screens/tabs/eco_gide/eco_guide_tabs/reference_book_
 import 'package:recycle_hub/screens/tabs/eco_gide/eco_guide_tabs/search_screen.dart';
 
 class EcoMainScreen extends StatefulWidget {
+  /*final Widget bottomNavBar;
+  EcoMainScreen({this.bottomNavBar});*/
   @override
   _EcoMainScreenState createState() => _EcoMainScreenState();
 }

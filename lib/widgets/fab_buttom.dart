@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:recycle_hub/bloc/map_screen_blocs/markers_collection_bloc.dart';
 import 'package:recycle_hub/bloc/navigation_bloc.dart';
 import 'package:recycle_hub/style/theme.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 
 class BottomNavBarV2 extends StatefulWidget {
   final IconThemeData unselectedIconThemeData;
@@ -55,71 +56,53 @@ class _BottomNavBarV2State extends State<BottomNavBarV2> {
                 ),
                 Container(
                   width: size.width,
-                  height: 70,
+                  //height: 60,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Padding(
-                        padding: EdgeInsets.only(top: 15),
-                        child: IconButtonV2(
-                          label: "Карта",
-                          icon: Icon(Icons.map_outlined),
-                          selectedIconThemeData: widget.selectedIconThemeData,
-                          unselectedIconThemeData:
-                              widget.unselectedIconThemeData,
-                          isActive: widget.currentItem == 0 ? true : false,
-                          ontap: () {
-                            bottomNavBarBloc.pickItem(0);
-                          },
-                        ),
+                      IconButtonV2(
+                        label: "Карта",
+                        icon: Icon(Icons.map_outlined),
+                        selectedIconThemeData: widget.selectedIconThemeData,
+                        unselectedIconThemeData: widget.unselectedIconThemeData,
+                        isActive: widget.currentItem == 0 ? true : false,
+                        ontap: () {
+                          bottomNavBarBloc.pickItem(0);
+                        },
                       ),
-                      Padding(
-                        padding: EdgeInsets.only(top: 15),
-                        child: IconButtonV2(
-                          label: "ЭкоГид",
-                          icon: Icon(Icons.school_outlined),
-                          selectedIconThemeData: widget.selectedIconThemeData,
-                          unselectedIconThemeData:
-                              widget.unselectedIconThemeData,
-                          isActive: widget.currentItem == 1 ? true : false,
-                          ontap: () {
-                            bottomNavBarBloc.pickItem(1);
-                          },
-                        ),
+                      IconButtonV2(
+                        label: "ЭкоГид",
+                        icon: Icon(Icons.school_outlined),
+                        selectedIconThemeData: widget.selectedIconThemeData,
+                        unselectedIconThemeData: widget.unselectedIconThemeData,
+                        isActive: widget.currentItem == 1 ? true : false,
+                        ontap: () {
+                          bottomNavBarBloc.pickItem(1);
+                        },
                       ),
-                      Padding(
-                        padding: EdgeInsets.only(top: 15),
-                        child: Container(
-                          width: 20,
-                        ),
+                      SizedBox(
+                        width: (MediaQuery.of(context).size.width / 5),
                       ),
-                      Padding(
-                        padding: EdgeInsets.only(top: 15),
-                        child: IconButtonV2(
-                          label: "ЭкоКоин",
-                          icon: Icon(Icons.copyright_outlined),
-                          selectedIconThemeData: widget.selectedIconThemeData,
-                          unselectedIconThemeData:
-                              widget.unselectedIconThemeData,
-                          isActive: widget.currentItem == 2 ? true : false,
-                          ontap: () {
-                            bottomNavBarBloc.pickItem(2);
-                          },
-                        ),
+                      IconButtonV2(
+                        label: "ЭкоКоин",
+                        icon: Icon(Icons.copyright_outlined),
+                        selectedIconThemeData: widget.selectedIconThemeData,
+                        unselectedIconThemeData: widget.unselectedIconThemeData,
+                        isActive: widget.currentItem == 2 ? true : false,
+                        ontap: () {
+                          bottomNavBarBloc.pickItem(2);
+                        },
                       ),
-                      Padding(
-                        padding: EdgeInsets.only(top: 15),
-                        child: IconButtonV2(
-                          label: "Профиль",
-                          icon: Icon(Icons.person_outlined),
-                          selectedIconThemeData: widget.selectedIconThemeData,
-                          unselectedIconThemeData:
-                              widget.unselectedIconThemeData,
-                          isActive: widget.currentItem == 3 ? true : false,
-                          ontap: () {
-                            bottomNavBarBloc.pickItem(3);
-                          },
-                        ),
+                      IconButtonV2(
+                        label: "Профиль",
+                        icon: Icon(Icons.person_outlined),
+                        selectedIconThemeData: widget.selectedIconThemeData,
+                        unselectedIconThemeData: widget.unselectedIconThemeData,
+                        isActive: widget.currentItem == 3 ? true : false,
+                        ontap: () {
+                          bottomNavBarBloc.pickItem(3);
+                        },
                       ),
                     ],
                   ),
@@ -182,25 +165,36 @@ class IconButtonV2 extends StatefulWidget {
 class _IconButtonV2State extends State<IconButtonV2> {
   @override
   Widget build(BuildContext context) {
+    final double size = (MediaQuery.of(context).size.width / 5);
     return GestureDetector(
       onTap: widget.ontap,
-      child: Container(
-        width: 70,
-        height: 60,
-        child: Column(
-          children: [
-            IconTheme(
-              child: widget.icon,
-              data: widget.isActive
-                  ? widget.selectedIconThemeData
-                  : widget.unselectedIconThemeData,
+      child: Material(
+        color: Color(0x00FFFFFF),
+        child: LayoutBuilder(builder: (context, constraint) {
+          return Center(
+            child: ConstrainedBox(
+              constraints: BoxConstraints(maxWidth: size, minWidth: size),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  IconTheme(
+                      child: widget.icon,
+                      data: widget.isActive
+                          ? widget
+                              .selectedIconThemeData /*.copyWith(size: size)*/
+                          : widget.unselectedIconThemeData
+                      //.copyWith(size: size + 3),
+                      ),
+                  AutoSizeText(widget.label,
+                      style: TextStyle(
+                          fontSize: 12,
+                          color:
+                              widget.isActive ? kColorGreen : kColorGreyLight))
+                ],
+              ),
             ),
-            Text(widget.label,
-                style: TextStyle(
-                    fontSize: 12,
-                    color: widget.isActive ? kColorGreen : kColorGreyLight))
-          ],
-        ),
+          );
+        }),
       ),
     );
   }

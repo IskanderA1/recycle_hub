@@ -22,6 +22,7 @@ dependencies:
   http: ^0.12.2
   permission_handler: ^5.0.1+1
   bottom_sheet: ^0.0.1-dev.7
+  auto_size_text: ^2.1.0
   flutter_svg:
 
 dev_dependencies:

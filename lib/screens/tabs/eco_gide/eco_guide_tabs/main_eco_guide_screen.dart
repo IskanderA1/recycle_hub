@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:recycle_hub/bloc/eco_guide_blocs/eco_menu_bloc.dart';
 import 'package:recycle_hub/elements/drawer.dart';
+import 'package:recycle_hub/screens/tabs/bottom_nav_bar.dart';
 
 import '../../../../style/theme.dart';
 
@@ -23,6 +24,8 @@ List<Icon> icons = [
 ];
 
 class MainEcoGuideScreen extends StatefulWidget {
+  /*final Widget bottomNavBar;
+  MainEcoGuideScreen({this.bottomNavBar});*/
   @override
   _MainEcoGuideScreenState createState() => _MainEcoGuideScreenState();
 }

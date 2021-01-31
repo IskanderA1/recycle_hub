@@ -1,6 +1,10 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:recycle_hub/bloc/garb_collection_type_bloc.dart';
 import 'package:recycle_hub/bloc/marker_work_mode_bloc.dart';
+import 'package:recycle_hub/screens/tabs/eco_gide/eco_guide_tabs/main_eco_guide_screen.dart';
+import 'package:recycle_hub/style/theme.dart';
 
 GarbageCollectionTypeBloc garbageCollBloc = GarbageCollectionTypeBloc();
 MarkerWorkModeBloc markerWorkModeBloc = MarkerWorkModeBloc();
@@ -12,8 +16,10 @@ class MapFilterDetailScreen extends StatefulWidget {
 
 class _MapFilterDetailScreenState extends State<MapFilterDetailScreen> {
   final TextEditingController _searchController = TextEditingController();
+  Size size;
   @override
   Widget build(BuildContext context) {
+    size = MediaQuery.of(context).size;
     return GestureDetector(
       onTap: () {
         FocusScopeNode currentFocus = FocusScope.of(context);
@@ -22,34 +28,52 @@ class _MapFilterDetailScreenState extends State<MapFilterDetailScreen> {
         }
       },
       child: Scaffold(
+          backgroundColor: Color(0xFFFFFFFF),
           appBar: AppBar(
             title: Text("Фильтр"),
             centerTitle: true,
           ),
-          body: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: EdgeInsets.all(8),
-                child: TextField(
-                    controller: _searchController,
-                    decoration: inputDecorWidget()),
-              ),
-              Padding(
-                padding: EdgeInsets.fromLTRB(15, 10, 15, 10),
-                child: _garbCollectTypeWidget(),
-              ),
-              Padding(
-                padding: EdgeInsets.fromLTRB(15, 10, 15, 10),
-                child: _markerModeCheck(),
-              ),
-              Expanded(
-                child: Container(
-                  alignment: Alignment.center,
-                  child: Text("Список"),
+          body: Container(
+            color: Color(0xFFFFFFFF),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: EdgeInsets.all(8),
+                  child: TextField(
+                      controller: _searchController,
+                      decoration: inputDecorWidget()),
                 ),
-              )
-            ],
+                Padding(
+                  padding: EdgeInsets.fromLTRB(15, 10, 15, 10),
+                  child: _garbCollectTypeWidget(),
+                ),
+                Padding(
+                  padding: EdgeInsets.fromLTRB(15, 10, 15, 10),
+                  child: _markerModeCheck(),
+                ),
+                Expanded(
+                    child: GridView.count(
+                  childAspectRatio: 5 / 4,
+                  crossAxisCount: 2,
+                  padding: EdgeInsets.all(15),
+                  children: [
+                    FilterCardWidget(size: size),
+                    FilterCardWidget(size: size),
+                    FilterCardWidget(size: size),
+                    FilterCardWidget(size: size),
+                    FilterCardWidget(size: size),
+                    FilterCardWidget(size: size),
+                    FilterCardWidget(size: size),
+                    FilterCardWidget(size: size),
+                    FilterCardWidget(size: size),
+                    FilterCardWidget(size: size),
+                    FilterCardWidget(size: size),
+                    FilterCardWidget(size: size),
+                  ],
+                ))
+              ],
+            ),
           )),
     );
   }
@@ -76,7 +100,7 @@ class _MapFilterDetailScreenState extends State<MapFilterDetailScreen> {
                             : Color(0xFFFFFFFF),
                         padding: EdgeInsets.zero,
                         alignment: Alignment.center,
-                        child: Text("Платный приём",
+                        child: AutoSizeText("Платный приём",
                             softWrap: true,
                             style: TextStyle(
                                 color: snapshot.data == MODE.PAID
@@ -97,7 +121,7 @@ class _MapFilterDetailScreenState extends State<MapFilterDetailScreen> {
                             ? Color(0xFF62C848)
                             : Color(0xFFFFFFFF),
                         alignment: Alignment.center,
-                        child: Text("Бесплатный приём",
+                        child: AutoSizeText("Бесплатный приём",
                             softWrap: true,
                             style: TextStyle(
                                 color: snapshot.data == MODE.FREE
@@ -118,7 +142,7 @@ class _MapFilterDetailScreenState extends State<MapFilterDetailScreen> {
                             ? Color(0xFF62C848)
                             : Color(0xFFFFFFFF),
                         alignment: Alignment.center,
-                        child: Text("Круглосуточно",
+                        child: AutoSizeText("Круглосуточно",
                             softWrap: true,
                             style: TextStyle(
                                 color: snapshot.data == MODE.ROUND
@@ -139,7 +163,7 @@ class _MapFilterDetailScreenState extends State<MapFilterDetailScreen> {
                             ? Color(0xFF62C848)
                             : Color(0xFFFFFFFF),
                         alignment: Alignment.center,
-                        child: Text("Партнёры",
+                        child: AutoSizeText("Партнёры",
                             softWrap: true,
                             style: TextStyle(
                                 color: snapshot.data == MODE.PARTNERS
@@ -171,6 +195,53 @@ class _MapFilterDetailScreenState extends State<MapFilterDetailScreen> {
             borderSide: BorderSide(color: Color(0xFF62C848), width: 2.5)),
         border: OutlineInputBorder(
             borderSide: BorderSide(color: Color(0xFF62C848), width: 2.5)));
+  }
+}
+
+class FilterCardWidget extends StatelessWidget {
+  const FilterCardWidget({
+    Key key,
+    @required this.size,
+  }) : super(key: key);
+
+  final Size size;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        margin: EdgeInsets.all(10),
+        decoration: BoxDecoration(
+            color: Color(0xFFF2F2F2), borderRadius: BorderRadius.circular(15)),
+        child: GestureDetector(
+          child: Stack(children: [
+            Align(
+              alignment: Alignment.topRight,
+              child: Padding(
+                padding: const EdgeInsets.all(15),
+                child: Icon(
+                  Icons.info,
+                  color: Colors.green,
+                ),
+              ),
+            ),
+            Center(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(
+                    Icons.ac_unit_outlined,
+                    size: size.width / 6,
+                    color: Colors.green,
+                  ),
+                  AutoSizeText(
+                    "Макулатура",
+                    style: kCardSelectedTextStyle,
+                  )
+                ],
+              ),
+            ),
+          ]),
+        ));
   }
 }
 
