@@ -43,6 +43,31 @@ class _MapScreenState extends State<MapScreen>
   }*/
 
   Widget _map = googleMap();
+  AppBar mapScreenAppBar() {
+    return AppBar(
+      title: Text("RecycleHub"),
+      centerTitle: true,
+      leading: IconButton(
+        icon: Icon(Icons.menu),
+        onPressed: () {
+          Scaffold.of(context).openDrawer();
+        },
+      ),
+      actions: [
+        IconButton(
+          icon: Icon(Icons.filter_alt),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) {
+                return MapFilterDetailScreen();
+              }),
+            );
+          },
+        )
+      ],
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -51,9 +76,9 @@ class _MapScreenState extends State<MapScreen>
     //}
     super.build(context);
     return Scaffold(
-      appBar: mapScreenAppBar(context),
+      appBar: mapScreenAppBar(),
       body: _map,
-      drawer: customDrawer,
+
       /*floatingActionButton: FloatingActionButton(
         elevation: 0,
         backgroundColor: kColorGreen,
@@ -72,49 +97,9 @@ class _MapScreenState extends State<MapScreen>
   }
 }
 
-Drawer mapScreenDrawer() {
-  return Drawer(
-    child: ListView(
-      padding: EdgeInsets.zero,
-      children: <Widget>[
-        DrawerHeader(
-          child: Text('Drawer Header'),
-          decoration: BoxDecoration(
-            color: Colors.blue,
-          ),
-        ),
-        ListTile(
-          title: Text('Item 1'),
-          onTap: () {},
-        ),
-        ListTile(
-          title: Text('Item 2'),
-          onTap: () {},
-        ),
-      ],
-    ),
-  );
-}
 
-AppBar mapScreenAppBar(BuildContext context) {
-  return AppBar(
-    title: Text("RecycleHub"),
-    centerTitle: true,
-    actions: [
-      IconButton(
-        icon: Icon(Icons.filter_alt),
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) {
-              return MapFilterDetailScreen();
-            }),
-          );
-        },
-      )
-    ],
-  );
-}
+
+
 
 Widget googleMap(/*BuildContext context*/) {
   Completer<GoogleMapController> _controller = Completer();

@@ -36,6 +36,7 @@ class _WorkSpaceState extends State<WorkSpaceScreen> {
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
     return Scaffold(
+      drawer: customDrawer,
       body: Stack(children: [
         CupertinoTabScaffold(
           tabBar: CupertinoTabBar(
