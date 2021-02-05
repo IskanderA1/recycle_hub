@@ -5,7 +5,7 @@ const kColorRed = Color(0xFFF14343);
 const kColorBlack = Color(0xFF000000);
 const kColorGreyDark = Color(0xFF616161);
 const kColorGreyLight = Color(0xFF8D8D8D);
-const kColorWhite = Color(0xFFF2F2F2);
+const kColorWhite = Color(0xFFFFFFFF);
 
 ThemeData kAppThemeData() {
   return ThemeData(

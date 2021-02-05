@@ -23,15 +23,32 @@ dependencies:
   permission_handler: ^5.0.1+1
   bottom_sheet: ^0.0.1-dev.7
   auto_size_text: ^2.1.0
+  snapping_sheet: ^2.0.2
+  font_awesome_flutter: ^8.11.0
+  flutter_star_rating: ^0.0.3
+  location: ^3.2.4
+  intl: ^0.16.1
   flutter_svg:
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
 
+
+
 flutter:
   assets:
-  - svg/
+  - assets/
 
   uses-material-design: true
 
+  fonts:
+    - family: Gilroy
+      fonts:
+        - asset: assets/fonts/Gilroy/gilroy-regular.ttf
+        - asset: assets/fonts/Gilroy/gilroy-bold.ttf
+          style: normal
+    - family: GilroyMedium
+      fonts:
+        - asset: assets/fonts/Gilroy/gilroy-medium.ttf
+          weight: 400

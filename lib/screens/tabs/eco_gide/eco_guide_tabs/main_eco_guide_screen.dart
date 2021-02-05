@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:recycle_hub/bloc/eco_guide_blocs/eco_menu_bloc.dart';
 import 'package:recycle_hub/elements/drawer.dart';
-import 'package:recycle_hub/screens/tabs/bottom_nav_bar.dart';
 
 import '../../../../style/theme.dart';
 
@@ -35,6 +34,12 @@ class _MainEcoGuideScreenState extends State<MainEcoGuideScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          icon: Icon(Icons.menu),
+          onPressed: () {
+            Scaffold.of(context).openDrawer();
+          },
+        ),
         title: Text(
           "ЭкоГид",
         ),
@@ -60,7 +65,6 @@ class _MainEcoGuideScreenState extends State<MainEcoGuideScreen> {
           ],
         ),
       ),
-      drawer: customDrawer,
     );
   }
 }

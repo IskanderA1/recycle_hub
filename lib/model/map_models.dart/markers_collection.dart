@@ -30,6 +30,15 @@ class MarkersCollection {
 
   String toJson() => json.encode(toMap());
 
+  /*CustMarker getByIndex(int i) {
+    if (markers == null) {
+      return null;
+    }
+    if (i < markers.length && i >= 0) {
+      return markers[i];
+    }
+  }*/
+
   @override
   String toString() => 'MarkersCollection(markers: $markers)';
 

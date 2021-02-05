@@ -10,12 +10,14 @@ class BottomNavBarV2 extends StatefulWidget {
   final IconThemeData selectedIconThemeData;
   final int currentItem;
   final Color backgraundColor;
+  Function func;
 
   BottomNavBarV2(
       {@required this.selectedIconThemeData,
       @required this.unselectedIconThemeData,
       @required this.currentItem,
-      @required this.backgraundColor});
+      @required this.backgraundColor,
+      @required this.func});
   @override
   _BottomNavBarV2State createState() => _BottomNavBarV2State();
 }
@@ -68,6 +70,7 @@ class _BottomNavBarV2State extends State<BottomNavBarV2> {
                         unselectedIconThemeData: widget.unselectedIconThemeData,
                         isActive: widget.currentItem == 0 ? true : false,
                         ontap: () {
+                          widget.func(0);
                           bottomNavBarBloc.pickItem(0);
                         },
                       ),
@@ -78,6 +81,7 @@ class _BottomNavBarV2State extends State<BottomNavBarV2> {
                         unselectedIconThemeData: widget.unselectedIconThemeData,
                         isActive: widget.currentItem == 1 ? true : false,
                         ontap: () {
+                          widget.func(1);
                           bottomNavBarBloc.pickItem(1);
                         },
                       ),
@@ -91,6 +95,7 @@ class _BottomNavBarV2State extends State<BottomNavBarV2> {
                         unselectedIconThemeData: widget.unselectedIconThemeData,
                         isActive: widget.currentItem == 2 ? true : false,
                         ontap: () {
+                          widget.func(2);
                           bottomNavBarBloc.pickItem(2);
                         },
                       ),
@@ -101,6 +106,7 @@ class _BottomNavBarV2State extends State<BottomNavBarV2> {
                         unselectedIconThemeData: widget.unselectedIconThemeData,
                         isActive: widget.currentItem == 3 ? true : false,
                         ontap: () {
+                          widget.func(3);
                           bottomNavBarBloc.pickItem(3);
                         },
                       ),

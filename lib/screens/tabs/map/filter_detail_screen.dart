@@ -2,8 +2,11 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:recycle_hub/bloc/garb_collection_type_bloc.dart';
+import 'package:recycle_hub/bloc/map_screen_blocs/accept_types_collection_bloc.dart';
 import 'package:recycle_hub/bloc/marker_work_mode_bloc.dart';
-import 'package:recycle_hub/screens/tabs/eco_gide/eco_guide_tabs/main_eco_guide_screen.dart';
+import 'package:recycle_hub/model/map_responses/accept_types_collection_response.dart';
+import 'package:recycle_hub/screens/tabs/map/widgets/filter_card_widget.dart';
+import 'package:recycle_hub/screens/tabs/map/widgets/loader_widget.dart';
 import 'package:recycle_hub/style/theme.dart';
 
 GarbageCollectionTypeBloc garbageCollBloc = GarbageCollectionTypeBloc();
@@ -17,6 +20,13 @@ class MapFilterDetailScreen extends StatefulWidget {
 class _MapFilterDetailScreenState extends State<MapFilterDetailScreen> {
   final TextEditingController _searchController = TextEditingController();
   Size size;
+
+  @override
+  void initState() {
+    acceptTypesCollectionBloc.loadAcceptTypes();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     size = MediaQuery.of(context).size;
@@ -39,7 +49,7 @@ class _MapFilterDetailScreenState extends State<MapFilterDetailScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Padding(
-                  padding: EdgeInsets.all(8),
+                  padding: const EdgeInsets.fromLTRB(15, 10, 15, 10),
                   child: TextField(
                       controller: _searchController,
                       decoration: inputDecorWidget()),
@@ -53,25 +63,81 @@ class _MapFilterDetailScreenState extends State<MapFilterDetailScreen> {
                   child: _markerModeCheck(),
                 ),
                 Expanded(
-                    child: GridView.count(
-                  childAspectRatio: 5 / 4,
-                  crossAxisCount: 2,
-                  padding: EdgeInsets.all(15),
-                  children: [
-                    FilterCardWidget(size: size),
-                    FilterCardWidget(size: size),
-                    FilterCardWidget(size: size),
-                    FilterCardWidget(size: size),
-                    FilterCardWidget(size: size),
-                    FilterCardWidget(size: size),
-                    FilterCardWidget(size: size),
-                    FilterCardWidget(size: size),
-                    FilterCardWidget(size: size),
-                    FilterCardWidget(size: size),
-                    FilterCardWidget(size: size),
-                    FilterCardWidget(size: size),
-                  ],
-                ))
+                  child: Container(
+                    child: StreamBuilder(
+                      stream: acceptTypesCollectionBloc.stream,
+                      initialData: acceptTypesCollectionBloc.defaultItem,
+                      builder: (BuildContext context,
+                          AsyncSnapshot<AcceptTypesCollectionResponse>
+                              snapshot) {
+                        if (snapshot.hasData) {
+                          if (snapshot.data
+                              is AcceptTypesCollectionResponseLoading) {
+                            return LoaderWidget();
+                          } else if (snapshot.data
+                              is AcceptTypesCollectionResponseWithError) {
+                            return Align(
+                              alignment: Alignment.center,
+                              child: Text(snapshot.data.error),
+                            );
+                          } else if (snapshot.data
+                              is AcceptTypesCollectionResponseOk) {
+                            double _size = MediaQuery.of(context).size.width;
+                            return GridView.builder(
+                              gridDelegate:
+                                  SliverGridDelegateWithFixedCrossAxisCount(
+                                      crossAxisSpacing: 5,
+                                      mainAxisSpacing: 5,
+                                      childAspectRatio: 5 / 4,
+                                      crossAxisCount: 2),
+                              itemCount:
+                                  snapshot.data.acceptTypes.acceptTypes.length,
+                              itemBuilder: (context, index) {
+                                return FilterCardWidget(
+                                    acceptType: snapshot
+                                        .data.acceptTypes.acceptTypes[index],
+                                    size: _size);
+                              },
+                            );
+                          }
+                        } else {
+                          return Center(
+                            child: Text(snapshot.error),
+                          );
+                        }
+                        return Container();
+                      },
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.fromLTRB(15, 10, 15, 10),
+                  child: Align(
+                    alignment: Alignment.bottomCenter,
+                    child: GestureDetector(
+                      onTap: () {},
+                      child: ConstrainedBox(
+                        constraints: BoxConstraints(
+                          maxHeight: 60,
+                          maxWidth: 350,
+                        ),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: kColorGreen,
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                          child: Center(
+                            child: Text(
+                              "Применить",
+                              style:
+                                  TextStyle(color: kColorWhite, fontSize: 28),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                )
               ],
             ),
           )),
@@ -102,6 +168,7 @@ class _MapFilterDetailScreenState extends State<MapFilterDetailScreen> {
                         alignment: Alignment.center,
                         child: AutoSizeText("Платный приём",
                             softWrap: true,
+                            textAlign: TextAlign.center,
                             style: TextStyle(
                                 color: snapshot.data == MODE.PAID
                                     ? Color(0xFFFFFFFF)
@@ -120,13 +187,18 @@ class _MapFilterDetailScreenState extends State<MapFilterDetailScreen> {
                         color: snapshot.data == MODE.FREE
                             ? Color(0xFF62C848)
                             : Color(0xFFFFFFFF),
-                        alignment: Alignment.center,
-                        child: AutoSizeText("Бесплатный приём",
-                            softWrap: true,
-                            style: TextStyle(
-                                color: snapshot.data == MODE.FREE
-                                    ? Color(0xFFFFFFFF)
-                                    : Color(0xFF62C848))),
+                        //alignment: Alignment.center,
+                        padding: EdgeInsets.zero,
+                        child: Align(
+                          alignment: Alignment.center,
+                          child: AutoSizeText("Бесплатный приём",
+                              overflow: TextOverflow.visible,
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  color: snapshot.data == MODE.FREE
+                                      ? Color(0xFFFFFFFF)
+                                      : Color(0xFF62C848))),
+                        ),
                       ),
                     ),
                   ),
@@ -134,7 +206,7 @@ class _MapFilterDetailScreenState extends State<MapFilterDetailScreen> {
                     width: 1,
                     color: Color(0xFFFF62C848),
                   ),
-                  Expanded(
+                  /*Expanded(
                     child: GestureDetector(
                       onTap: () => markerWorkModeBloc.pickEvent(MODE.ROUND),
                       child: Container(
@@ -154,7 +226,7 @@ class _MapFilterDetailScreenState extends State<MapFilterDetailScreen> {
                   VerticalDivider(
                     width: 1,
                     color: Color(0xFFFF62C848),
-                  ),
+                  ),*/
                   Expanded(
                     child: GestureDetector(
                       onTap: () => markerWorkModeBloc.pickEvent(MODE.PARTNERS),
@@ -165,6 +237,7 @@ class _MapFilterDetailScreenState extends State<MapFilterDetailScreen> {
                         alignment: Alignment.center,
                         child: AutoSizeText("Партнёры",
                             softWrap: true,
+                            textAlign: TextAlign.center,
                             style: TextStyle(
                                 color: snapshot.data == MODE.PARTNERS
                                     ? Color(0xFFFFFFFF)
@@ -175,6 +248,91 @@ class _MapFilterDetailScreenState extends State<MapFilterDetailScreen> {
                 ],
               ));
         });
+  }
+
+  _garbCollectTypeWidget() {
+    return StreamBuilder(
+      stream: garbageCollBloc.stream,
+      initialData: garbageCollBloc.defaultItem,
+      builder: (ctx, AsyncSnapshot<GCOLLTYPE> snapshot) {
+        return Container(
+          height: 40,
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(3),
+              border: Border.all(color: Color(0xFF62C848), width: 1.5)),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Expanded(
+                child: GestureDetector(
+                  onTap: () => garbageCollBloc.pickEvent(GCOLLTYPE.RECYCLING),
+                  child: Container(
+                      color: snapshot.data == GCOLLTYPE.RECYCLING
+                          ? Color(0xFF62C848)
+                          : Color(0xFFFFFFFF),
+                      padding: EdgeInsets.zero,
+                      alignment: Alignment.center,
+                      child: Text(
+                        "Переработка",
+                        style: TextStyle(
+                          color: snapshot.data == GCOLLTYPE.RECYCLING
+                              ? Color(0xFFFFFFFF)
+                              : Color(0xFF62C848),
+                        ),
+                      )),
+                ),
+              ),
+              VerticalDivider(
+                width: 1,
+                color: Color(0xFFFF62C848),
+              ),
+              Expanded(
+                child: GestureDetector(
+                  onTap: () => garbageCollBloc.pickEvent(GCOLLTYPE.UTILISATION),
+                  child: Container(
+                      color: snapshot.data == GCOLLTYPE.UTILISATION
+                          ? Color(0xFF62C848)
+                          : Color(0xFFFFFFFF),
+                      padding: EdgeInsets.zero,
+                      alignment: Alignment.center,
+                      child: Text(
+                        "Утилизация",
+                        style: TextStyle(
+                          color: snapshot.data == GCOLLTYPE.UTILISATION
+                              ? Color(0xFFFFFFFF)
+                              : Color(0xFF62C848),
+                        ),
+                      )),
+                ),
+              ),
+              VerticalDivider(
+                width: 1,
+                color: Color(0xFFFF62C848),
+              ),
+              Expanded(
+                child: GestureDetector(
+                  onTap: () => garbageCollBloc.pickEvent(GCOLLTYPE.BENEFIT),
+                  child: Container(
+                      color: snapshot.data == GCOLLTYPE.BENEFIT
+                          ? Color(0xFF62C848)
+                          : Color(0xFFFFFFFF),
+                      padding: EdgeInsets.zero,
+                      alignment: Alignment.center,
+                      child: Text(
+                        "Благо",
+                        style: TextStyle(
+                          color: snapshot.data == GCOLLTYPE.BENEFIT
+                              ? Color(0xFFFFFFFF)
+                              : Color(0xFF62C848),
+                        ),
+                      )),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
   }
 
   InputDecoration inputDecorWidget() {
@@ -196,136 +354,4 @@ class _MapFilterDetailScreenState extends State<MapFilterDetailScreen> {
         border: OutlineInputBorder(
             borderSide: BorderSide(color: Color(0xFF62C848), width: 2.5)));
   }
-}
-
-class FilterCardWidget extends StatelessWidget {
-  const FilterCardWidget({
-    Key key,
-    @required this.size,
-  }) : super(key: key);
-
-  final Size size;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-        margin: EdgeInsets.all(10),
-        decoration: BoxDecoration(
-            color: Color(0xFFF2F2F2), borderRadius: BorderRadius.circular(15)),
-        child: GestureDetector(
-          child: Stack(children: [
-            Align(
-              alignment: Alignment.topRight,
-              child: Padding(
-                padding: const EdgeInsets.all(15),
-                child: Icon(
-                  Icons.info,
-                  color: Colors.green,
-                ),
-              ),
-            ),
-            Center(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Icon(
-                    Icons.ac_unit_outlined,
-                    size: size.width / 6,
-                    color: Colors.green,
-                  ),
-                  AutoSizeText(
-                    "Макулатура",
-                    style: kCardSelectedTextStyle,
-                  )
-                ],
-              ),
-            ),
-          ]),
-        ));
-  }
-}
-
-_garbCollectTypeWidget() {
-  return StreamBuilder(
-    stream: garbageCollBloc.stream,
-    initialData: garbageCollBloc.defaultItem,
-    builder: (ctx, AsyncSnapshot<GCOLLTYPE> snapshot) {
-      return Container(
-        height: 40,
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(3),
-            border: Border.all(color: Color(0xFF62C848), width: 1.5)),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            Expanded(
-              child: GestureDetector(
-                onTap: () => garbageCollBloc.pickEvent(GCOLLTYPE.RECYCLING),
-                child: Container(
-                    color: snapshot.data == GCOLLTYPE.RECYCLING
-                        ? Color(0xFF62C848)
-                        : Color(0xFFFFFFFF),
-                    padding: EdgeInsets.zero,
-                    alignment: Alignment.center,
-                    child: Text(
-                      "Переработка",
-                      style: TextStyle(
-                        color: snapshot.data == GCOLLTYPE.RECYCLING
-                            ? Color(0xFFFFFFFF)
-                            : Color(0xFF62C848),
-                      ),
-                    )),
-              ),
-            ),
-            VerticalDivider(
-              width: 1,
-              color: Color(0xFFFF62C848),
-            ),
-            Expanded(
-              child: GestureDetector(
-                onTap: () => garbageCollBloc.pickEvent(GCOLLTYPE.UTILISATION),
-                child: Container(
-                    color: snapshot.data == GCOLLTYPE.UTILISATION
-                        ? Color(0xFF62C848)
-                        : Color(0xFFFFFFFF),
-                    padding: EdgeInsets.zero,
-                    alignment: Alignment.center,
-                    child: Text(
-                      "Утилизация",
-                      style: TextStyle(
-                        color: snapshot.data == GCOLLTYPE.UTILISATION
-                            ? Color(0xFFFFFFFF)
-                            : Color(0xFF62C848),
-                      ),
-                    )),
-              ),
-            ),
-            VerticalDivider(
-              width: 1,
-              color: Color(0xFFFF62C848),
-            ),
-            Expanded(
-              child: GestureDetector(
-                onTap: () => garbageCollBloc.pickEvent(GCOLLTYPE.BENEFIT),
-                child: Container(
-                    color: snapshot.data == GCOLLTYPE.BENEFIT
-                        ? Color(0xFF62C848)
-                        : Color(0xFFFFFFFF),
-                    padding: EdgeInsets.zero,
-                    alignment: Alignment.center,
-                    child: Text(
-                      "Благо",
-                      style: TextStyle(
-                        color: snapshot.data == GCOLLTYPE.BENEFIT
-                            ? Color(0xFFFFFFFF)
-                            : Color(0xFF62C848),
-                      ),
-                    )),
-              ),
-            ),
-          ],
-        ),
-      );
-    },
-  );
 }

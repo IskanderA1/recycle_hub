@@ -54,6 +54,28 @@ class AcceptType {
     );
   }
 
+  factory AcceptType.fromMapForFilter(Map<String, dynamic> map) {
+    if (map == null) return null;
+
+    return AcceptType(
+      id: map['_id']['! @ # \$ & * ~oid'],
+      badWords: List<String>.from(map['bad_words']),
+      keyWords: List<String>.from(map['key_words']),
+      name: map['name'],
+      varName: map['var_name'],
+    );
+  }
+
+  /*AcceptType.fromMapForFilter(Map<String, dynamic> map) {
+    if (map == null) return;
+
+    this.id = map['_id']['! @ # \$ & * ~oid'];
+    this.badWords = List<String>.from(map['bad_words']);
+    this.keyWords = List<String>.from(map['key_words']);
+    this.name = map['name'];
+    this.varName = map['var_name'];
+  }*/
+
   String toJson() => json.encode(toMap());
 
   factory AcceptType.fromJson(String source) =>

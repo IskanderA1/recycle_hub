@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:recycle_hub/bloc/map_screen_blocs/marker_info_bloc.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:recycle_hub/bloc/map_screen_blocs/markers_collection_bloc.dart';
-import 'package:recycle_hub/bloc/navigation_bloc.dart';
-import 'package:recycle_hub/elements/drawer.dart';
-import 'package:recycle_hub/model/map_models.dart/marker.dart';
 import 'package:recycle_hub/model/map_responses/markers_response.dart';
-import 'package:recycle_hub/screens/tabs/bottom_nav_bar.dart';
 import 'package:recycle_hub/screens/tabs/map/filter_detail_screen.dart';
 import 'dart:async';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:bottom_sheet/bottom_sheet.dart';
+import 'package:recycle_hub/screens/tabs/map/widgets/bottom_sheet_body.dart';
+import 'package:recycle_hub/screens/tabs/map/widgets/loader_widget.dart';
 import 'package:recycle_hub/style/theme.dart';
+import 'package:location/location.dart';
+import 'methods/header_builder.dart';
+import 'methods/pre_information_container.dart';
 
 class MapScreen extends StatefulWidget {
   /*final Widget child;
@@ -19,30 +20,34 @@ class MapScreen extends StatefulWidget {
   _MapScreenState createState() => _MapScreenState();
 }
 
-class _MapScreenState extends State<MapScreen>
-    with AutomaticKeepAliveClientMixin {
-  bool keepAlive = true;
+class _MapScreenState extends State<MapScreen> {
+  CameraPosition cameraPosition;
+  LatLng initLatLng;
 
-  @override
-  bool get wantKeepAlive => true;
+  Future<String> getCurrentPosition() async {
+    LocationData currentLocation;
+    GoogleMapController controller;
+    var location = new Location();
+    try {
+      currentLocation = await location.getLocation();
+    } on Exception {
+      currentLocation = null;
+    }
+    setState(() {
+      initLatLng = LatLng(currentLocation.latitude, currentLocation.longitude);
+      cameraPosition = CameraPosition(
+        target: initLatLng,
+        zoom: 12,
+      );
+    });
+    return "Ok";
+  }
 
   @override
   void initState() {
-    keepAlive = true;
     super.initState();
   }
 
-  /*Future doAsyncStuff() async {
-    keepAlive = true;
-    updateKeepAlive();
-
-    ///Поддержание состояния виджета
-
-    keepAlive = false;
-    updateKeepAlive();
-  }*/
-
-  Widget _map = googleMap();
   AppBar mapScreenAppBar() {
     return AppBar(
       title: Text("RecycleHub"),
@@ -71,220 +76,301 @@ class _MapScreenState extends State<MapScreen>
 
   @override
   Widget build(BuildContext context) {
-    //if (_map == null) {
-    //_map = googleMap();
-    //}
-    super.build(context);
-    return Scaffold(
-      appBar: mapScreenAppBar(),
-      body: _map,
-
-      /*floatingActionButton: FloatingActionButton(
-        elevation: 0,
-        backgroundColor: kColorGreen,
-        onPressed: () {
-          markersCollectionBloc.loadMarkers();
-        },
-        child: Container(
-          child: Icon(
-            Icons.qr_code,
-          ),
-        ),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,*/
-      //bottomNavigationBar: BottomNavBarV2(),
+    return FutureBuilder<String>(
+      future: getCurrentPosition(),
+      builder: (context, AsyncSnapshot<String> snapshot) {
+        if (snapshot.hasData) {
+          return Scaffold(
+            appBar: mapScreenAppBar(),
+            body: MyGoogleMapWidget(
+              cameraPosition: cameraPosition,
+            ),
+          );
+        } else {
+          return LoaderWidget();
+        }
+      },
     );
   }
 }
 
-
-
-
-
-Widget googleMap(/*BuildContext context*/) {
-  Completer<GoogleMapController> _controller = Completer();
-
-  final CameraPosition _kGooglePlex = CameraPosition(
-    target: LatLng(55.7887, 49.1221),
-    zoom: 12.5,
-  );
-
-  return Container(
-    //height: MediaQuery.of(context).size.height,
-    //width: MediaQuery.of(context).size.width,
-    child: StreamBuilder<MarkersCollectionResponse>(
-        stream: markersCollectionBloc.stream,
-        initialData: markersCollectionBloc.defaultItem,
-        builder: (context, AsyncSnapshot<MarkersCollectionResponse> snapshot) {
-          if (snapshot.data is MarkerCollectionResponseWithError ||
-              snapshot.data is MarkerCollectionResponseLoading) {
-            return GoogleMap(
-                mapType: MapType.normal,
-                initialCameraPosition: _kGooglePlex,
-                onMapCreated: (GoogleMapController controller) {
-                  _controller.complete(controller);
-                },
-                myLocationButtonEnabled: true,
-                myLocationEnabled: true,
-                markers: {});
-          }
-          print("Список получен");
-          return GoogleMap(
-              mapType: MapType.normal,
-              initialCameraPosition: _kGooglePlex,
-              onMapCreated: (GoogleMapController controller) {
-                _controller.complete(controller);
-              },
-              myLocationButtonEnabled: true,
-              myLocationEnabled: true,
-              markers: Set<Marker>.from(
-                  snapshot.data.markers.markers.map((marker) => new Marker(
-                        markerId: MarkerId(marker.id),
-                        //anchor: Offset(5, 5),
-                        consumeTapEvents: true,
-
-                        /*Цвет можно поменять здесь */
-                        icon: BitmapDescriptor.defaultMarkerWithHue(4),
-                        onTap: () {
-                          showStickyFlexibleBottomSheet(
-                              initHeight: 0.4,
-                              minHeight: 0.40,
-                              maxHeight: 0.85,
-                              context: context,
-                              headerHeight: 50,
-                              headerBuilder: _buildHeader,
-                              builder: (context, offset) {
-                                return SliverChildListDelegate(<Widget>[
-                                  BuildBody(marker: marker),
-                                ]);
-                              },
-                              anchors: [0.0, 0.4, 0.85]);
-                        },
-                        position: LatLng(marker.coords.lat, marker.coords.lng),
-                      ))));
-        }),
-  );
-}
-
-class BuildBody extends StatefulWidget {
-  final CustMarker marker;
-  BuildBody({this.marker});
+class MyGoogleMapWidget extends StatefulWidget {
+  final CameraPosition cameraPosition;
+  MyGoogleMapWidget({this.cameraPosition});
   @override
-  _BuildBodyState createState() => _BuildBodyState();
+  _MyGoogleMapWidgetState createState() => _MyGoogleMapWidgetState();
 }
 
-class _BuildBodyState extends State<BuildBody> {
-  int _selectedInd = 0;
+class _MyGoogleMapWidgetState extends State<MyGoogleMapWidget> {
+  Completer<GoogleMapController> _controller = Completer();
+  MapType _currentMapType = MapType.normal;
+  CameraPosition cameraPosition;
+
+  @override
+  void initState() {
+    cameraPosition = widget.cameraPosition;
+    super.initState();
+  }
+
+  void _currentLocation() async {
+    LocationData currentLocation;
+    GoogleMapController controller;
+    var location = new Location();
+    try {
+      currentLocation = await location.getLocation();
+    } on Exception {
+      currentLocation = null;
+    }
+
+    controller = await _controller.future;
+    controller.animateCamera(CameraUpdate.newCameraPosition(
+      CameraPosition(
+        bearing: 0,
+        target: LatLng(currentLocation.latitude, currentLocation.longitude),
+        zoom: 17.0,
+      ),
+    ));
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Colors.white,
-      //height: MediaQuery.of(context).size.height * 0.85,
-      height: 1400,
-      child: SafeArea(
-        child: PreferredSize(
-          preferredSize: null,
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                Container(
-                    padding: EdgeInsets.all(10),
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      widget.marker.name,
-                      style:
-                          TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
-                    )),
-                Container(
-                  alignment: Alignment.center,
-                  child: Row(
-                    children: [
-                      Container(
-                        alignment: Alignment.center,
-                        child: GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              _selectedInd = 0;
-                            });
-                            markerInfoFeedBloc.pickEvent(Mode.INFO);
-                          },
-                          child: Text(
-                            "ИНФО",
-                            style: TextStyle(
-                                fontSize: 24,
-                                color: _selectedInd == 0
-                                    ? Color(0xFF249507)
-                                    : Color(0xFF000000)),
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        width: 10,
-                      ),
-                      Container(
-                        alignment: Alignment.center,
-                        child: GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              _selectedInd = 1;
-                            });
-                            markerInfoFeedBloc.pickEvent(Mode.FEEFBACK);
-                          },
-                          child: Text(
-                            "ОЗЫВЫ",
-                            style: TextStyle(
-                                fontSize: 24,
-                                color: _selectedInd == 1
-                                    ? Color(0xFF249507)
-                                    : Color(0xFF000000)),
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-                StreamBuilder(
-                  stream: markerInfoFeedBloc.stream,
-                  initialData: markerInfoFeedBloc.defaultItem,
-                  builder: (context, AsyncSnapshot<Mode> snapshot) {
-                    if (snapshot.data == Mode.INFO) {
-                      return Column(
-                        children: [Text("Информация")],
-                      );
-                    } else {
-                      return Column(
-                        children: [Text("Отзывы")],
-                      );
-                    }
+    return Stack(children: [
+      Container(
+        child: StreamBuilder<MarkersCollectionResponse>(
+            stream: markersCollectionBloc.stream,
+            initialData: markersCollectionBloc.defaultItem,
+            builder:
+                (context, AsyncSnapshot<MarkersCollectionResponse> snapshot) {
+              if (snapshot.data is MarkerCollectionResponseWithError ||
+                  snapshot.data is MarkerCollectionResponseLoading) {
+                return LoaderWidget();
+              }
+              print("Список получен");
+              return GoogleMap(
+                  mapType: _currentMapType,
+                  initialCameraPosition: cameraPosition,
+                  onMapCreated: (GoogleMapController controller) {
+                    _controller.complete(controller);
                   },
-                )
-              ],
+                  myLocationButtonEnabled: false,
+                  myLocationEnabled: true,
+                  zoomControlsEnabled: false,
+                  markers: Set<Marker>.from(
+                      snapshot.data.markers.markers.map((marker) => new Marker(
+                            markerId: MarkerId(marker.id),
+                            //anchor: Offset(5, 5),
+                            consumeTapEvents: true,
+
+                            /*Цвет можно поменять здесь */
+                            icon: BitmapDescriptor.defaultMarkerWithHue(4),
+                            onTap: () => showStickyFlexibleBottomSheet(
+                                initHeight: 0.4,
+                                minHeight: 0.40,
+                                maxHeight: 0.85,
+                                context: context,
+                                headerHeight: 60,
+                                headerBuilder: (context, bottomSheetOffset) {
+                                  return buildHeader(
+                                      context, bottomSheetOffset, marker);
+                                },
+                                builder: (context, offset) {
+                                  return SliverChildListDelegate(
+                                    <Widget>[
+                                      AnimatedPreInformationContainer(
+                                          offset: offset, marker: marker),
+                                      BuildBody(marker: marker),
+                                    ],
+                                  );
+                                },
+                                anchors: [0.0, 0.4, 0.85]),
+                            position:
+                                LatLng(marker.coords.lat, marker.coords.lng),
+                          ))));
+            }),
+      ),
+      /*Кнопка определения местоположения */
+      Positioned(
+        bottom: 30,
+        right: 10,
+        top: 600,
+        child: GestureDetector(
+          onTap: _currentLocation
+          /*() async {
+            LatLng newLatLng = await getUserLocation();
+            //setState(() {
+             // latLng = newLatLng;
+            //});
+          }*/
+          ,
+          child: Container(
+            height: 40,
+            width: 40,
+            //color: kColorGreen,
+            decoration:
+                BoxDecoration(color: kColorBlack, shape: BoxShape.circle),
+            child: CircleAvatar(
+              backgroundColor: kColorWhite,
+              foregroundColor: kColorWhite,
+              child: Icon(
+                Icons.my_location_outlined,
+                size: 30,
+                color: kColorGreen,
+              ),
             ),
           ),
         ),
       ),
-    );
-  }
-}
-
-/*Отрисовка headerа bottomsheet'а*/
-Widget _buildHeader(BuildContext context, double bottomSheetOffset) {
-  return AnimatedContainer(
-      duration: const Duration(milliseconds: 300),
-      width: double.infinity,
-      height: 50,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(bottomSheetOffset == 0.85 ? 0 : 40),
-          topRight: Radius.circular(bottomSheetOffset == 0.85 ? 0 : 40),
+      /*Кнопка изменения направления */
+      Positioned(
+        top: 30,
+        left: 10,
+        child: GestureDetector(
+          onTap: northSouth,
+          child: Container(
+            height: 40,
+            width: 40,
+            //color: kColorGreen,
+            decoration:
+                BoxDecoration(color: kColorBlack, shape: BoxShape.circle),
+            child: CircleAvatar(
+              backgroundColor: kColorWhite,
+              foregroundColor: kColorWhite,
+              child: Icon(
+                Icons.explore,
+                size: 30,
+                color: kColorGreen,
+              ),
+            ),
+          ),
         ),
       ),
-      child:
-          Column(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-        Icon(
-          Icons.drag_handle,
-          color: Colors.black54,
+      /*Зум + */
+      Positioned(
+        top: 30,
+        right: 10,
+        child: GestureDetector(
+          onTap: zoomIncrement
+          /*() async {
+            LatLng newLatLng = await getUserLocation();
+            //setState(() {
+             // latLng = newLatLng;
+            //});
+          }*/
+          ,
+          child: Container(
+            height: 40,
+            width: 40,
+            //color: kColorGreen,
+            decoration:
+                BoxDecoration(color: kColorBlack, shape: BoxShape.circle),
+            child: CircleAvatar(
+              backgroundColor: kColorWhite,
+              foregroundColor: kColorWhite,
+              child: FaIcon(
+                FontAwesomeIcons.plusCircle,
+                size: 30,
+                color: kColorGreen,
+              ),
+            ),
+          ),
         ),
-      ]));
+      ),
+      /*ZOOM - */
+      Positioned(
+        top: 70,
+        right: 10,
+        child: GestureDetector(
+          onTap: zoomDecrement,
+          child: Container(
+            height: 40,
+            width: 40,
+            //color: kColorGreen,
+            decoration:
+                BoxDecoration(color: kColorBlack, shape: BoxShape.circle),
+            child: CircleAvatar(
+              backgroundColor: kColorWhite,
+              foregroundColor: kColorWhite,
+              child: FaIcon(
+                FontAwesomeIcons.minusCircle,
+                size: 30,
+                color: kColorGreen,
+              ),
+            ),
+          ),
+        ),
+      )
+    ]);
+  }
+
+  void northSouth() async {
+    double screenWidth = MediaQuery.of(context).size.width *
+        MediaQuery.of(context).devicePixelRatio;
+    double screenHeight = (MediaQuery.of(context).size.height - 90) *
+        MediaQuery.of(context).devicePixelRatio;
+
+    double middleX = screenWidth / 2;
+    double middleY = screenHeight / 2;
+    GoogleMapController zController = await _controller.future;
+    LatLng latLng = await zController
+        .getLatLng(ScreenCoordinate(x: middleX.toInt(), y: middleY.toInt()));
+    var currentZoomLevel = await zController.getZoomLevel();
+
+    currentZoomLevel = currentZoomLevel;
+    zController.animateCamera(
+      CameraUpdate.newCameraPosition(
+        CameraPosition(
+          target: latLng,
+          zoom: currentZoomLevel,
+        ),
+      ),
+    );
+  }
+
+  void zoomIncrement() async {
+    double screenWidth = MediaQuery.of(context).size.width *
+        MediaQuery.of(context).devicePixelRatio;
+    double screenHeight = MediaQuery.of(context).size.height *
+        MediaQuery.of(context).devicePixelRatio;
+
+    double middleX = screenWidth / 2;
+    double middleY = screenHeight / 2;
+    GoogleMapController zController = await _controller.future;
+    LatLng latLng = await zController
+        .getLatLng(ScreenCoordinate(x: middleX.toInt(), y: middleY.toInt()));
+    var currentZoomLevel = await zController.getZoomLevel();
+
+    currentZoomLevel = currentZoomLevel + 0.5;
+    zController.animateCamera(
+      CameraUpdate.newCameraPosition(
+        CameraPosition(
+          target: latLng,
+          zoom: currentZoomLevel,
+        ),
+      ),
+    );
+  }
+
+  void zoomDecrement() async {
+    double screenWidth = MediaQuery.of(context).size.width *
+        MediaQuery.of(context).devicePixelRatio;
+    double screenHeight = MediaQuery.of(context).size.height *
+        MediaQuery.of(context).devicePixelRatio;
+
+    double middleX = screenWidth / 2;
+    double middleY = screenHeight / 2;
+    GoogleMapController zController = await _controller.future;
+    LatLng latLng = await zController
+        .getLatLng(ScreenCoordinate(x: middleX.toInt(), y: middleY.toInt()));
+    var currentZoomLevel = await zController.getZoomLevel();
+
+    currentZoomLevel = currentZoomLevel - 0.5;
+    zController.animateCamera(
+      CameraUpdate.newCameraPosition(
+        CameraPosition(
+          target: latLng,
+          zoom: currentZoomLevel,
+        ),
+      ),
+    );
+  }
 }
