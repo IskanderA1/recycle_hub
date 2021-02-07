@@ -7,6 +7,8 @@ import 'package:recycle_hub/elements/loader.dart';
 import 'package:recycle_hub/model/eco_guide_models/filter_model.dart';
 import 'package:recycle_hub/model/eco_guide_models/filter_response.dart';
 
+import '../../../../bloc/eco_guide_blocs/trash_details_bloc.dart';
+import '../../../../style/theme.dart';
 import '../../../../style/theme.dart';
 import '../../../../style/theme.dart';
 
@@ -216,7 +218,80 @@ Widget _buildContainerList(FilterResponse filterResponse, int screenIndex) {
                       alignment: Alignment.center,
                       child: IconButton(
                         onPressed: () {
-
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return StreamBuilder(
+                                  stream: trashDetailsBloc
+                                      .containerController.stream,
+                                  builder: (context, AsyncSnapshot snapshot) {
+                                    FilterResponse filterResponse =
+                                        snapshot.data;
+                                    if (snapshot.hasData) {
+                                      SvgPicture svgPicture =
+                                          containerImages[screenIndex];
+                                      return AlertDialog(
+                                        titlePadding: EdgeInsets.all(0),
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(5)),
+                                        title: ClipRRect(
+                                          borderRadius: BorderRadius.only(
+                                              topLeft: Radius.circular(5),
+                                              topRight: Radius.circular(5)),
+                                          child: Container(
+                                            padding: EdgeInsets.only(
+                                                top: 10, bottom: 10),
+                                            height: 80,
+                                            color: kColorGreen,
+                                            child: svgPicture,
+                                          ),
+                                        ),
+                                        content: Container(
+                                          height: 200,
+                                          child: ListView(
+                                            children: [
+                                              Text(
+                                                "Подлежат:",
+                                                style: TextStyle(
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                              SizedBox(
+                                                height: 10,
+                                              ),
+                                              Wrap(
+                                                children: [
+                                                  Text(buildText(filterResponse,
+                                                      screenIndex)[0])
+                                                ],
+                                              ),
+                                              SizedBox(
+                                                height: 10,
+                                              ),
+                                              Text("Не подлежат:",
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold)),
+                                              SizedBox(
+                                                height: 10,
+                                              ),
+                                              Wrap(
+                                                children: [
+                                                  Text(buildText(filterResponse,
+                                                      screenIndex)[1])
+                                                ],
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                      );
+                                    } else {
+                                      return Container();
+                                    }
+                                  });
+                            },
+                          );
                         },
                         padding: EdgeInsets.all(0),
                         icon: Icon(
@@ -501,4 +576,26 @@ void _buildTabList() {
       ),
     ));
   }
+}
+
+List<String> buildText(FilterResponse filterResponse, int screenIndex) {
+  List<String> keyWords = filterResponse.filterModels[screenIndex].keyWords;
+  List<String> badWords = filterResponse.filterModels[screenIndex].badWords;
+  String res1 = '', res2 = '';
+  for (int i = 0; i < keyWords.length; i++) {
+    if (!(i + 1 == keyWords.length)) {
+      res1 += keyWords[i] + ", ";
+    } else {
+      res1 += keyWords[i];
+    }
+  }
+  for (int i = 0; i < badWords.length; i++) {
+    if (!(i + 1 == badWords.length)) {
+      res2 += badWords[i] + ", ";
+    } else {
+      res2 += badWords[i];
+    }
+  }
+  List<String> response = [res1, res2];
+  return response;
 }

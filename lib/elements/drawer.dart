@@ -1,5 +1,7 @@
 import 'package:day_night_switcher/day_night_switcher.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import '../style/theme.dart';
 import '../style/theme.dart';
 
 Drawer customDrawer(BuildContext context) => Drawer(
@@ -7,50 +9,32 @@ Drawer customDrawer(BuildContext context) => Drawer(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Container(
-            height: MediaQuery.of(context).size.height-82.5,
+            height: MediaQuery.of(context).size.height - 82.5,
             child: ListView(
               padding: EdgeInsets.zero,
               children: <Widget>[
-                DrawerHeader(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Row(
+                Container(
+                  color: Colors.grey[300],
+                  child: Stack(children: [
+                    SvgPicture.asset(
+                      "svg/drawer_header.svg",
+                    ),
+                    Container(
+                      alignment: Alignment.center,
+                      padding: EdgeInsets.only(
+                          left: 50, top: 45, bottom: 20, right: 30),
+                      child: Wrap(
+                        alignment: WrapAlignment.center,
                         children: [
-                          CircleAvatar(
-                            radius: 25,
-                            backgroundColor: Color(0xFF286385),
-                            child: Icon(
-                              Icons.person,
-                              color: Color(0xFFFDC00F),
-                              size: 30,
-                            ),
-                          ),
-                          SizedBox(
-                            width: 3,
-                          ),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Text("Ураа!!",
-                                  style: TextStyle(
-                                      color: kColorWhite, fontSize: 19)),
-                              Text(
-                                "Вместе мы сдали 320 кг",
-                                style:
-                                    TextStyle(color: kColorWhite, fontSize: 19),
-                              ),
-                            ],
-                          ),
+                          Text(
+                            "Ура!!! Вместе мы сдали более 1320 кг!",
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 16),
+                          )
                         ],
-                      )
-                    ],
-                  ),
-                  decoration: BoxDecoration(
-                    color: kColorGreen,
-                  ),
+                      ),
+                    ),
+                  ]),
                 ),
                 Container(
                   alignment: Alignment.centerLeft,
@@ -177,7 +161,7 @@ Drawer customDrawer(BuildContext context) => Drawer(
             ),
           ),
           Container(
-            margin: EdgeInsets.only(left: 12, right: 8,bottom: 5),
+            margin: EdgeInsets.only(left: 12, right: 8, bottom: 5),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
