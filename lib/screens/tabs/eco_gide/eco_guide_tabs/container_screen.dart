@@ -8,6 +8,7 @@ import 'package:recycle_hub/model/eco_guide_models/filter_model.dart';
 import 'package:recycle_hub/model/eco_guide_models/filter_response.dart';
 
 import '../../../../style/theme.dart';
+import '../../../../style/theme.dart';
 
 List<SvgPicture> containerImages = [
   SvgPicture.asset("svg/blue_container.svg"),
@@ -213,10 +214,16 @@ Widget _buildContainerList(FilterResponse filterResponse, int screenIndex) {
                   Expanded(
                     child: Container(
                       alignment: Alignment.center,
-                      child: Icon(
-                        Icons.contact_support_rounded,
-                        size: 40,
-                        color: kColorGreen,
+                      child: IconButton(
+                        onPressed: () {
+
+                        },
+                        padding: EdgeInsets.all(0),
+                        icon: Icon(
+                          Icons.contact_support,
+                          size: 40,
+                          color: kColorGreen,
+                        ),
                       ),
                     ),
                   )
@@ -234,7 +241,8 @@ class _buildContainerListView extends StatelessWidget {
   StateButtons stateButtons;
   int screenIndex;
   Widget properties;
-  _buildContainerListView(List<FilterModel> filterModels, StateButtons stateButtons, int screenIndex) {
+  _buildContainerListView(List<FilterModel> filterModels,
+      StateButtons stateButtons, int screenIndex) {
     this.filterModels = filterModels;
     this.stateButtons = stateButtons;
     this.screenIndex = screenIndex;
@@ -254,9 +262,7 @@ class _buildContainerListView extends StatelessWidget {
               margin: EdgeInsets.only(top: 8.0),
               child: Text(
                 containerTitles[screenIndex],
-                style: TextStyle(
-                    fontSize: 50,
-                    color: kColorBlack),
+                style: TextStyle(fontSize: 50, color: kColorBlack),
               ),
             ),
             properties
@@ -284,7 +290,7 @@ class AllowedItems extends StatelessWidget {
       ),
       padding: EdgeInsets.only(left: 20, top: 10, right: 20),
       margin: EdgeInsets.only(left: 20, right: 20, top: 20),
-      height: MediaQuery.of(context).size.height - 321,
+      height: MediaQuery.of(context).size.height - 390,
       width: MediaQuery.of(context).size.width,
       child: ListView(
         children: _buildAllowedItems(allowedItems),
@@ -303,7 +309,7 @@ class ForbiddenItems extends StatelessWidget {
     return Container(
       alignment: Alignment.center,
       decoration: BoxDecoration(
-        color: Colors.black12,
+        color: Color(0xFFF14343),
         borderRadius: BorderRadius.only(
             topLeft: Radius.circular(30), topRight: Radius.circular(30)),
       ),

@@ -7,7 +7,7 @@ Drawer customDrawer(BuildContext context) => Drawer(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Container(
-            height: MediaQuery.of(context).size.height-85,
+            height: MediaQuery.of(context).size.height-82.5,
             child: ListView(
               padding: EdgeInsets.zero,
               children: <Widget>[
@@ -182,7 +182,7 @@ Drawer customDrawer(BuildContext context) => Drawer(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Icon(
-                  Icons.settings,
+                  Icons.settings_outlined,
                   color: kColorBlack,
                   size: 30,
                 ),

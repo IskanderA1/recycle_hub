@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:recycle_hub/bloc/eco_guide_blocs/eco_menu_bloc.dart';
 
 import '../../../../style/theme.dart';
@@ -24,16 +25,15 @@ class _TestScreenState extends State<TestScreen> {
       ),
       body: Container(
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Column(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              Icon(
-                Icons.pregnant_woman,
-                size: 200,
-                color: Color(0xFF002E49),
+              SizedBox(
+                height: 10,
               ),
+              SvgPicture.asset("svg/test_illustration.svg"),
               SizedBox(
                 height: 10,
               ),
@@ -103,7 +103,7 @@ class _TestScreenState extends State<TestScreen> {
                                   border: Border.all(
                                       color: Color(0xFFC9C9C9), width: 2)),
                               child: Text(
-                                "A",
+                                "B",
                                 style: TextStyle(fontSize: 20),
                               ),
                             ),
@@ -134,7 +134,7 @@ class _TestScreenState extends State<TestScreen> {
                                   border: Border.all(
                                       color: Color(0xFFC9C9C9), width: 2)),
                               child: Text(
-                                "A",
+                                "C",
                                 style: TextStyle(fontSize: 20),
                               ),
                             ),
@@ -165,7 +165,7 @@ class _TestScreenState extends State<TestScreen> {
                                   border: Border.all(
                                       color: Color(0xFFC9C9C9), width: 2)),
                               child: Text(
-                                "A",
+                                "D",
                                 style: TextStyle(fontSize: 20),
                               ),
                             ),
@@ -181,16 +181,18 @@ class _TestScreenState extends State<TestScreen> {
             ],
           ),
           Container(
-            padding: EdgeInsets.only(left: 15,right: 15),
+            padding: EdgeInsets.only(left: 15, right: 15),
             child: RaisedButton(
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+              elevation: 0,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15)),
               padding: EdgeInsets.all(15),
               color: Color(0xFF249507),
               onPressed: () {},
               child: Center(
                 child: Text(
                   "Продолжить",
-                  style: TextStyle(color: Colors.white,fontSize: 20),
+                  style: TextStyle(color: Colors.white, fontSize: 20),
                 ),
               ),
             ),
