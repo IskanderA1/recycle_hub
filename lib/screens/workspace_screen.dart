@@ -7,7 +7,6 @@ import 'package:recycle_hub/screens/tabs/eco_coin/eco_coin_screen.dart';
 import 'package:recycle_hub/screens/tabs/eco_gide/main_eco_screen.dart';
 import 'package:recycle_hub/screens/tabs/map/map_screen.dart';
 import 'package:recycle_hub/screens/tabs/profile/profile_screen.dart';
-import 'package:recycle_hub/style/theme.dart';
 import 'package:recycle_hub/widgets/fab_buttom.dart';
 
 class WorkSpaceScreen extends StatefulWidget {
@@ -44,7 +43,7 @@ class _WorkSpaceState extends State<WorkSpaceScreen> {
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
     return Scaffold(
-      drawer: customDrawer,
+      drawer: customDrawer(context),
       body: Stack(children: [
         IndexedStack(index: bottomNavBarBloc.index, children: [
           MapScreen(),

@@ -4,8 +4,8 @@ import 'package:recycle_hub/bloc/eco_guide_blocs/button_switch_bloc.dart';
 import 'package:recycle_hub/bloc/eco_guide_blocs/eco_menu_bloc.dart';
 import 'package:recycle_hub/bloc/eco_guide_blocs/trash_details_bloc.dart';
 import 'package:recycle_hub/elements/loader.dart';
-import 'package:recycle_hub/model/eco_guide_models/container_model.dart';
-import 'package:recycle_hub/model/eco_guide_models/container_response.dart';
+import 'package:recycle_hub/model/eco_guide_models/filter_model.dart';
+import 'package:recycle_hub/model/eco_guide_models/filter_response.dart';
 
 import '../../../../style/theme.dart';
 
@@ -35,7 +35,7 @@ class ReferenceBookScreen extends StatefulWidget {
 class _ReferenceBookScreenState extends State<ReferenceBookScreen> {
   @override
   void initState() {
-    trashDetailsBloc.getContainers();
+    trashDetailsBloc.getFilters();
     tabList = [];
     _buildTabList();
     super.initState();
@@ -98,9 +98,9 @@ class _buildContainerView extends StatelessWidget {
   Widget build(BuildContext context) {
     return StreamBuilder(
         stream: trashDetailsBloc.containerController.stream,
-        builder: (context, AsyncSnapshot<ContainerResponse> snapshot) {
+        builder: (context, AsyncSnapshot<FilterResponse> snapshot) {
           if (snapshot.hasData) {
-            print(snapshot.data.containers[0].name);
+            print(snapshot.data.filterModels[0].name);
             if (snapshot.data.error != null && snapshot.data.error.length > 0) {
               if (snapshot.data.error == "Авторизуйтесь") {
                 return Center(
@@ -122,21 +122,23 @@ class _buildContainerView extends StatelessWidget {
   }
 }
 
-Widget _buildContainerList(
-    ContainerResponse containerResponse, int screenIndex) {
-  List<ContainerModel> containerModels = containerResponse.containers;
-  print(containerModels[0].name);
+Widget _buildContainerList(FilterResponse filterResponse, int screenIndex) {
+  List<FilterModel> filterModels = filterResponse.filterModels;
+  print(filterModels[0].name);
   return StreamBuilder(
       stream: switchButtonBloc.switchButtonController.stream,
       initialData: switchButtonBloc.defaultStateButton,
       builder: (context, AsyncSnapshot<StateButtons> snapshot) {
         return Container(
-          padding: EdgeInsets.only(left: 20, top: 30),
+          alignment: Alignment.center,
+          padding: EdgeInsets.only(top: 25),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              _buildContainerListView(
-                  containerModels, snapshot.data, screenIndex)
+              SizedBox(
+                height: 30,
+              ),
+              _buildContainerListView(filterModels, snapshot.data, screenIndex)
             ],
           ),
         );
@@ -144,44 +146,36 @@ Widget _buildContainerList(
 }
 
 class _buildContainerListView extends StatelessWidget {
-  List<ContainerModel> containerModels;
+  List<FilterModel> filterModels;
   StateButtons stateButtons;
   int screenIndex;
   Widget properties;
-  _buildContainerListView(List<ContainerModel> containerModels,
+  _buildContainerListView(List<FilterModel> filterModels,
       StateButtons stateButtons, int screenIndex) {
-    this.containerModels = containerModels;
+    this.filterModels = filterModels;
     this.stateButtons = stateButtons;
     this.screenIndex = screenIndex;
-    this.properties = AllowedItems(containerModels[screenIndex].allowed);
-    print(containerModels[screenIndex].allowed[0].name);
+    this.properties = stateButtons == StateButtons.ALLOWED
+        ? AllowedItems(filterModels[screenIndex].keyWords)
+        : ForbiddenItems(filterModels[screenIndex].badWords);
+    print(filterModels[screenIndex].keyWords[0]);
   }
   @override
   Widget build(BuildContext context) {
     return Stack(
       children: [
         Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Container(
-              margin: EdgeInsets.only(top: 8.0, left: 8.0),
+              margin: EdgeInsets.only(top: 8.0),
               child: Text(
                 containerTitles[screenIndex],
-                style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 50,
-                    color: kColorGreyDark),
+                style: TextStyle(fontSize: 50, color: kColorBlack),
               ),
             ),
             properties
           ],
-        ),
-        Container(
-          margin: EdgeInsets.only(
-              left: MediaQuery.of(context).size.width - 170, top: 30),
-          width: 180,
-          height: 180,
-          child: containerImages[screenIndex],
         ),
       ],
     );
@@ -189,20 +183,22 @@ class _buildContainerListView extends StatelessWidget {
 }
 
 class AllowedItems extends StatelessWidget {
-  List<Allowed> allowedItems;
-  AllowedItems(List<Allowed> allowedItems) {
+  List<String> allowedItems;
+  AllowedItems(List<String> allowedItems) {
     this.allowedItems = allowedItems;
-    print(allowedItems[0].name);
+    print(allowedItems[0]);
   }
   @override
   Widget build(BuildContext context) {
     return Container(
+      alignment: Alignment.topCenter,
       decoration: BoxDecoration(
         color: Colors.black12,
-        borderRadius: BorderRadius.only(topLeft: Radius.circular(50),topRight: Radius.circular(50)),
+        borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(30), topRight: Radius.circular(30)),
       ),
-      padding: EdgeInsets.only(left: 30, top: 30, right: 80),
-      margin: EdgeInsets.only(left: 20, right: 40, top: 20),
+      padding: EdgeInsets.only(left: 20, top: 10, right: 20),
+      margin: EdgeInsets.only(left: 20, right: 20, top: 20),
       height: MediaQuery.of(context).size.height - 321,
       width: MediaQuery.of(context).size.width,
       child: ListView(
@@ -212,34 +208,145 @@ class AllowedItems extends StatelessWidget {
   }
 }
 
-List<Widget> _buildAllowedItems(List<Allowed> allowedItems) {
+class ForbiddenItems extends StatelessWidget {
+  List<String> forbiddenItems;
+  ForbiddenItems(List<String> forbiddenItems) {
+    this.forbiddenItems = forbiddenItems;
+  }
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      alignment: Alignment.center,
+      decoration: BoxDecoration(
+        color: Colors.black12,
+        borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(30), topRight: Radius.circular(30)),
+      ),
+      padding: EdgeInsets.only(left: 20, top: 10, right: 20),
+      margin: EdgeInsets.only(left: 20, right: 20, top: 20),
+      height: MediaQuery.of(context).size.height - 321,
+      width: MediaQuery.of(context).size.width,
+      child: Center(
+        child: ListView(
+          children: _buildForbiddenItems(forbiddenItems),
+        ),
+      ),
+    );
+  }
+}
+
+List<Widget> _buildAllowedItems(List<String> allowedItems) {
   List<Widget> listItems = List<Widget>();
-  print(allowedItems[0].name +
-      allowedItems[0].subjects[0].name +
-      allowedItems.length.toString());
+  print(allowedItems[0]);
   for (int i = 0; i < allowedItems.length; i++) {
-    listItems.add(Text(
-      allowedItems[i].name,
-      style: TextStyle(
-          fontWeight: FontWeight.bold, fontSize: 18, color: kColorGreyDark),
+    listItems.add(Row(
+      children: [
+        Expanded(
+          child: Container(
+            height: 125,
+            margin: EdgeInsets.only(right: 2),
+            child: Card(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10)),
+              elevation: 3,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(flex: 2, child: containerImages[4]),
+                  Expanded(
+                    flex: 3,
+                    child: Wrap(
+                        alignment: WrapAlignment.center,
+                        crossAxisAlignment: WrapCrossAlignment.center,
+                        runAlignment: WrapAlignment.center,
+                        children: [Text(allowedItems[i])]),
+                  )
+                ],
+              ),
+            ),
+          ),
+        ),
+      ],
     ));
-    for (int j = 0; j < allowedItems[i].subjects.length; j++) {
-      listItems.add(_buildItem(allowedItems[i].subjects[j].name, null));
-    }
   }
   return listItems;
 }
 
-
-Widget _buildItem(String title, Image image) {
-  return ListTile(
-    leading: image,
-    title: Text(
-      title,
-      style: TextStyle(
-          fontSize: 12, fontWeight: FontWeight.bold, color: kColorGreyDark),
-    ),
-  );
+List<Widget> _buildForbiddenItems(List<String> forbiddenItems) {
+  List<Widget> listItems = List<Widget>();
+  for (int i = 0; i < forbiddenItems.length; i += 2) {
+    listItems.add(Row(
+      children: [
+        Expanded(
+          child: Container(
+            height: 125,
+            margin: EdgeInsets.only(right: 2),
+            child: Card(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10)),
+              elevation: 3,
+              child: Row(
+                children: [
+                  CircleAvatar(
+                    maxRadius: 30,
+                    backgroundColor: Colors.orange,
+                    child: Text(
+                      "S",
+                      style: TextStyle(color: Colors.white, fontSize: 30),
+                    ),
+                  ),
+                  Center(
+                    child: Wrap(
+                        alignment: WrapAlignment.center,
+                        crossAxisAlignment: WrapCrossAlignment.center,
+                        runAlignment: WrapAlignment.center,
+                        children: [Text(forbiddenItems[i])]),
+                  )
+                ],
+              ),
+            ),
+          ),
+        ),
+        (i + 1 < forbiddenItems.length)
+            ? Expanded(
+                child: Container(
+                  margin: EdgeInsets.only(left: 2),
+                  height: 125,
+                  child: Card(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10)),
+                    elevation: 3,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        CircleAvatar(
+                          maxRadius: 30,
+                          backgroundColor: Colors.orange,
+                          child: Text(
+                            "S",
+                            style: TextStyle(color: Colors.white, fontSize: 30),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 5,
+                        ),
+                        Center(
+                          child: Wrap(
+                              alignment: WrapAlignment.center,
+                              crossAxisAlignment: WrapCrossAlignment.center,
+                              runAlignment: WrapAlignment.center,
+                              children: [Text(forbiddenItems[i + 1])]),
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+              )
+            : Container()
+      ],
+    ));
+  }
+  return listItems;
 }
 
 void _buildTabList() {

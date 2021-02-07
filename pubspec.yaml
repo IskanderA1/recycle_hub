@@ -29,6 +29,7 @@ dependencies:
   location: ^3.2.4
   intl: ^0.16.1
   flutter_svg:
+  day_night_switcher: ^0.1.1+1
 
 dev_dependencies:
   flutter_test:
@@ -39,6 +40,7 @@ dev_dependencies:
 flutter:
   assets:
   - assets/
+  - svg/
 
   uses-material-design: true
 
