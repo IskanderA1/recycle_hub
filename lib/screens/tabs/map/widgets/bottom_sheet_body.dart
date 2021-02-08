@@ -1,13 +1,12 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:intl/intl.dart';
 import 'package:recycle_hub/bloc/map_screen_blocs/feedbacks_bloc.dart';
 import 'package:recycle_hub/bloc/map_screen_blocs/marker_info_bloc.dart';
 import 'package:recycle_hub/model/map_models.dart/feedbacker_model.dart';
 import 'package:recycle_hub/model/map_models.dart/marker.dart';
-import 'package:recycle_hub/model/map_models.dart/work_time.dart';
 import 'package:recycle_hub/model/map_responses/feedbacks_collection_response.dart';
 import 'package:recycle_hub/screens/tabs/map/widgets/loader_widget.dart';
 import 'package:recycle_hub/style/theme.dart';
@@ -161,233 +160,276 @@ class _BuildBodyState extends State<BuildBody> {
       initialData: markerInfoFeedBloc.defaultItem,
       builder: (context, AsyncSnapshot<Mode> snapshot) {
         if (snapshot.data == Mode.INFO) {
-          return Column(
-            children: [
-              myDivider(),
-              Padding(
-                  padding: const EdgeInsets.fromLTRB(25, 5, 25, 5),
-                  child: Row(
-                    children: [
-                      Icon(
-                        Icons.copyright,
-                        size: 30,
-                        color: Color(0xFF8D8D8D),
-                      ),
-                      SizedBox(
-                        width: 15,
-                      ),
-                      AutoSizeText(
-                        "Не выдает ЭкоКоинов",
-                        style: TextStyle(
-                            color: kColorBlack,
-                            fontFamily: 'Gilroy',
-                            fontSize: 18),
-                      )
-                    ],
-                  )),
-              myDivider(),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(25, 5, 25, 5),
-                child: Column(
-                  children: [
-                    Row(
-                      children: [
-                        FaIcon(
-                          FontAwesomeIcons.recycle,
-                          size: 30,
-                          color: Color(0xFF8D8D8D),
-                        ),
-                        SizedBox(
-                          width: 15,
-                        ),
-                        Text(
-                          "Принимают:",
-                          style: TextStyle(
-                              color: kColorBlack,
-                              fontFamily: 'Gilroy',
-                              fontSize: 16),
-                        ),
-                      ],
-                    ),
-                    Container(
-                        height: 300,
-                        width: MediaQuery.of(context).size.width - 100,
-                        child: GridView.builder(
-                          gridDelegate:
-                              SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: 2),
-                          itemCount: widget.marker.acceptTypes.length,
-                          itemBuilder: (context, i) {
-                            return FilterCardWidget(
-                                acceptType: widget.marker.acceptTypes[0],
-                                size: size.width);
-                          },
-                        ))
-                  ],
-                ),
-              ),
-              myDivider(),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(25, 5, 25, 5),
-                child: Row(
-                  children: [
-                    FaIcon(
-                      FontAwesomeIcons.phoneAlt,
-                      size: 30,
-                      color: Color(0xFF8D8D8D),
-                    ),
-                    SizedBox(
-                      width: 15,
-                    ),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          AutoSizeText(
-                            widget.marker.contacts,
-                            style: TextStyle(
-                                color: kColorGreen,
-                                fontFamily: 'Gilroy',
-                                fontSize: 16),
-                          ),
-                          AutoSizeText(
-                            "Администратор",
-                            style: TextStyle(
-                                color: kColorBlack,
-                                fontFamily: 'GilroyMedium',
-                                fontSize: 16),
-                          ),
-                          Divider(
-                            color: Color(0xF2707070),
-                            indent: 10,
-                            endIndent: 15,
-                            thickness: 0.6,
-                            height: 15,
-                          ),
-                          AutoSizeText(
-                            widget.marker.contacts,
-                            style: TextStyle(
-                                color: kColorGreen,
-                                fontFamily: 'Gilroy',
-                                fontSize: 16),
-                          ),
-                          AutoSizeText(
-                            "Телефон партнёра",
-                            style: TextStyle(
-                                color: kColorBlack,
-                                fontFamily: 'GilroyMedium',
-                                fontSize: 16),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              myDivider(),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(25, 5, 25, 5),
-                child: Row(
-                  //mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Icon(
-                      Icons.location_on,
-                      size: 30,
-                      color: Color(0xFF8D8D8D),
-                    ),
-                    SizedBox(
-                      width: 15,
-                    ),
-                    Expanded(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Text(
-                            widget.marker.address,
-                            overflow: TextOverflow.clip,
-                            style: TextStyle(
-                                color: kColorBlack,
-                                fontFamily: 'GilroyMedium',
-                                fontSize: 16),
-                          ),
-                          SizedBox(
-                            height: 5,
-                          ),
-                          GestureDetector(
-                            onTap: () {},
-                            child: AutoSizeText(
-                              "(Построить маршрут)",
-                              style: TextStyle(
-                                  color: kColorGreen,
-                                  fontFamily: 'Gilroy',
-                                  fontSize: 18),
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              myDivider(),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(25, 5, 25, 5),
-                child: WorkingDaysWidget(
-                  workingTime: widget.marker.workTime,
-                ),
-              ),
-              myDivider(),
-              Padding(
-                padding: EdgeInsets.fromLTRB(25, 5, 25, 5),
-                child: Container(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Icon(
-                            Icons.comment,
-                            size: 30,
-                            color: Color(0xFF8D8D8D),
-                          ),
-                          SizedBox(
-                            width: 15,
-                          ),
-                          AutoSizeText(
-                            "Примечание:",
-                            style: TextStyle(
-                                color: kColorBlack,
-                                fontFamily: 'GilroyMedium',
-                                fontSize: 16),
-                          )
-                        ],
-                      ),
-                      Container(
-                        child: Text(
-                          widget.marker.description,
-                          style: TextStyle(
-                              fontFamily: 'Gilroy',
-                              fontSize: 16,
-                              color: kColorBlack.withOpacity(0.5),
-                              //letterSpacing: 1,
-                              fontWeight: FontWeight.normal),
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-              ),
-              myDivider(),
-              Placeholder()
-            ],
+          return NewWidget(
+            marker: widget.marker,
+            size: size,
           );
         } else {
           return FeedBacksView();
         }
       },
+    );
+  }
+}
+
+class NewWidget extends StatefulWidget {
+  const NewWidget({
+    Key key,
+    @required this.marker,
+    @required this.size,
+  }) : super(key: key);
+
+  final CustMarker marker;
+  final Size size;
+
+  @override
+  _NewWidgetState createState() => _NewWidgetState();
+}
+
+class _NewWidgetState extends State<NewWidget> {
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        myDivider(),
+        Padding(
+            padding: const EdgeInsets.fromLTRB(25, 5, 25, 5),
+            child: Row(
+              children: [
+                Icon(
+                  Icons.copyright,
+                  size: 30,
+                  color: Color(0xFF8D8D8D),
+                ),
+                SizedBox(
+                  width: 15,
+                ),
+                AutoSizeText(
+                  "Не выдает ЭкоКоинов",
+                  style: TextStyle(
+                      color: kColorBlack, fontFamily: 'Gilroy', fontSize: 18),
+                )
+              ],
+            )),
+        myDivider(),
+        Padding(
+          padding: const EdgeInsets.fromLTRB(25, 5, 25, 5),
+          child: Column(
+            children: [
+              Row(
+                children: [
+                  FaIcon(
+                    FontAwesomeIcons.recycle,
+                    size: 30,
+                    color: Color(0xFF8D8D8D),
+                  ),
+                  SizedBox(
+                    width: 15,
+                  ),
+                  Text(
+                    "Принимают:",
+                    style: TextStyle(
+                        color: kColorBlack, fontFamily: 'Gilroy', fontSize: 16),
+                  ),
+                ],
+              ),
+              Container(
+                  height: 300,
+                  width: MediaQuery.of(context).size.width - 100,
+                  child: GridView.builder(
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2),
+                    itemCount: widget.marker.acceptTypes.length,
+                    itemBuilder: (context, i) {
+                      return FilterCardWidget(
+                          isSelected: false,
+                          acceptType: widget.marker.acceptTypes[0],
+                          tapable: false,
+                          onUp: () {},
+                          onpressed: () {},
+                          size: widget.size.width);
+                    },
+                  ))
+            ],
+          ),
+        ),
+        myDivider(),
+        Padding(
+          padding: const EdgeInsets.fromLTRB(25, 5, 25, 5),
+          child: Row(
+            children: [
+              FaIcon(
+                FontAwesomeIcons.phoneAlt,
+                size: 30,
+                color: Color(0xFF8D8D8D),
+              ),
+              SizedBox(
+                width: 15,
+              ),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    AutoSizeText(
+                      widget.marker.contacts[0].phone,
+                      style: TextStyle(
+                          color: kColorGreen,
+                          fontFamily: 'Gilroy',
+                          fontSize: 16),
+                    ),
+                    AutoSizeText(
+                      widget.marker.contacts[0].name,
+                      style: TextStyle(
+                          color: kColorBlack,
+                          fontFamily: 'GilroyMedium',
+                          fontSize: 16),
+                    ),
+                    Divider(
+                      color: Color(0xF2707070),
+                      indent: 10,
+                      endIndent: 15,
+                      thickness: 0.6,
+                      height: 15,
+                    ),
+                    AutoSizeText(
+                      widget.marker.contacts[1].phone,
+                      style: TextStyle(
+                          color: kColorGreen,
+                          fontFamily: 'Gilroy',
+                          fontSize: 16),
+                    ),
+                    AutoSizeText(
+                      widget.marker.contacts[1].name,
+                      style: TextStyle(
+                          color: kColorBlack,
+                          fontFamily: 'GilroyMedium',
+                          fontSize: 16),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+        myDivider(),
+        Padding(
+          padding: const EdgeInsets.fromLTRB(25, 5, 25, 5),
+          child: Row(
+            //mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Icon(
+                Icons.location_on,
+                size: 30,
+                color: Color(0xFF8D8D8D),
+              ),
+              SizedBox(
+                width: 15,
+              ),
+              Expanded(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      widget.marker.address,
+                      overflow: TextOverflow.clip,
+                      style: TextStyle(
+                          color: kColorBlack,
+                          fontFamily: 'GilroyMedium',
+                          fontSize: 16),
+                    ),
+                    SizedBox(
+                      height: 5,
+                    ),
+                    GestureDetector(
+                      onTap: () {},
+                      child: AutoSizeText(
+                        "(Построить маршрут)",
+                        style: TextStyle(
+                            color: kColorGreen,
+                            fontFamily: 'Gilroy',
+                            fontSize: 18),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+        myDivider(),
+        Padding(
+          padding: const EdgeInsets.fromLTRB(25, 5, 25, 5),
+          child: WorkingDaysWidget(
+            workingTime: widget.marker.workTime,
+          ),
+        ),
+        myDivider(),
+        Padding(
+          padding: EdgeInsets.fromLTRB(25, 5, 25, 5),
+          child: Container(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(
+                      Icons.comment,
+                      size: 30,
+                      color: Color(0xFF8D8D8D),
+                    ),
+                    SizedBox(
+                      width: 15,
+                    ),
+                    AutoSizeText(
+                      "Примечание:",
+                      style: TextStyle(
+                          color: kColorBlack,
+                          fontFamily: 'GilroyMedium',
+                          fontSize: 16),
+                    )
+                  ],
+                ),
+                Container(
+                  child: Text(
+                    widget.marker.description,
+                    style: TextStyle(
+                        fontFamily: 'Gilroy',
+                        fontSize: 16,
+                        color: kColorBlack.withOpacity(0.5),
+                        //letterSpacing: 1,
+                        fontWeight: FontWeight.normal),
+                  ),
+                )
+              ],
+            ),
+          ),
+        ),
+        myDivider(),
+        Container(
+          height: 400,
+          padding: EdgeInsets.fromLTRB(25, 5, 25, 5),
+          child: ListView.separated(
+              itemCount: widget.marker.images.length,
+              separatorBuilder: (BuildContext context, int ind) {
+                return myDivider();
+              },
+              itemBuilder: (BuildContext context, int ind) {
+                print("eco.loliallen.com${widget.marker.images[ind]}");
+                return
+                    /*Image.network(
+                    "https://pbs.twimg.com/media/EG10LtNX4AAHWyl.jpg");*/
+                    CachedNetworkImage(
+                  placeholder: (BuildContext context, url) => LoaderWidget(),
+                  imageUrl: "https://www.ummatour.ru/sites/default/files/9.jpg",
+                  errorWidget: (BuildContext context, url, error) =>
+                      Icon(Icons.error),
+                );
+              }),
+        )
+      ],
     );
   }
 }
@@ -497,7 +539,7 @@ class _FeedBacksViewState extends State<FeedBacksView> {
               width: MediaQuery.of(context).size.width,
               height: 500,
               child: FeedBacksWidget()),
-        )
+        ),
       ],
     );
   }
@@ -524,8 +566,8 @@ class FeedBacksWidget extends StatelessWidget {
             );
           } else if (snapshot.data is FeedBackCollectionResponseOk) {
             return Container(
-              height: 200,
-              width: 200,
+              //height: 100,
+              //width: 100,
               child: ListView.separated(
                   itemCount: snapshot.data.feeds.feedBacks.length,
                   physics: BouncingScrollPhysics(),

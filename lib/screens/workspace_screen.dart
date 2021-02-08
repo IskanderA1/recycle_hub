@@ -24,7 +24,6 @@ class _WorkSpaceState extends State<WorkSpaceScreen> {
   @override
   void initState() {
     super.initState();
-    markersCollectionBloc.loadMarkers();
   }
 
   @override

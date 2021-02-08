@@ -36,7 +36,7 @@ class _WorkingDaysWidgetState extends State<WorkingDaysWidget> {
             SizedBox(
               width: 15,
             ),
-            AutoSizeText(
+            Text(
               "Сегодня ${widget.workingTime.getByInd(dateFormat)}",
               style: TextStyle(
                   color: kColorBlack, fontFamily: 'GilroyMedium', fontSize: 16),
@@ -171,44 +171,30 @@ class _DayWidgetState extends State<DayWidget> {
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Padding(
-            padding: const EdgeInsets.only(top: 3.25),
-            child: Flexible(
-              child: AutoSizeText(
-                "${widget.dayName}\n",
-                style: TextStyle(
-                    fontFamily: 'GilroyMedium',
-                    color: widget.isSelected ? kColorBlack : kColorGreyLight),
-              ),
-            ),
+          Text(
+            "${widget.dayName}\n",
+            style: TextStyle(
+                fontFamily: 'GilroyMedium',
+                color: widget.isSelected ? kColorBlack : kColorGreyLight),
           ),
-          Flexible(
-            child: AutoSizeText(
-              "${widget.dayArr[0]}\n${widget.dayArr[3]}",
-              style: TextStyle(
-                  fontFamily: 'GilroyMedium',
-                  color: widget.isSelected ? kColorBlack : kColorGreyLight),
-            ),
+          Text(
+            "${widget.dayArr[0]}\n${widget.dayArr[3]}",
+            style: TextStyle(
+                fontFamily: 'GilroyMedium',
+                color: widget.isSelected ? kColorBlack : kColorGreyLight),
           ),
-          Flexible(
-            child: AutoSizeText(
-              "·",
-              style: TextStyle(
-                  fontSize: 35,
-                  color: widget.isSelected ? kColorBlack : kColorGreyLight,
-                  fontWeight: FontWeight.w900),
-            ),
+          Text(
+            "·",
+            style: TextStyle(
+                fontSize: 35,
+                color: widget.isSelected ? kColorBlack : kColorGreyLight,
+                fontWeight: FontWeight.w900),
           ),
-          Flexible(
-            child: Padding(
-              padding: const EdgeInsets.only(bottom: 3.25),
-              child: AutoSizeText(
-                "${widget.dayArr[1]}\n${widget.dayArr[2]}",
-                style: TextStyle(
-                    fontFamily: 'GilroyMedium',
-                    color: widget.isSelected ? kColorBlack : kColorGreyLight),
-              ),
-            ),
+          Text(
+            "${widget.dayArr[1]}\n${widget.dayArr[2]}",
+            style: TextStyle(
+                fontFamily: 'GilroyMedium',
+                color: widget.isSelected ? kColorBlack : kColorGreyLight),
           ),
         ],
       )),

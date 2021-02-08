@@ -27,7 +27,9 @@ dependencies:
   font_awesome_flutter: ^8.11.0
   flutter_star_rating: ^0.0.3
   location: ^3.2.4
+  cached_network_image: ^2.5.0
   intl: ^0.16.1
+  flutter_typeahead: ^2.0.0
   flutter_svg:
 
 dev_dependencies:
@@ -38,10 +40,10 @@ dev_dependencies:
 
 flutter:
   assets:
-  - assets/
+    - assets/
+    - assets/fonts/
 
   uses-material-design: true
-
   fonts:
     - family: Gilroy
       fonts:
@@ -52,3 +54,6 @@ flutter:
       fonts:
         - asset: assets/fonts/Gilroy/gilroy-medium.ttf
           weight: 400
+    - family: LofOut
+      fonts:
+        - asset: assets/fonts/LofOut.ttf

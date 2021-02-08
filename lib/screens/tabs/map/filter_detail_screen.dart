@@ -3,11 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:recycle_hub/bloc/garb_collection_type_bloc.dart';
 import 'package:recycle_hub/bloc/map_screen_blocs/accept_types_collection_bloc.dart';
+import 'package:recycle_hub/bloc/map_screen_blocs/markers_collection_bloc.dart';
 import 'package:recycle_hub/bloc/marker_work_mode_bloc.dart';
+import 'package:recycle_hub/model/map_models.dart/accept_types_collection_model.dart';
+import 'package:recycle_hub/model/map_models.dart/filter_model.dart';
 import 'package:recycle_hub/model/map_responses/accept_types_collection_response.dart';
 import 'package:recycle_hub/screens/tabs/map/widgets/filter_card_widget.dart';
 import 'package:recycle_hub/screens/tabs/map/widgets/loader_widget.dart';
 import 'package:recycle_hub/style/theme.dart';
+import 'package:flutter_typeahead/flutter_typeahead.dart';
 
 GarbageCollectionTypeBloc garbageCollBloc = GarbageCollectionTypeBloc();
 MarkerWorkModeBloc markerWorkModeBloc = MarkerWorkModeBloc();
@@ -20,6 +24,11 @@ class MapFilterDetailScreen extends StatefulWidget {
 class _MapFilterDetailScreenState extends State<MapFilterDetailScreen> {
   final TextEditingController _searchController = TextEditingController();
   Size size;
+  FilterModel currentFilterModel = FilterModel();
+  AcceptTypesCollection acceptTypesCollection;
+  List<FilterCardWidget> filterCards;
+  /*GlobalKey<FilterCardWidgetState> _key =
+      GlobalKey<FilterCardWidgetState>(debugLabel: "__myKey__");*/
 
   @override
   void initState() {
@@ -49,23 +58,41 @@ class _MapFilterDetailScreenState extends State<MapFilterDetailScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Padding(
-                  padding: const EdgeInsets.fromLTRB(15, 10, 15, 10),
-                  child: TextField(
+                  padding: const EdgeInsets.fromLTRB(15, 5, 15, 5),
+                  child: TypeAheadField(
+                    textFieldConfiguration: TextFieldConfiguration(
                       controller: _searchController,
-                      decoration: inputDecorWidget()),
+                      decoration: inputDecorWidget(),
+                    ),
+                    suggestionsCallback: (str) {
+                      return acceptTypesCollection.getPatterns(str);
+                    },
+                    itemBuilder: (BuildContext context, suggestion) {
+                      return ListTile(
+                        title: Text(suggestion),
+                      );
+                    },
+                    onSuggestionSelected: (String suggestion) {
+                      selectCardByVarName(acceptTypesCollection
+                          .getVarNameByKeyWord(suggestion));
+                      currentFilterModel.filters.add(acceptTypesCollection
+                          .getVarNameByKeyWord(suggestion));
+                    },
+                  ),
                 ),
                 Padding(
-                  padding: EdgeInsets.fromLTRB(15, 10, 15, 10),
+                  padding: EdgeInsets.fromLTRB(15, 5, 15, 5),
                   child: _garbCollectTypeWidget(),
                 ),
                 Padding(
-                  padding: EdgeInsets.fromLTRB(15, 10, 15, 10),
+                  padding: EdgeInsets.fromLTRB(15, 5, 15, 5),
                   child: _markerModeCheck(),
                 ),
                 Expanded(
                   child: Container(
                     child: StreamBuilder(
                       stream: acceptTypesCollectionBloc.stream,
+                      //future: acceptTypesCollectionBloc.loadAcceptTypes(),
                       initialData: acceptTypesCollectionBloc.defaultItem,
                       builder: (BuildContext context,
                           AsyncSnapshot<AcceptTypesCollectionResponse>
@@ -83,21 +110,42 @@ class _MapFilterDetailScreenState extends State<MapFilterDetailScreen> {
                           } else if (snapshot.data
                               is AcceptTypesCollectionResponseOk) {
                             double _size = MediaQuery.of(context).size.width;
-                            return GridView.builder(
-                              gridDelegate:
+                            filterCards = List<FilterCardWidget>.from(snapshot
+                                .data.acceptTypes.acceptTypes
+                                .map((x) => FilterCardWidget(
+                                      //key: _key,
+                                      isSelected: false,
+                                      acceptType: x,
+                                      size: _size,
+                                      onUp: rejectVarName,
+                                      onpressed: injectNewVarName,
+                                      tapable: true,
+                                    )));
+                            if (acceptTypesCollection == null) {
+                              acceptTypesCollection = snapshot.data.acceptTypes;
+                            }
+                            return GridView.count(
+                              /*gridDelegate:
                                   SliverGridDelegateWithFixedCrossAxisCount(
                                       crossAxisSpacing: 5,
                                       mainAxisSpacing: 5,
                                       childAspectRatio: 5 / 4,
                                       crossAxisCount: 2),
                               itemCount:
-                                  snapshot.data.acceptTypes.acceptTypes.length,
-                              itemBuilder: (context, index) {
+                                  snapshot.data.acceptTypes.acceptTypes.length,*/
+                              crossAxisCount: 2,
+                              childAspectRatio: 5 / 4,
+                              children: filterCards,
+                              /*itemBuilder: (context, index) {
                                 return FilterCardWidget(
-                                    acceptType: snapshot
-                                        .data.acceptTypes.acceptTypes[index],
-                                    size: _size);
-                              },
+                                  acceptType: snapshot
+                                      .data.acceptTypes.acceptTypes[index],
+                                  size: _size,
+                                  onpressed: injectNewVarName,
+                                  onUp: rejectVarName,
+                                  tapable: true,
+                                );
+                              },*/
                             );
                           }
                         } else {
@@ -115,7 +163,10 @@ class _MapFilterDetailScreenState extends State<MapFilterDetailScreen> {
                   child: Align(
                     alignment: Alignment.bottomCenter,
                     child: GestureDetector(
-                      onTap: () {},
+                      onTap: () {
+                        acceptFilters();
+                        Navigator.pop(context);
+                      },
                       child: ConstrainedBox(
                         constraints: BoxConstraints(
                           maxHeight: 60,
@@ -144,6 +195,33 @@ class _MapFilterDetailScreenState extends State<MapFilterDetailScreen> {
     );
   }
 
+  selectCardByVarName(String varName) {
+    for (int i = 0; i < filterCards.length; i++) {
+      if (filterCards[i].acceptType.varName == varName) {
+        setState(() {
+          //_key.currentState.pressFunc();
+        });
+      }
+    }
+  }
+
+  injectNewVarName(String suggestion) {
+    this.currentFilterModel.filters.add(suggestion);
+  }
+
+  rejectVarName(String suggestion) {
+    this.currentFilterModel.filters.remove(suggestion);
+  }
+
+  void acceptFilters() {
+    print("///////////////////");
+    for (int i = 0; i < currentFilterModel.filters.length; i++) {
+      print(currentFilterModel.filters[i]);
+    }
+    print("///////////////////");
+    markersCollectionBloc.filterMarkers(currentFilterModel);
+  }
+
   _markerModeCheck() {
     return StreamBuilder<Object>(
         stream: markerWorkModeBloc.stream,
@@ -159,7 +237,10 @@ class _MapFilterDetailScreenState extends State<MapFilterDetailScreen> {
                 children: [
                   Expanded(
                     child: GestureDetector(
-                      onTap: () => markerWorkModeBloc.pickEvent(MODE.PAID),
+                      onTap: () {
+                        currentFilterModel.paybackType = "paid";
+                        markerWorkModeBloc.pickEvent(MODE.PAID);
+                      },
                       child: Container(
                         color: snapshot.data == MODE.PAID
                             ? Color(0xFF62C848)
@@ -182,7 +263,10 @@ class _MapFilterDetailScreenState extends State<MapFilterDetailScreen> {
                   ),
                   Expanded(
                     child: GestureDetector(
-                      onTap: () => markerWorkModeBloc.pickEvent(MODE.FREE),
+                      onTap: () {
+                        currentFilterModel.paybackType = "free";
+                        markerWorkModeBloc.pickEvent(MODE.FREE);
+                      },
                       child: Container(
                         color: snapshot.data == MODE.FREE
                             ? Color(0xFF62C848)
@@ -229,7 +313,10 @@ class _MapFilterDetailScreenState extends State<MapFilterDetailScreen> {
                   ),*/
                   Expanded(
                     child: GestureDetector(
-                      onTap: () => markerWorkModeBloc.pickEvent(MODE.PARTNERS),
+                      onTap: () {
+                        currentFilterModel.paybackType = "partner";
+                        markerWorkModeBloc.pickEvent(MODE.PARTNERS);
+                      },
                       child: Container(
                         color: snapshot.data == MODE.PARTNERS
                             ? Color(0xFF62C848)
@@ -265,7 +352,10 @@ class _MapFilterDetailScreenState extends State<MapFilterDetailScreen> {
             children: [
               Expanded(
                 child: GestureDetector(
-                  onTap: () => garbageCollBloc.pickEvent(GCOLLTYPE.RECYCLING),
+                  onTap: () {
+                    currentFilterModel.recType = "recycle";
+                    garbageCollBloc.pickEvent(GCOLLTYPE.RECYCLING);
+                  },
                   child: Container(
                       color: snapshot.data == GCOLLTYPE.RECYCLING
                           ? Color(0xFF62C848)
@@ -288,7 +378,10 @@ class _MapFilterDetailScreenState extends State<MapFilterDetailScreen> {
               ),
               Expanded(
                 child: GestureDetector(
-                  onTap: () => garbageCollBloc.pickEvent(GCOLLTYPE.UTILISATION),
+                  onTap: () {
+                    currentFilterModel.recType = "utilisation";
+                    garbageCollBloc.pickEvent(GCOLLTYPE.UTILISATION);
+                  },
                   child: Container(
                       color: snapshot.data == GCOLLTYPE.UTILISATION
                           ? Color(0xFF62C848)
@@ -311,7 +404,10 @@ class _MapFilterDetailScreenState extends State<MapFilterDetailScreen> {
               ),
               Expanded(
                 child: GestureDetector(
-                  onTap: () => garbageCollBloc.pickEvent(GCOLLTYPE.BENEFIT),
+                  onTap: () {
+                    currentFilterModel.recType = "charity";
+                    garbageCollBloc.pickEvent(GCOLLTYPE.BENEFIT);
+                  },
                   child: Container(
                       color: snapshot.data == GCOLLTYPE.BENEFIT
                           ? Color(0xFF62C848)

@@ -16,104 +16,103 @@ class AnimatedPreInformationContainer extends StatefulWidget {
 
 class _AnimatedPreInformationContainerState
     extends State<AnimatedPreInformationContainer> {
+  Widget widgetVisible;
+  Widget widgetNotVisable = Container();
   @override
   Widget build(BuildContext context) {
+    widgetVisible = newMethod();
     return AnimatedContainer(
         duration: Duration(milliseconds: 700),
         height: widget.offset <= 0.4 ? 302 : 0,
         color: Colors.white,
         onEnd: () {},
         child: Padding(
-          padding: EdgeInsets.all(15),
+            padding: EdgeInsets.all(15),
+            child: widget.offset == 0.4 ? widgetVisible : widgetNotVisable));
+  }
+
+  Column newMethod() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Expanded(
+          flex: 2,
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
             children: [
               Expanded(
-                flex: 2,
-                child: Column(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Expanded(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            widget.marker.name,
-                            style: TextStyle(
-                                fontSize: 18, fontWeight: FontWeight.bold),
-                          ),
-                          Text(
-                            "Рейтинг",
-                            style: TextStyle(color: Colors.green),
-                          ),
-                        ],
+                    Flexible(
+                      child: AutoSizeText(
+                        widget.marker.name,
+                        style: TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.bold),
+                        overflow: TextOverflow.visible,
                       ),
                     ),
-                    Expanded(
-                      child: Container(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Flexible(
-                              child: AutoSizeText(
-                                widget.marker.address,
-                                style: TextStyle(fontSize: 16),
-                                overflow: TextOverflow.visible,
-                              ),
-                            ),
-                            Container(child: AutoSizeText("800 м")),
-                          ],
-                        ),
+                    Flexible(
+                      child: AutoSizeText(
+                        "Рейтинг",
+                        style: TextStyle(color: Colors.green),
                       ),
                     ),
                   ],
                 ),
               ),
               Expanded(
-                flex: 4,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: widget.offset <= 0.4
-                      ? [
-                          AutoSizeText(widget.marker.workTime.getWorkingTime()),
-                          AutoSizeText("Подробнее")
-                        ]
-                      : [],
+                child: Container(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Flexible(
+                        child: AutoSizeText(
+                          widget.marker.address,
+                          style: TextStyle(fontSize: 16),
+                          overflow: TextOverflow.visible,
+                        ),
+                      ),
+                      Container(child: AutoSizeText("800 м")),
+                    ],
+                  ),
                 ),
               ),
-              Expanded(
-                flex: 1,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: widget.offset <= 0.4
-                      ? [
-                          AutoSizeText("Принимают на переработку:"),
-                        ]
-                      : [],
-                ),
-              ),
-              Expanded(
-                  flex: 1,
-                  child: GridView.count(
-                    crossAxisCount: 3,
-                    children: getChilds(widget.marker),
-                  )
-                  /*GridView.builder(
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 3),
-                    itemCount: widget.marker.acceptTypes.length,
-                    itemBuilder: (context, index) {
-                      return AutoSizeText(
-                        "  ${widget.marker.acceptTypes[index].name}  ",
-                        style: TextStyle(backgroundColor: Color(0xFFF2F2F2)),
-                      );
-                    },
-                  )*/
-                  )
             ],
           ),
-        ));
+        ),
+        Expanded(
+          flex: 4,
+          child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                AutoSizeText(widget.marker.workTime.getWorkingTime()),
+                AutoSizeText("Подробнее")
+              ]),
+        ),
+        Expanded(
+          flex: 1,
+          child:
+              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            AutoSizeText("Принимают на переработку:"),
+          ]),
+        ),
+        Expanded(
+            flex: 1,
+            child: GridView.builder(
+              gridDelegate:
+                  SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3),
+              itemCount: widget.marker.acceptTypes.length,
+              itemBuilder: (context, index) {
+                return AutoSizeText(
+                  "  ${widget.marker.acceptTypes[index].name}  ",
+                  style: TextStyle(backgroundColor: Color(0xFFF2F2F2)),
+                );
+              },
+            ))
+      ],
+    );
   }
 }
 

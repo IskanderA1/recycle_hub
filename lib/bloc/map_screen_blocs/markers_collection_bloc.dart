@@ -1,4 +1,5 @@
 import 'package:recycle_hub/model/map_models.dart/coord.dart';
+import 'package:recycle_hub/model/map_models.dart/filter_model.dart';
 import 'package:recycle_hub/model/map_models.dart/markers_collection.dart';
 import 'package:recycle_hub/model/map_responses/markers_response.dart';
 import 'package:recycle_hub/repo/google_map_repo.dart';
@@ -25,6 +26,12 @@ class MarkersCollectionBloc {
         Coords(lat: 60, lng: 33),
         Coords(lat: 60, lng: 60),
         Coords(lat: 33, lng: 60));
+    _behaviorSubject.sink.add(_response);
+  }
+
+  filterMarkers(FilterModel filter) async {
+    _behaviorSubject.sink.add(MarkerCollectionResponseLoading());
+    var _response = await _repo.getMarkersByFilter(filter);
     _behaviorSubject.sink.add(_response);
   }
 

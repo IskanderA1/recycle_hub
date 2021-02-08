@@ -1,5 +1,8 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:recycle_hub/bloc/map_screen_blocs/marker_info_bloc.dart';
 import 'package:recycle_hub/bloc/map_screen_blocs/markers_collection_bloc.dart';
 import 'package:recycle_hub/model/map_responses/markers_response.dart';
 import 'package:recycle_hub/screens/tabs/map/filter_detail_screen.dart';
@@ -41,11 +44,6 @@ class _MapScreenState extends State<MapScreen> {
       );
     });
     return "Ok";
-  }
-
-  @override
-  void initState() {
-    super.initState();
   }
 
   AppBar mapScreenAppBar() {
@@ -145,16 +143,18 @@ class _MyGoogleMapWidgetState extends State<MyGoogleMapWidget> {
                   snapshot.data is MarkerCollectionResponseLoading) {
                 return LoaderWidget();
               }
-              print("Список получен");
               return GoogleMap(
                   mapType: _currentMapType,
                   initialCameraPosition: cameraPosition,
                   onMapCreated: (GoogleMapController controller) {
-                    _controller.complete(controller);
+                    if (!_controller.isCompleted) {
+                      _controller.complete(controller);
+                    }
                   },
                   myLocationButtonEnabled: false,
                   myLocationEnabled: true,
                   zoomControlsEnabled: false,
+                  compassEnabled: false,
                   markers: Set<Marker>.from(
                       snapshot.data.markers.markers.map((marker) => new Marker(
                             markerId: MarkerId(marker.id),
@@ -163,26 +163,29 @@ class _MyGoogleMapWidgetState extends State<MyGoogleMapWidget> {
 
                             /*Цвет можно поменять здесь */
                             icon: BitmapDescriptor.defaultMarkerWithHue(4),
-                            onTap: () => showStickyFlexibleBottomSheet(
-                                initHeight: 0.4,
-                                minHeight: 0.40,
-                                maxHeight: 0.85,
-                                context: context,
-                                headerHeight: 60,
-                                headerBuilder: (context, bottomSheetOffset) {
-                                  return buildHeader(
-                                      context, bottomSheetOffset, marker);
-                                },
-                                builder: (context, offset) {
-                                  return SliverChildListDelegate(
-                                    <Widget>[
-                                      AnimatedPreInformationContainer(
-                                          offset: offset, marker: marker),
-                                      BuildBody(marker: marker),
-                                    ],
-                                  );
-                                },
-                                anchors: [0.0, 0.4, 0.85]),
+                            onTap: () {
+                              markerInfoFeedBloc.pickEvent(Mode.INFO);
+                              showStickyFlexibleBottomSheet(
+                                  initHeight: 0.4,
+                                  minHeight: 0.40,
+                                  maxHeight: 0.85,
+                                  context: context,
+                                  headerHeight: 60,
+                                  headerBuilder: (context, bottomSheetOffset) {
+                                    return buildHeader(
+                                        context, bottomSheetOffset, marker);
+                                  },
+                                  builder: (context, offset) {
+                                    return SliverChildListDelegate(
+                                      <Widget>[
+                                        AnimatedPreInformationContainer(
+                                            offset: offset, marker: marker),
+                                        BuildBody(marker: marker),
+                                      ],
+                                    );
+                                  },
+                                  anchors: [0.0, 0.4, 0.85]);
+                            },
                             position:
                                 LatLng(marker.coords.lat, marker.coords.lng),
                           ))));
@@ -224,22 +227,17 @@ class _MyGoogleMapWidgetState extends State<MyGoogleMapWidget> {
       Positioned(
         top: 30,
         left: 10,
-        child: GestureDetector(
-          onTap: northSouth,
-          child: Container(
-            height: 40,
-            width: 40,
-            //color: kColorGreen,
-            decoration:
-                BoxDecoration(color: kColorBlack, shape: BoxShape.circle),
-            child: CircleAvatar(
-              backgroundColor: kColorWhite,
-              foregroundColor: kColorWhite,
-              child: Icon(
-                Icons.explore,
-                size: 30,
-                color: kColorGreen,
-              ),
+        child: Container(
+          width: 50,
+          height: 50,
+          child: FloatingActionButton(
+            heroTag: null,
+            backgroundColor: kColorGreen,
+            onPressed: northSouth,
+            child: Icon(
+              Icons.explore,
+              size: 30,
+              color: kColorWhite,
             ),
           ),
         ),
@@ -248,53 +246,40 @@ class _MyGoogleMapWidgetState extends State<MyGoogleMapWidget> {
       Positioned(
         top: 30,
         right: 10,
-        child: GestureDetector(
-          onTap: zoomIncrement
-          /*() async {
-            LatLng newLatLng = await getUserLocation();
-            //setState(() {
-             // latLng = newLatLng;
-            //});
-          }*/
-          ,
-          child: Container(
-            height: 40,
-            width: 40,
-            //color: kColorGreen,
-            decoration:
-                BoxDecoration(color: kColorBlack, shape: BoxShape.circle),
-            child: CircleAvatar(
-              backgroundColor: kColorWhite,
-              foregroundColor: kColorWhite,
-              child: FaIcon(
-                FontAwesomeIcons.plusCircle,
-                size: 30,
-                color: kColorGreen,
-              ),
+        child: Container(
+          height: 50,
+          width: 50,
+          child: FloatingActionButton(
+            heroTag: null,
+            backgroundColor: kColorWhite,
+            shape:
+                CircleBorder(side: BorderSide(color: kColorGreen, width: 1.5)),
+            onPressed: zoomIncrement,
+            child: FaIcon(
+              FontAwesomeIcons.plus,
+              size: 20,
+              color: kColorGreen,
             ),
           ),
         ),
       ),
       /*ZOOM - */
       Positioned(
-        top: 70,
+        top: 82,
         right: 10,
-        child: GestureDetector(
-          onTap: zoomDecrement,
-          child: Container(
-            height: 40,
-            width: 40,
-            //color: kColorGreen,
-            decoration:
-                BoxDecoration(color: kColorBlack, shape: BoxShape.circle),
-            child: CircleAvatar(
-              backgroundColor: kColorWhite,
-              foregroundColor: kColorWhite,
-              child: FaIcon(
-                FontAwesomeIcons.minusCircle,
-                size: 30,
-                color: kColorGreen,
-              ),
+        child: Container(
+          height: 50,
+          width: 50,
+          child: FloatingActionButton(
+            heroTag: null,
+            backgroundColor: kColorWhite,
+            shape:
+                CircleBorder(side: BorderSide(color: kColorGreen, width: 1.5)),
+            onPressed: zoomDecrement,
+            child: FaIcon(
+              FontAwesomeIcons.minus,
+              size: 20,
+              color: kColorGreen,
             ),
           ),
         ),

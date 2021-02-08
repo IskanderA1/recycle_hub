@@ -43,15 +43,20 @@ class _BottomNavBarV2State extends State<BottomNavBarV2> {
                 ),
                 Center(
                   heightFactor: 0.3,
-                  child: FloatingActionButton(
-                    elevation: 0,
-                    backgroundColor: kColorGreen,
-                    onPressed: () {
-                      markersCollectionBloc.loadMarkers();
-                    },
-                    child: Container(
-                      child: Icon(
-                        Icons.qr_code,
+                  child: Container(
+                    height: 80,
+                    width: 80,
+                    child: FloatingActionButton(
+                      elevation: 0,
+                      backgroundColor: kColorGreen,
+                      onPressed: () {
+                        markersCollectionBloc.loadMarkers();
+                      },
+                      child: Container(
+                        child: Icon(
+                          Icons.qr_code,
+                          size: 40,
+                        ),
                       ),
                     ),
                   ),
@@ -131,11 +136,11 @@ class BNBCustomPainter extends CustomPainter {
 
     Path path = Path();
     path.moveTo(0, 0); // Start
-    path.lineTo(size.width * 0.35, 0);
-    path.quadraticBezierTo(size.width * 0.42, 0, size.width * 0.42, 13);
-    path.arcToPoint(Offset(size.width * 0.58, 13),
+    path.lineTo(size.width * 0.30, 0);
+    path.quadraticBezierTo(size.width * 0.40, 0, size.width * 0.40, 13);
+    path.arcToPoint(Offset(size.width * 0.60, 13),
         radius: Radius.circular(33.2), clockwise: false);
-    path.quadraticBezierTo(size.width * 0.58, 0, size.width * 0.65, 0);
+    path.quadraticBezierTo(size.width * 0.60, 0, size.width * 0.65, 0);
     path.lineTo(size.width, 0);
     path.lineTo(size.width, size.height);
     path.lineTo(0, size.height);

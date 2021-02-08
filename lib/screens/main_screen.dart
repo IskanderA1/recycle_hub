@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:recycle_hub/bloc/auth_user_bloc.dart';
+import 'package:recycle_hub/bloc/map_screen_blocs/markers_collection_bloc.dart';
 import 'package:recycle_hub/bloc/navigation_bloc.dart';
 import 'package:recycle_hub/elements/loader.dart';
 import 'package:recycle_hub/model/user_response.dart';
@@ -22,6 +23,7 @@ class _MainScreenState extends State<MainScreen> {
   @override
   void initState() {
     authBloc.authLocal();
+    markersCollectionBloc.loadMarkers();
     super.initState();
   }
 

@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 
 import 'package:recycle_hub/model/map_models.dart/accept_types.dart';
+import 'package:recycle_hub/model/map_models.dart/contact_model.dart';
 import 'package:recycle_hub/model/map_models.dart/coord.dart';
 import 'package:recycle_hub/model/map_models.dart/work_time.dart';
 
@@ -10,7 +11,7 @@ class CustMarker {
   String id;
   List<AcceptType> acceptTypes;
   String address;
-  String contacts;
+  List<Contact> contacts;
   Coords coords;
   String description;
   List<String> images;
@@ -32,7 +33,7 @@ class CustMarker {
     String id,
     List<AcceptType> acceptTypes,
     String address,
-    String contacts,
+    List<Contact> contacts,
     Coords coords,
     String description,
     List<String> images,
@@ -54,15 +55,15 @@ class CustMarker {
 
   Map<String, dynamic> toMap() {
     return {
-      '_id': id,
-      'accept_types': acceptTypes?.map((x) => x?.toMap())?.toList(),
+      'id': id,
+      'acceptTypes': acceptTypes?.map((x) => x?.toMap())?.toList(),
       'address': address,
-      'contacts': contacts,
+      'contacts': contacts?.map((x) => x?.toMap())?.toList(),
       'coords': coords?.toMap(),
       'description': description,
       'images': images,
       'name': name,
-      'work_time': workTime?.toMap(),
+      'workTime': workTime?.toMap(),
     };
   }
 
@@ -71,7 +72,8 @@ class CustMarker {
     acceptTypes = List<AcceptType>.from(
         map['accept_types']?.map((x) => AcceptType.fromMap(x)));
     address = map['address'];
-    contacts = map['contacts'];
+    contacts =
+        List<Contact>.from(map['contacts']?.map((x) => Contact.fromMap(x)));
     coords = Coords.fromMap(map['coords']);
     description = map['description'];
     images = List<String>.from(map['images']);
@@ -86,7 +88,7 @@ class CustMarker {
 
   @override
   String toString() {
-    return 'Marker(id: $id, acceptTypes: $acceptTypes, address: $address, contacts: $contacts, coords: $coords, description: $description, images: $images, name: $name, workTime: $workTime)';
+    return 'CustMarker(id: $id, acceptTypes: $acceptTypes, address: $address, contacts: $contacts, coords: $coords, description: $description, images: $images, name: $name, workTime: $workTime)';
   }
 
   @override
@@ -97,7 +99,7 @@ class CustMarker {
         o.id == id &&
         listEquals(o.acceptTypes, acceptTypes) &&
         o.address == address &&
-        o.contacts == contacts &&
+        listEquals(o.contacts, contacts) &&
         o.coords == coords &&
         o.description == description &&
         listEquals(o.images, images) &&
