@@ -1,68 +1,78 @@
 import 'package:flutter/material.dart';
 import 'package:recycle_hub/bloc/eco_guide_blocs/eco_menu_bloc.dart';
-import 'package:recycle_hub/elements/drawer.dart';
-
+import 'package:recycle_hub/elements/input_style.dart';
 import '../../../../style/theme.dart';
 
 List<String> titles = [
-  "Поиск",
   "Виды отходов",
   "Справочник маркировок",
-  "Советы для экономики",
-  "Вопросы и ответы",
+  "Советы для экономии",
   "Пройти тест"
 ];
 
 List<Icon> icons = [
-  Icon(Icons.search_rounded),
   Icon(Icons.restore_from_trash_outlined),
   Icon(Icons.book),
   Icon(Icons.monetization_on_outlined),
-  Icon(Icons.question_answer_outlined),
   Icon(Icons.contact_support_outlined)
 ];
 
 class MainEcoGuideScreen extends StatefulWidget {
-  /*final Widget bottomNavBar;
-  MainEcoGuideScreen({this.bottomNavBar});*/
   @override
   _MainEcoGuideScreenState createState() => _MainEcoGuideScreenState();
 }
 
 class _MainEcoGuideScreenState extends State<MainEcoGuideScreen> {
+  final TextEditingController _searchController = TextEditingController();
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          icon: Icon(Icons.menu),
-          onPressed: () {
-            Scaffold.of(context).openDrawer();
-          },
+    return GestureDetector(
+      onTap: () {
+        FocusScopeNode currentFocus = FocusScope.of(context);
+        if (!currentFocus.hasPrimaryFocus) {
+          currentFocus.unfocus();
+        }
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          leading: IconButton(
+            icon: Icon(Icons.menu),
+            onPressed: () {
+              Scaffold.of(context).openDrawer();
+            },
+          ),
+          title: Text(
+            "ЭкоГид",
+          ),
+          centerTitle: true,
+          iconTheme: IconThemeData(size: 1),
         ),
-        title: Text(
-          "ЭкоГид",
-        ),
-        centerTitle: true,
-        iconTheme: IconThemeData(size: 1),
-      ),
-      body: Container(
-        child: Column(
-          children: [
-            Container(
-              child: Center(
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 15),
+        body: Container(
+          child: Column(
+            children: [
+              Container(
+                height: 60,
+                margin: EdgeInsets.only(top: 7, bottom: 5),
+                child: Container(
+                  padding: EdgeInsets.only(left: 12, right: 12, top: 8),
+                  child: TextField(
+                    controller: _searchController,
+                    decoration: inputDecorWidget(),
+                  ),
+                ),
+              ),
+              Container(
+                child: Center(
                   child: Container(
-                    height: MediaQuery.of(context).size.height - 160,
+                    height: MediaQuery.of(context).size.height - 200,
                     child: ListView(
                       children: _buildButton(context),
                     ),
                   ),
                 ),
-              ),
-            )
-          ],
+              )
+            ],
+          ),
         ),
       ),
     );
