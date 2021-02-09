@@ -231,6 +231,7 @@ Widget _buildContainerList(FilterResponse filterResponse, int screenIndex) {
                                       SvgPicture svgPicture =
                                           containerImages[screenIndex];
                                       return AlertDialog(
+                                        actionsPadding: EdgeInsets.all(0),
                                         titlePadding: EdgeInsets.all(0),
                                         shape: RoundedRectangleBorder(
                                             borderRadius:
@@ -248,39 +249,67 @@ Widget _buildContainerList(FilterResponse filterResponse, int screenIndex) {
                                           ),
                                         ),
                                         content: Container(
-                                          height: 200,
-                                          child: ListView(
+                                          height: 250,
+                                          child: Column(
                                             children: [
-                                              Text(
-                                                "Подлежат:",
-                                                style: TextStyle(
-                                                    fontWeight:
-                                                        FontWeight.bold),
+                                              Container(
+                                                height: 200,
+                                                child: ListView(
+                                                  children: [
+                                                    Text(
+                                                      "Подлежат:",
+                                                      style: TextStyle(
+                                                          fontWeight:
+                                                              FontWeight.bold),
+                                                    ),
+                                                    SizedBox(
+                                                      height: 10,
+                                                    ),
+                                                    Wrap(
+                                                      children: [
+                                                        Text(
+                                                          buildText(
+                                                              filterResponse,
+                                                              screenIndex)[0],
+                                                        )
+                                                      ],
+                                                    ),
+                                                    SizedBox(
+                                                      height: 10,
+                                                    ),
+                                                    Text("Не подлежат:",
+                                                        style: TextStyle(
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .bold)),
+                                                    SizedBox(
+                                                      height: 10,
+                                                    ),
+                                                    Wrap(
+                                                      children: [
+                                                        Text(
+                                                          buildText(
+                                                              filterResponse,
+                                                              screenIndex)[1],
+                                                        )
+                                                      ],
+                                                    ),
+                                                  ],
+                                                ),
                                               ),
-                                              SizedBox(
-                                                height: 10,
-                                              ),
-                                              Wrap(
-                                                children: [
-                                                  Text(buildText(filterResponse,
-                                                      screenIndex)[0])
-                                                ],
-                                              ),
-                                              SizedBox(
-                                                height: 10,
-                                              ),
-                                              Text("Не подлежат:",
-                                                  style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.bold)),
-                                              SizedBox(
-                                                height: 10,
-                                              ),
-                                              Wrap(
-                                                children: [
-                                                  Text(buildText(filterResponse,
-                                                      screenIndex)[1])
-                                                ],
+                                              Container(
+                                                width: 250,
+                                                child: RaisedButton(
+                                                  onPressed: () {
+                                                    Navigator.pop(context);
+                                                  },
+                                                  color: kColorGreen,
+                                                  child: Text(
+                                                    "Понятно",
+                                                    style: TextStyle(
+                                                        color: kColorWhite),
+                                                  ),
+                                                ),
                                               )
                                             ],
                                           ),
@@ -365,7 +394,7 @@ class AllowedItems extends StatelessWidget {
       ),
       padding: EdgeInsets.only(left: 20, top: 10, right: 20),
       margin: EdgeInsets.only(left: 20, right: 20, top: 20),
-      height: MediaQuery.of(context).size.height - 390,
+      height: MediaQuery.of(context).size.height - 400,
       width: MediaQuery.of(context).size.width,
       child: ListView(
         children: _buildAllowedItems(allowedItems),
@@ -390,7 +419,7 @@ class ForbiddenItems extends StatelessWidget {
       ),
       padding: EdgeInsets.only(left: 20, top: 10, right: 20),
       margin: EdgeInsets.only(left: 20, right: 20, top: 20),
-      height: MediaQuery.of(context).size.height - 321,
+      height: MediaQuery.of(context).size.height - 400,
       width: MediaQuery.of(context).size.width,
       child: Center(
         child: ListView(
@@ -430,11 +459,12 @@ List<Widget> _buildAllowedItems(List<String> allowedItems) {
                     height: 5,
                   ),
                   Center(
-                    child: Wrap(
-                        alignment: WrapAlignment.center,
-                        crossAxisAlignment: WrapCrossAlignment.center,
-                        runAlignment: WrapAlignment.center,
-                        children: [Text(allowedItems[i])]),
+                    child: Wrap(children: [
+                      Text(
+                        allowedItems[i],
+                        textAlign: TextAlign.center,
+                      )
+                    ]),
                   )
                 ],
               ),
@@ -465,11 +495,12 @@ List<Widget> _buildAllowedItems(List<String> allowedItems) {
                           height: 5,
                         ),
                         Center(
-                          child: Wrap(
-                              alignment: WrapAlignment.center,
-                              crossAxisAlignment: WrapCrossAlignment.center,
-                              runAlignment: WrapAlignment.center,
-                              children: [Text(allowedItems[i + 1])]),
+                          child: Wrap(children: [
+                            Text(
+                              allowedItems[i + 1],
+                              textAlign: TextAlign.center,
+                            )
+                          ]),
                         )
                       ],
                     ),
@@ -511,11 +542,12 @@ List<Widget> _buildForbiddenItems(List<String> forbiddenItems) {
                     height: 5,
                   ),
                   Center(
-                    child: Wrap(
-                        alignment: WrapAlignment.center,
-                        crossAxisAlignment: WrapCrossAlignment.center,
-                        runAlignment: WrapAlignment.center,
-                        children: [Text(forbiddenItems[i])]),
+                    child: Wrap(children: [
+                      Text(
+                        forbiddenItems[i],
+                        textAlign: TextAlign.center,
+                      )
+                    ]),
                   )
                 ],
               ),
@@ -546,11 +578,12 @@ List<Widget> _buildForbiddenItems(List<String> forbiddenItems) {
                           height: 5,
                         ),
                         Center(
-                          child: Wrap(
-                              alignment: WrapAlignment.center,
-                              crossAxisAlignment: WrapCrossAlignment.center,
-                              runAlignment: WrapAlignment.center,
-                              children: [Text(forbiddenItems[i + 1])]),
+                          child: Wrap(children: [
+                            Text(
+                              forbiddenItems[i + 1],
+                              textAlign: TextAlign.center,
+                            )
+                          ]),
                         )
                       ],
                     ),

@@ -13,7 +13,7 @@ class _AdviceScreenState extends State<AdviceScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Советы для экономики"),
+        title: Text("Советы для экономии"),
         centerTitle: true,
         leading: IconButton(
           icon: Icon(Icons.arrow_back_sharp),
@@ -23,11 +23,12 @@ class _AdviceScreenState extends State<AdviceScreen> {
         ),
       ),
       body: Container(
-        child: Column(
+        height: MediaQuery.of(context).size.height-150,
+        child: ListView(
           children: [
             Container(
-              padding: EdgeInsets.only(left: 10, right: 10, top: 10),
-              margin: EdgeInsets.only(bottom: 10),
+              padding: EdgeInsets.only(left: 10, right: 10, top: 5),
+              margin: EdgeInsets.only(bottom: 5),
               child: Column(
                 children: [
                   Container(
@@ -94,15 +95,6 @@ class _AdviceScreenState extends State<AdviceScreen> {
                       ],
                     ),
                   ),
-                ],
-              ),
-            ),
-            Container(
-              color: Colors.grey[200],
-              padding: EdgeInsets.only(left: 10, right: 10, top: 10),
-              height: MediaQuery.of(context).size.height - 277,
-              child: ListView(
-                children: [
                   GestureDetector(
                     onTap: () {
                       Navigator.push(context, MaterialPageRoute(
@@ -179,24 +171,18 @@ class _AdviceScreenState extends State<AdviceScreen> {
                       child: Column(
                         children: [
                           Expanded(
-                              child: Hero(
-                            tag: "first image",
-                            child: Image.network(
-                                "https://www.accenture.com/t20200128T032529Z__w__/lu-en/_acnmedia/Accenture/Redesign-Assets/DotCom/Images/Global/Thumbnail400x400/8/Accenture-australian-water-utility-blue-400x400.jpg"),
-                          )),
+                              child: Image.network(
+                                  "https://www.accenture.com/t20200128T032529Z__w__/lu-en/_acnmedia/Accenture/Redesign-Assets/DotCom/Images/Global/Thumbnail400x400/8/Accenture-australian-water-utility-blue-400x400.jpg")),
                           Expanded(
                               child: Container(
                             padding: EdgeInsets.all(10),
                             child: Column(
                               children: [
-                                Hero(
-                                  tag: "first title",
-                                  child: Text(
-                                    "Как и зачем экономить воду?",
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 20),
-                                  ),
+                                Text(
+                                  "Как и зачем экономить воду?",
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 20),
                                 ),
                                 SizedBox(
                                   height: 5,
@@ -214,11 +200,13 @@ class _AdviceScreenState extends State<AdviceScreen> {
                                   children: [
                                     Text(
                                       "19.01.2021",
-                                      style: TextStyle(color: kColorGreyLight),
+                                      style:
+                                          TextStyle(color: kColorGreyLight),
                                     ),
                                     Text(
                                       "Поподробнее",
-                                      style: TextStyle(color: kColorGreyLight),
+                                      style:
+                                          TextStyle(color: kColorGreyLight),
                                     )
                                   ],
                                 )
@@ -231,7 +219,7 @@ class _AdviceScreenState extends State<AdviceScreen> {
                   ),
                 ],
               ),
-            )
+            ),
           ],
         ),
       ),

@@ -155,9 +155,7 @@ class _buildContainerListView extends StatelessWidget {
     this.filterModels = filterModels;
     this.stateButtons = stateButtons;
     this.screenIndex = screenIndex;
-    this.properties = stateButtons == StateButtons.ALLOWED
-        ? AllowedItems(filterModels[screenIndex].keyWords)
-        : ForbiddenItems(filterModels[screenIndex].badWords);
+    this.properties = AllowedItems(filterModels[screenIndex].keyWords);
     print(filterModels[screenIndex].keyWords[0]);
   }
   @override
@@ -199,37 +197,10 @@ class AllowedItems extends StatelessWidget {
       ),
       padding: EdgeInsets.only(left: 20, top: 10, right: 20),
       margin: EdgeInsets.only(left: 20, right: 20, top: 20),
-      height: MediaQuery.of(context).size.height - 321,
+      height: MediaQuery.of(context).size.height - 380,
       width: MediaQuery.of(context).size.width,
       child: ListView(
         children: _buildAllowedItems(allowedItems),
-      ),
-    );
-  }
-}
-
-class ForbiddenItems extends StatelessWidget {
-  List<String> forbiddenItems;
-  ForbiddenItems(List<String> forbiddenItems) {
-    this.forbiddenItems = forbiddenItems;
-  }
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      alignment: Alignment.center,
-      decoration: BoxDecoration(
-        color: Colors.black12,
-        borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(30), topRight: Radius.circular(30)),
-      ),
-      padding: EdgeInsets.only(left: 20, top: 10, right: 20),
-      margin: EdgeInsets.only(left: 20, right: 20, top: 20),
-      height: MediaQuery.of(context).size.height - 321,
-      width: MediaQuery.of(context).size.width,
-      child: Center(
-        child: ListView(
-          children: _buildForbiddenItems(forbiddenItems),
-        ),
       ),
     );
   }
@@ -266,83 +237,6 @@ List<Widget> _buildAllowedItems(List<String> allowedItems) {
             ),
           ),
         ),
-      ],
-    ));
-  }
-  return listItems;
-}
-
-List<Widget> _buildForbiddenItems(List<String> forbiddenItems) {
-  List<Widget> listItems = List<Widget>();
-  for (int i = 0; i < forbiddenItems.length; i += 2) {
-    listItems.add(Row(
-      children: [
-        Expanded(
-          child: Container(
-            height: 125,
-            margin: EdgeInsets.only(right: 2),
-            child: Card(
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10)),
-              elevation: 3,
-              child: Row(
-                children: [
-                  CircleAvatar(
-                    maxRadius: 30,
-                    backgroundColor: Colors.orange,
-                    child: Text(
-                      "S",
-                      style: TextStyle(color: Colors.white, fontSize: 30),
-                    ),
-                  ),
-                  Center(
-                    child: Wrap(
-                        alignment: WrapAlignment.center,
-                        crossAxisAlignment: WrapCrossAlignment.center,
-                        runAlignment: WrapAlignment.center,
-                        children: [Text(forbiddenItems[i])]),
-                  )
-                ],
-              ),
-            ),
-          ),
-        ),
-        (i + 1 < forbiddenItems.length)
-            ? Expanded(
-                child: Container(
-                  margin: EdgeInsets.only(left: 2),
-                  height: 125,
-                  child: Card(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10)),
-                    elevation: 3,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        CircleAvatar(
-                          maxRadius: 30,
-                          backgroundColor: Colors.orange,
-                          child: Text(
-                            "S",
-                            style: TextStyle(color: Colors.white, fontSize: 30),
-                          ),
-                        ),
-                        SizedBox(
-                          height: 5,
-                        ),
-                        Center(
-                          child: Wrap(
-                              alignment: WrapAlignment.center,
-                              crossAxisAlignment: WrapCrossAlignment.center,
-                              runAlignment: WrapAlignment.center,
-                              children: [Text(forbiddenItems[i + 1])]),
-                        )
-                      ],
-                    ),
-                  ),
-                ),
-              )
-            : Container()
       ],
     ));
   }

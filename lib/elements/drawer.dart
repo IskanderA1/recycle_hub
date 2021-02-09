@@ -2,8 +2,6 @@ import 'package:day_night_switcher/day_night_switcher.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../style/theme.dart';
-import '../style/theme.dart';
-
 Drawer customDrawer(BuildContext context) => Drawer(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -22,7 +20,7 @@ Drawer customDrawer(BuildContext context) => Drawer(
                     Container(
                       alignment: Alignment.center,
                       padding: EdgeInsets.only(
-                          left: 50, top: 45, bottom: 20, right: 30),
+                          left: 30, top: 45, bottom: 20, right: 30),
                       child: Wrap(
                         alignment: WrapAlignment.center,
                         children: [
@@ -30,6 +28,7 @@ Drawer customDrawer(BuildContext context) => Drawer(
                             "Ура!!! Вместе мы сдали более 1320 кг!",
                             style: TextStyle(
                                 fontWeight: FontWeight.bold, fontSize: 16),
+                                textAlign: TextAlign.center,
                           )
                         ],
                       ),
