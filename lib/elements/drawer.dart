@@ -171,7 +171,7 @@ Drawer customDrawer(BuildContext context) => Drawer(
                   size: 30,
                 ),
                 Container(
-                  height: 50,
+                  height: 47,
                   width: 50,
                   child: DayNightSwitcher(
                       isDarkModeEnabled: false, onStateChanged: (state) {}),

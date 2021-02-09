@@ -71,4 +71,6 @@ class LofOut {
       const IconData(0xe81e, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData waste2 =
       const IconData(0xe81f, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData location =
+      IconData(0xe820, fontFamily: _kFontFam, fontPackage: _kFontPkg);
 }

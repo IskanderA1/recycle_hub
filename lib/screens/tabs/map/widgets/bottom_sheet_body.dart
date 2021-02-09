@@ -362,6 +362,9 @@ class _NewWidgetState extends State<NewWidget> {
           padding: const EdgeInsets.fromLTRB(25, 5, 25, 5),
           child: WorkingDaysWidget(
             workingTime: widget.marker.workTime,
+            wColor: kColorBlack,
+            backColor: kColorWhite,
+            hasSelection: true,
           ),
         ),
         myDivider(),
@@ -371,26 +374,29 @@ class _NewWidgetState extends State<NewWidget> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(
-                      Icons.comment,
-                      size: 30,
-                      color: Color(0xFF8D8D8D),
-                    ),
-                    SizedBox(
-                      width: 15,
-                    ),
-                    AutoSizeText(
-                      "Примечание:",
-                      style: TextStyle(
-                          color: kColorBlack,
-                          fontFamily: 'GilroyMedium',
-                          fontSize: 16),
-                    )
-                  ],
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(
+                        Icons.comment,
+                        size: 30,
+                        color: Color(0xFF8D8D8D),
+                      ),
+                      SizedBox(
+                        width: 15,
+                      ),
+                      AutoSizeText(
+                        "Примечание:",
+                        style: TextStyle(
+                            color: kColorBlack,
+                            fontFamily: 'GilroyMedium',
+                            fontSize: 16),
+                      )
+                    ],
+                  ),
                 ),
                 Container(
                   child: Text(
@@ -407,10 +413,9 @@ class _NewWidgetState extends State<NewWidget> {
             ),
           ),
         ),
-        myDivider(),
         Container(
           height: 400,
-          padding: EdgeInsets.fromLTRB(25, 5, 25, 5),
+          padding: EdgeInsets.fromLTRB(0, 5, 0, 5),
           child: ListView.separated(
               itemCount: widget.marker.images.length,
               separatorBuilder: (BuildContext context, int ind) {

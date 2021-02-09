@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:recycle_hub/model/map_models.dart/marker.dart';
 import 'package:recycle_hub/style/theme.dart';
 
 ///Отрисовка headerа bottomsheet'a
-Widget buildHeader(
-    BuildContext context, double bottomSheetOffset, CustMarker marker) {
+Widget buildHeader(BuildContext context, double bottomSheetOffset) {
   return AnimatedContainer(
       duration: const Duration(milliseconds: 400),
       width: double.infinity,
@@ -31,11 +29,6 @@ Widget buildHeader(
                 size: 50,
                 color: Colors.black54,
               ),
-            ),
-            Divider(
-              color: kColorGreyLight,
-              thickness: 2,
-              height: 1,
             ),
           ]));
 }
