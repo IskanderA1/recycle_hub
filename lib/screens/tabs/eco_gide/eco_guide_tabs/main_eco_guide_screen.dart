@@ -26,6 +26,7 @@ class _MainEcoGuideScreenState extends State<MainEcoGuideScreen> {
   final TextEditingController _searchController = TextEditingController();
   @override
   Widget build(BuildContext context) {
+    Size _size = MediaQuery.of(context).size;
     return GestureDetector(
       onTap: () {
         FocusScopeNode currentFocus = FocusScope.of(context);
@@ -34,6 +35,8 @@ class _MainEcoGuideScreenState extends State<MainEcoGuideScreen> {
         }
       },
       child: Scaffold(
+        resizeToAvoidBottomPadding: false,
+        resizeToAvoidBottomInset: false,
         appBar: AppBar(
           leading: IconButton(
             icon: Icon(Icons.menu),
@@ -48,6 +51,8 @@ class _MainEcoGuideScreenState extends State<MainEcoGuideScreen> {
           iconTheme: IconThemeData(size: 1),
         ),
         body: Container(
+          height: _size.height,
+          width: _size.width,
           child: Column(
             children: [
               Container(

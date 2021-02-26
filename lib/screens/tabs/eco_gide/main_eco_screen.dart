@@ -14,31 +14,24 @@ class EcoMainScreen extends StatefulWidget {
 class _EcoMainScreenState extends State<EcoMainScreen> {
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async {
-        print("on willpop");
-        ecoMenu.backToMenu();
-        return false;
+    return StreamBuilder(
+      stream: ecoMenu.itemStream,
+      initialData: ecoMenu.defaultItem,
+      // ignore: missing_return
+      builder: (context, AsyncSnapshot<EcoMenuItem> snapshot) {
+        switch (snapshot.data) {
+          case EcoMenuItem.MENU:
+            return MainEcoGuideScreen();
+          case EcoMenuItem.CONTAINER:
+            return ContainerScreen();
+          case EcoMenuItem.REFERENCE:
+            return ReferenceBookScreen();
+          case EcoMenuItem.ADVICE:
+            return AdviceScreen();
+          case EcoMenuItem.TEST:
+            return TestScreen();
+        }
       },
-      child: StreamBuilder(
-        stream: ecoMenu.itemStream,
-        initialData: ecoMenu.defaultItem,
-        // ignore: missing_return
-        builder: (context, AsyncSnapshot<EcoMenuItem> snapshot) {
-          switch (snapshot.data) {
-            case EcoMenuItem.MENU:
-              return MainEcoGuideScreen();
-            case EcoMenuItem.CONTAINER:
-              return ContainerScreen();
-            case EcoMenuItem.REFERENCE:
-              return ReferenceBookScreen();
-            case EcoMenuItem.ADVICE:
-              return AdviceScreen();
-            case EcoMenuItem.TEST:
-              return TestScreen();
-          }
-        },
-      ),
     );
   }
 }

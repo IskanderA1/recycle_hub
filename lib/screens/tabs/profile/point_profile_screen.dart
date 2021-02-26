@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_star_rating/flutter_star_rating.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:recycle_hub/style/style.dart';
 import '../../../style/theme.dart';
 import 'package:recycle_hub/bloc/profile_bloc/profile_bloc.dart';
 
@@ -9,7 +9,6 @@ List<Widget> svgIcons = [
     Icons.account_box_outlined,
     color: kColorPink,
   ),
-  Icon(Icons.money, color: kColorPink),
   Icon(
     Icons.graphic_eq_outlined,
     color: kColorPink,
@@ -28,12 +27,12 @@ List<Widget> svgIcons = [
   ),
 ];
 
-class ProfileScreen extends StatefulWidget {
+class PointProfileScreen extends StatefulWidget {
   @override
-  _ProfileScreenState createState() => _ProfileScreenState();
+  _PointProfileScreenState createState() => _PointProfileScreenState();
 }
 
-class _ProfileScreenState extends State<ProfileScreen> {
+class _PointProfileScreenState extends State<PointProfileScreen> {
   @override
   Widget build(BuildContext context) {
     Size _size = MediaQuery.of(context).size;
@@ -42,45 +41,47 @@ class _ProfileScreenState extends State<ProfileScreen> {
         profileMenuBloc.mapEventToState(ProfileMenuEvents.USER_PROFILE);
       },
       child: Scaffold(
+        appBar: AppBar(
+          centerTitle: true,
+          backgroundColor: kColorGreen,
+          title: Text("Пункт приёма"),
+          leading: IconButton(
+            icon: Icon(
+              Icons.arrow_back_sharp,
+              color: kColorWhite,
+            ),
+            onPressed: () {
+              profileMenuBloc.mapEventToState(ProfileMenuEvents.USER_PROFILE);
+            },
+          ),
+        ),
         body: Container(
           height: _size.height,
           width: _size.width,
           alignment: Alignment.topCenter,
           child: Stack(
             children: [
-              Image.asset("svg/Mask Group.png"),
+              Image.asset(
+                "svg/trash.jpg",
+              ),
+              Container(
+                height: 226,
+                color: Colors.black45,
+              ),
               Container(
                 padding: EdgeInsets.only(left: 17, right: 17, top: 10),
                 child: Column(
                   children: [
-                    buildAppBar(),
-                    SizedBox(
-                      height: 17,
-                    ),
-                    buildProfileAvatar("Иван Иванов", "ЭКОЛОГ"),
+                    buildPointProfile(
+                        "Пункт приёма Советский", "ООО НПП РИСАЛ"),
                     SizedBox(
                       height: 24,
                     ),
-                    buildStatus(10, 78, 94),
+                    buildStatus(10, 94),
                     SizedBox(
-                      height: 5,
+                      height: 20,
                     ),
-                    Container(
-                      height: _size.height - _size.height * 0.5,
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(16),
-                        child: ListView(
-                          padding: EdgeInsets.only(bottom: 45, top: 10),
-                          children: [
-                            buildAchievments("Эколог", 94.3),
-                            SizedBox(
-                              height: 20,
-                            ),
-                            buildMenu()
-                          ],
-                        ),
-                      ),
-                    ),
+                    buildMenu(_size.height * 0.4)
                   ],
                 ),
               ),
@@ -92,150 +93,103 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 }
 
-Widget buildAppBar() {
-  return Stack(
-    children: [
-      Container(
-        padding: EdgeInsets.only(top: 8),
-        child: Align(
-          alignment: Alignment.centerLeft,
-          child: InkWell(
-            onTap: () {
-              profileMenuBloc.mapEventToState(ProfileMenuEvents.POINT_PROFILE);
-            },
-            child: Icon(
-              Icons.arrow_back_sharp,
-              color: kColorWhite,
-              size: 30,
-            ),
-          ),
-        ),
-      ),
-      Container(
-          alignment: Alignment.center,
-          padding: EdgeInsets.only(top: 12),
-          child: Text(
-            "Профиль",
-            style: TextStyle(
-                fontSize: 18, color: kColorWhite, fontWeight: FontWeight.bold),
-          ))
-    ],
-  );
-}
-
-Widget buildProfileAvatar(String username, String status) {
+Widget buildPointProfile(String title, String subtitle) {
   return Container(
-    child: Row(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.center,
+    padding: EdgeInsets.all(10),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(
-          child: Stack(
-            children: [
-              Container(
-                  height: 82,
-                  width: 82,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: kColorPink,
-                  ),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(41),
-                    child: Image.network(
-                        "https://idsb.tmgrup.com.tr/ly/uploads/images/2020/04/30/33310.jpg"),
-                  )),
-              Container(
-                  padding: EdgeInsets.only(top: 50, left: 50),
-                  child: InkWell(
-                    onTap: () {},
-                    child: Container(
-                      alignment: Alignment.center,
-                      height: 31,
-                      width: 31,
-                      decoration: BoxDecoration(
-                          shape: BoxShape.circle, color: kColorWhite),
-                      child: Icon(
-                        Icons.camera_alt_outlined,
-                        color: kColorGreen,
-                        size: 21,
-                      ),
-                    ),
-                  ))
-            ],
+          alignment: Alignment.centerLeft,
+          padding: EdgeInsets.only(right: 160),
+          child: StarRating(
+            rating: 2,
+            spaceBetween: 5,
+            starConfig: StarConfig(
+                size: 25,
+                fillColor: kColorGreen,
+                emptyColor: Colors.white,
+                strokeWidth: 0,
+                strokeColor: Colors.transparent),
           ),
         ),
         SizedBox(
-          width: 12,
+          height: 5,
         ),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(username,
-                style: TextStyle(
-                  color: kColorWhite,
-                  fontSize: 18,
-                )),
-            Text(status,
-                style: TextStyle(
-                  color: kColorWhite,
-                  fontSize: 12,
-                ))
-          ],
-        )
+        Text(
+          title,
+          style: TextStyle(color: kColorWhite, fontSize: 24),
+        ),
+        SizedBox(
+          height: 5,
+        ),
+        Text(
+          subtitle,
+          style: TextStyle(color: kColorWhite, fontSize: 18),
+        ),
       ],
     ),
   );
 }
 
-Widget buildStatus(int place, int balance, int made) {
+Widget buildStatus(int place, int made) {
   return Container(
-    decoration: BoxDecoration(
-      color: kColorWhite,
-      borderRadius: BorderRadius.circular(16),
-    ),
-    padding: EdgeInsets.all(26),
     child: Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Text(
-              "$place",
-              style: TextStyle(color: kColorBlack, fontSize: 36),
-            ),
-            Text(
-              "Место",
-              style: TextStyle(color: kColorBlack, fontSize: 16),
-            )
-          ],
+        Container(
+          width: 160,
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(16), color: kColorWhite),
+          padding: EdgeInsets.all(20),
+          child: Column(
+            children: [
+              Text("$place",
+                  style: TextStyle(
+                    color: kColorBlack,
+                    fontSize: 36,
+                  )),
+              SizedBox(height: 5),
+              Wrap(
+                children: [
+                  Text(
+                    "Место в общем зачете",
+                    style: TextStyle(color: kColorBlack, fontSize: 12),
+                    textAlign: TextAlign.center,
+                  ),
+                ],
+              )
+            ],
+          ),
         ),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Text(
-              "$balance",
-              style: TextStyle(color: kColorBlack, fontSize: 36),
-            ),
-            Text(
-              "Баланс",
-              style: TextStyle(color: kColorBlack, fontSize: 16),
-            )
-          ],
+        SizedBox(
+          width: 5,
         ),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Text(
-              "$made",
-              style: TextStyle(color: kColorBlack, fontSize: 36),
-            ),
-            Text(
-              "Сдал(кг)",
-              style: TextStyle(color: kColorBlack, fontSize: 16),
-            )
-          ],
-        )
+        Container(
+          width: 160,
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(16), color: kColorWhite),
+          padding: EdgeInsets.all(20),
+          child: Column(
+            children: [
+              Text("$made",
+                  style: TextStyle(
+                    color: kColorBlack,
+                    fontSize: 36,
+                  )),
+              SizedBox(height: 5),
+              Wrap(
+                children: [
+                  Text(
+                    "Всего сдано вторсырье(кг)",
+                    style: TextStyle(color: kColorBlack, fontSize: 12),
+                    textAlign: TextAlign.center,
+                  ),
+                ],
+              )
+            ],
+          ),
+        ),
       ],
     ),
   );
@@ -399,21 +353,21 @@ Widget _buildProgressIndicator(int lastKGindex) {
   );
 }
 
-Widget buildMenu() {
+Widget buildMenu(double size) {
   return Container(
-    padding: EdgeInsets.only(top: 17, bottom: 35, right: 17, left: 17),
+    height: size,
     decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16), color: kColorWhite),
     child: ClipRRect(
       borderRadius: BorderRadius.circular(16),
-      child: Column(
+      child: ListView(
+        padding: EdgeInsets.only(top: 17, bottom: 35, right: 17, left: 17),
         children: [
           buildListItem(0, "Редактировать профиль"),
-          buildListItem(1, "Кошелек"),
-          buildListItem(2, "Статистика"),
-          buildListItem(3, "Как заработать баллы?"),
-          buildListItem(4, "Задать вопрос авторам"),
-          buildListItem(5, "Выйти"),
+          buildListItem(1, "Статистика"),
+          buildListItem(2, "Как заработать баллы?"),
+          buildListItem(3, "Задать вопрос авторам"),
+          buildListItem(4, "Выйти"),
         ],
       ),
     ),
@@ -424,7 +378,7 @@ Widget buildListItem(int index, String text) {
   return Container(
     padding: EdgeInsets.only(top: 12, bottom: 12),
     decoration: BoxDecoration(
-        border: Border(bottom: BorderSide(color: kLightGrey, width: 0.5))),
+        border: Border(bottom: BorderSide(color: kColorGreyDark, width: 0.5))),
     child: Stack(children: [
       Row(
         mainAxisAlignment: MainAxisAlignment.start,
