@@ -20,8 +20,6 @@ import 'methods/pre_information_container.dart';
 import 'widgets/working_days_widget.dart';
 
 class MapScreen extends StatefulWidget {
-  /*final Widget child;
-  MapScreen({this.child});*/
   @override
   _MapScreenState createState() => _MapScreenState();
 }
