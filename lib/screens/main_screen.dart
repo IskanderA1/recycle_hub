@@ -1,15 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:recycle_hub/bloc/auth_user_bloc.dart';
 import 'package:recycle_hub/bloc/map_screen_blocs/markers_collection_bloc.dart';
-import 'package:recycle_hub/bloc/navigation_bloc.dart';
 import 'package:recycle_hub/elements/loader.dart';
 import 'package:recycle_hub/model/user_response.dart';
-import 'package:recycle_hub/screens/tabs/eco_coin/eco_coin_screen.dart';
-import 'package:recycle_hub/screens/tabs/eco_gide/main_eco_screen.dart';
-import 'package:recycle_hub/screens/tabs/profile/profile_screen.dart';
 import 'package:recycle_hub/screens/workspace_screen.dart';
-import 'package:recycle_hub/widgets/fab_buttom.dart';
-import 'package:recycle_hub/screens/tabs/map/map_screen.dart';
 
 class MainScreen extends StatefulWidget {
   @override

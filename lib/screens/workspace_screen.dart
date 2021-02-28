@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:recycle_hub/bloc/map_screen_blocs/markers_collection_bloc.dart';
 import 'package:recycle_hub/bloc/navigation_bloc.dart';
 import 'package:recycle_hub/elements/drawer.dart';
 import 'package:recycle_hub/screens/tabs/eco_coin/eco_coin_screen.dart';
