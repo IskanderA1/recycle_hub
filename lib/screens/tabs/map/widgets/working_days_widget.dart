@@ -2,6 +2,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
+import 'package:recycle_hub/model/map_models.dart/work_day.dart';
 import 'package:recycle_hub/model/map_models.dart/work_time.dart';
 import 'package:recycle_hub/style/theme.dart';
 
@@ -307,7 +308,7 @@ class DayWidget extends StatefulWidget {
       : super(key: key);
 
   final String dayName;
-  final List<String> dayArr;
+  final WorkDay dayArr;
   final bool isSelected;
   final sWidth;
   final Color selectedColor;
@@ -337,7 +338,7 @@ class _DayWidgetState extends State<DayWidget> {
                     : widget.unSelectedColor),
           ),
           Text(
-            "${widget.dayArr[0]}\n${widget.dayArr[3]}",
+            "${widget.dayArr.first}\n${widget.dayArr.fourth}",
             style: TextStyle(
                 fontFamily: 'GilroyMedium',
                 color: widget.isSelected
@@ -354,7 +355,7 @@ class _DayWidgetState extends State<DayWidget> {
                 fontWeight: FontWeight.w900),
           ),
           Text(
-            "${widget.dayArr[1]}\n${widget.dayArr[2]}",
+            "${widget.dayArr.second}\n${widget.dayArr.third}",
             style: TextStyle(
                 fontFamily: 'GilroyMedium',
                 color: widget.isSelected

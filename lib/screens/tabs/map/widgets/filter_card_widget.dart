@@ -46,6 +46,8 @@ class FilterCardWidgetState extends State<FilterCardWidget> {
         }
       },
       child: Container(
+          height: 60,
+          width: 100,
           margin: EdgeInsets.all(10),
           decoration: BoxDecoration(
               border: Border.all(

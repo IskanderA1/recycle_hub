@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:recycle_hub/bloc/map_screen_blocs/markers_collection_bloc.dart';
 import 'package:recycle_hub/bloc/navigation_bloc.dart';
 import 'package:recycle_hub/elements/drawer.dart';
 import 'package:recycle_hub/screens/tabs/eco_coin/eco_coin_screen.dart';
@@ -17,8 +16,6 @@ class WorkSpaceScreen extends StatefulWidget {
 class _WorkSpaceState extends State<WorkSpaceScreen> {
   final loginController = TextEditingController();
   final passController = TextEditingController();
-
-  final MapScreen _screen = MapScreen();
 
   @override
   void initState() {
@@ -40,7 +37,6 @@ class _WorkSpaceState extends State<WorkSpaceScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final Size size = MediaQuery.of(context).size;
     return Scaffold(
       drawer: customDrawer(context),
       body: Stack(children: [

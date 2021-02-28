@@ -31,6 +31,8 @@ class _BottomNavBarV2State extends State<BottomNavBarV2> {
         Positioned(
           bottom: 0,
           left: 0,
+          //top: 200,
+          //right: 10,
           child: Container(
             width: size.width,
             height: 70,
@@ -39,7 +41,7 @@ class _BottomNavBarV2State extends State<BottomNavBarV2> {
               children: [
                 CustomPaint(
                   size: Size(size.width, 70),
-                  painter: BNBCustomPainter(),
+                  painter: BNBCustomPainter(size: size),
                 ),
                 Center(
                   heightFactor: 0.3,
@@ -128,14 +130,16 @@ class _BottomNavBarV2State extends State<BottomNavBarV2> {
 }
 
 class BNBCustomPainter extends CustomPainter {
+  BNBCustomPainter({this.size});
+  final Size size;
   @override
   void paint(Canvas canvas, Size size) {
     Paint paint = new Paint()
       ..color = Colors.white
       ..style = PaintingStyle.fill;
 
-    Path path = Path();
-    path.moveTo(0, 0); // Start
+    Path path = getClip(size);
+    /*path.moveTo(0, 0); // Start
     path.lineTo(size.width * 0.30, 0);
     path.quadraticBezierTo(size.width * 0.40, 0, size.width * 0.40, 13);
     path.arcToPoint(Offset(size.width * 0.60, 13),
@@ -146,6 +150,9 @@ class BNBCustomPainter extends CustomPainter {
     path.lineTo(0, size.height);
     path.lineTo(0, 0);
     canvas.drawShadow(path, Colors.black, 5, true);
+    canvas.drawPath(path, paint);*/
+
+    //canvas.drawShadow(path, Colors.black, 5, true);
     canvas.drawPath(path, paint);
   }
 
@@ -153,6 +160,21 @@ class BNBCustomPainter extends CustomPainter {
   bool shouldRepaint(CustomPainter oldDelegate) {
     return false;
   }
+}
+
+Path getClip(Size size) {
+  Path path = Path();
+  path.moveTo(0, 0); // Start
+  path.lineTo(size.width * 0.30, 0);
+  path.quadraticBezierTo(size.width * 0.37, 1, size.width * 0.42, 35);
+  path.arcToPoint(Offset(size.width * 0.58, 35),
+      radius: Radius.circular(40), clockwise: false);
+  path.quadraticBezierTo(size.width * 0.63, 1, size.width * 0.70, 0);
+  path.lineTo(size.width, 0);
+  path.lineTo(size.width, size.height);
+  path.lineTo(0, size.height);
+  path.lineTo(0, 0);
+  return path;
 }
 
 class IconButtonV2 extends StatefulWidget {

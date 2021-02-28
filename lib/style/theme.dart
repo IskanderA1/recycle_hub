@@ -7,6 +7,12 @@ const kColorGreyDark = Color(0xFF616161);
 const kColorGreyLight = Color(0xFF8D8D8D);
 const kColorWhite = Color(0xFFFFFFFF);
 const kColorPink = Color(0xFFFF9966);
+const kColorGreenYellow = Color(0xFFD0E07A);
+const kColorSteperLightGreen = Color(0xFFDFE895);
+
+///Экран регистрации
+const kColorRegGoogle = Color(0xFFDD4B39);
+const kColorRegVK = Color(0xFF2787F5);
 
 ThemeData kAppThemeData() {
   return ThemeData(

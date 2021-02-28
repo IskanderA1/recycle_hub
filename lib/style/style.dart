@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:recycle_hub/style/theme.dart';
 
 class Style {
   const Style();
@@ -29,13 +30,13 @@ final kLabelStyle = TextStyle(
 );
 
 final kBoxDecorationStyle = BoxDecoration(
-  color: Colors.white,
-  borderRadius: BorderRadius.circular(5.0),
+  color: Color(0xFFF7F7F7),
+  borderRadius: BorderRadius.circular(10),
   boxShadow: [
     BoxShadow(
-      color: Colors.black12,
-      blurRadius: 6.0,
-      offset: Offset(0, 2),
+      color: kColorWhite,
+      blurRadius: 0,
+      offset: Offset(0, 1),
     ),
   ],
 );

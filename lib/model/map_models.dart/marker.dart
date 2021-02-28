@@ -16,6 +16,8 @@ class CustMarker {
   String description;
   List<String> images;
   String name;
+  String paybackType;
+  String receptionType;
   WorkingTime workTime;
   CustMarker({
     this.id,
@@ -26,6 +28,8 @@ class CustMarker {
     this.description,
     this.images,
     this.name,
+    this.paybackType,
+    this.receptionType,
     this.workTime,
   });
 
@@ -38,6 +42,8 @@ class CustMarker {
     String description,
     List<String> images,
     String name,
+    String paybackType,
+    String receptionType,
     WorkingTime workTime,
   }) {
     return CustMarker(
@@ -49,6 +55,8 @@ class CustMarker {
       description: description ?? this.description,
       images: images ?? this.images,
       name: name ?? this.name,
+      paybackType: paybackType ?? this.paybackType,
+      receptionType: receptionType ?? this.receptionType,
       workTime: workTime ?? this.workTime,
     );
   }
@@ -63,22 +71,30 @@ class CustMarker {
       'description': description,
       'images': images,
       'name': name,
+      'paybackType': paybackType,
+      'receptionType': receptionType,
       'workTime': workTime?.toMap(),
     };
   }
 
-  CustMarker.fromMap(Map<String, dynamic> map) {
-    id = map['_id'];
-    acceptTypes = List<AcceptType>.from(
-        map['accept_types']?.map((x) => AcceptType.fromMap(x)));
-    address = map['address'];
-    contacts =
-        List<Contact>.from(map['contacts']?.map((x) => Contact.fromMap(x)));
-    coords = Coords.fromMap(map['coords']);
-    description = map['description'];
-    images = List<String>.from(map['images']);
-    name = map['name'];
-    workTime = WorkingTime.fromMap(map['work_time']);
+  factory CustMarker.fromMap(Map<String, dynamic> map) {
+    if (map == null) return null;
+
+    return CustMarker(
+      id: map['_id'],
+      acceptTypes: List<AcceptType>.from(
+          map['accept_types']?.map((x) => AcceptType.fromMap(x))),
+      address: map['address'],
+      contacts:
+          List<Contact>.from(map['contacts']?.map((x) => Contact.fromMap(x))),
+      coords: Coords.fromMap(map['coords']),
+      description: map['description'],
+      images: List<String>.from(map['images']),
+      name: map['name'],
+      paybackType: map['payback_type'],
+      receptionType: map['reception_type'],
+      workTime: WorkingTime.fromMap(map['work_time']),
+    );
   }
 
   String toJson() => json.encode(toMap());
@@ -88,7 +104,7 @@ class CustMarker {
 
   @override
   String toString() {
-    return 'CustMarker(id: $id, acceptTypes: $acceptTypes, address: $address, contacts: $contacts, coords: $coords, description: $description, images: $images, name: $name, workTime: $workTime)';
+    return 'CustMarker(id: $id, acceptTypes: $acceptTypes, address: $address, contacts: $contacts, coords: $coords, description: $description, images: $images, name: $name, paybackType: $paybackType, receptionType: $receptionType, workTime: $workTime)';
   }
 
   @override
@@ -104,6 +120,8 @@ class CustMarker {
         o.description == description &&
         listEquals(o.images, images) &&
         o.name == name &&
+        o.paybackType == paybackType &&
+        o.receptionType == receptionType &&
         o.workTime == workTime;
   }
 
@@ -117,6 +135,8 @@ class CustMarker {
         description.hashCode ^
         images.hashCode ^
         name.hashCode ^
+        paybackType.hashCode ^
+        receptionType.hashCode ^
         workTime.hashCode;
   }
 }

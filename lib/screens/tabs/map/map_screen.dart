@@ -1,5 +1,3 @@
-import 'dart:typed_data';
-
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_star_rating/flutter_star_rating.dart';
@@ -7,8 +5,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:recycle_hub/bloc/map_screen_blocs/marker_info_bloc.dart';
 import 'package:recycle_hub/bloc/map_screen_blocs/markers_collection_bloc.dart';
 import 'package:recycle_hub/custom_icons.dart';
+import 'package:recycle_hub/model/map_models.dart/marker.dart';
 import 'package:recycle_hub/model/map_responses/markers_response.dart';
-import 'package:recycle_hub/repo/eco_quide_repo.dart';
 import 'package:recycle_hub/screens/tabs/map/filter_detail_screen.dart';
 import 'dart:async';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -34,7 +32,7 @@ class _MapScreenState extends State<MapScreen> {
 
   Future<String> getCurrentPosition() async {
     LocationData currentLocation;
-    GoogleMapController controller;
+
     var location = new Location();
     try {
       currentLocation = await location.getLocation();
@@ -108,6 +106,7 @@ class _MyGoogleMapWidgetState extends State<MyGoogleMapWidget> {
   Completer<GoogleMapController> _controller = Completer();
   MapType _currentMapType = MapType.normal;
   CameraPosition cameraPosition;
+  CameraPosition _camera;
 
   @override
   void initState() {
@@ -151,6 +150,9 @@ class _MyGoogleMapWidgetState extends State<MyGoogleMapWidget> {
               return GoogleMap(
                   mapType: _currentMapType,
                   initialCameraPosition: cameraPosition,
+                  onCameraMove: (CameraPosition camera) {
+                    _camera = camera;
+                  },
                   onMapCreated: (GoogleMapController controller) {
                     if (!_controller.isCompleted) {
                       _controller.complete(controller);
@@ -176,6 +178,12 @@ class _MyGoogleMapWidgetState extends State<MyGoogleMapWidget> {
                                   maxHeight: 0.85,
                                   context: context,
                                   headerHeight: 60,
+                                  decoration: const BoxDecoration(
+                                      borderRadius: BorderRadius.only(
+                                          topLeft: Radius.circular(40),
+                                          topRight: Radius.circular(40)),
+                                      shape: BoxShape.rectangle,
+                                      color: kColorWhite),
                                   headerBuilder: (context, bottomSheetOffset) {
                                     return buildHeader(
                                         context, bottomSheetOffset);
@@ -199,9 +207,8 @@ class _MyGoogleMapWidgetState extends State<MyGoogleMapWidget> {
 
       ///Кнопка определения местоположения
       Positioned(
-        bottom: 20,
+        top: (MediaQuery.of(context).size.height) / 2,
         right: 20,
-        top: 600,
         child: Container(
           height: 40,
           width: 40,
@@ -221,8 +228,8 @@ class _MyGoogleMapWidgetState extends State<MyGoogleMapWidget> {
 
       ///Кнопка изменения направления
       Positioned(
-        top: 15,
-        left: 20,
+        top: (MediaQuery.of(context).size.height - 100) / 2 - 60,
+        right: 20,
         child: Container(
           width: 40,
           height: 40,
@@ -287,7 +294,7 @@ class _MyGoogleMapWidgetState extends State<MyGoogleMapWidget> {
 
       ///Маркеры списком
       Positioned(
-        bottom: 100,
+        bottom: 80,
         left: 20,
         child: Container(
           height: 30,
@@ -299,16 +306,20 @@ class _MyGoogleMapWidgetState extends State<MyGoogleMapWidget> {
                 side: BorderSide(color: kColorWhite, width: 2),
                 borderRadius: BorderRadius.circular(50)),
             onPressed: () {
-              showStickyFlexibleBottomSheet(
+              return showStickyFlexibleBottomSheet<void>(
                   initHeight: 0.4,
                   minHeight: 0.40,
                   maxHeight: 0.85,
                   context: context,
-                  headerHeight: 60,
+                  headerHeight: 40,
+                  /*decoration: const BoxDecoration(
+                    color: kColorWhite,
+                    //shape: BoxShape.rectangle
+                  ),*/
                   headerBuilder: (context, bottomSheetOffset) {
-                    return buildHeader(context, bottomSheetOffset);
+                    return buildHeaderAnimated(context, bottomSheetOffset);
                   },
-                  builder: (context, offset) {
+                  builder: (BuildContext context, offset) {
                     return SliverChildListDelegate(
                       <Widget>[MarkersListWidget()],
                     );
@@ -335,23 +346,14 @@ class _MyGoogleMapWidgetState extends State<MyGoogleMapWidget> {
   }
 
   void northSouth() async {
-    double screenWidth = MediaQuery.of(context).size.width *
-        MediaQuery.of(context).devicePixelRatio;
-    double screenHeight = (MediaQuery.of(context).size.height - 90) *
-        MediaQuery.of(context).devicePixelRatio;
-
-    double middleX = screenWidth / 2;
-    double middleY = screenHeight / 2;
     GoogleMapController zController = await _controller.future;
-    LatLng latLng = await zController
-        .getLatLng(ScreenCoordinate(x: middleX.toInt(), y: middleY.toInt()));
     var currentZoomLevel = await zController.getZoomLevel();
 
     currentZoomLevel = currentZoomLevel;
     zController.animateCamera(
       CameraUpdate.newCameraPosition(
         CameraPosition(
-          target: latLng,
+          target: _camera.target,
           zoom: currentZoomLevel,
         ),
       ),
@@ -359,23 +361,14 @@ class _MyGoogleMapWidgetState extends State<MyGoogleMapWidget> {
   }
 
   void zoomIncrement() async {
-    double screenWidth = MediaQuery.of(context).size.width *
-        MediaQuery.of(context).devicePixelRatio;
-    double screenHeight = MediaQuery.of(context).size.height *
-        MediaQuery.of(context).devicePixelRatio;
-
-    double middleX = screenWidth / 2;
-    double middleY = screenHeight / 2;
     GoogleMapController zController = await _controller.future;
-    LatLng latLng = await zController
-        .getLatLng(ScreenCoordinate(x: middleX.toInt(), y: middleY.toInt()));
     var currentZoomLevel = await zController.getZoomLevel();
 
-    currentZoomLevel = currentZoomLevel + 0.5;
+    currentZoomLevel = currentZoomLevel + 2;
     zController.animateCamera(
       CameraUpdate.newCameraPosition(
         CameraPosition(
-          target: latLng,
+          target: _camera.target,
           zoom: currentZoomLevel,
         ),
       ),
@@ -383,23 +376,14 @@ class _MyGoogleMapWidgetState extends State<MyGoogleMapWidget> {
   }
 
   void zoomDecrement() async {
-    double screenWidth = MediaQuery.of(context).size.width *
-        MediaQuery.of(context).devicePixelRatio;
-    double screenHeight = MediaQuery.of(context).size.height *
-        MediaQuery.of(context).devicePixelRatio;
-
-    double middleX = screenWidth / 2;
-    double middleY = screenHeight / 2;
     GoogleMapController zController = await _controller.future;
-    LatLng latLng = await zController
-        .getLatLng(ScreenCoordinate(x: middleX.toInt(), y: middleY.toInt()));
     var currentZoomLevel = await zController.getZoomLevel();
 
-    currentZoomLevel = currentZoomLevel - 0.5;
+    currentZoomLevel = currentZoomLevel - 2;
     zController.animateCamera(
       CameraUpdate.newCameraPosition(
         CameraPosition(
-          target: latLng,
+          target: _camera.target,
           zoom: currentZoomLevel,
         ),
       ),
@@ -407,162 +391,173 @@ class _MyGoogleMapWidgetState extends State<MyGoogleMapWidget> {
   }
 }
 
-class MarkersListWidget extends StatelessWidget {
+class MarkersListWidget extends StatefulWidget {
   //final ScrollController controller;
   //final AsyncSnapshot<MarkersCollectionResponse> snapshot;
   const MarkersListWidget({Key key}) : super(key: key);
 
   @override
+  _MarkersListWidgetState createState() => _MarkersListWidgetState();
+}
+
+class _MarkersListWidgetState extends State<MarkersListWidget> {
+  int i = 0;
+  @override
   Widget build(BuildContext context) {
-    return Container(
-      height: MediaQuery.of(context).size.height * 0.79,
-      color: kColorWhite,
-      child: StreamBuilder(
-          initialData: markersCollectionBloc.defaultItem,
-          stream: markersCollectionBloc.stream,
-          builder: (BuildContext context,
-              AsyncSnapshot<MarkersCollectionResponse> snapshot) {
-            if (snapshot.hasData) {
-              if (snapshot.data is MarkersCollectionResponseOk) {
-                return ListView.builder(
-                  itemCount: snapshot.data.markers.markers.length,
-                  //controller: controller,
-                  itemBuilder: (ctx, int index) {
-                    return Padding(
-                      padding: const EdgeInsets.fromLTRB(17, 30, 17, 30),
-                      child: Container(
-                        height: 500,
-                        decoration: BoxDecoration(
-                            color: index % 2 == 0 ? kColorGreen : kColorPink,
-                            borderRadius: BorderRadius.circular(10)),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Padding(
-                              padding: EdgeInsets.fromLTRB(15, 5, 15, 5),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
-                                children: [
-                                  Flexible(
-                                    child: AutoSizeText(
-                                      snapshot.data.markers.markers[index].name,
-                                      style: TextStyle(
-                                          color: kColorBlack,
-                                          fontFamily: "Gilroy",
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 18),
-                                    ),
-                                  ),
-                                  StarRating(
-                                      rating: 3.5,
-                                      spaceBetween: 1,
-                                      starConfig: StarConfig(
-                                        fillColor: index % 2 == 0
-                                            ? kColorWhite
-                                            : kColorBlack,
-                                        size: 15,
-                                        emptyColor: index % 2 == 0
-                                            ? kColorGreen
-                                            : kColorPink,
-                                        strokeColor: index % 2 == 0
-                                            ? kColorWhite
-                                            : kColorBlack,
-                                      ))
-                                ],
-                              ),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.fromLTRB(15, 5, 15, 5),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Flexible(
-                                    child: AutoSizeText(snapshot
-                                        .data.markers.markers[index].address),
-                                  ),
-                                  Flexible(
-                                    child: AutoSizeText("900 м"),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: WorkingDaysWidget(
-                                workingTime: snapshot
-                                    .data.markers.markers[index].workTime,
-                                wColor:
-                                    index % 2 == 0 ? kColorWhite : kColorBlack,
-                                backColor:
-                                    index % 2 == 0 ? kColorGreen : kColorPink,
-                                hasSelection: false,
-                              ),
-                            ),
-                            Align(
-                              alignment: Alignment.centerLeft,
-                              child: Padding(
-                                padding: EdgeInsets.all(10),
-                                child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      AutoSizeText(
-                                        "Принимают на переработку:",
-                                        style: TextStyle(
-                                            color: index % 2 == 0
-                                                ? kColorWhite
-                                                : kColorBlack,
-                                            fontFamily: "Gilroy",
-                                            fontWeight: FontWeight.w400,
-                                            fontSize: 14),
-                                      ),
-                                    ]),
-                              ),
-                            ),
-                            Container(
-                                height: 60,
-                                padding: EdgeInsets.all(10),
-                                child: GridView.builder(
-                                  gridDelegate:
-                                      SliverGridDelegateWithFixedCrossAxisCount(
-                                          mainAxisSpacing: 5,
-                                          crossAxisSpacing: 5,
-                                          crossAxisCount: 3,
-                                          childAspectRatio: 8 / 1.5),
-                                  itemCount: snapshot.data.markers
-                                      .markers[index].acceptTypes.length,
-                                  padding: EdgeInsets.all(10),
-                                  itemBuilder: (context, i) {
-                                    return Container(
-                                      height: 10,
-                                      decoration: BoxDecoration(
-                                          color: kColorWhite,
-                                          borderRadius:
-                                              BorderRadius.circular(5)),
-                                      child: AutoSizeText(
-                                        "  ${snapshot.data.markers.markers[index].acceptTypes[i].name}  ",
-                                        style: TextStyle(),
-                                        textAlign: TextAlign.center,
-                                      ),
-                                    );
-                                  },
-                                ))
-                          ],
-                        ),
-                      ),
-                    );
-                  },
-                );
-              } else {
-                return LoaderWidget();
-              }
+    return StreamBuilder(
+        initialData: markersCollectionBloc.defaultItem,
+        stream: markersCollectionBloc.stream,
+        builder: (BuildContext context,
+            AsyncSnapshot<MarkersCollectionResponse> snapshot) {
+          if (snapshot.hasData) {
+            if (snapshot.data is MarkersCollectionResponseOk) {
+              return Container(
+                padding: EdgeInsets.only(bottom: 10),
+                color: kColorWhite,
+                child: Column(
+                    children: snapshot.data.markers.markers
+                        .map((item) => MarkerCardWidget(
+                              index: item.hashCode,
+                              marker: item,
+                            ))
+                        .toList()),
+              );
+              /*ListView.builder(
+                itemCount: snapshot.data.markers.markers.length,
+                //controller: controller,
+                itemBuilder: (ctx, int index) {
+                  return NewWidget(
+                    index: index,
+                    marker: snapshot.data.markers.markers[index],
+                  );
+                },
+              );*/
             } else {
               return LoaderWidget();
             }
-          }),
+          } else {
+            return LoaderWidget();
+          }
+        });
+  }
+}
+
+class MarkerCardWidget extends StatelessWidget {
+  final int index;
+  final CustMarker marker;
+
+  const MarkerCardWidget({Key key, @required this.index, @required this.marker})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(17, 30, 17, 30),
+      child: Container(
+        height: 420,
+        decoration: BoxDecoration(
+            color: index % 2 == 0 ? kColorGreen : kColorPink,
+            borderRadius: BorderRadius.circular(10)),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Padding(
+              padding: EdgeInsets.fromLTRB(15, 5, 15, 5),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Flexible(
+                    child: AutoSizeText(
+                      marker.name,
+                      style: TextStyle(
+                          color: kColorBlack,
+                          fontFamily: "Gilroy",
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18),
+                    ),
+                  ),
+                  StarRating(
+                      rating: 3.5,
+                      spaceBetween: 1,
+                      starConfig: StarConfig(
+                        fillColor: index % 2 == 0 ? kColorWhite : kColorBlack,
+                        size: 15,
+                        emptyColor: index % 2 == 0 ? kColorGreen : kColorPink,
+                        strokeColor: index % 2 == 0 ? kColorWhite : kColorBlack,
+                      ))
+                ],
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.fromLTRB(15, 5, 15, 5),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Flexible(
+                    child: AutoSizeText(marker.address),
+                  ),
+                  Flexible(
+                    child: AutoSizeText("900 м"),
+                  ),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: WorkingDaysWidget(
+                workingTime: marker.workTime,
+                wColor: index % 2 == 0 ? kColorWhite : kColorBlack,
+                backColor: index % 2 == 0 ? kColorGreen : kColorPink,
+                hasSelection: false,
+              ),
+            ),
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Padding(
+                padding: EdgeInsets.all(10),
+                child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      AutoSizeText(
+                        "Принимают на переработку:",
+                        style: TextStyle(
+                            color: index % 2 == 0 ? kColorWhite : kColorBlack,
+                            fontFamily: "Gilroy",
+                            fontWeight: FontWeight.w400,
+                            fontSize: 14),
+                      ),
+                    ]),
+              ),
+            ),
+            Container(
+                height: 60,
+                padding: EdgeInsets.all(10),
+                child: GridView.builder(
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      mainAxisSpacing: 5,
+                      crossAxisSpacing: 5,
+                      crossAxisCount: 3,
+                      childAspectRatio: 8 / 1.5),
+                  itemCount: marker.acceptTypes.length,
+                  padding: EdgeInsets.all(10),
+                  itemBuilder: (context, i) {
+                    return Container(
+                      height: 10,
+                      decoration: BoxDecoration(
+                          color: kColorWhite,
+                          borderRadius: BorderRadius.circular(5)),
+                      child: AutoSizeText(
+                        "  ${marker.acceptTypes[i].name}  ",
+                        style: TextStyle(),
+                        textAlign: TextAlign.center,
+                      ),
+                    );
+                  },
+                ))
+          ],
+        ),
+      ),
     );
   }
 }

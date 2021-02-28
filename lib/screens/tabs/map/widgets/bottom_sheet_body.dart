@@ -37,44 +37,37 @@ class _BuildBodyState extends State<BuildBody> {
   @override
   Widget build(BuildContext context) {
     _size = MediaQuery.of(context).size;
-    return Container(
-        height: _size.height * 0.78,
-        width: _size.width,
-        decoration: BoxDecoration(color: Colors.white),
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            //mainAxisAlignment: MainAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Align(
-                alignment: Alignment.centerLeft,
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(15, 10, 15, 5),
-                  child: Text(
-                    "Рейтинг",
-                    style: TextStyle(color: kColorGreen),
-                  ),
-                ),
-              ),
-              Align(
-                  alignment: Alignment.centerLeft,
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(15, 5, 15, 10),
-                    child: Text(
-                      widget.marker.name,
-                      style: TextStyle(
-                          color: kColorBlack,
-                          fontFamily: 'Gilroy',
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18),
-                    ),
-                  )),
-              buildTabBar(),
-              streamBuilderMethod(_size)
-            ],
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Align(
+          alignment: Alignment.centerLeft,
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(15, 10, 15, 5),
+            child: Text(
+              "Рейтинг",
+              style: TextStyle(color: kColorGreen),
+            ),
           ),
-        ));
+        ),
+        Align(
+            alignment: Alignment.centerLeft,
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(15, 5, 15, 10),
+              child: Text(
+                widget.marker.name,
+                style: TextStyle(
+                    color: kColorBlack,
+                    fontFamily: 'Gilroy',
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18),
+              ),
+            )),
+        buildTabBar(),
+        streamBuilderMethod(_size)
+      ],
+    );
   }
 
   Container buildTabBar() {
@@ -84,18 +77,6 @@ class _BuildBodyState extends State<BuildBody> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          /*ToggleButtons(
-            children: [
-              Container(
-                child: Text("ИНФО"),
-              ),
-              Container(
-                child: Text("ОТЗЫВЫ"),
-              )
-            ],
-            isSelected: [false, true],
-
-          )*/
           GestureDetector(
             onTap: () {
               setState(() {
@@ -189,6 +170,23 @@ class NewWidget extends StatefulWidget {
 class _NewWidgetState extends State<NewWidget> {
   @override
   Widget build(BuildContext context) {
+    List<Widget> _list = widget.marker.acceptTypes
+        .map((card) => FilterCardWidget(
+            isSelected: false,
+            acceptType: card,
+            tapable: false,
+            onUp: () {},
+            onpressed: () {},
+            size: widget.size.width * 0.7))
+        .toList();
+    List<Widget> _pictureList = widget.marker.images
+        .map((img) => CachedNetworkImage(
+              placeholder: (BuildContext context, url) => LoaderWidget(),
+              imageUrl: "http://eco.loliallen.com$img",
+              errorWidget: (BuildContext context, url, error) =>
+                  Icon(Icons.error),
+            ))
+        .toList();
     return Column(
       children: [
         myDivider(),
@@ -212,6 +210,8 @@ class _NewWidgetState extends State<NewWidget> {
               ],
             )),
         myDivider(),
+
+        ///Карты того, что принимают
         Padding(
           padding: const EdgeInsets.fromLTRB(25, 5, 25, 5),
           child: Column(
@@ -233,23 +233,13 @@ class _NewWidgetState extends State<NewWidget> {
                   ),
                 ],
               ),
-              Container(
-                  height: 300,
-                  width: MediaQuery.of(context).size.width - 100,
-                  child: GridView.builder(
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2),
-                    itemCount: widget.marker.acceptTypes.length,
-                    itemBuilder: (context, i) {
-                      return FilterCardWidget(
-                          isSelected: false,
-                          acceptType: widget.marker.acceptTypes[0],
-                          tapable: false,
-                          onUp: () {},
-                          onpressed: () {},
-                          size: widget.size.width);
-                    },
-                  ))
+              GridView.count(
+                childAspectRatio: 5 / 4,
+                children: _list,
+                crossAxisCount: 2,
+                shrinkWrap: true,
+                controller: ScrollController(keepScrollOffset: false),
+              )
             ],
           ),
         ),
@@ -413,26 +403,12 @@ class _NewWidgetState extends State<NewWidget> {
             ),
           ),
         ),
-        Container(
-          height: 400,
-          padding: EdgeInsets.fromLTRB(0, 5, 0, 5),
-          child: ListView.separated(
-              itemCount: widget.marker.images.length,
-              separatorBuilder: (BuildContext context, int ind) {
-                return myDivider();
-              },
-              itemBuilder: (BuildContext context, int ind) {
-                print("eco.loliallen.com${widget.marker.images[ind]}");
-                return
-                    /*Image.network(
-                    "https://pbs.twimg.com/media/EG10LtNX4AAHWyl.jpg");*/
-                    CachedNetworkImage(
-                  placeholder: (BuildContext context, url) => LoaderWidget(),
-                  imageUrl: "https://www.ummatour.ru/sites/default/files/9.jpg",
-                  errorWidget: (BuildContext context, url, error) =>
-                      Icon(Icons.error),
-                );
-              }),
+        myDivider(),
+        GridView.count(
+          crossAxisCount: 1,
+          children: _pictureList,
+          shrinkWrap: true,
+          controller: ScrollController(keepScrollOffset: false),
         )
       ],
     );

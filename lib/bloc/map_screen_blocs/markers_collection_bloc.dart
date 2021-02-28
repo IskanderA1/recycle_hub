@@ -35,7 +35,7 @@ class MarkersCollectionBloc {
     _behaviorSubject.sink.add(_response);
   }
 
-  close() {
+  dispose() {
     _behaviorSubject.close();
   }
 }

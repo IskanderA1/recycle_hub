@@ -22,7 +22,7 @@ class _AnimatedPreInformationContainerState
   Widget build(BuildContext context) {
     widgetVisible = newMethod();
     return AnimatedContainer(
-        duration: Duration(milliseconds: 700),
+        duration: Duration(milliseconds: 200),
         height: widget.offset <= 0.4 ? 302 : 0,
         color: Colors.white,
         onEnd: () {},

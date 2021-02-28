@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:recycle_hub/screens/main_screen.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:recycle_hub/style/theme.dart';
@@ -18,26 +19,24 @@ class MyApp extends StatelessWidget {
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
     ]);
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'RecycleHub',
-      theme: kAppThemeData(),
-      home: MainScreen(),
-    );
+    return ScreenUtilInit(
+        //designSize: Size(360, 690),
+        allowFontScaling: false,
+        builder: () => MaterialApp(
+              debugShowCheckedModeBanner: false,
+              title: 'RecycleHub',
+              theme: kAppThemeData(),
+              home: MainScreen(),
+            ));
   }
 }
 
 _checkPermissions() async {
   var status = await Permission.location.status;
-  var status1 = await Permission.locationAlways.status;
 
   /*if ((await Permission.accessMediaLocation.isUndetermined)) {
     Permission.accessMediaLocation.request();
   }*/
-
-  if (!status1.isGranted) {
-    await Permission.locationAlways.request();
-  }
 
   if (status.isUndetermined) {
     // We didn't ask for permission yet.

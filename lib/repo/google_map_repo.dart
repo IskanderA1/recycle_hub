@@ -51,7 +51,7 @@ class GoogleMapRepo {
       var response;
       if (model.filters.length != 0) {
         response = await http.get(
-          "$mainUrl/api/rec_points?coords=[[33, 33],[60, 33],[60, 60],[33, 60]]&filters=$_filters",
+          "$mainUrl/api/rec_points?coords=[[33, 33],[60, 33],[60, 60],[33, 60]]&filters=$_filters", /*&rec_type=${model.recType}&payback_type=${model.paybackType}*/
           /*headers: {
               /*'coords':
               "[[${model.coordLeftTop.lat}, ${model.coordLeftTop.lng}],[${model.coordRightTop.lat}, ${model.coordRightTop.lng}],[${model.coordRightButton.lat}, ${model.coordRightButton.lng}],[${model.coordLeftButton.lat}, ${model.coordLeftButton.lng}]]",*/
@@ -63,9 +63,7 @@ class GoogleMapRepo {
       } else {
         response = await http.get("$mainUrl/api/rec_points", headers: {
           'coords':
-              "[[${model.coordLeftTop.lat}, ${model.coordLeftTop.lng}],[${model.coordRightTop.lat}, ${model.coordRightTop.lng}],[${model.coordRightButton.lat}, ${model.coordRightButton.lng}],[${model.coordLeftButton.lat}, ${model.coordLeftButton.lng}]]",
-          'rec_type': "${model.recType}",
-          'payback_type': "${model.paybackType}"
+              "[[${model.coordLeftTop.lat}, ${model.coordLeftTop.lng}],[${model.coordRightTop.lat}, ${model.coordRightTop.lng}],[${model.coordRightButton.lat}, ${model.coordRightButton.lng}],[${model.coordLeftButton.lat}, ${model.coordLeftButton.lng}]]", /*&rec_type=${model.recType}&payback_type=${model.paybackType}*/
         });
       }
       var data = jsonDecode(response.body);
