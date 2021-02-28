@@ -1,6 +1,6 @@
 import 'package:rxdart/rxdart.dart';
 
-enum MODE { PAID, FREE, ROUND, PARTNERS }
+enum MODE { PAID, FREE, PARTNERS }
 
 class MarkerWorkModeBloc {
   BehaviorSubject<MODE> _behaviorSubject = BehaviorSubject<MODE>();

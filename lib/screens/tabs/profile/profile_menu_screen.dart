@@ -14,6 +14,7 @@ class _ProfileMenuScreenState extends State<ProfileMenuScreen> {
     return StreamBuilder(
         stream: profileMenuBloc.subject.stream,
         initialData: profileMenuBloc.defaultState,
+        // ignore: missing_return
         builder: (context, AsyncSnapshot<ProfileMenuStates> snapshot) {
           switch (snapshot.data) {
             case ProfileMenuStates.USER_PROFILE:

@@ -60,6 +60,7 @@ flutter:
     - assets/icons/onboarding_4/People.svg
     - assets/icons/onboarding_4/Clouds.svg
     - assets/svg/
+    - svg/
 
   uses-material-design: true
   fonts:

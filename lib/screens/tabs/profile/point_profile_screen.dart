@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_star_rating/flutter_star_rating.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:recycle_hub/bloc/auth_user_bloc.dart';
 import '../../../style/theme.dart';
 import 'package:recycle_hub/bloc/profile_bloc/profile_bloc.dart';
 
@@ -352,7 +353,9 @@ Widget buildMenu(double size) {
           buildListItem(1, "Статистика"),
           buildListItem(2, "Как заработать баллы?"),
           buildListItem(3, "Задать вопрос авторам"),
-          buildListItem(4, "Выйти"),
+          GestureDetector(
+              onTap: () => authBloc.authLogOut(),
+              child: buildListItem(4, "Выйти")),
         ],
       ),
     ),
@@ -368,9 +371,7 @@ Widget buildListItem(int index, String text) {
       Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          Container(
-            child: svgIcons[index]
-            ),
+          Container(child: svgIcons[index]),
           SizedBox(
             width: 5,
           ),

@@ -1,3 +1,5 @@
+import 'package:recycle_hub/bloc/global_state_bloc.dart';
+import 'package:recycle_hub/bloc/navigation_bloc.dart';
 import 'package:recycle_hub/model/authorisation_models/user_response.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:recycle_hub/repo/app_repo.dart';
@@ -18,6 +20,7 @@ class AuthUserBloc {
     _subject.sink.add(response);
     if (response is UserLoggedIn) {
       user = response;
+      bottomNavBarBloc.pickItem(0);
     }
   }
 
@@ -34,6 +37,7 @@ class AuthUserBloc {
     _subject.sink.add(UserLoading());
     UserResponse response = await _repository.userLogOut();
     _subject.sink.add(response);
+    globalStateBloc.pickItem(GLobalStates.AUTH);
     if (response is UserLoggedIn) {
       user = null;
     }

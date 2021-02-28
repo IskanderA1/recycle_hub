@@ -26,7 +26,6 @@ class _AuthorisationMainScreenState extends State<AuthorisationMainScreen> {
 
   @override
   void dispose() {
-    authBloc.dispose();
     super.dispose();
   }
 

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:recycle_hub/bloc/auth_user_bloc.dart';
 import '../../../style/theme.dart';
 import 'package:recycle_hub/bloc/profile_bloc/profile_bloc.dart';
 
@@ -397,7 +398,9 @@ Widget buildMenu() {
           buildListItem(2, "Статистика"),
           buildListItem(3, "Как заработать баллы?"),
           buildListItem(4, "Задать вопрос авторам"),
-          buildListItem(5, "Выйти"),
+          GestureDetector(
+              onTap: () => authBloc.authLogOut(),
+              child: buildListItem(5, "Выйти")),
         ],
       ),
     ),

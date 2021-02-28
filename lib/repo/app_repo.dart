@@ -226,8 +226,16 @@ class AppRepository {
 
   Future<UserResponse> userLogOut() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.remove("login");
-    prefs.remove("password");
+        prefs.remove("u_id");
+        prefs.remove("username");
+        prefs.remove("name");
+        prefs.remove("password");
+        prefs.remove("image");
+        prefs.remove("confirmed");
+        prefs.remove("eco_coins");
+        prefs.remove("code");
+        prefs.remove("qrcode");
+        prefs.remove("token");
     return UserUnlogged();
   }
 
