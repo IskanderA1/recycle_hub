@@ -1,31 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:recycle_hub/style/style.dart';
 import '../../../style/theme.dart';
 import 'package:recycle_hub/bloc/profile_bloc/profile_bloc.dart';
 
 List<Widget> svgIcons = [
-  Icon(
-    Icons.account_box_outlined,
-    color: kColorPink,
-  ),
-  Icon(Icons.money, color: kColorPink),
-  Icon(
-    Icons.graphic_eq_outlined,
-    color: kColorPink,
-  ),
-  Icon(
-    Icons.handyman_outlined,
-    color: kColorPink,
-  ),
-  Icon(
-    Icons.support_outlined,
-    color: kColorPink,
-  ),
-  Icon(
-    Icons.exit_to_app_outlined,
-    color: kColorPink,
-  ),
+  Image.asset("svg/profile.png"),
+  Image.asset("svg/cash.png"),
+  Image.asset("svg/stats.png"),
+  Image.asset("svg/cash-hand.png"),
+  SvgPicture.asset("svg/question.svg"),
+  Image.asset("svg/log-out.png")
 ];
 
 class ProfileScreen extends StatefulWidget {
