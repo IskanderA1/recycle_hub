@@ -1,7 +1,10 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:recycle_hub/bloc/eco_guide_blocs/eco_menu_bloc.dart';
 import 'package:recycle_hub/bloc/map_screen_blocs/markers_collection_bloc.dart';
 import 'package:recycle_hub/bloc/navigation_bloc.dart';
+import 'package:recycle_hub/bloc/qr_bloc.dart';
+import 'package:recycle_hub/screens/qr_scanner_screen.dart';
 import 'package:recycle_hub/style/theme.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 
@@ -52,7 +55,8 @@ class _BottomNavBarV2State extends State<BottomNavBarV2> {
                       elevation: 0,
                       backgroundColor: kColorGreen,
                       onPressed: () {
-                        markersCollectionBloc.loadMarkers();
+                        qrBloc
+                            .mapEventToState(QRInitialEvent(context: context));
                       },
                       child: Container(
                         child: Icon(
@@ -90,6 +94,7 @@ class _BottomNavBarV2State extends State<BottomNavBarV2> {
                         ontap: () {
                           widget.func(1);
                           bottomNavBarBloc.pickItem(1);
+                          ecoMenu.backToMenu();
                         },
                       ),
                       SizedBox(
