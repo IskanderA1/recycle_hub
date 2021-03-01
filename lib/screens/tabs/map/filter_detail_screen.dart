@@ -13,9 +13,6 @@ import 'package:recycle_hub/screens/tabs/map/widgets/loader_widget.dart';
 import 'package:recycle_hub/style/theme.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 
-GarbageCollectionTypeBloc garbageCollBloc = GarbageCollectionTypeBloc();
-MarkerWorkModeBloc markerWorkModeBloc = MarkerWorkModeBloc();
-
 class MapFilterDetailScreen extends StatefulWidget {
   @override
   _MapFilterDetailScreenState createState() => _MapFilterDetailScreenState();
@@ -27,6 +24,8 @@ class _MapFilterDetailScreenState extends State<MapFilterDetailScreen> {
   FilterModel currentFilterModel = FilterModel();
   AcceptTypesCollection acceptTypesCollection;
   List<FilterCardWidget> filterCards;
+  GarbageCollectionTypeBloc garbageCollBloc = GarbageCollectionTypeBloc();
+  MarkerWorkModeBloc markerWorkModeBloc = MarkerWorkModeBloc();
   /*GlobalKey<FilterCardWidgetState> _key =
       GlobalKey<FilterCardWidgetState>(debugLabel: "__myKey__");*/
 
@@ -51,6 +50,13 @@ class _MapFilterDetailScreenState extends State<MapFilterDetailScreen> {
           appBar: AppBar(
             title: Text("Фильтр"),
             centerTitle: true,
+            leading: GestureDetector(
+              onTap: () {
+                markersCollectionBloc.loadMarkers();
+                Navigator.pop(context);
+              },
+              child: Icon(Icons.arrow_back),
+            ),
           ),
           body: Container(
             color: Color(0xFFFFFFFF),
@@ -225,12 +231,12 @@ class _MapFilterDetailScreenState extends State<MapFilterDetailScreen> {
   _markerModeCheck() {
     return StreamBuilder<Object>(
         stream: markerWorkModeBloc.stream,
-        initialData: markerWorkModeBloc.defaultItem,
+        //initialData: markerWorkModeBloc.defaultItem,
         builder: (context, snapshot) {
           return Container(
               height: 60,
               decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(5),
+                  borderRadius: BorderRadius.circular(2),
                   border: Border.all(color: Color(0xFF62C848), width: 1.5)),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -340,7 +346,7 @@ class _MapFilterDetailScreenState extends State<MapFilterDetailScreen> {
   _garbCollectTypeWidget() {
     return StreamBuilder(
       stream: garbageCollBloc.stream,
-      initialData: garbageCollBloc.defaultItem,
+      //initialData: garbageCollBloc.defaultItem,
       builder: (ctx, AsyncSnapshot<GCOLLTYPE> snapshot) {
         return Container(
           height: 40,

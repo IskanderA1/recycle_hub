@@ -144,6 +144,22 @@ class _MyGoogleMapWidgetState extends State<MyGoogleMapWidget> {
               if (snapshot.data is MarkerCollectionResponseWithError ||
                   snapshot.data is MarkerCollectionResponseLoading) {
                 return LoaderWidget();
+              } else if (snapshot.data is MarkerCollectionResponseEmptyList) {
+                return GoogleMap(
+                    mapType: _currentMapType,
+                    initialCameraPosition: cameraPosition,
+                    onCameraMove: (CameraPosition camera) {
+                      _camera = camera;
+                    },
+                    onMapCreated: (GoogleMapController controller) {
+                      if (!_controller.isCompleted) {
+                        _controller.complete(controller);
+                      }
+                    },
+                    myLocationButtonEnabled: false,
+                    myLocationEnabled: true,
+                    zoomControlsEnabled: false,
+                    compassEnabled: false);
               }
               return GoogleMap(
                   mapType: _currentMapType,
@@ -176,6 +192,7 @@ class _MyGoogleMapWidgetState extends State<MyGoogleMapWidget> {
                                   maxHeight: 0.85,
                                   context: context,
                                   headerHeight: 60,
+                                  isExpand: false,
                                   decoration: const BoxDecoration(
                                       borderRadius: BorderRadius.only(
                                           topLeft: Radius.circular(40),

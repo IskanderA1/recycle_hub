@@ -187,6 +187,7 @@ class _NewWidgetState extends State<NewWidget> {
                   Icon(Icons.error),
             ))
         .toList();
+
     return Column(
       children: [
         myDivider(),

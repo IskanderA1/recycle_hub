@@ -10,8 +10,8 @@ Widget buildHeader(BuildContext context, double bottomSheetOffset) {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(40 /*bottomSheetOffset == 0.85 ? 0 : 40*/),
-          topRight: Radius.circular(40 /*bottomSheetOffset == 0.85 ? 0 : 40*/),
+          topLeft: Radius.circular(bottomSheetOffset == 0.85 ? 0 : 40),
+          topRight: Radius.circular(bottomSheetOffset == 0.85 ? 0 : 40),
         ),
       ),
       child: Column(

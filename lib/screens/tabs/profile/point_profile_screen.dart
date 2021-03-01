@@ -25,6 +25,7 @@ class _PointProfileScreenState extends State<PointProfileScreen> {
     return WillPopScope(
       onWillPop: () {
         profileMenuBloc.mapEventToState(ProfileMenuEvents.USER_PROFILE);
+        return;
       },
       child: Scaffold(
         appBar: AppBar(

@@ -1,8 +1,11 @@
 import 'dart:io';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
+import 'package:recycle_hub/bloc/auth_user_bloc.dart';
 import 'package:recycle_hub/bloc/qr_bloc.dart';
 import '../style/theme.dart';
+import 'tabs/map/widgets/loader_widget.dart';
 
 class QRScannerScreen extends StatefulWidget {
   @override
@@ -33,23 +36,37 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
     return WillPopScope(
       onWillPop: () {
         qrBloc.mapEventToState(QROnCloseEvent());
+        return;
       },
       child: Scaffold(
-        appBar: AppBar(
-          elevation: 0,
-          title: Text(
-            "QR Сканнер",
-            style: TextStyle(color: kColorWhite, fontSize: 18),
+          appBar: AppBar(
+            elevation: 0,
+            title: Text(
+              "QR Сканнер",
+              style: TextStyle(color: kColorWhite, fontSize: 18),
+            ),
+            centerTitle: true,
+            leading: IconButton(
+              icon: Icon(Icons.arrow_back_sharp),
+              onPressed: () {
+                qrBloc.mapEventToState(QROnCloseEvent());
+              },
+            ),
           ),
-          centerTitle: true,
-          leading: IconButton(
-            icon: Icon(Icons.arrow_back_sharp),
-            onPressed: () {
-              qrBloc.mapEventToState(QROnCloseEvent());
-            },
-          ),
-        ),
-        body: StreamBuilder(
+          body: Container(
+            color: kColorWhite,
+            child: Center(
+                child: CachedNetworkImage(
+              placeholder: (BuildContext context, url) => LoaderWidget(),
+              errorWidget: (BuildContext context, url, error) =>
+                  Icon(Icons.error),
+              imageUrl: "http://eco.loliallen.com" + authBloc.user.qrCode,
+            )),
+          )),
+    );
+  }
+
+  /*StreamBuilder(
             stream: qrBloc.subject.stream,
             builder: (context, AsyncSnapshot<QRStates> snapshot) {
               Icon icon;
@@ -117,10 +134,6 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
                 return Container();
               }
             }),
-      ),
-    );
-  }
-
   Widget _buildQrView(BuildContext context) {
     // For this example we check how width or tall the device is and change the scanArea and overlay accordingly.
     double scanArea = MediaQuery.of(context).size.width - 120;
@@ -148,5 +161,5 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
         qrBloc.mapEventToState(QROnCloseEvent());
       }
     });
-  }
+  }*/
 }

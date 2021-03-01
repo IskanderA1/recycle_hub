@@ -42,7 +42,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     SizedBox(
                       height: 17,
                     ),
-                    buildProfileAvatar("Иван Иванов", "ЭКОЛОГ"),
+                    buildProfileAvatar(authBloc.user.name, "ЭКОЛОГ"),
                     SizedBox(
                       height: 24,
                     ),

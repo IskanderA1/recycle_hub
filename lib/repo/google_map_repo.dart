@@ -39,39 +39,39 @@ class GoogleMapRepo {
   Future<MarkersCollectionResponse> getMarkersByFilter(
       FilterModel model) async {
     try {
-      String _filters = '';
+      String _filters = '[';
       if (model.filters.length != 0) {
         _filters = "['${model.filters[0]}'";
-        for (int i = 0; i < model.filters.length; i++) {
+        for (int i = 1; i < model.filters.length; i++) {
           _filters = '$_filters' + ',' + "'${model.filters[i]}'";
         }
-        _filters = _filters + "]";
       }
+      _filters = _filters + "]";
       print("Запрос отправлен");
       var response;
-      if (model.filters.length != 0) {
+      print(
+          "$mainUrl/api/rec_points?coords=[[33, 33],[60, 33],[60, 60],[33, 60]]&rec_type=" +
+              model.recType +
+              "&payback_type=" +
+              model.paybackType +
+              "&filters=$_filters");
+      if (model.recType != "" && model.paybackType != "") {
         response = await http.get(
-            "$mainUrl/api/rec_points?coords=[[33, 33],[60, 33],[60, 60],[33, 60]]&filters=$_filters" /*&rec_type=${model.recType}&payback_type=${model.paybackType}"*/
-            /*headers: {
-              /*'coords':
-              "[[${model.coordLeftTop.lat}, ${model.coordLeftTop.lng}],[${model.coordRightTop.lat}, ${model.coordRightTop.lng}],[${model.coordRightButton.lat}, ${model.coordRightButton.lng}],[${model.coordLeftButton.lat}, ${model.coordLeftButton.lng}]]",*/
-              'filters': _filters,
-              //'rec_type': "${model.recType}",
-              //'payback_type': "${model.paybackType}"
-            }*/
-            );
+            "$mainUrl/api/rec_points?coords=[[33, 33],[60, 33],[60, 60],[33, 60]]&rec_type=" +
+                model.recType +
+                "&payback_type=" +
+                model.paybackType +
+                "&filters=$_filters");
       } else {
-        response = await http.get("$mainUrl/api/rec_points", headers: {
-          'coords':
-              "[[${model.coordLeftTop.lat}, ${model.coordLeftTop.lng}],[${model.coordRightTop.lat}, ${model.coordRightTop.lng}],[${model.coordRightButton.lat}, ${model.coordRightButton.lng}],[${model.coordLeftButton.lat}, ${model.coordLeftButton.lng}]]", /*&rec_type=${model.recType}&payback_type=${model.paybackType}*/
-        });
+        response = await http.get(
+            "$mainUrl/api/rec_points?coords=[[33, 33],[60, 33],[60, 60],[33, 60]]&filters=$_filters");
       }
       var data = jsonDecode(response.body);
       print(data);
       if (data.isNotEmpty) {
         return MarkersCollectionResponseOk(data);
       } else {
-        return MarkerCollectionResponseWithError(err: "Список пуст");
+        return MarkerCollectionResponseEmptyList(err: "Список пуст");
       }
     } catch (error, stacktrace) {
       print("Exception occured: $error stackTrace: $stacktrace");

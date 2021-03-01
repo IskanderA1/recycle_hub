@@ -1,6 +1,7 @@
 import 'package:recycle_hub/bloc/global_state_bloc.dart';
 import 'package:recycle_hub/bloc/navigation_bloc.dart';
 import 'package:recycle_hub/model/authorisation_models/user_response.dart';
+import 'package:recycle_hub/model/user_model.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:recycle_hub/repo/app_repo.dart';
 
@@ -8,7 +9,7 @@ class AuthUserBloc {
   final AppRepository _repository = AppRepository();
   final BehaviorSubject<UserResponse> _subject =
       BehaviorSubject<UserResponse>();
-  UserResponse user;
+  UserModel user;
 
   pickState(UserResponse state) {
     _subject.sink.add(state);
@@ -19,18 +20,20 @@ class AuthUserBloc {
     UserResponse response = await _repository.userAuth(login, password);
     _subject.sink.add(response);
     if (response is UserLoggedIn) {
-      user = response;
+      user = response.user;
       bottomNavBarBloc.pickItem(0);
     }
   }
 
-  authLocal() async {
+  Future<int> authLocal() async {
     _subject.sink.add(UserLoading());
     UserResponse response = await _repository.userAuthLocal();
     _subject.sink.add(response);
     if (response is UserLoggedIn) {
-      user = response;
+      user = response.user;
+      return 0;
     }
+    return -1;
   }
 
   authLogOut() async {

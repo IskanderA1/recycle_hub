@@ -1,3 +1,4 @@
+import 'package:recycle_hub/bloc/auth_user_bloc.dart';
 import 'package:recycle_hub/model/authorisation_models/user_response.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:recycle_hub/repo/app_repo.dart';
@@ -14,12 +15,11 @@ class GlobalStateBloc {
     if (_comeIn == true) {
       _subject.sink.add(GLobalStates.FIRSTIN);
     } else {
-      UserResponse response = await _repository.userAuthLocal();
-      if (response is UserLoggedIn) {
-        _subject.sink.add(GLobalStates.TABS);
-      } else {
-        _subject.sink.add(GLobalStates.AUTH);
-      }
+      int i = await authBloc.authLocal();
+      if (i == 0)
+        pickItem(GLobalStates.TABS);
+      else
+        pickItem(GLobalStates.AUTH);
     }
   }
 

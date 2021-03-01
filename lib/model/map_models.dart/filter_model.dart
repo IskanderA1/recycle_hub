@@ -20,7 +20,7 @@ class FilterModel {
     coordRightButton = Coords(lat: 60, lng: 60);
     coordLeftButton = Coords(lat: 33, lng: 60);
     filters = List<String>();
-    recType = "charity";
-    paybackType = "paid";
+    recType = "";
+    paybackType = "";
   }
 }
