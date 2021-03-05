@@ -4,12 +4,48 @@ import '../../../style/theme.dart';
 import 'package:recycle_hub/bloc/profile_bloc/profile_bloc.dart';
 
 List<Widget> svgIcons = [
-  Image.asset("svg/profile.png"),
-  Image.asset("svg/cash.png"),
-  Image.asset("svg/stats.png"),
-  Image.asset("svg/cash-hand.png"),
-  SvgPicture.asset("svg/question.svg"),
-  Image.asset("svg/log-out.png")
+  SvgPicture.asset(
+    "svg/profile_2.svg",
+    height: 30,
+    width: 30,
+    color: kColorGreyDark,
+  ),
+  SvgPicture.asset(
+    "svg/profile_3.svg",
+    height: 30,
+    width: 30,
+    color: kColorGreyDark,
+  ),
+  SvgPicture.asset(
+    "svg/profile_4.svg",
+    height: 30,
+    width: 30,
+    color: kColorGreyDark,
+  ),
+  SvgPicture.asset(
+    "svg/profile_5.svg",
+    height: 30,
+    width: 30,
+    color: kColorGreyDark,
+  ),
+  SvgPicture.asset(
+    "svg/profile_6.svg",
+    height: 30,
+    width: 30,
+    color: kColorGreyDark,
+  ),
+  SvgPicture.asset(
+    "svg/profile_7.svg",
+    height: 30,
+    width: 30,
+    color: kColorGreyDark,
+  ),
+  SvgPicture.asset(
+    "svg/profile_1.svg",
+    height: 30,
+    width: 30,
+    color: kColorGreyDark,
+  ),
 ];
 
 class ProfileScreen extends StatefulWidget {
@@ -34,8 +70,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
             children: [
               Image.asset("svg/Mask Group.png"),
               Container(
-                padding: EdgeInsets.only(left: 17, right: 17, top: 10),
-                child: Column(
+                child: ListView(
+                  padding: EdgeInsets.only(left: 17, right: 17, top: 10),
                   children: [
                     buildAppBar(),
                     SizedBox(
@@ -50,15 +86,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       height: 5,
                     ),
                     Container(
-                      height: _size.height - _size.height * 0.5,
+                      height: _size.height * 0.5,
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(16),
                         child: ListView(
-                          padding: EdgeInsets.only(bottom: 45, top: 10),
+                          padding: EdgeInsets.only(
+                              bottom: _size.height * 0.05, top: 5),
                           children: [
                             buildAchievments("Эколог", 94.3),
                             SizedBox(
-                              height: 20,
+                              height: 10,
                             ),
                             buildMenu()
                           ],
@@ -238,7 +275,7 @@ Widget buildAchievments(String status, double made) {
         Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            SvgPicture.asset("svg/dostizheniya.svg"),
+            Container(height: 30, width: 30, child: svgIcons[6]),
             SizedBox(
               width: 15,
             ),
@@ -308,7 +345,7 @@ Widget _buildProgressIndicator(int lastKGindex) {
     children: [
       Container(
           height: 20,
-          width: 50,
+          width: 47,
           margin: EdgeInsets.only(right: 2),
           alignment: Alignment.center,
           decoration: BoxDecoration(
@@ -324,7 +361,7 @@ Widget _buildProgressIndicator(int lastKGindex) {
                 )),
       Container(
           height: 20,
-          width: 50,
+          width: 48,
           margin: EdgeInsets.only(right: 2),
           alignment: Alignment.center,
           decoration: BoxDecoration(
@@ -352,7 +389,7 @@ Widget _buildProgressIndicator(int lastKGindex) {
                 )),
       Container(
           height: 20,
-          width: 50,
+          width: 48,
           margin: EdgeInsets.only(right: 2),
           alignment: Alignment.center,
           decoration: BoxDecoration(
@@ -366,7 +403,7 @@ Widget _buildProgressIndicator(int lastKGindex) {
                 )),
       Container(
           height: 20,
-          width: 50,
+          width: 47,
           alignment: Alignment.center,
           decoration: BoxDecoration(
               color: (4 < lastKGindex) ? kColorGreen : kLightGrey,
@@ -413,11 +450,16 @@ Widget buildListItem(int index, String text) {
       Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          svgIcons[index],
+          Container(height: 30, width: 30, child: svgIcons[index]),
           SizedBox(
             width: 5,
           ),
-          Text(text)
+          Text(
+            text,
+            style: TextStyle(
+              color: index + 2 == svgIcons.length ? kColorRed : kColorBlack,
+            ),
+          )
         ],
       ),
       Align(

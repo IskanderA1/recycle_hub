@@ -53,7 +53,7 @@ class _MapScreenState extends State<MapScreen> {
 
   AppBar mapScreenAppBar() {
     return AppBar(
-      title: Text("RecycleHub"),
+      title: Text("RecycleHub",style: TextStyle(fontWeight: FontWeight.w700),),
       centerTitle: true,
       leading: IconButton(
         icon: Icon(Icons.menu),

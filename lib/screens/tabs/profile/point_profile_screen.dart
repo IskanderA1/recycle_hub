@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_star_rating/flutter_star_rating.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -5,11 +7,36 @@ import '../../../style/theme.dart';
 import 'package:recycle_hub/bloc/profile_bloc/profile_bloc.dart';
 
 List<Widget> svgIcons = [
-  Image.asset("svg/profile.png"),
-  Image.asset("svg/stats.png"),
-  Image.asset("svg/cash-hand.png"),
-  SvgPicture.asset("svg/question.svg"),
-  Image.asset("svg/log-out.png")
+  SvgPicture.asset(
+    "svg/profile_2.svg",
+    height: 30,
+    width: 30,
+    color: kColorGreyDark,
+  ),
+  SvgPicture.asset(
+    "svg/profile_4.svg",
+    height: 30,
+    width: 30,
+    color: kColorGreyDark,
+  ),
+  SvgPicture.asset(
+    "svg/profile_5.svg",
+    height: 30,
+    width: 30,
+    color: kColorGreyDark,
+  ),
+  SvgPicture.asset(
+    "svg/profile_6.svg",
+    height: 30,
+    width: 30,
+    color: kColorGreyDark,
+  ),
+  SvgPicture.asset(
+    "svg/profile_7.svg",
+    height: 30,
+    width: 30,
+    color: kColorGreyDark,
+  ),
 ];
 
 class PointProfileScreen extends StatefulWidget {
@@ -28,6 +55,7 @@ class _PointProfileScreenState extends State<PointProfileScreen> {
       child: Scaffold(
         appBar: AppBar(
           centerTitle: true,
+          elevation: 0,
           backgroundColor: kColorGreen,
           title: Text("Пункт приёма"),
           leading: IconButton(
@@ -46,27 +74,34 @@ class _PointProfileScreenState extends State<PointProfileScreen> {
           alignment: Alignment.topCenter,
           child: Stack(
             children: [
-              Image.asset(
-                "svg/trash.jpg",
+              Container(
+                height: 240,
+                child: Image.asset(
+                  "svg/trash.jpg",
+                  fit: BoxFit.cover,
+                  height: 240,
+                  width: _size.width,
+                ),
               ),
               Container(
-                height: 226,
+                height: 240,
                 color: Colors.black45,
               ),
               Container(
-                padding: EdgeInsets.only(left: 17, right: 17, top: 10),
-                child: Column(
+                child: ListView(
+                  padding: EdgeInsets.only(
+                      left: 17, right: 17, top: 10, bottom: 100),
                   children: [
                     buildPointProfile(
-                        "Пункт приёма Советский", "ООО НПП РИСАЛ"),
+                        "Пункт приёма Советский", "ООО НПП РИСАЛ", _size),
                     SizedBox(
-                      height: 24,
+                      height: _size.height * 0.08,
                     ),
                     buildStatus(10, 94),
                     SizedBox(
-                      height: 20,
+                      height: 10,
                     ),
-                    buildMenu(_size.height * 0.4)
+                    buildMenu(_size.height * 0.5)
                   ],
                 ),
               ),
@@ -78,18 +113,17 @@ class _PointProfileScreenState extends State<PointProfileScreen> {
   }
 }
 
-Widget buildPointProfile(String title, String subtitle) {
+Widget buildPointProfile(String title, String subtitle, Size size) {
   return Container(
     padding: EdgeInsets.all(10),
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(
-          alignment: Alignment.centerLeft,
-          padding: EdgeInsets.only(right: 160),
+          width: 130,
           child: StarRating(
             rating: 2,
-            spaceBetween: 5,
+            spaceBetween: 1,
             starConfig: StarConfig(
                 size: 25,
                 fillColor: kColorGreen,
@@ -120,59 +154,63 @@ Widget buildPointProfile(String title, String subtitle) {
 Widget buildStatus(int place, int made) {
   return Container(
     child: Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Container(
-          width: 160,
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(16), color: kColorWhite),
-          padding: EdgeInsets.all(20),
-          child: Column(
-            children: [
-              Text("$place",
-                  style: TextStyle(
-                    color: kColorBlack,
-                    fontSize: 36,
-                  )),
-              SizedBox(height: 5),
-              Wrap(
-                children: [
-                  Text(
-                    "Место в общем зачете",
-                    style: TextStyle(color: kColorBlack, fontSize: 12),
-                    textAlign: TextAlign.center,
-                  ),
-                ],
-              )
-            ],
+        Expanded(
+          child: Container(
+            height: 115,
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(16), color: kColorWhite),
+            padding: EdgeInsets.all(20),
+            child: Column(
+              children: [
+                Text("$place",
+                    style: TextStyle(
+                      color: kColorBlack,
+                      fontSize: 36,
+                    )),
+                SizedBox(height: 5),
+                Wrap(
+                  children: [
+                    Text(
+                      "Место в общем зачете",
+                      style: TextStyle(color: kColorBlack, fontSize: 12),
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
+                )
+              ],
+            ),
           ),
         ),
         SizedBox(
           width: 5,
         ),
-        Container(
-          width: 160,
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(16), color: kColorWhite),
-          padding: EdgeInsets.all(20),
-          child: Column(
-            children: [
-              Text("$made",
-                  style: TextStyle(
-                    color: kColorBlack,
-                    fontSize: 36,
-                  )),
-              SizedBox(height: 5),
-              Wrap(
-                children: [
-                  Text(
-                    "Всего сдано вторсырье(кг)",
-                    style: TextStyle(color: kColorBlack, fontSize: 12),
-                    textAlign: TextAlign.center,
-                  ),
-                ],
-              )
-            ],
+        Expanded(
+          child: Container(
+            height: 115,
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(16), color: kColorWhite),
+            padding: EdgeInsets.all(20),
+            child: Column(
+              children: [
+                Text("$made",
+                    style: TextStyle(
+                      color: kColorBlack,
+                      fontSize: 36,
+                    )),
+                SizedBox(height: 5),
+                Wrap(
+                  children: [
+                    Text(
+                      "Всего сдано вторсырье(кг)",
+                      style: TextStyle(color: kColorBlack, fontSize: 12),
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
+                )
+              ],
+            ),
           ),
         ),
       ],
@@ -340,21 +378,17 @@ Widget _buildProgressIndicator(int lastKGindex) {
 
 Widget buildMenu(double size) {
   return Container(
-    height: size,
+    padding: EdgeInsets.only(right: 17, left: 17, bottom: 10),
     decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16), color: kColorWhite),
-    child: ClipRRect(
-      borderRadius: BorderRadius.circular(16),
-      child: ListView(
-        padding: EdgeInsets.only(top: 17, bottom: 35, right: 17, left: 17),
-        children: [
-          buildListItem(0, "Редактировать профиль"),
-          buildListItem(1, "Статистика"),
-          buildListItem(2, "Как заработать баллы?"),
-          buildListItem(3, "Задать вопрос авторам"),
-          buildListItem(4, "Выйти"),
-        ],
-      ),
+    child: Column(
+      children: [
+        buildListItem(0, "Редактировать профиль"),
+        buildListItem(1, "Статистика"),
+        buildListItem(2, "Как заработать баллы?"),
+        buildListItem(3, "Задать вопрос авторам"),
+        buildListItem(4, "Выйти"),
+      ],
     ),
   );
 }
@@ -369,12 +403,17 @@ Widget buildListItem(int index, String text) {
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Container(
-            child: svgIcons[index]
-            ),
+              alignment: Alignment.center,
+              height: 30,
+              width: 30,
+              child: svgIcons[index]),
           SizedBox(
             width: 5,
           ),
-          Text(text)
+          Text(text,
+              style: TextStyle(
+                color: index + 1 == svgIcons.length ? kColorRed : kColorBlack,
+              ))
         ],
       ),
       Align(
