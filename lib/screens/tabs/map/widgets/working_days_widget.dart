@@ -2,6 +2,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
+
 import 'package:recycle_hub/model/map_models.dart/work_day.dart';
 import 'package:recycle_hub/model/map_models.dart/work_time.dart';
 import 'package:recycle_hub/style/theme.dart';
@@ -11,12 +12,16 @@ class WorkingDaysWidget extends StatefulWidget {
   final Color backColor;
   final WorkingTime workingTime;
   final bool hasSelection;
+  final Size size;
+  final double fontSize;
   const WorkingDaysWidget(
       {Key key,
       @required this.workingTime,
       @required this.wColor,
       @required this.backColor,
-      @required this.hasSelection})
+      @required this.hasSelection,
+      @required this.size,
+      @required this.fontSize})
       : super(key: key);
 
   @override
@@ -24,16 +29,14 @@ class WorkingDaysWidget extends StatefulWidget {
 }
 
 class _WorkingDaysWidgetState extends State<WorkingDaysWidget> {
-  double _size;
-
   @override
   Widget build(BuildContext context) {
     DateTime date = DateTime.now();
     String dateFormat = DateFormat('EEEE').format(date);
     print(dateFormat);
-    Size _fullSize = MediaQuery.of(context).size;
-    _size = (_fullSize.width - 62) / 7;
+    Size _fullSize = widget.size;
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -41,7 +44,7 @@ class _WorkingDaysWidgetState extends State<WorkingDaysWidget> {
             FaIcon(
               FontAwesomeIcons.clock,
               color: widget.hasSelection ? kColorGreyDark : widget.wColor,
-              size: 30,
+              size: widget.fontSize + 15,
             ),
             SizedBox(
               width: 15,
@@ -51,15 +54,16 @@ class _WorkingDaysWidgetState extends State<WorkingDaysWidget> {
               style: TextStyle(
                   color: widget.wColor,
                   fontFamily: 'GilroyMedium',
-                  fontSize: 16),
+                  fontSize: widget.fontSize + 4),
             )
           ],
         ),
         SizedBox(
-          height: 15,
+          height: 10,
         ),
         Container(
-          height: _fullSize.height / 6.1,
+          height: _fullSize.height,
+          width: _fullSize.width,
           color: widget.backColor,
           child: widget.hasSelection
               ? Row(
@@ -69,10 +73,10 @@ class _WorkingDaysWidgetState extends State<WorkingDaysWidget> {
                       dayName: "ПН",
                       dayArr: widget.workingTime.mon,
                       isSelected: dateFormat == "Monday" ? true : false,
-                      sWidth: _size,
-                      selectedColor: kColorBlack,
-                      unSelectedColor: kColorGreyDark,
+                      textSelectedColor: kColorBlack,
+                      textUnSelectedColor: kColorGreyDark,
                       backColor: widget.backColor,
+                      fontSize: widget.fontSize,
                     ),
                     VerticalDivider(
                       color: widget.wColor,
@@ -85,10 +89,10 @@ class _WorkingDaysWidgetState extends State<WorkingDaysWidget> {
                       dayName: "ВТ",
                       dayArr: widget.workingTime.mon,
                       isSelected: dateFormat == "Tuesday" ? true : false,
-                      sWidth: _size,
-                      selectedColor: kColorBlack,
-                      unSelectedColor: kColorGreyDark,
+                      textSelectedColor: kColorBlack,
+                      textUnSelectedColor: kColorGreyDark,
                       backColor: widget.backColor,
+                      fontSize: widget.fontSize,
                     ),
                     VerticalDivider(
                       color: widget.wColor,
@@ -101,10 +105,10 @@ class _WorkingDaysWidgetState extends State<WorkingDaysWidget> {
                       dayName: "СР",
                       dayArr: widget.workingTime.mon,
                       isSelected: dateFormat == "Wednesday" ? true : false,
-                      sWidth: _size,
-                      selectedColor: kColorBlack,
-                      unSelectedColor: kColorGreyDark,
+                      textSelectedColor: kColorBlack,
+                      textUnSelectedColor: kColorGreyDark,
                       backColor: widget.backColor,
+                      fontSize: widget.fontSize,
                     ),
                     VerticalDivider(
                       color: widget.wColor,
@@ -117,10 +121,10 @@ class _WorkingDaysWidgetState extends State<WorkingDaysWidget> {
                       dayName: "ЧТ",
                       dayArr: widget.workingTime.mon,
                       isSelected: dateFormat == "Thursday" ? true : false,
-                      sWidth: _size,
-                      selectedColor: kColorBlack,
-                      unSelectedColor: kColorGreyDark,
+                      textSelectedColor: kColorBlack,
+                      textUnSelectedColor: kColorGreyDark,
                       backColor: widget.backColor,
+                      fontSize: widget.fontSize,
                     ),
                     VerticalDivider(
                       color: widget.wColor,
@@ -133,10 +137,10 @@ class _WorkingDaysWidgetState extends State<WorkingDaysWidget> {
                       dayName: "ПТ",
                       dayArr: widget.workingTime.mon,
                       isSelected: dateFormat == "Friday" ? true : false,
-                      sWidth: _size,
-                      selectedColor: kColorBlack,
-                      unSelectedColor: kColorGreyDark,
+                      textSelectedColor: kColorBlack,
+                      textUnSelectedColor: kColorGreyDark,
                       backColor: widget.backColor,
+                      fontSize: widget.fontSize,
                     ),
                     VerticalDivider(
                       color: widget.wColor,
@@ -149,10 +153,10 @@ class _WorkingDaysWidgetState extends State<WorkingDaysWidget> {
                       dayName: "СБ",
                       dayArr: widget.workingTime.mon,
                       isSelected: dateFormat == "Saturday" ? true : false,
-                      sWidth: _size,
-                      selectedColor: kColorBlack,
-                      unSelectedColor: kColorGreyDark,
+                      textSelectedColor: kColorBlack,
+                      textUnSelectedColor: kColorGreyDark,
                       backColor: widget.backColor,
+                      fontSize: widget.fontSize,
                     ),
                     VerticalDivider(
                       color: widget.wColor,
@@ -165,10 +169,10 @@ class _WorkingDaysWidgetState extends State<WorkingDaysWidget> {
                       dayName: "ВС",
                       dayArr: widget.workingTime.mon,
                       isSelected: dateFormat == "Sunday" ? true : false,
-                      sWidth: _size,
-                      selectedColor: kColorBlack,
-                      unSelectedColor: kColorGreyDark,
+                      textSelectedColor: kColorBlack,
+                      textUnSelectedColor: kColorGreyDark,
                       backColor: widget.backColor,
+                      fontSize: widget.fontSize,
                     ),
                   ],
                 )
@@ -179,18 +183,11 @@ class _WorkingDaysWidgetState extends State<WorkingDaysWidget> {
                       dayName: "ПН",
                       dayArr: widget.workingTime.mon,
                       isSelected: false,
-                      sWidth: _size,
-                      selectedColor: kColorBlack,
-                      unSelectedColor: widget.wColor,
+                      textSelectedColor: kColorBlack,
+                      textUnSelectedColor: widget.wColor,
                       backColor: widget.backColor,
+                      fontSize: widget.fontSize,
                     ),
-                    /*VerticalDivider(
-                color: widget.wColor,
-                indent: 3,
-                endIndent: 3,
-                width: 2,
-                thickness: 0.6,
-              ),*/
                     VerticalDivider(
                       color: widget.wColor,
                       indent: 3,
@@ -202,10 +199,10 @@ class _WorkingDaysWidgetState extends State<WorkingDaysWidget> {
                       dayName: "ВТ",
                       dayArr: widget.workingTime.mon,
                       isSelected: false,
-                      sWidth: _size,
-                      selectedColor: kColorBlack,
-                      unSelectedColor: widget.wColor,
+                      textSelectedColor: kColorBlack,
+                      textUnSelectedColor: widget.wColor,
                       backColor: widget.backColor,
+                      fontSize: widget.fontSize,
                     ),
                     VerticalDivider(
                       color: widget.wColor,
@@ -218,10 +215,10 @@ class _WorkingDaysWidgetState extends State<WorkingDaysWidget> {
                       dayName: "СР",
                       dayArr: widget.workingTime.mon,
                       isSelected: false,
-                      sWidth: _size,
-                      selectedColor: kColorBlack,
-                      unSelectedColor: widget.wColor,
+                      textSelectedColor: kColorBlack,
+                      textUnSelectedColor: widget.wColor,
                       backColor: widget.backColor,
+                      fontSize: widget.fontSize,
                     ),
                     VerticalDivider(
                       color: widget.wColor,
@@ -234,10 +231,10 @@ class _WorkingDaysWidgetState extends State<WorkingDaysWidget> {
                       dayName: "ЧТ",
                       dayArr: widget.workingTime.mon,
                       isSelected: false,
-                      sWidth: _size,
-                      selectedColor: kColorBlack,
-                      unSelectedColor: widget.wColor,
+                      textSelectedColor: kColorBlack,
+                      textUnSelectedColor: widget.wColor,
                       backColor: widget.backColor,
+                      fontSize: widget.fontSize,
                     ),
                     VerticalDivider(
                       color: widget.wColor,
@@ -250,10 +247,10 @@ class _WorkingDaysWidgetState extends State<WorkingDaysWidget> {
                       dayName: "ПТ",
                       dayArr: widget.workingTime.mon,
                       isSelected: false,
-                      sWidth: _size,
-                      selectedColor: kColorBlack,
-                      unSelectedColor: widget.wColor,
+                      textSelectedColor: kColorBlack,
+                      textUnSelectedColor: widget.wColor,
                       backColor: widget.backColor,
+                      fontSize: widget.fontSize,
                     ),
                     VerticalDivider(
                       color: widget.wColor,
@@ -266,10 +263,10 @@ class _WorkingDaysWidgetState extends State<WorkingDaysWidget> {
                       dayName: "СБ",
                       dayArr: widget.workingTime.mon,
                       isSelected: false,
-                      sWidth: _size,
-                      selectedColor: kColorBlack,
-                      unSelectedColor: widget.wColor,
+                      textSelectedColor: kColorBlack,
+                      textUnSelectedColor: widget.wColor,
                       backColor: widget.backColor,
+                      fontSize: widget.fontSize,
                     ),
                     VerticalDivider(
                       color: widget.wColor,
@@ -282,10 +279,10 @@ class _WorkingDaysWidgetState extends State<WorkingDaysWidget> {
                       dayName: "ВС",
                       dayArr: widget.workingTime.mon,
                       isSelected: false,
-                      sWidth: _size,
-                      selectedColor: kColorBlack,
-                      unSelectedColor: widget.wColor,
+                      textSelectedColor: kColorBlack,
+                      textUnSelectedColor: widget.wColor,
                       backColor: widget.backColor,
+                      fontSize: widget.fontSize,
                     ),
                   ],
                 ),
@@ -295,75 +292,184 @@ class _WorkingDaysWidgetState extends State<WorkingDaysWidget> {
   }
 }
 
-class DayWidget extends StatefulWidget {
+class DayWidget extends StatelessWidget {
   DayWidget(
       {Key key,
       @required this.dayName,
       @required this.dayArr,
       @required this.isSelected,
-      @required this.sWidth,
-      @required this.selectedColor,
-      @required this.unSelectedColor,
-      @required this.backColor})
+      @required this.textSelectedColor,
+      @required this.textUnSelectedColor,
+      @required this.backColor,
+      @required this.fontSize})
       : super(key: key);
 
   final String dayName;
   final WorkDay dayArr;
   final bool isSelected;
-  final sWidth;
-  final Color selectedColor;
-  final Color unSelectedColor;
+  final Color textSelectedColor;
+  final Color textUnSelectedColor;
   final Color backColor;
+  final double fontSize;
 
-  @override
-  _DayWidgetState createState() => _DayWidgetState();
-}
-
-class _DayWidgetState extends State<DayWidget> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: widget.sWidth,
-      color: widget.isSelected ? kColorRed.withOpacity(0.65) : widget.backColor,
-      child: (Column(
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            "${widget.dayName}\n",
-            style: TextStyle(
-                fontFamily: 'GilroyMedium',
-                color: widget.isSelected
-                    ? widget.selectedColor
-                    : widget.unSelectedColor),
-          ),
-          Text(
-            "${widget.dayArr.first}\n${widget.dayArr.fourth}",
-            style: TextStyle(
-                fontFamily: 'GilroyMedium',
-                color: widget.isSelected
-                    ? widget.selectedColor
-                    : widget.unSelectedColor),
-          ),
-          Text(
-            "·",
-            style: TextStyle(
-                fontSize: 35,
-                color: widget.isSelected
-                    ? widget.selectedColor
-                    : widget.unSelectedColor,
-                fontWeight: FontWeight.w900),
-          ),
-          Text(
-            "${widget.dayArr.second}\n${widget.dayArr.third}",
-            style: TextStyle(
-                fontFamily: 'GilroyMedium',
-                color: widget.isSelected
-                    ? widget.selectedColor
-                    : widget.unSelectedColor),
-          ),
-        ],
-      )),
+    return Expanded(
+      child: Container(
+        color: isSelected ? kColorRed.withOpacity(0.65) : backColor,
+        child: (Column(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Text(
+              "$dayName\n",
+              style: TextStyle(
+                  fontFamily: 'GilroyMedium',
+                  fontSize: fontSize + 2,
+                  color: isSelected ? textSelectedColor : textUnSelectedColor),
+            ),
+            Text(
+              "${dayArr.first}\n${dayArr.fourth}",
+              style: TextStyle(
+                  fontFamily: 'GilroyMedium',
+                  fontSize: fontSize,
+                  color: isSelected ? textSelectedColor : textUnSelectedColor),
+            ),
+            Text(
+              "·",
+              style: TextStyle(
+                  fontSize: fontSize + 10,
+                  color: isSelected ? textSelectedColor : textUnSelectedColor,
+                  fontWeight: FontWeight.w900),
+            ),
+            Text(
+              "${dayArr.second}\n${dayArr.third}",
+              style: TextStyle(
+                  fontFamily: 'GilroyMedium',
+                  fontSize: fontSize,
+                  color: isSelected ? textSelectedColor : textUnSelectedColor),
+            ),
+          ],
+        )),
+      ),
     );
+  }
+}
+
+class DaysRow extends StatelessWidget {
+  final WorkingTime workingTime;
+  final double sSize;
+  final double fontSize;
+
+  const DaysRow(
+      {Key key,
+      @required this.workingTime,
+      @required this.sSize,
+      @required this.fontSize})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(mainAxisSize: MainAxisSize.min, children: [
+      DayWidget(
+          dayName: "ПН",
+          dayArr: workingTime.mon,
+          isSelected: false,
+          textSelectedColor: kColorWhite,
+          textUnSelectedColor: kColorWhite,
+          backColor: kColorWhite,
+          fontSize: fontSize),
+      VerticalDivider(
+        color: kColorBlack,
+        indent: 3,
+        endIndent: 3,
+        width: 2,
+        thickness: 0.6,
+      ),
+      DayWidget(
+          dayName: "ВТ",
+          dayArr: workingTime.mon,
+          isSelected: false,
+          textSelectedColor: kColorWhite,
+          textUnSelectedColor: kColorWhite,
+          backColor: kColorWhite,
+          fontSize: fontSize),
+      VerticalDivider(
+        color: kColorBlack,
+        indent: 3,
+        endIndent: 3,
+        width: 2,
+        thickness: 0.6,
+      ),
+      DayWidget(
+          dayName: "СР",
+          dayArr: workingTime.mon,
+          isSelected: false,
+          textSelectedColor: kColorWhite,
+          textUnSelectedColor: kColorWhite,
+          backColor: kColorWhite,
+          fontSize: fontSize),
+      VerticalDivider(
+        color: kColorBlack,
+        indent: 3,
+        endIndent: 3,
+        width: 2,
+        thickness: 0.6,
+      ),
+      DayWidget(
+          dayName: "ЧТ",
+          dayArr: workingTime.mon,
+          isSelected: false,
+          textSelectedColor: kColorWhite,
+          textUnSelectedColor: kColorWhite,
+          backColor: kColorWhite,
+          fontSize: fontSize),
+      VerticalDivider(
+        color: kColorBlack,
+        indent: 3,
+        endIndent: 3,
+        width: 2,
+        thickness: 0.6,
+      ),
+      DayWidget(
+          dayName: "ПТ",
+          dayArr: workingTime.mon,
+          isSelected: false,
+          textSelectedColor: kColorWhite,
+          textUnSelectedColor: kColorWhite,
+          backColor: kColorWhite,
+          fontSize: fontSize),
+      VerticalDivider(
+        color: kColorBlack,
+        indent: 3,
+        endIndent: 3,
+        width: 2,
+        thickness: 0.6,
+      ),
+      DayWidget(
+          dayName: "СБ",
+          dayArr: workingTime.mon,
+          isSelected: false,
+          textSelectedColor: kColorWhite,
+          textUnSelectedColor: kColorWhite,
+          backColor: kColorWhite,
+          fontSize: fontSize),
+      VerticalDivider(
+        color: kColorBlack,
+        indent: 3,
+        endIndent: 3,
+        width: 2,
+        thickness: 0.6,
+      ),
+      DayWidget(
+          dayName: "ВС",
+          dayArr: workingTime.mon,
+          isSelected: false,
+          textSelectedColor: kColorWhite,
+          textUnSelectedColor: kColorWhite,
+          backColor: kColorWhite,
+          fontSize: fontSize),
+    ]);
   }
 }

@@ -46,7 +46,7 @@ class _MapFilterDetailScreenState extends State<MapFilterDetailScreen> {
         }
       },
       child: Scaffold(
-          backgroundColor: Color(0xFFFFFFFF),
+          backgroundColor: kColorWhite,
           appBar: AppBar(
             title: Text("Фильтр"),
             centerTitle: true,
@@ -65,25 +65,31 @@ class _MapFilterDetailScreenState extends State<MapFilterDetailScreen> {
               children: [
                 Padding(
                   padding: const EdgeInsets.fromLTRB(15, 5, 15, 5),
-                  child: TypeAheadField(
-                    textFieldConfiguration: TextFieldConfiguration(
-                      controller: _searchController,
-                      decoration: inputDecorWidget(),
+                  child: Container(
+                    decoration: BoxDecoration(
+                        color: Color(0xFFF2F2F2),
+                        borderRadius: BorderRadius.all(Radius.circular(10))),
+                    child: TypeAheadField(
+                      textFieldConfiguration: TextFieldConfiguration(
+                        controller: _searchController,
+                        decoration: inputDecorWidget(),
+                        cursorColor: kColorBlack,
+                      ),
+                      suggestionsCallback: (str) {
+                        return acceptTypesCollection.getPatterns(str);
+                      },
+                      itemBuilder: (BuildContext context, suggestion) {
+                        return ListTile(
+                          title: Text(suggestion),
+                        );
+                      },
+                      onSuggestionSelected: (String suggestion) {
+                        selectCardByVarName(acceptTypesCollection
+                            .getVarNameByKeyWord(suggestion));
+                        currentFilterModel.filters.add(acceptTypesCollection
+                            .getVarNameByKeyWord(suggestion));
+                      },
                     ),
-                    suggestionsCallback: (str) {
-                      return acceptTypesCollection.getPatterns(str);
-                    },
-                    itemBuilder: (BuildContext context, suggestion) {
-                      return ListTile(
-                        title: Text(suggestion),
-                      );
-                    },
-                    onSuggestionSelected: (String suggestion) {
-                      selectCardByVarName(acceptTypesCollection
-                          .getVarNameByKeyWord(suggestion));
-                      currentFilterModel.filters.add(acceptTypesCollection
-                          .getVarNameByKeyWord(suggestion));
-                    },
                   ),
                 ),
                 Padding(
@@ -439,21 +445,26 @@ class _MapFilterDetailScreenState extends State<MapFilterDetailScreen> {
 
   InputDecoration inputDecorWidget() {
     return InputDecoration(
-        prefixIcon: Icon(
-          Icons.search,
-          color: Color(0xFF62C848),
-          size: 40,
+        focusColor: Color(0xFFF2F2F2),
+        fillColor: Color(0xFFF2F2F2),
+        hoverColor: Color(0xFFF2F2F2),
+        suffixIcon: Padding(
+          padding: const EdgeInsets.fromLTRB(10, 5, 15, 5),
+          child: Icon(
+            Icons.search,
+            color: Color(0xFF616161),
+            size: 35,
+          ),
         ),
         hintText: "Что вы хотите сдать?",
-        hintStyle: TextStyle(color: Color(0xFF62C848), fontSize: 16.0),
+        hintStyle: TextStyle(
+          color: Color(0xFF616161).withOpacity(0.6),
+          fontSize: 16.0,
+        ),
+        prefix: SizedBox(width: 15),
         enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(25)),
-            borderSide: BorderSide(color: Color(0xFF62C848), width: 2.5)),
-        disabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: Color(0xFF62C848), width: 2.5)),
-        focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: Color(0xFF62C848), width: 2.5)),
-        border: OutlineInputBorder(
-            borderSide: BorderSide(color: Color(0xFF62C848), width: 2.5)));
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+            borderSide: BorderSide.none),
+        focusedBorder: OutlineInputBorder(borderSide: BorderSide.none));
   }
 }

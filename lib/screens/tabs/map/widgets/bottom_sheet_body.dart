@@ -1,7 +1,10 @@
+import 'dart:ffi';
+
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:recycle_hub/bloc/map_screen_blocs/feedbacks_bloc.dart';
 import 'package:recycle_hub/bloc/map_screen_blocs/marker_info_bloc.dart';
@@ -37,36 +40,42 @@ class _BuildBodyState extends State<BuildBody> {
   @override
   Widget build(BuildContext context) {
     _size = MediaQuery.of(context).size;
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Align(
-          alignment: Alignment.centerLeft,
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(15, 10, 15, 5),
-            child: Text(
-              "Рейтинг",
-              style: TextStyle(color: kColorGreen),
-            ),
-          ),
-        ),
-        Align(
-            alignment: Alignment.centerLeft,
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(15, 5, 15, 10),
-              child: Text(
-                widget.marker.name,
-                style: TextStyle(
-                    color: kColorBlack,
-                    fontFamily: 'Gilroy',
-                    fontWeight: FontWeight.bold,
-                    fontSize: 18),
+    return ClipRRect(
+      borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(40), topRight: Radius.circular(40)),
+      child: Container(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(15, 10, 15, 5),
+                child: Text(
+                  "Рейтинг",
+                  style: TextStyle(color: kColorGreen),
+                ),
               ),
-            )),
-        buildTabBar(),
-        streamBuilderMethod(_size)
-      ],
+            ),
+            Align(
+                alignment: Alignment.centerLeft,
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(15, 5, 15, 10),
+                  child: Text(
+                    widget.marker.name,
+                    style: TextStyle(
+                        color: kColorBlack,
+                        fontFamily: 'Gilroy',
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18),
+                  ),
+                )),
+            buildTabBar(),
+            streamBuilderMethod(_size)
+          ],
+        ),
+      ),
     );
   }
 
@@ -187,7 +196,7 @@ class _NewWidgetState extends State<NewWidget> {
                   Icon(Icons.error),
             ))
         .toList();
-
+    Size _size = MediaQuery.of(context).size;
     return Column(
       children: [
         myDivider(),
@@ -356,6 +365,8 @@ class _NewWidgetState extends State<NewWidget> {
             wColor: kColorBlack,
             backColor: kColorWhite,
             hasSelection: true,
+            fontSize: 14,
+            size: Size(_size.width - 50, _size.height / 5),
           ),
         ),
         myDivider(),

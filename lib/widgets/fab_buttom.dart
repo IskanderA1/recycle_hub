@@ -8,6 +8,7 @@ import 'package:recycle_hub/bloc/qr_bloc.dart';
 import 'package:recycle_hub/screens/qr_scanner_screen.dart';
 import 'package:recycle_hub/style/theme.dart';
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:recycle_hub/tab_icons_icons.dart';
 
 class BottomNavBarV2 extends StatefulWidget {
   final IconThemeData unselectedIconThemeData;
@@ -81,6 +82,7 @@ class _BottomNavBarV2State extends State<BottomNavBarV2> {
                           Icons.map_outlined,
                           size: size.width / 13,
                         ),
+                        spacing: 0,
                         selectedIconThemeData: widget.selectedIconThemeData,
                         unselectedIconThemeData: widget.unselectedIconThemeData,
                         isActive: widget.currentItem == 0 ? true : false,
@@ -91,10 +93,11 @@ class _BottomNavBarV2State extends State<BottomNavBarV2> {
                       ),
                       IconButtonV2(
                         label: "ЭкоГид",
-                        icon: FaIcon(
-                          FontAwesomeIcons.bookOpen,
-                          size: size.width / 13,
+                        icon: Icon(
+                          TabIcons.guide_book,
+                          size: size.width / 15.5,
                         ),
+                        spacing: 4,
                         selectedIconThemeData: widget.selectedIconThemeData,
                         unselectedIconThemeData: widget.unselectedIconThemeData,
                         isActive: widget.currentItem == 1 ? true : false,
@@ -113,6 +116,7 @@ class _BottomNavBarV2State extends State<BottomNavBarV2> {
                           Icons.copyright_outlined,
                           size: size.width / 13,
                         ),
+                        spacing: 0,
                         selectedIconThemeData: widget.selectedIconThemeData,
                         unselectedIconThemeData: widget.unselectedIconThemeData,
                         isActive: widget.currentItem == 2 ? true : false,
@@ -127,6 +131,7 @@ class _BottomNavBarV2State extends State<BottomNavBarV2> {
                           Icons.person_outlined,
                           size: size.width / 13,
                         ),
+                        spacing: 0,
                         selectedIconThemeData: widget.selectedIconThemeData,
                         unselectedIconThemeData: widget.unselectedIconThemeData,
                         isActive: widget.currentItem == 3 ? true : false,
@@ -202,13 +207,15 @@ class IconButtonV2 extends StatefulWidget {
   final String label;
   final Function ontap;
   final bool isActive;
+  final double spacing;
   IconButtonV2(
       {@required this.selectedIconThemeData,
       @required this.unselectedIconThemeData,
       @required this.icon,
       @required this.label,
       @required this.isActive,
-      @required this.ontap});
+      @required this.ontap,
+      @required this.spacing});
   @override
   _IconButtonV2State createState() => _IconButtonV2State();
 }
@@ -236,6 +243,9 @@ class _IconButtonV2State extends State<IconButtonV2> {
                           : widget.unselectedIconThemeData
                       //.copyWith(size: size + 3),
                       ),
+                  SizedBox(
+                    height: widget.spacing,
+                  ),
                   AutoSizeText(widget.label,
                       style: TextStyle(
                           fontSize: 12,

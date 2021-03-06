@@ -52,7 +52,7 @@ class FilterCardWidgetState extends State<FilterCardWidget> {
           decoration: BoxDecoration(
               border: Border.all(
                 color: widget.isSelected ? kColorGreen : Color(0xFFF2F2F2),
-                width: 2,
+                width: 1,
               ),
               color: Color(0xFFF2F2F2),
               borderRadius: BorderRadius.circular(15)),

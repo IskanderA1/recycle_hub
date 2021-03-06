@@ -75,3 +75,6 @@ flutter:
     - family: LofOut
       fonts:
         - asset: assets/fonts/LofOut.ttf
+    - family: TabIcons
+      fonts:
+        - asset: assets/fonts/TabIcons.ttf

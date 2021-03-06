@@ -1,20 +1,22 @@
+import 'dart:async';
+
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:bottom_sheet/bottom_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_star_rating/flutter_star_rating.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:location/location.dart';
+
 import 'package:recycle_hub/bloc/map_screen_blocs/marker_info_bloc.dart';
 import 'package:recycle_hub/bloc/map_screen_blocs/markers_collection_bloc.dart';
 import 'package:recycle_hub/custom_icons.dart';
 import 'package:recycle_hub/model/map_models.dart/marker.dart';
 import 'package:recycle_hub/model/map_responses/markers_response.dart';
 import 'package:recycle_hub/screens/tabs/map/filter_detail_screen.dart';
-import 'dart:async';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:bottom_sheet/bottom_sheet.dart';
 import 'package:recycle_hub/screens/tabs/map/widgets/bottom_sheet_body.dart';
 import 'package:recycle_hub/screens/tabs/map/widgets/loader_widget.dart';
 import 'package:recycle_hub/style/theme.dart';
-import 'package:location/location.dart';
 import 'methods/header_builder.dart';
 import 'methods/pre_information_container.dart';
 import 'widgets/working_days_widget.dart';
@@ -105,6 +107,7 @@ class _MyGoogleMapWidgetState extends State<MyGoogleMapWidget> {
   MapType _currentMapType = MapType.normal;
   CameraPosition cameraPosition;
   CameraPosition _camera;
+  List<Widget> _list;
 
   @override
   void initState() {
@@ -134,6 +137,34 @@ class _MyGoogleMapWidgetState extends State<MyGoogleMapWidget> {
 
   @override
   Widget build(BuildContext context) {
+    _list = markersCollectionBloc.collection.markers.markers
+        .map((item) => MarkerCardWidget(
+              index: item.hashCode,
+              marker: item,
+              list: GridView.count(
+                crossAxisCount: 3,
+                crossAxisSpacing: 5,
+                childAspectRatio: 8 / 2,
+                physics: NeverScrollableScrollPhysics(),
+                children: item.acceptTypes
+                    .map((acceptsItem) => Container(
+                          height: 10,
+                          decoration: BoxDecoration(
+                              color: kColorWhite,
+                              borderRadius: BorderRadius.circular(5)),
+                          child: Center(
+                            child: AutoSizeText(
+                              "  ${acceptsItem.name}  ",
+                              style: TextStyle(
+                                  fontFamily: 'GilroyMedium', fontSize: 14),
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                        ))
+                    .toList(),
+              ),
+            ))
+        .toList();
     return Stack(children: [
       Container(
         child: StreamBuilder<MarkersCollectionResponse>(
@@ -193,12 +224,21 @@ class _MyGoogleMapWidgetState extends State<MyGoogleMapWidget> {
                                   context: context,
                                   headerHeight: 60,
                                   isExpand: false,
-                                  decoration: const BoxDecoration(
+                                  /*decoration: const BoxDecoration(
                                       borderRadius: BorderRadius.only(
                                           topLeft: Radius.circular(40),
                                           topRight: Radius.circular(40)),
                                       shape: BoxShape.rectangle,
-                                      color: kColorWhite),
+                                      color: kColorWhite),*/
+                                  decoration: ShapeDecoration(
+                                    color: kColorWhite,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.only(
+                                        topLeft: Radius.circular(40),
+                                        topRight: Radius.circular(40),
+                                      ),
+                                    ),
+                                  ),
                                   headerBuilder: (context, bottomSheetOffset) {
                                     return buildHeader(
                                         context, bottomSheetOffset);
@@ -336,7 +376,11 @@ class _MyGoogleMapWidgetState extends State<MyGoogleMapWidget> {
                   },
                   builder: (BuildContext context, offset) {
                     return SliverChildListDelegate(
-                      <Widget>[MarkersListWidget()],
+                      <Widget>[
+                        MarkersListWidget(
+                          list: _list,
+                        )
+                      ],
                     );
                   },
                   anchors: [0.0, 0.4, 0.85]);
@@ -409,7 +453,11 @@ class _MyGoogleMapWidgetState extends State<MyGoogleMapWidget> {
 class MarkersListWidget extends StatefulWidget {
   //final ScrollController controller;
   //final AsyncSnapshot<MarkersCollectionResponse> snapshot;
-  const MarkersListWidget({Key key}) : super(key: key);
+  final List<Widget> list;
+  const MarkersListWidget({
+    Key key,
+    this.list,
+  }) : super(key: key);
 
   @override
   _MarkersListWidgetState createState() => _MarkersListWidgetState();
@@ -417,59 +465,32 @@ class MarkersListWidget extends StatefulWidget {
 
 class _MarkersListWidgetState extends State<MarkersListWidget> {
   int i = 0;
+
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder(
-        initialData: markersCollectionBloc.defaultItem,
-        stream: markersCollectionBloc.stream,
-        builder: (BuildContext context,
-            AsyncSnapshot<MarkersCollectionResponse> snapshot) {
-          if (snapshot.hasData) {
-            if (snapshot.data is MarkersCollectionResponseOk) {
-              return Container(
-                padding: EdgeInsets.only(bottom: 10),
-                color: kColorWhite,
-                child: Column(
-                    children: snapshot.data.markers.markers
-                        .map((item) => MarkerCardWidget(
-                              index: item.hashCode,
-                              marker: item,
-                            ))
-                        .toList()),
-              );
-              /*ListView.builder(
-                itemCount: snapshot.data.markers.markers.length,
-                //controller: controller,
-                itemBuilder: (ctx, int index) {
-                  return NewWidget(
-                    index: index,
-                    marker: snapshot.data.markers.markers[index],
-                  );
-                },
-              );*/
-            } else {
-              return LoaderWidget();
-            }
-          } else {
-            return LoaderWidget();
-          }
-        });
+    return Container(color: kColorWhite, child: Column(children: widget.list));
   }
 }
 
 class MarkerCardWidget extends StatelessWidget {
+  final GridView list;
   final int index;
   final CustMarker marker;
 
-  const MarkerCardWidget({Key key, @required this.index, @required this.marker})
+  const MarkerCardWidget(
+      {Key key,
+      @required this.index,
+      @required this.marker,
+      @required this.list})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    Size _size = MediaQuery.of(context).size;
     return Padding(
       padding: const EdgeInsets.fromLTRB(17, 30, 17, 30),
       child: Container(
-        height: 420,
+        //height: 420,
         decoration: BoxDecoration(
             color: index % 2 == 0 ? kColorGreen : kColorPink,
             borderRadius: BorderRadius.circular(10)),
@@ -478,19 +499,17 @@ class MarkerCardWidget extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Padding(
-              padding: EdgeInsets.fromLTRB(15, 5, 15, 5),
+              padding: EdgeInsets.fromLTRB(15, 10, 15, 10),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Flexible(
-                    child: AutoSizeText(
-                      marker.name,
-                      style: TextStyle(
-                          color: kColorBlack,
-                          fontFamily: "Gilroy",
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18),
-                    ),
+                  AutoSizeText(
+                    marker.name,
+                    style: TextStyle(
+                        color: index % 2 == 0 ? kColorWhite : kColorBlack,
+                        fontFamily: "Gilroy",
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18),
                   ),
                   StarRating(
                       rating: 3.5,
@@ -510,27 +529,47 @@ class MarkerCardWidget extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Flexible(
-                    child: AutoSizeText(marker.address),
+                    child: Text(
+                      marker.address,
+                      style: TextStyle(
+                        color: index % 2 == 0 ? kColorWhite : kColorBlack,
+                        fontFamily: "Gilroy",
+                        fontWeight: FontWeight.w400,
+                        fontSize: 18,
+                      ),
+                    ),
                   ),
                   Flexible(
-                    child: AutoSizeText("900 м"),
+                    child: AutoSizeText(
+                      "900 м",
+                      style: TextStyle(
+                          color: index % 2 == 0 ? kColorWhite : kColorBlack,
+                          fontFamily: "Gilroy",
+                          fontWeight: FontWeight.w400,
+                          fontSize: 18),
+                    ),
                   ),
                 ],
               ),
             ),
             Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: WorkingDaysWidget(
-                workingTime: marker.workTime,
-                wColor: index % 2 == 0 ? kColorWhite : kColorBlack,
-                backColor: index % 2 == 0 ? kColorGreen : kColorPink,
-                hasSelection: false,
+              padding: const EdgeInsets.symmetric(horizontal: 15),
+              child: Align(
+                alignment: Alignment.center,
+                child: WorkingDaysWidget(
+                  workingTime: marker.workTime,
+                  wColor: index % 2 == 0 ? kColorWhite : kColorBlack,
+                  backColor: index % 2 == 0 ? kColorGreen : kColorPink,
+                  hasSelection: false,
+                  fontSize: 13,
+                  size: Size(_size.width - 50, 130),
+                ),
               ),
             ),
             Align(
               alignment: Alignment.centerLeft,
               child: Padding(
-                padding: EdgeInsets.all(10),
+                padding: EdgeInsets.fromLTRB(15, 4, 15, 4),
                 child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -547,29 +586,8 @@ class MarkerCardWidget extends StatelessWidget {
             ),
             Container(
                 height: 60,
-                padding: EdgeInsets.all(10),
-                child: GridView.builder(
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      mainAxisSpacing: 5,
-                      crossAxisSpacing: 5,
-                      crossAxisCount: 3,
-                      childAspectRatio: 8 / 1.5),
-                  itemCount: marker.acceptTypes.length,
-                  padding: EdgeInsets.all(10),
-                  itemBuilder: (context, i) {
-                    return Container(
-                      height: 10,
-                      decoration: BoxDecoration(
-                          color: kColorWhite,
-                          borderRadius: BorderRadius.circular(5)),
-                      child: AutoSizeText(
-                        "  ${marker.acceptTypes[i].name}  ",
-                        style: TextStyle(),
-                        textAlign: TextAlign.center,
-                      ),
-                    );
-                  },
-                ))
+                padding: EdgeInsets.fromLTRB(15, 2, 15, 2),
+                child: list)
           ],
         ),
       ),

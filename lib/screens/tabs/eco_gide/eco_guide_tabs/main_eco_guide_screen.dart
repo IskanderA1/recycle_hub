@@ -35,7 +35,6 @@ class _MainEcoGuideScreenState extends State<MainEcoGuideScreen> {
         }
       },
       child: Scaffold(
-        resizeToAvoidBottomPadding: false,
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
           leading: IconButton(
