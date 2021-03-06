@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:recycle_hub/screens/qr_scanner_screen.dart';
 import 'package:rxdart/rxdart.dart';
@@ -40,14 +39,13 @@ class QRBloc {
         // Navigator.of(initialEvent.context)
         //     .push(MaterialPageRoute(builder: (context) => QRScannerScreen()));
         showModalBottomSheet(
-          elevation: 0,
-          backgroundColor: Colors.transparent,
-          isScrollControlled: true,
-          context: _context, builder: (context)=>Wrap(
-          children: [
-            QRScannerScreen()
-          ],
-        ));
+            elevation: 0,
+            backgroundColor: Colors.transparent,
+            isScrollControlled: true,
+            context: _context,
+            builder: (context) => Wrap(
+                  children: [QRScannerScreen()],
+                ));
         _subject.sink.add(QRInitialState());
         break;
       case QROnCloseEvent:
