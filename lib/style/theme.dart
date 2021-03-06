@@ -5,6 +5,7 @@ const kColorRed = Color(0xFFF14343);
 const kColorBlack = Color(0xFF000000);
 const kColorGreyDark = Color(0xFF616161);
 const kColorGreyLight = Color(0xFF8D8D8D);
+const kColorGreyVeryLight = Color(0xFFF2F2F2);
 const kColorWhite = Color(0xFFFFFFFF);
 const kColorPink = Color(0xFFFF9966);
 const kColorGreenYellow = Color(0xFFD0E07A);
@@ -17,7 +18,7 @@ const kLightGrey = const Color(0xFF8D8D8D80);
 
 ThemeData kAppThemeData() {
   return ThemeData(
-      fontFamily: "assets/fonts/Gilroy/gilroy-regular.ttf",
+      fontFamily: "Gilroy",
       appBarTheme: AppBarTheme(
         shadowColor: kColorWhite,
         iconTheme: IconThemeData(

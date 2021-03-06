@@ -1,3 +1,5 @@
+import 'package:device_preview/device_preview.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -6,7 +8,10 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:recycle_hub/style/theme.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(DevicePreview(
+    enabled: !kReleaseMode,
+    builder: (context) => MyApp(),
+  ));
 }
 
 class MyApp extends StatelessWidget {
@@ -19,15 +24,17 @@ class MyApp extends StatelessWidget {
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
     ]);
-    return ScreenUtilInit(
-        //designSize: Size(360, 690),
-        allowFontScaling: false,
-        builder: () => MaterialApp(
-              debugShowCheckedModeBanner: false,
-              title: 'RecycleHub',
-              theme: kAppThemeData(),
-              home: MainScreen(),
-            ));
+    return ScreenUtil()(
+      allowFontScaling: false,
+      builder: () => MaterialApp(
+        debugShowCheckedModeBanner: false,
+        locale: DevicePreview.locale(context), // Add the locale here
+        builder: DevicePreview.appBuilder,
+        title: 'RecycleHub',
+        theme: kAppThemeData(),
+        home: MainScreen(),
+      ),
+    );
   }
 }
 

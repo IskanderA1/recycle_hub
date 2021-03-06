@@ -38,6 +38,7 @@ dependencies:
   flutter_screenutil: ^4.0.3+2
   mask_text_input_formatter: ^1.2.1
   qr_code_scanner:
+  device_preview: ^0.5.5
 
 dev_dependencies:
   flutter_test:
@@ -67,6 +68,7 @@ flutter:
       fonts:
         - asset: assets/fonts/Gilroy/gilroy-regular.ttf
         - asset: assets/fonts/Gilroy/gilroy-bold.ttf
+        - asset: fonts/gilroy-medium.ttf
           style: normal
     - family: GilroyMedium
       fonts:
