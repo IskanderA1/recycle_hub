@@ -64,6 +64,9 @@ class _AuthScreenState extends State<AuthScreen> {
                         image: Svg('assets/icons/onboarding_1/Clouds.svg'),
                       ),
                     ),
+                    Image(
+                      image: Svg('assets/icons/reg/reg_logo.svg'),
+                    ),
                     Column(
                       children: [
                         Container(

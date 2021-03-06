@@ -29,7 +29,7 @@ class BottomNavBarBloc {
   }
 
   close() {
-    _navBarController?.close();
+    _navBarController.close();
   }
 }
 

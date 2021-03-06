@@ -28,9 +28,9 @@ dependencies:
   flutter_star_rating: ^0.0.3
   location: ^3.2.4
   cached_network_image: ^2.5.0
-  intl: ^0.16.1
+  intl: ^0.17.0
   flutter_typeahead: ^2.0.0
-  flutter_svg:
+  flutter_svg: ^0.19.3
   day_night_switcher: ^0.1.1+1
   draggable_bottom_sheet: ^0.1.2
   im_stepper: 0.1.2+10
@@ -38,7 +38,7 @@ dependencies:
   flutter_screenutil: ^4.0.3+2
   mask_text_input_formatter: ^1.2.1
   qr_code_scanner:
-  device_preview: ^0.5.5
+  device_preview: ^0.6.2-beta
 
 dev_dependencies:
   flutter_test:
@@ -61,6 +61,7 @@ flutter:
     - assets/icons/onboarding_4/Clouds.svg
     - assets/svg/
     - svg/
+    - assets/icons/reg/reg_logo.svg
 
   uses-material-design: true
   fonts:
