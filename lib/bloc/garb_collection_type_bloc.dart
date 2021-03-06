@@ -5,7 +5,7 @@ enum GCOLLTYPE { RECYCLING, UTILISATION, BENEFIT }
 class GarbageCollectionTypeBloc {
   BehaviorSubject<GCOLLTYPE> _behaviorSubject = BehaviorSubject<GCOLLTYPE>();
 
-  GCOLLTYPE defaultItem = GCOLLTYPE.RECYCLING;
+  //GCOLLTYPE defaultItem = GCOLLTYPE.RECYCLING;
 
   Stream<GCOLLTYPE> get stream => _behaviorSubject.stream;
 

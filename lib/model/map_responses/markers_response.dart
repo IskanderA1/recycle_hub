@@ -17,6 +17,11 @@ class MarkerCollectionResponseWithError extends MarkersCollectionResponse {
   MarkerCollectionResponseWithError({this.err}) : super.withError();
 }
 
+class MarkerCollectionResponseEmptyList extends MarkersCollectionResponse {
+  String err;
+  MarkerCollectionResponseEmptyList({this.err}) : super.withError();
+}
+
 class MarkerCollectionResponseLoading extends MarkersCollectionResponse {
   MarkerCollectionResponseLoading() : super.withError();
 }

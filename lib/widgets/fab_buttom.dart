@@ -1,9 +1,14 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:recycle_hub/bloc/eco_guide_blocs/eco_menu_bloc.dart';
 import 'package:recycle_hub/bloc/map_screen_blocs/markers_collection_bloc.dart';
 import 'package:recycle_hub/bloc/navigation_bloc.dart';
+import 'package:recycle_hub/bloc/qr_bloc.dart';
+import 'package:recycle_hub/screens/qr_scanner_screen.dart';
 import 'package:recycle_hub/style/theme.dart';
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:recycle_hub/tab_icons_icons.dart';
 
 class BottomNavBarV2 extends StatefulWidget {
   final IconThemeData unselectedIconThemeData;
@@ -46,18 +51,19 @@ class _BottomNavBarV2State extends State<BottomNavBarV2> {
                 Center(
                   heightFactor: 0.3,
                   child: Container(
-                    height: 80,
-                    width: 80,
+                    height: size.height * 0.1,
+                    width: size.width * 0.2,
                     child: FloatingActionButton(
                       elevation: 0,
                       backgroundColor: kColorGreen,
                       onPressed: () {
-                        markersCollectionBloc.loadMarkers();
+                        qrBloc
+                            .mapEventToState(QRInitialEvent(context: context));
                       },
                       child: Container(
                         child: Icon(
                           Icons.qr_code,
-                          size: 40,
+                          size: size.width * 0.12,
                         ),
                       ),
                     ),
@@ -72,7 +78,11 @@ class _BottomNavBarV2State extends State<BottomNavBarV2> {
                     children: [
                       IconButtonV2(
                         label: "Карта",
-                        icon: Icon(Icons.map_outlined),
+                        icon: Icon(
+                          Icons.map_outlined,
+                          size: size.width / 13,
+                        ),
+                        spacing: 0,
                         selectedIconThemeData: widget.selectedIconThemeData,
                         unselectedIconThemeData: widget.unselectedIconThemeData,
                         isActive: widget.currentItem == 0 ? true : false,
@@ -83,21 +93,30 @@ class _BottomNavBarV2State extends State<BottomNavBarV2> {
                       ),
                       IconButtonV2(
                         label: "ЭкоГид",
-                        icon: Icon(Icons.school_outlined),
+                        icon: Icon(
+                          TabIcons.guide_book,
+                          size: size.width / 15.5,
+                        ),
+                        spacing: 4,
                         selectedIconThemeData: widget.selectedIconThemeData,
                         unselectedIconThemeData: widget.unselectedIconThemeData,
                         isActive: widget.currentItem == 1 ? true : false,
                         ontap: () {
                           widget.func(1);
                           bottomNavBarBloc.pickItem(1);
+                          ecoMenu.backToMenu();
                         },
                       ),
                       SizedBox(
-                        width: (MediaQuery.of(context).size.width / 5),
+                        width: size.width / 5,
                       ),
                       IconButtonV2(
                         label: "ЭкоКоин",
-                        icon: Icon(Icons.copyright_outlined),
+                        icon: Icon(
+                          Icons.copyright_outlined,
+                          size: size.width / 13,
+                        ),
+                        spacing: 0,
                         selectedIconThemeData: widget.selectedIconThemeData,
                         unselectedIconThemeData: widget.unselectedIconThemeData,
                         isActive: widget.currentItem == 2 ? true : false,
@@ -108,7 +127,11 @@ class _BottomNavBarV2State extends State<BottomNavBarV2> {
                       ),
                       IconButtonV2(
                         label: "Профиль",
-                        icon: Icon(Icons.person_outlined),
+                        icon: Icon(
+                          Icons.person_outlined,
+                          size: size.width / 13,
+                        ),
+                        spacing: 0,
                         selectedIconThemeData: widget.selectedIconThemeData,
                         unselectedIconThemeData: widget.unselectedIconThemeData,
                         isActive: widget.currentItem == 3 ? true : false,
@@ -178,19 +201,21 @@ Path getClip(Size size) {
 }
 
 class IconButtonV2 extends StatefulWidget {
-  final Icon icon;
+  final Widget icon;
   final IconThemeData unselectedIconThemeData;
   final IconThemeData selectedIconThemeData;
   final String label;
   final Function ontap;
   final bool isActive;
+  final double spacing;
   IconButtonV2(
       {@required this.selectedIconThemeData,
       @required this.unselectedIconThemeData,
       @required this.icon,
       @required this.label,
       @required this.isActive,
-      @required this.ontap});
+      @required this.ontap,
+      @required this.spacing});
   @override
   _IconButtonV2State createState() => _IconButtonV2State();
 }
@@ -218,6 +243,9 @@ class _IconButtonV2State extends State<IconButtonV2> {
                           : widget.unselectedIconThemeData
                       //.copyWith(size: size + 3),
                       ),
+                  SizedBox(
+                    height: widget.spacing,
+                  ),
                   AutoSizeText(widget.label,
                       style: TextStyle(
                           fontSize: 12,

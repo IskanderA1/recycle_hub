@@ -15,24 +15,29 @@ class MarkersCollectionBloc {
 
   Stream<MarkersCollectionResponse> get stream => _behaviorSubject.stream;
 
+  MarkersCollectionResponse collection;
+
   pickEvent(MarkersCollectionResponse type) {
     _behaviorSubject.sink.add(type);
   }
 
   loadMarkers() async {
     _behaviorSubject.sink.add(MarkerCollectionResponseLoading());
-    var _response = await _repo.loadMarkersFrom4Coords(
+    MarkersCollectionResponse _response = await _repo.loadMarkersFrom4Coords(
         Coords(lat: 33, lng: 33),
         Coords(lat: 60, lng: 33),
         Coords(lat: 60, lng: 60),
         Coords(lat: 33, lng: 60));
     _behaviorSubject.sink.add(_response);
+    collection = _response;
   }
 
   filterMarkers(FilterModel filter) async {
     _behaviorSubject.sink.add(MarkerCollectionResponseLoading());
-    var _response = await _repo.getMarkersByFilter(filter);
+    MarkersCollectionResponse _response =
+        await _repo.getMarkersByFilter(filter);
     _behaviorSubject.sink.add(_response);
+    collection = _response;
   }
 
   dispose() {

@@ -18,15 +18,38 @@ class WellcomePageStepper extends StatefulWidget {
 
 class _WellcomePageStepperState extends State<WellcomePageStepper> {
   int activeStepInd = 0;
+  bool isConfirmed = false;
   PageController _pageController =
       PageController(initialPage: 0, keepPage: true);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         body: Stack(children: [
-      Align(
+      /*Align(
         alignment: Alignment.topCenter,
         child: CustomPainterAnimatedSwitcher(isFirst: activeStepInd % 2 == 0),
+      ),*/
+
+      PageView(
+        controller: _pageController,
+        children: [
+          Page1(),
+          Page2(),
+          Page3(),
+          Page4(
+            val: isConfirmed,
+            onChaned: (bool value) {
+              setState(() {
+                isConfirmed = value;
+              });
+            },
+          ),
+        ],
+        onPageChanged: (ind) {
+          setState(() {
+            activeStepInd = ind;
+          });
+        },
       ),
       Align(
         alignment: Alignment.bottomLeft,
@@ -37,27 +60,13 @@ class _WellcomePageStepperState extends State<WellcomePageStepper> {
           ),
         ),
       ),
-      PageView(
-        controller: _pageController,
-        children: [
-          Page1(),
-          Page2(),
-          Page3(),
-          Page4(),
-        ],
-        onPageChanged: (ind) {
-          setState(() {
-            activeStepInd = ind;
-          });
-        },
-      ),
       Align(
         alignment: Alignment.bottomRight,
         child: Padding(
             padding: EdgeInsets.only(bottom: 30, right: 30),
             child: TextButton(
               child: Text(
-                activeStepInd != 3 ? "Skip" : "Start",
+                activeStepInd != 3 ? "Продолжить" : "Принять",
                 style: TextStyle(
                     fontSize: 16,
                     color: activeStepInd % 2 == 0 ? kColorGreen : kColorWhite,

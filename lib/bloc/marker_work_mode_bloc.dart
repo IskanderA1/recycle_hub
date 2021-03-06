@@ -1,11 +1,11 @@
 import 'package:rxdart/rxdart.dart';
 
-enum MODE { PAID, FREE, ROUND, PARTNERS }
+enum MODE { PAID, FREE, PARTNERS }
 
 class MarkerWorkModeBloc {
   BehaviorSubject<MODE> _behaviorSubject = BehaviorSubject<MODE>();
 
-  MODE defaultItem = MODE.PAID;
+  //MODE defaultItem = MODE.PAID;
 
   Stream<MODE> get stream => _behaviorSubject.stream;
 

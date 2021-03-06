@@ -20,13 +20,13 @@ class _MainScreenState extends State<MainScreen> {
   @override
   void initState() {
     globalStateBloc.getComeIn();
-    //authBloc.authLocal();
     markersCollectionBloc.loadMarkers();
     super.initState();
   }
 
   @override
   void dispose() {
+    globalStateBloc.dispose();
     authBloc.dispose();
     markersCollectionBloc.dispose();
     super.dispose();

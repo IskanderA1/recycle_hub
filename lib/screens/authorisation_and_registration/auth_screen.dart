@@ -371,10 +371,11 @@ class _AuthScreenState extends State<AuthScreen> {
                   Container(
                     height: 25,
                     width: 25,
+                    //color: kColorRegVK,
                     decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: kColorRegVK,
-                        backgroundBlendMode: BlendMode.color),
+                      shape: BoxShape.circle,
+                      color: kColorRegVK,
+                    ),
                     child: Center(
                       child: FaIcon(
                         FontAwesomeIcons.vk,

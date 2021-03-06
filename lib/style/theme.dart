@@ -13,9 +13,11 @@ const kColorSteperLightGreen = Color(0xFFDFE895);
 ///Экран регистрации
 const kColorRegGoogle = Color(0xFFDD4B39);
 const kColorRegVK = Color(0xFF2787F5);
+const kLightGrey = const Color(0xFF8D8D8D80);
 
 ThemeData kAppThemeData() {
   return ThemeData(
+      fontFamily: "assets/fonts/Gilroy/gilroy-regular.ttf",
       appBarTheme: AppBarTheme(
         shadowColor: kColorWhite,
         iconTheme: IconThemeData(

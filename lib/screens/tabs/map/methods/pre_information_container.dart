@@ -1,6 +1,8 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:recycle_hub/model/map_models.dart/marker.dart';
+import 'package:recycle_hub/screens/tabs/map/widgets/working_days_widget.dart';
+import 'package:recycle_hub/style/theme.dart';
 
 ///Контейнер, который первым показывается по нажатию на маркер, с увеличеним offset уменьшается
 class AnimatedPreInformationContainer extends StatefulWidget {
@@ -18,17 +20,19 @@ class _AnimatedPreInformationContainerState
     extends State<AnimatedPreInformationContainer> {
   Widget widgetVisible;
   Widget widgetNotVisable = Container();
+  Size size;
   @override
   Widget build(BuildContext context) {
+    size = MediaQuery.of(context).size;
     widgetVisible = newMethod();
     return AnimatedContainer(
-        duration: Duration(milliseconds: 200),
-        height: widget.offset <= 0.4 ? 302 : 0,
+        duration: Duration(milliseconds: 400),
+        height: widget.offset <= 0.5 ? 302 : 0,
         color: Colors.white,
         onEnd: () {},
         child: Padding(
-            padding: EdgeInsets.all(15),
-            child: widget.offset == 0.4 ? widgetVisible : widgetNotVisable));
+            padding: EdgeInsets.fromLTRB(15, 0, 15, 15),
+            child: widget.offset <= 0.5 ? widgetVisible : widgetNotVisable));
   }
 
   Column newMethod() {
@@ -83,13 +87,18 @@ class _AnimatedPreInformationContainerState
           ),
         ),
         Expanded(
-          flex: 4,
-          child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                AutoSizeText(widget.marker.workTime.getWorkingTime()),
-                AutoSizeText("Подробнее")
-              ]),
+          flex: 6,
+          child:
+              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+            WorkingDaysWidget(
+              workingTime: widget.marker.workTime,
+              backColor: kColorWhite,
+              wColor: kColorBlack,
+              hasSelection: false,
+              size: Size(size.width - 90, size.height * 0.14),
+              fontSize: 12,
+            ),
+          ]),
         ),
         Expanded(
           flex: 1,

@@ -72,7 +72,8 @@ class AppRepository {
     );
     if (user.token != null) {
       try {
-        return userAuth(user.username, pass);
+        UserResponse userResponse = await userAuth(user.username, pass);
+        return userResponse;
       } catch (error, stacktrace) {
         print("Exception occured: $error stackTrace: $stacktrace");
         return UserAuthFailed("Нет сети");
@@ -226,8 +227,16 @@ class AppRepository {
 
   Future<UserResponse> userLogOut() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.remove("login");
+    prefs.remove("u_id");
+    prefs.remove("username");
+    prefs.remove("name");
     prefs.remove("password");
+    prefs.remove("image");
+    prefs.remove("confirmed");
+    prefs.remove("eco_coins");
+    prefs.remove("code");
+    prefs.remove("qrcode");
+    prefs.remove("token");
     return UserUnlogged();
   }
 
