@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'package:dio/dio.dart';
 import 'package:recycle_hub/model/authorisation_models/user_response.dart';
 import 'package:recycle_hub/model/user_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -7,7 +6,6 @@ import 'package:http/http.dart' as http;
 
 class AppRepository {
   static String mainUrl = "http://eco.loliallen.com/api";
-  Dio _dio = Dio();
 
   Future<UserResponse> userAuth(String login, String password) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();

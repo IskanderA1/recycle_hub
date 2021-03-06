@@ -54,7 +54,7 @@ class _WorkingDaysWidgetState extends State<WorkingDaysWidget> {
               style: TextStyle(
                   color: widget.wColor,
                   fontFamily: 'GilroyMedium',
-                  fontSize: widget.fontSize + 4),
+                  fontSize: widget.fontSize + 2),
             )
           ],
         ),

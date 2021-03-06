@@ -1,10 +1,7 @@
-import 'dart:ffi';
-
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:recycle_hub/bloc/map_screen_blocs/feedbacks_bloc.dart';
 import 'package:recycle_hub/bloc/map_screen_blocs/marker_info_bloc.dart';
@@ -213,9 +210,13 @@ class _NewWidgetState extends State<NewWidget> {
                   width: 15,
                 ),
                 AutoSizeText(
-                  "Не выдает ЭкоКоинов",
+                  widget.marker.paybackType == "partner"
+                      ? "Выдает ЭкоКоины"
+                      : "Не выдает ЭкоКоинов",
                   style: TextStyle(
-                      color: kColorBlack, fontFamily: 'Gilroy', fontSize: 18),
+                      color: kColorBlack,
+                      fontFamily: 'GilroyMedium',
+                      fontSize: 18),
                 )
               ],
             )),
@@ -239,7 +240,10 @@ class _NewWidgetState extends State<NewWidget> {
                   Text(
                     "Принимают:",
                     style: TextStyle(
-                        color: kColorBlack, fontFamily: 'Gilroy', fontSize: 16),
+                        color: kColorBlack,
+                        fontWeight: FontWeight.w400,
+                        fontFamily: 'GilroyMedium',
+                        fontSize: 16),
                   ),
                 ],
               ),
@@ -366,7 +370,7 @@ class _NewWidgetState extends State<NewWidget> {
             backColor: kColorWhite,
             hasSelection: true,
             fontSize: 14,
-            size: Size(_size.width - 50, _size.height / 5),
+            size: Size(_size.width - 50, _size.height / 6.5),
           ),
         ),
         myDivider(),

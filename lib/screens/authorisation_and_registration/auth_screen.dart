@@ -64,15 +64,13 @@ class _AuthScreenState extends State<AuthScreen> {
                         image: Svg('assets/icons/onboarding_1/Clouds.svg'),
                       ),
                     ),
-                    Image(
-                      image: Svg('assets/icons/reg/reg_logo.svg'),
-                    ),
                     Column(
                       children: [
                         Container(
-                          height: 100,
-                          decoration: BoxDecoration(
-                              color: Colors.black12, shape: BoxShape.circle),
+                          alignment: Alignment.center,
+                          child: Image(
+                            image: Svg('assets/icons/reg/reg_logo.svg'),
+                          ),
                         ),
                         Padding(
                           padding: const EdgeInsets.only(top: 30),
