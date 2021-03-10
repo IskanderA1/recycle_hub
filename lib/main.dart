@@ -1,17 +1,37 @@
-import 'package:device_preview/device_preview.dart';
-import 'package:flutter/foundation.dart';
+import 'dart:io';
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:hive/hive.dart';
 import 'package:recycle_hub/screens/main_screen.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:recycle_hub/style/theme.dart';
+import 'package:path_provider/path_provider.dart';
+import 'model/map_models.dart/accept_types.dart';
+import 'model/map_models.dart/contact_model.dart';
+import 'model/map_models.dart/coord.dart';
+import 'model/map_models.dart/marker.dart';
+import 'model/map_models.dart/work_day.dart';
+import 'model/map_models.dart/work_time.dart';
+import 'model/user_model.dart';
 
-void main() {
-  runApp(DevicePreview(
-    enabled: !kReleaseMode,
-    builder: (context) => MyApp(),
-  ));
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  Directory directory = await getApplicationDocumentsDirectory();
+    Hive.init(directory.path);
+  Hive.registerAdapter(UserModelAdapter());
+  Hive.registerAdapter(CustMarkerAdapter());
+  Hive.registerAdapter(WorkDayAdapter());
+  Hive.registerAdapter(WorkingTimeAdapter());
+  Hive.registerAdapter(ContactAdapter());
+  Hive.registerAdapter(AcceptTypeAdapter());
+  Hive.registerAdapter(CoordsAdapter());
+  Hive.openBox('user');
+  Hive.openBox('markers');
+  runApp(
+    MyApp(),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -24,12 +44,11 @@ class MyApp extends StatelessWidget {
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
     ]);
+    
     return ScreenUtilInit(
       allowFontScaling: false,
       builder: () => MaterialApp(
         debugShowCheckedModeBanner: false,
-        locale: DevicePreview.locale(context), // Add the locale here
-        builder: DevicePreview.appBuilder,
         title: 'RecycleHub',
         theme: kAppThemeData(),
         home: MainScreen(),
@@ -40,7 +59,11 @@ class MyApp extends StatelessWidget {
 
 _checkPermissions() async {
   var status = await Permission.location.status;
+  var dataAccess = await Permission.storage.status;
 
+  if(dataAccess.isUndetermined){
+    await Permission.storage.request();
+  }
   /*if ((await Permission.accessMediaLocation.isUndetermined)) {
     Permission.accessMediaLocation.request();
   }*/
@@ -49,6 +72,7 @@ _checkPermissions() async {
     // We didn't ask for permission yet.
     await Permission.location.request();
   }
+
 
 // You can can also directly ask the permission about its status.
   /*if (await Permission.location.isRestricted) {

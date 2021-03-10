@@ -14,9 +14,6 @@ class WorkSpaceScreen extends StatefulWidget {
 }
 
 class _WorkSpaceState extends State<WorkSpaceScreen> {
-  final loginController = TextEditingController();
-  final passController = TextEditingController();
-
   @override
   void initState() {
     super.initState();
@@ -51,23 +48,16 @@ class _WorkSpaceState extends State<WorkSpaceScreen> {
           alignment: Alignment.bottomCenter,
           child: Container(
             height: 70,
-            child: StreamBuilder(
-                stream: bottomNavBarBloc.itemStream,
-                initialData: bottomNavBarBloc.defaultItem,
-                // ignore: missing_return
-                builder: (context, AsyncSnapshot<NavBarItem> snapshot) {
-                  return BottomNavBarV2(
-                    func: pickIndex,
-                    selectedIconThemeData: Theme.of(context)
-                        .bottomNavigationBarTheme
-                        .selectedIconTheme,
-                    unselectedIconThemeData: Theme.of(context)
-                        .bottomNavigationBarTheme
-                        .unselectedIconTheme,
-                    backgraundColor: Theme.of(context).backgroundColor,
-                    currentItem: snapshot.data.index,
-                  );
-                }),
+            child: BottomNavBarV2(
+              func: pickIndex,
+              selectedIconThemeData:
+                  Theme.of(context).bottomNavigationBarTheme.selectedIconTheme,
+              unselectedIconThemeData: Theme.of(context)
+                  .bottomNavigationBarTheme
+                  .unselectedIconTheme,
+              backgraundColor: Theme.of(context).backgroundColor,
+              currentItem: _currentIndex,
+            ),
           ),
         )
       ]),

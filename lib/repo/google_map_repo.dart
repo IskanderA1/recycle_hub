@@ -1,5 +1,7 @@
 import 'dart:convert';
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 import 'package:recycle_hub/model/map_models.dart/coord.dart';
 import 'package:recycle_hub/model/map_models.dart/filter_model.dart';
 import 'package:recycle_hub/model/map_responses/accept_types_collection_response.dart';
@@ -7,9 +9,19 @@ import 'package:recycle_hub/model/map_responses/feedbacks_collection_response.da
 import 'package:recycle_hub/model/map_responses/markers_response.dart';
 import 'package:http/http.dart' as http;
 
+import '../model/map_models.dart/marker.dart';
+import '../model/map_models.dart/marker.dart';
+
 class GoogleMapRepo {
   static String mainUrl = "http://eco.loliallen.com";
-  GoogleMapRepo();
+  Box box;
+  GoogleMapRepo(){
+   openBox();
+  }
+
+  openBox() async {
+     box = await Hive.openBox('markers');
+  }
 
   Future<MarkersCollectionResponse> loadMarkersFrom4Coords(
     Coords x1,
@@ -23,9 +35,11 @@ class GoogleMapRepo {
         'coords':
             "[[${x1.lat}, ${x1.lng}],[${x2.lat}, ${x2.lng}],[${x3.lat}, ${x3.lng}],[${x4.lat}, ${x4.lng}]]"
       });
-      var data = jsonDecode(response.body);
+      List<dynamic> data = jsonDecode(response.body);
       print(data);
       if (data.isNotEmpty) {
+        List<CustMarker> list = List.from(data.map((marker) => CustMarker.fromMap(marker)));
+        box.put('markersList', list);
         return MarkersCollectionResponseOk(data);
       } else {
         return MarkerCollectionResponseWithError(err: "Список пуст");
@@ -37,10 +51,11 @@ class GoogleMapRepo {
   }
 
   Future<MarkersCollectionResponse> getMarkersByFilter(
-      FilterModel model) async {
+      MapFilterModel model) async {
     try {
       String _filters = '[';
-      if (model.filters.length != 0) {
+      
+      if (model.filters != null && model.filters.length != 0) {
         _filters = "['${model.filters[0]}'";
         for (int i = 1; i < model.filters.length; i++) {
           _filters = '$_filters' + ',' + "'${model.filters[i]}'";
@@ -49,13 +64,13 @@ class GoogleMapRepo {
       _filters = _filters + "]";
       print("Запрос отправлен");
       var response;
-      print(
+      /*print(
           "$mainUrl/api/rec_points?coords=[[33, 33],[60, 33],[60, 60],[33, 60]]&rec_type=" +
               model.recType +
               "&payback_type=" +
               model.paybackType +
-              "&filters=$_filters");
-      if (model.recType != "" && model.paybackType != "") {
+              "&filters=$_filters");*/
+      if (model.recType != null && model.paybackType != null ){
         response = await http.get(
             "$mainUrl/api/rec_points?coords=[[33, 33],[60, 33],[60, 60],[33, 60]]&rec_type=" +
                 model.recType +
@@ -143,9 +158,6 @@ class GoogleMapRepo {
         },
       ],
     };
-
-    //print(source.toList());
-    //List data = source.toList();
     print(source);
     //var data = json.encode(source);
     return Future.delayed(Duration(milliseconds: 300),

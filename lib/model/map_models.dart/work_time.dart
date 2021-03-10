@@ -1,13 +1,23 @@
 import 'dart:convert';
-import 'work_day.dart';
+import 'package:hive/hive.dart';
 
+import 'work_day.dart';
+part 'work_time.g.dart';
+@HiveType(typeId: 4)
 class WorkingTime {
+  @HiveField(0)
   WorkDay mon;
+  @HiveField(1)
   WorkDay thu;
+  @HiveField(2)
   WorkDay wed;
+  @HiveField(3)
   WorkDay thr;
+  @HiveField(4)
   WorkDay fri;
+  @HiveField(5)
   WorkDay sat;
+  @HiveField(6)
   WorkDay sun;
   WorkingTime({
     this.mon,

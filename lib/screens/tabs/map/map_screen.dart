@@ -1,13 +1,16 @@
 import 'dart:async';
-
+import 'dart:ui';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:bottom_sheet/bottom_sheet.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_star_rating/flutter_star_rating.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:google_maps_cluster_manager/google_maps_cluster_manager.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:hive/hive.dart';
 import 'package:location/location.dart';
-
 import 'package:recycle_hub/bloc/map_screen_blocs/marker_info_bloc.dart';
 import 'package:recycle_hub/bloc/map_screen_blocs/markers_collection_bloc.dart';
 import 'package:recycle_hub/custom_icons.dart';
@@ -17,6 +20,9 @@ import 'package:recycle_hub/screens/tabs/map/filter_detail_screen.dart';
 import 'package:recycle_hub/screens/tabs/map/widgets/bottom_sheet_body.dart';
 import 'package:recycle_hub/screens/tabs/map/widgets/loader_widget.dart';
 import 'package:recycle_hub/style/theme.dart';
+import '../../../bloc/map_screen_blocs/markers_collection_bloc.dart';
+import '../../../model/map_models.dart/marker.dart';
+import '../../../style/theme.dart';
 import 'methods/header_builder.dart';
 import 'methods/pre_information_container.dart';
 import 'widgets/working_days_widget.dart';
@@ -28,30 +34,32 @@ class MapScreen extends StatefulWidget {
 
 class _MapScreenState extends State<MapScreen> {
   CameraPosition cameraPosition;
-  LatLng initLatLng;
 
-  Future<String> getCurrentPosition() async {
-    LocationData currentLocation;
-
-    var location = new Location();
-    try {
-      currentLocation = await location.getLocation();
-    } on Exception {
-      currentLocation = null;
-    }
-    setState(() {
-      initLatLng = LatLng(currentLocation.latitude, currentLocation.longitude);
-      cameraPosition = CameraPosition(
-        target: initLatLng,
-        zoom: 12,
-      );
-    });
-    return "Ok";
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder<String>(
+      future: getCurrentPosition(),
+      builder: (context, AsyncSnapshot<String> snapshot) {
+        if (snapshot.hasData) {
+          return Scaffold(
+            appBar: mapScreenAppBar(),
+            body: MyGoogleMapWidget(
+              cameraPosition: cameraPosition,
+            ),
+          );
+        } else {
+          return LoaderWidget();
+        }
+      },
+    );
   }
 
   AppBar mapScreenAppBar() {
     return AppBar(
-      title: Text("RecycleHub",style: TextStyle(fontWeight: FontWeight.w700),),
+      title: Text(
+        "RecycleHub",
+        style: TextStyle(fontWeight: FontWeight.w700),
+      ),
       centerTitle: true,
       leading: IconButton(
         icon: Icon(Icons.menu),
@@ -74,24 +82,22 @@ class _MapScreenState extends State<MapScreen> {
       ],
     );
   }
+  Future<String> getCurrentPosition() async {
+    LocationData currentLocation;
 
-  @override
-  Widget build(BuildContext context) {
-    return FutureBuilder<String>(
-      future: getCurrentPosition(),
-      builder: (context, AsyncSnapshot<String> snapshot) {
-        if (snapshot.hasData) {
-          return Scaffold(
-            appBar: mapScreenAppBar(),
-            body: MyGoogleMapWidget(
-              cameraPosition: cameraPosition,
-            ),
-          );
-        } else {
-          return LoaderWidget();
-        }
-      },
-    );
+    var location = new Location();
+    try {
+      currentLocation = await location.getLocation();
+    } on Exception {
+      currentLocation = null;
+    }
+    setState(() {
+      cameraPosition = CameraPosition(
+        target: LatLng(currentLocation.latitude, currentLocation.longitude),
+        zoom: 12,
+      );
+    });
+    return "Ok";
   }
 }
 
@@ -106,13 +112,49 @@ class _MyGoogleMapWidgetState extends State<MyGoogleMapWidget> {
   Completer<GoogleMapController> _controller = Completer();
   MapType _currentMapType = MapType.normal;
   CameraPosition cameraPosition;
-  CameraPosition _camera;
   List<Widget> _list;
+  ClusterManager<CustMarker> clusterManager;
+  Iterable<ClusterItem> _items;
+  Set<Marker> markers;
+  List<CustMarker> _ls;
+  StreamSubscription streamSubscription;
 
   @override
   void initState() {
+    streamSubscription = markersCollectionBloc.stream.listen((event) {
+      if(event is MarkersCollectionResponseOk){
+        setState(() async {
+           //markers = await _getMarkers(Cluster(event.markers.markers.map((markItem) => ClusterItem(LatLng(markItem.coords.lat, markItem.coords.lng), item: markItem))));
+           //_items = event.markers.markers.map((markItem) => ClusterItem(LatLng(markItem.coords.lat, markItem.coords.lng), item: markItem)).toList();
+        });
+        clusterManager.setItems(_items);
+       
+        //event.markers.markers.map((markItem) => ClusterItem(LatLng(markItem.coords.lat, markItem.coords.lng), item: markItem));
+        //
+      }
+    });
     cameraPosition = widget.cameraPosition;
+    _currentLocation();
+    
+    //_ls = Hive.box('markers').get('markersList');
+    _items = _ls.map((markItem) => ClusterItem(LatLng(markItem.coords.lat, markItem.coords.lng), item: markItem)).toList();
+    clusterManager = ClusterManager<CustMarker>(
+      _items,
+      _updateMarkers,
+      markerBuilder: _markerBuilder,
+      initialZoom: cameraPosition.zoom,
+      stopClusteringZoom: 17.0,
+      levels: [4, 6, 8, 10, 12, 14, 15, 16],
+      extraPercent: 0.2,
+    );
     super.initState();
+  }
+
+  void _updateMarkers(Set<Marker> markers) {
+    print('Updated ${markers.length} markers');
+    setState(() {
+      this.markers = markers;
+    });
   }
 
   void _currentLocation() async {
@@ -137,7 +179,7 @@ class _MyGoogleMapWidgetState extends State<MyGoogleMapWidget> {
 
   @override
   Widget build(BuildContext context) {
-    _list = markersCollectionBloc.collection.markers.markers
+    _list = markersCollectionBloc.collection.markers.markers != null ? markersCollectionBloc.collection.markers.markers
         .map((item) => MarkerCardWidget(
               index: item.hashCode,
               marker: item,
@@ -164,102 +206,27 @@ class _MyGoogleMapWidgetState extends State<MyGoogleMapWidget> {
                     .toList(),
               ),
             ))
-        .toList();
+        .toList() : List.empty();
     return Stack(children: [
       Container(
-        child: StreamBuilder<MarkersCollectionResponse>(
-            stream: markersCollectionBloc.stream,
-            initialData: markersCollectionBloc.defaultItem,
-            builder:
-                (context, AsyncSnapshot<MarkersCollectionResponse> snapshot) {
-              if (snapshot.data is MarkerCollectionResponseWithError ||
-                  snapshot.data is MarkerCollectionResponseLoading) {
-                return LoaderWidget();
-              } else if (snapshot.data is MarkerCollectionResponseEmptyList) {
-                return GoogleMap(
-                    mapType: _currentMapType,
-                    initialCameraPosition: cameraPosition,
-                    onCameraMove: (CameraPosition camera) {
-                      _camera = camera;
-                    },
-                    onMapCreated: (GoogleMapController controller) {
-                      if (!_controller.isCompleted) {
-                        _controller.complete(controller);
-                      }
-                    },
-                    myLocationButtonEnabled: false,
-                    myLocationEnabled: true,
-                    zoomControlsEnabled: false,
-                    compassEnabled: false);
-              }
-              return GoogleMap(
+        child: GoogleMap(
                   mapType: _currentMapType,
                   initialCameraPosition: cameraPosition,
-                  onCameraMove: (CameraPosition camera) {
-                    _camera = camera;
-                  },
+                  onCameraMove: clusterManager.onCameraMove,
+                  onCameraIdle: clusterManager.updateMap,
                   onMapCreated: (GoogleMapController controller) {
                     if (!_controller.isCompleted) {
                       _controller.complete(controller);
                     }
+                    clusterManager.setMapController(controller);
                   },
                   myLocationButtonEnabled: false,
                   myLocationEnabled: true,
                   zoomControlsEnabled: false,
                   compassEnabled: false,
-                  markers: Set<Marker>.from(
-                      snapshot.data.markers.markers.map((marker) => new Marker(
-                            markerId: MarkerId(marker.id),
-                            //anchor: Offset(5, 5),
-                            consumeTapEvents: true,
-
-                            /*Цвет можно поменять здесь */
-                            icon: BitmapDescriptor.defaultMarkerWithHue(4),
-                            onTap: () {
-                              markerInfoFeedBloc.pickEvent(Mode.INFO);
-                              showStickyFlexibleBottomSheet(
-                                  initHeight: 0.4,
-                                  minHeight: 0.40,
-                                  maxHeight: 0.85,
-                                  context: context,
-                                  headerHeight: 60,
-                                  isExpand: false,
-                                  /*decoration: const BoxDecoration(
-                                      borderRadius: BorderRadius.only(
-                                          topLeft: Radius.circular(40),
-                                          topRight: Radius.circular(40)),
-                                      shape: BoxShape.rectangle,
-                                      color: kColorWhite),*/
-                                  decoration: ShapeDecoration(
-                                    color: kColorWhite,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.only(
-                                        topLeft: Radius.circular(40),
-                                        topRight: Radius.circular(40),
-                                      ),
-                                    ),
-                                  ),
-                                  headerBuilder: (context, bottomSheetOffset) {
-                                    return buildHeader(
-                                        context, bottomSheetOffset);
-                                  },
-                                  builder: (context, offset) {
-                                    return SliverChildListDelegate(
-                                      <Widget>[
-                                        AnimatedPreInformationContainer(
-                                            offset: offset, marker: marker),
-                                        BuildBody(marker: marker),
-                                      ],
-                                    );
-                                  },
-                                  anchors: [0.0, 0.4, 0.85]);
-                            },
-                            position:
-                                LatLng(marker.coords.lat, marker.coords.lng),
-                          ))));
-            }),
-      ),
-
+                  markers: markers)
+            ),
+            
       ///Кнопка определения местоположения
       Positioned(
         top: (MediaQuery.of(context).size.height) / 2,
@@ -404,6 +371,141 @@ class _MyGoogleMapWidgetState extends State<MyGoogleMapWidget> {
     ]);
   }
 
+  _getMarkers(Cluster cluster) async {
+        return Marker(
+          markerId: MarkerId(cluster.getId()),
+          position: cluster.location,
+          onTap: () {
+            if(cluster.items.length == 1){
+markerInfoFeedBloc.pickEvent(Mode.INFO);
+                              showStickyFlexibleBottomSheet(
+                                  initHeight: 0.45,
+                                  minHeight: 0.45,
+                                  maxHeight: 0.85,
+                                  context: context,
+                                  headerHeight: 60,
+                                  isExpand: false,
+                                  /*decoration: const BoxDecoration(
+                                      borderRadius: BorderRadius.only(
+                                          topLeft: Radius.circular(40),
+                                          topRight: Radius.circular(40)),
+                                      shape: BoxShape.rectangle,
+                                      color: kColorWhite),*/
+                                  decoration: ShapeDecoration(
+                                    color: kColorWhite,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.only(
+                                        topLeft: Radius.circular(40),
+                                        topRight: Radius.circular(40),
+                                      ),
+                                    ),
+                                  ),
+                                  headerBuilder: (context, bottomSheetOffset) {
+                                    return buildHeader(
+                                        context, bottomSheetOffset);
+                                  },
+                                  builder: (context, offset) {
+                                    return SliverChildListDelegate(
+                                      <Widget>[
+                                        AnimatedPreInformationContainer(
+                                            offset: offset, marker: cluster.items.first),
+                                        BuildBody(marker: cluster.items.first),
+                                      ],
+                                    );
+                                  },
+                                  anchors: [0.0, 0.45, 0.85]);
+            }
+          },
+          icon: await _getMarkerBitmap(cluster.isMultiple ? 125 : 75,
+              text: cluster.isMultiple ? cluster.count.toString() : null),
+        );
+      }
+
+  Future<Marker> Function(Cluster<CustMarker>) get _markerBuilder =>
+      (cluster) async {
+        return Marker(
+          markerId: MarkerId(cluster.getId()),
+          position: cluster.location,
+          onTap: () {
+            if(cluster.items.length == 1){
+markerInfoFeedBloc.pickEvent(Mode.INFO);
+                              showStickyFlexibleBottomSheet(
+                                  initHeight: 0.45,
+                                  minHeight: 0.45,
+                                  maxHeight: 0.85,
+                                  context: context,
+                                  headerHeight: 60,
+                                  isExpand: false,
+                                  /*decoration: const BoxDecoration(
+                                      borderRadius: BorderRadius.only(
+                                          topLeft: Radius.circular(40),
+                                          topRight: Radius.circular(40)),
+                                      shape: BoxShape.rectangle,
+                                      color: kColorWhite),*/
+                                  decoration: ShapeDecoration(
+                                    color: kColorWhite,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.only(
+                                        topLeft: Radius.circular(40),
+                                        topRight: Radius.circular(40),
+                                      ),
+                                    ),
+                                  ),
+                                  headerBuilder: (context, bottomSheetOffset) {
+                                    return buildHeader(
+                                        context, bottomSheetOffset);
+                                  },
+                                  builder: (context, offset) {
+                                    return SliverChildListDelegate(
+                                      <Widget>[
+                                        AnimatedPreInformationContainer(
+                                            offset: offset, marker: cluster.items.first),
+                                        BuildBody(marker: cluster.items.first),
+                                      ],
+                                    );
+                                  },
+                                  anchors: [0.0, 0.45, 0.85]);
+            }
+          },
+          icon: await _getMarkerBitmap(cluster.isMultiple ? 125 : 75,
+              text: cluster.isMultiple ? cluster.count.toString() : null),
+        );
+      };
+
+  Future<BitmapDescriptor> _getMarkerBitmap(int size, {String text}) async {
+    if (kIsWeb) size = (size / 2).floor();
+
+    final PictureRecorder pictureRecorder = PictureRecorder();
+    final Canvas canvas = Canvas(pictureRecorder);
+    final Paint paint1 = Paint()..color = kColorGreen;
+    final Paint paint2 = Paint()..color = Colors.white;
+
+    canvas.drawCircle(Offset(size / 2, size / 2), size / 2.0, paint1);
+    canvas.drawCircle(Offset(size / 2, size / 2), size / 2.2, paint2);
+    canvas.drawCircle(Offset(size / 2, size / 2), size / 2.8, paint1);
+
+    if (text != null) {
+      TextPainter painter = TextPainter(textDirection: TextDirection.ltr);
+      painter.text = TextSpan(
+        text: text,
+        style: TextStyle(
+            fontSize: size / 3,
+            color: Colors.white,
+            fontWeight: FontWeight.normal),
+      );
+      painter.layout();
+      painter.paint(
+        canvas,
+        Offset(size / 2 - painter.width / 2, size / 2 - painter.height / 2),
+      );
+    }
+
+    final img = await pictureRecorder.endRecording().toImage(size, size);
+    final data = await img.toByteData(format: ImageByteFormat.png) as ByteData;
+
+    return BitmapDescriptor.fromBytes(data.buffer.asUint8List());
+  }
+
   void northSouth() async {
     GoogleMapController zController = await _controller.future;
     var currentZoomLevel = await zController.getZoomLevel();
@@ -412,7 +514,7 @@ class _MyGoogleMapWidgetState extends State<MyGoogleMapWidget> {
     zController.animateCamera(
       CameraUpdate.newCameraPosition(
         CameraPosition(
-          target: _camera.target,
+          target: cameraPosition.target,
           zoom: currentZoomLevel,
         ),
       ),
@@ -427,7 +529,7 @@ class _MyGoogleMapWidgetState extends State<MyGoogleMapWidget> {
     zController.animateCamera(
       CameraUpdate.newCameraPosition(
         CameraPosition(
-          target: _camera.target,
+          target: cameraPosition.target,
           zoom: currentZoomLevel,
         ),
       ),
@@ -442,7 +544,7 @@ class _MyGoogleMapWidgetState extends State<MyGoogleMapWidget> {
     zController.animateCamera(
       CameraUpdate.newCameraPosition(
         CameraPosition(
-          target: _camera.target,
+          target: cameraPosition.target,
           zoom: currentZoomLevel,
         ),
       ),

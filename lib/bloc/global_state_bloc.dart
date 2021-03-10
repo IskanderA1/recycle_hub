@@ -1,5 +1,4 @@
 import 'package:recycle_hub/bloc/auth_user_bloc.dart';
-import 'package:recycle_hub/model/authorisation_models/user_response.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:recycle_hub/repo/app_repo.dart';
 

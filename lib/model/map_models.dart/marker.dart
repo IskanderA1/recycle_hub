@@ -1,23 +1,36 @@
 import 'dart:convert';
-
 import 'package:flutter/foundation.dart';
-
+import 'package:hive/hive.dart';
 import 'package:recycle_hub/model/map_models.dart/accept_types.dart';
 import 'package:recycle_hub/model/map_models.dart/contact_model.dart';
 import 'package:recycle_hub/model/map_models.dart/coord.dart';
 import 'package:recycle_hub/model/map_models.dart/work_time.dart';
 
+part 'marker.g.dart';
+
+@HiveType(typeId: 1)
 class CustMarker {
+  @HiveField(0)
   String id;
+  @HiveField(1)
   List<AcceptType> acceptTypes;
+  @HiveField(2)
   String address;
+  @HiveField(3)
   List<Contact> contacts;
+  @HiveField(4)
   Coords coords;
+  @HiveField(5)
   String description;
+  @HiveField(6)
   List<String> images;
+  @HiveField(7)
   String name;
+  @HiveField(8)
   String paybackType;
+  @HiveField(9)
   String receptionType;
+  @HiveField(10)
   WorkingTime workTime;
   CustMarker({
     this.id,

@@ -96,7 +96,7 @@ class _AnimatedPreInformationContainerState
               wColor: kColorBlack,
               hasSelection: false,
               size: Size(size.width - 90, size.height * 0.14),
-              fontSize: 12,
+              fontSize: 11,
             ),
           ]),
         ),

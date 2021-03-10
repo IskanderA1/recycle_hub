@@ -1,7 +1,5 @@
 import 'dart:convert';
-
 import 'package:flutter/foundation.dart';
-
 import 'package:recycle_hub/model/map_models.dart/marker.dart';
 
 class MarkersCollection {
@@ -29,15 +27,6 @@ class MarkersCollection {
             List<CustMarker>.from(map?.map((x) => CustMarker.fromMap(x)));
 
   String toJson() => json.encode(toMap());
-
-  /*CustMarker getByIndex(int i) {
-    if (markers == null) {
-      return null;
-    }
-    if (i < markers.length && i >= 0) {
-      return markers[i];
-    }
-  }*/
 
   @override
   String toString() => 'MarkersCollection(markers: $markers)';

@@ -370,7 +370,7 @@ class _NewWidgetState extends State<NewWidget> {
             backColor: kColorWhite,
             hasSelection: true,
             fontSize: 14,
-            size: Size(_size.width - 50, _size.height / 6.5),
+            size: Size(_size.width - 50, _size.height / 6.7),
           ),
         ),
         myDivider(),

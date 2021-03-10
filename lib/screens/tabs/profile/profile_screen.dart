@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:hive/hive.dart';
 import 'package:recycle_hub/bloc/auth_user_bloc.dart';
+import '../../../model/user_model.dart';
 import '../../../style/theme.dart';
 import 'package:recycle_hub/bloc/profile_bloc/profile_bloc.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
 List<Widget> svgIcons = [
   SvgPicture.asset(
@@ -55,12 +58,19 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+  //Box<UserModel> userBox;
+  @override
+  void initState() {
+    //userBox = Hive.box('user');
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     Size _size = MediaQuery.of(context).size;
     return WillPopScope(
       onWillPop: () {
         profileMenuBloc.mapEventToState(ProfileMenuEvents.USER_PROFILE);
+        return;
       },
       child: Scaffold(
         body: Container(
@@ -78,7 +88,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     SizedBox(
                       height: 17,
                     ),
-                    buildProfileAvatar(authBloc.user.name, "ЭКОЛОГ"),
+                    buildProfileAvatar(Hive.box('user').get('user').name,
+                      "ЭКОЛОГ"),
                     SizedBox(
                       height: 24,
                     ),
@@ -87,7 +98,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       height: 5,
                     ),
                     Container(
-                      height: _size.height * 0.5,
+                      height: _size.height * 0.6,
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(16),
                         child: ListView(
@@ -145,7 +156,7 @@ Widget buildAppBar() {
   );
 }
 
-Widget buildProfileAvatar(String username, String status) {
+Widget buildProfileAvatar(String name, String status) {
   return Container(
     child: Row(
       mainAxisAlignment: MainAxisAlignment.start,
@@ -192,11 +203,13 @@ Widget buildProfileAvatar(String username, String status) {
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(username,
-                style: TextStyle(
+           Text(
+                          name,
+                          style: TextStyle(
                   color: kColorWhite,
                   fontSize: 18,
-                )),
+                )
+                      ),
             Text(status,
                 style: TextStyle(
                   color: kColorWhite,
@@ -423,7 +436,7 @@ Widget _buildProgressIndicator(int lastKGindex) {
 
 Widget buildMenu() {
   return Container(
-    padding: EdgeInsets.only(top: 17, bottom: 35, right: 17, left: 17),
+    padding: EdgeInsets.only(top: 17, bottom: 0, right: 17, left: 17),
     decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16), color: kColorWhite),
     child: ClipRRect(

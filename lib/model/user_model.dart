@@ -1,16 +1,42 @@
 import 'dart:convert';
+import 'package:hive/hive.dart';
 
-class UserModel {
+part 'user_model.g.dart';
+
+@HiveType(typeId: 0)
+class UserModel{
+
+  @HiveField(0)
   String id;
+
+  @HiveField(1)
   String username;
+
+  @HiveField(2)
   String surname = "";
+
+  @HiveField(3)
   String name;
+
+  @HiveField(4)
   String password;
+
+  @HiveField(5)
   String image;
+
+  @HiveField(6)
   bool confirmed;
+
+  @HiveField(7)
   int ecoCoins;
+
+  @HiveField(8)
   int refCode;
+
+  @HiveField(9)
   String qrCode;
+
+  @HiveField(10)
   String token;
   UserModel({
     this.id,
@@ -25,7 +51,6 @@ class UserModel {
     this.qrCode,
     this.token,
   });
-
   UserModel copyWith({
     String id,
     String username,
@@ -130,4 +155,5 @@ class UserModel {
         qrCode.hashCode ^
         token.hashCode;
   }
+  
 }

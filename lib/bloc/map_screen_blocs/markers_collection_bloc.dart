@@ -21,7 +21,7 @@ class MarkersCollectionBloc {
     _behaviorSubject.sink.add(type);
   }
 
-  loadMarkers() async {
+  Future<MarkersCollectionResponse> loadMarkers() async {
     _behaviorSubject.sink.add(MarkerCollectionResponseLoading());
     MarkersCollectionResponse _response = await _repo.loadMarkersFrom4Coords(
         Coords(lat: 33, lng: 33),
@@ -30,10 +30,11 @@ class MarkersCollectionBloc {
         Coords(lat: 33, lng: 60));
     _behaviorSubject.sink.add(_response);
     collection = _response;
+    return _response;
   }
 
-  filterMarkers(FilterModel filter) async {
-    _behaviorSubject.sink.add(MarkerCollectionResponseLoading());
+  filterMarkers(MapFilterModel filter) async {
+    //_behaviorSubject.sink.add(MarkerCollectionResponseLoading());
     MarkersCollectionResponse _response =
         await _repo.getMarkersByFilter(filter);
     _behaviorSubject.sink.add(_response);

@@ -1,5 +1,11 @@
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:rxdart/rxdart.dart';
 
-/*class LocationBloc{
-  BehaviorSubject<LonLng> _behaviorSubject = BehaviorSubject<
-}*/
+class LocationBloc {
+  
+  BehaviorSubject<LatLng> _behaviorSubject = BehaviorSubject<LatLng>();
+
+  getLocationPosition(){
+
+  }
+}

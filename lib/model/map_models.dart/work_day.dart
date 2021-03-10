@@ -1,9 +1,16 @@
 import 'dart:convert';
+import 'package:hive/hive.dart';
+part 'work_day.g.dart';
 
+@HiveType(typeId: 5)
 class WorkDay {
+  @HiveField(0)
   String first;
+  @HiveField(1)
   String second;
+  @HiveField(2)
   String third;
+  @HiveField(3)
   String fourth;
   WorkDay({
     this.first,

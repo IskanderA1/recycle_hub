@@ -1,6 +1,8 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter_typeahead/flutter_typeahead.dart';
+
 import 'package:recycle_hub/bloc/garb_collection_type_bloc.dart';
 import 'package:recycle_hub/bloc/map_screen_blocs/accept_types_collection_bloc.dart';
 import 'package:recycle_hub/bloc/map_screen_blocs/markers_collection_bloc.dart';
@@ -11,9 +13,11 @@ import 'package:recycle_hub/model/map_responses/accept_types_collection_response
 import 'package:recycle_hub/screens/tabs/map/widgets/filter_card_widget.dart';
 import 'package:recycle_hub/screens/tabs/map/widgets/loader_widget.dart';
 import 'package:recycle_hub/style/theme.dart';
-import 'package:flutter_typeahead/flutter_typeahead.dart';
 
 class MapFilterDetailScreen extends StatefulWidget {
+  const MapFilterDetailScreen({
+    Key key,
+  }) : super(key: key);
   @override
   _MapFilterDetailScreenState createState() => _MapFilterDetailScreenState();
 }
@@ -21,7 +25,7 @@ class MapFilterDetailScreen extends StatefulWidget {
 class _MapFilterDetailScreenState extends State<MapFilterDetailScreen> {
   final TextEditingController _searchController = TextEditingController();
   Size size;
-  FilterModel currentFilterModel = FilterModel();
+  MapFilterModel currentFilterModel = MapFilterModel();
   AcceptTypesCollection acceptTypesCollection;
   List<FilterCardWidget> filterCards;
   GarbageCollectionTypeBloc garbageCollBloc = GarbageCollectionTypeBloc();
@@ -176,7 +180,7 @@ class _MapFilterDetailScreenState extends State<MapFilterDetailScreen> {
                     alignment: Alignment.bottomCenter,
                     child: GestureDetector(
                       onTap: () {
-                        acceptFilters();
+                        markersCollectionBloc.filterMarkers(currentFilterModel);
                         Navigator.pop(context);
                       },
                       child: ConstrainedBox(

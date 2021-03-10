@@ -1,7 +1,12 @@
 import 'dart:convert';
 
+import 'package:hive/hive.dart';
+part 'coord.g.dart';
+@HiveType(typeId: 6)
 class Coords {
+  @HiveField(0)
   double lat;
+  @HiveField(1)
   double lng;
   Coords({
     this.lat,

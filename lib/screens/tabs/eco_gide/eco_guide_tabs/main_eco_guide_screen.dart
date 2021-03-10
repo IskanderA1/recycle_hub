@@ -84,7 +84,7 @@ class _MainEcoGuideScreenState extends State<MainEcoGuideScreen> {
                         Icons.search_outlined,
                         color: kColorBlack,
                       ),
-                      hintText: "Что вы ходите сдать",
+                      hintText: "Что вы хотите сдать",
                       contentPadding: EdgeInsets.only(left: 16, top: 14)),
                   controller: widget._searchController,
                 ),

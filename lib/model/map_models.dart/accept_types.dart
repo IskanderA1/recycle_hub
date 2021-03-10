@@ -1,12 +1,19 @@
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
-
+import 'package:hive/hive.dart';
+part 'accept_types.g.dart';
+@HiveType(typeId: 2)
 class AcceptType {
+  @HiveField(0)
   String id;
+  @HiveField(1)
   List<String> badWords;
+  @HiveField(2)
   List<String> keyWords;
+  @HiveField(3)
   String name;
+  @HiveField(4)
   String varName;
   AcceptType({
     this.id,

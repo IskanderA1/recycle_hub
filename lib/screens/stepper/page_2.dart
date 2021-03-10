@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg_provider/flutter_svg_provider.dart';
 import 'package:recycle_hub/style/theme.dart';
-
 import 'second_custom_paint.dart';
 
 class Page2 extends StatelessWidget {

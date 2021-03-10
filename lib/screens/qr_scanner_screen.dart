@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'dart:ui';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -84,8 +83,7 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
               placeholder: (BuildContext context, url) => LoaderWidget(),
               errorWidget: (BuildContext context, url, error) =>
                   Icon(Icons.error),
-              imageUrl:
-                  "https://upload.wikimedia.org/wikipedia/commons/e/e4/Emomali_Rahmon_in_2016_%28cropped%29.jpg",
+              imageUrl: "http://eco.loliallen.com/" + authBloc.user.qrCode,
             )),
           ),
           SizedBox(
