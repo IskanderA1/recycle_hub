@@ -2,7 +2,6 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg_provider/flutter_svg_provider.dart';
-import 'package:recycle_hub/bloc/global_state_bloc.dart';
 import 'package:recycle_hub/screens/stepper/confidentiality_policy_screen.dart';
 import 'package:recycle_hub/style/theme.dart';
 
