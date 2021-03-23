@@ -56,7 +56,7 @@ class _MapFilterDetailScreenState extends State<MapFilterDetailScreen> {
             centerTitle: true,
             leading: GestureDetector(
               onTap: () {
-                markersCollectionBloc.loadMarkers();
+                markersCollectionBloc.loadMarkersFromLast();
                 Navigator.pop(context);
               },
               child: Icon(Icons.arrow_back),

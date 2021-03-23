@@ -88,17 +88,14 @@ class _AnimatedPreInformationContainerState
         ),
         Expanded(
           flex: 6,
-          child:
-              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-            WorkingDaysWidget(
-              workingTime: widget.marker.workTime,
-              backColor: kColorWhite,
-              wColor: kColorBlack,
-              hasSelection: false,
-              size: Size(size.width - 90, size.height * 0.14),
-              fontSize: 11,
-            ),
-          ]),
+          child: WorkingDaysWidget(
+                workingTime: widget.marker.workTime,
+                backColor: kColorWhite,
+                wColor: kColorBlack,
+                hasSelection: false,
+                size: Size(size.width - 90, size.height * 0.14),
+                fontSize: 11,
+              ),
         ),
         Expanded(
           flex: 1,

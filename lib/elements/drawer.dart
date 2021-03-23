@@ -3,7 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../style/theme.dart';
 
-Drawer customDrawer(BuildContext context) => Drawer(
+class CustomDrawer extends StatefulWidget {
+  @override
+  _CustomDrawerState createState() => _CustomDrawerState();
+}
+
+class _CustomDrawerState extends State<CustomDrawer> {
+  @override
+  Widget build(BuildContext context) {
+    return Drawer(
       child: Stack(
         alignment: Alignment.bottomCenter,
         children: [
@@ -180,3 +188,5 @@ Drawer customDrawer(BuildContext context) => Drawer(
         ],
       ),
     );
+  }
+}

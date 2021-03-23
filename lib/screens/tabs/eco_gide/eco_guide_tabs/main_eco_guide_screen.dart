@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:recycle_hub/bloc/eco_guide_blocs/eco_menu_bloc.dart';
+import 'package:recycle_hub/icons/eco_guide_icons_icons.dart';
 import '../../../../style/theme.dart';
 
 List<String> titles = [
@@ -10,23 +11,11 @@ List<String> titles = [
   "Пройти тест"
 ];
 
-List<SvgPicture> icons = [
-  SvgPicture.asset(
-    "svg/eco_1.svg",
-    color: kColorGreyDark,
-  ),
-  SvgPicture.asset(
-    "svg/eco_2.svg",
-    color: kColorGreyDark,
-  ),
-  SvgPicture.asset(
-    "svg/eco_3.svg",
-    color: kColorGreyDark,
-  ),
-  SvgPicture.asset(
-    "svg/eco_4.svg",
-    color: kColorGreyDark,
-  ),
+List<IconData> icons = [
+  EcoGuideIcons.recyclebin,
+  EcoGuideIcons.book,
+  EcoGuideIcons.project,
+  EcoGuideIcons.brain,
 ];
 
 class MainEcoGuideScreen extends StatefulWidget {
@@ -108,7 +97,7 @@ class _MainEcoGuideScreenState extends State<MainEcoGuideScreen> {
 Widget buildBtn(String text, int index) {
   return InkWell(
     onTap: () {
-      ecoMenu.pickItem(index);
+      ecoGuideMenu.pickItem(index);
     },
     child: Container(
       padding: EdgeInsets.only(top: 16, bottom: 16),
@@ -125,7 +114,11 @@ Widget buildBtn(String text, int index) {
               Container(
                 height: 25,
                 width: 25,
-                child: icons[index],
+                child: Icon(
+                  icons[index],
+                  size: 25,
+                  color: kColorGreyDark
+                ),
               ),
               SizedBox(
                 width: 8,

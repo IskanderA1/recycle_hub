@@ -9,7 +9,6 @@ import 'package:flutter_star_rating/flutter_star_rating.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_maps_cluster_manager/google_maps_cluster_manager.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:hive/hive.dart';
 import 'package:location/location.dart';
 import 'package:recycle_hub/bloc/map_screen_blocs/marker_info_bloc.dart';
 import 'package:recycle_hub/bloc/map_screen_blocs/markers_collection_bloc.dart';
@@ -116,71 +115,18 @@ class _MyGoogleMapWidgetState extends State<MyGoogleMapWidget> {
   ClusterManager<CustMarker> clusterManager;
   Iterable<ClusterItem> _items;
   Set<Marker> markers;
-  List<CustMarker> _ls;
   StreamSubscription streamSubscription;
 
   @override
   void initState() {
+    cameraPosition = widget.cameraPosition;
+    markersCollectionBloc.loadMarkers(cameraPosition.target, cameraPosition.zoom);
     streamSubscription = markersCollectionBloc.stream.listen((event) {
       if(event is MarkersCollectionResponseOk){
-        setState(() async {
+        setState(()  {
            //markers = await _getMarkers(Cluster(event.markers.markers.map((markItem) => ClusterItem(LatLng(markItem.coords.lat, markItem.coords.lng), item: markItem))));
-           //_items = event.markers.markers.map((markItem) => ClusterItem(LatLng(markItem.coords.lat, markItem.coords.lng), item: markItem)).toList();
-        });
-        clusterManager.setItems(_items);
-       
-        //event.markers.markers.map((markItem) => ClusterItem(LatLng(markItem.coords.lat, markItem.coords.lng), item: markItem));
-        //
-      }
-    });
-    cameraPosition = widget.cameraPosition;
-    _currentLocation();
-    
-    //_ls = Hive.box('markers').get('markersList');
-    _items = _ls.map((markItem) => ClusterItem(LatLng(markItem.coords.lat, markItem.coords.lng), item: markItem)).toList();
-    clusterManager = ClusterManager<CustMarker>(
-      _items,
-      _updateMarkers,
-      markerBuilder: _markerBuilder,
-      initialZoom: cameraPosition.zoom,
-      stopClusteringZoom: 17.0,
-      levels: [4, 6, 8, 10, 12, 14, 15, 16],
-      extraPercent: 0.2,
-    );
-    super.initState();
-  }
-
-  void _updateMarkers(Set<Marker> markers) {
-    print('Updated ${markers.length} markers');
-    setState(() {
-      this.markers = markers;
-    });
-  }
-
-  void _currentLocation() async {
-    LocationData currentLocation;
-    GoogleMapController controller;
-    var location = new Location();
-    try {
-      currentLocation = await location.getLocation();
-    } on Exception {
-      currentLocation = null;
-    }
-
-    controller = await _controller.future;
-    controller.animateCamera(CameraUpdate.newCameraPosition(
-      CameraPosition(
-        bearing: 0,
-        target: LatLng(currentLocation.latitude, currentLocation.longitude),
-        zoom: 17.0,
-      ),
-    ));
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    _list = markersCollectionBloc.collection.markers.markers != null ? markersCollectionBloc.collection.markers.markers
-        .map((item) => MarkerCardWidget(
+           _items = event.markers.markers.map((markItem) => ClusterItem(LatLng(markItem.coords.lat, markItem.coords.lng), item: markItem)).toList();
+          _list = event.markers.markers.map((item) => MarkerCardWidget(
               index: item.hashCode,
               marker: item,
               list: GridView.count(
@@ -206,7 +152,67 @@ class _MyGoogleMapWidgetState extends State<MyGoogleMapWidget> {
                     .toList(),
               ),
             ))
-        .toList() : List.empty();
+        .toList();
+        });
+        clusterManager.setItems(_items);
+        //event.markers.markers.map((markItem) => ClusterItem(LatLng(markItem.coords.lat, markItem.coords.lng), item: markItem));
+      }else{
+        setState(() {
+        _items = List<ClusterItem<CustMarker>>.empty();
+        _list = List.empty();
+        });
+        clusterManager.setItems(_items);
+      }
+    },);
+    //_currentLocation();
+    //_ls = Hive.box('markers').get('markersList');
+    //_items = _ls.map((markItem) => ClusterItem(LatLng(markItem.coords.lat, markItem.coords.lng), item: markItem)).toList();
+    clusterManager = ClusterManager<CustMarker>(
+      _items,
+      _updateMarkers,
+      markerBuilder: _markerBuilder,
+      initialZoom: cameraPosition.zoom,
+      stopClusteringZoom: 17.0,
+      levels: [4, 6, 8, 10, 12, 14, 15, 16],
+      extraPercent: 0.2,
+    );
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    streamSubscription.cancel();
+    super.dispose();
+  }
+
+  void _updateMarkers(Set<Marker> markers) {
+    print('Updated ${markers.length} markers');
+    setState(() {
+      this.markers = markers;
+    });
+  }
+
+  void _currentLocation() async {
+    LocationData currentLocation;
+    GoogleMapController controller;
+    var location = new Location();
+    try {
+      currentLocation = await location.getLocation();
+    } on Exception {
+      currentLocation = null;
+    }
+    controller = await _controller.future;
+    controller.animateCamera(CameraUpdate.newCameraPosition(
+      CameraPosition(
+        bearing: 0,
+        target: LatLng(currentLocation.latitude, currentLocation.longitude),
+        zoom: 17.0,
+      ),
+    ));
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Stack(children: [
       Container(
         child: GoogleMap(
@@ -334,10 +340,10 @@ class _MyGoogleMapWidgetState extends State<MyGoogleMapWidget> {
                   maxHeight: 0.85,
                   context: context,
                   headerHeight: 40,
-                  /*decoration: const BoxDecoration(
+                  decoration: const BoxDecoration(
                     color: kColorWhite,
                     //shape: BoxShape.rectangle
-                  ),*/
+                  ),
                   headerBuilder: (context, bottomSheetOffset) {
                     return buildHeaderAnimated(context, bottomSheetOffset);
                   },
@@ -370,56 +376,6 @@ class _MyGoogleMapWidgetState extends State<MyGoogleMapWidget> {
       ),
     ]);
   }
-
-  _getMarkers(Cluster cluster) async {
-        return Marker(
-          markerId: MarkerId(cluster.getId()),
-          position: cluster.location,
-          onTap: () {
-            if(cluster.items.length == 1){
-markerInfoFeedBloc.pickEvent(Mode.INFO);
-                              showStickyFlexibleBottomSheet(
-                                  initHeight: 0.45,
-                                  minHeight: 0.45,
-                                  maxHeight: 0.85,
-                                  context: context,
-                                  headerHeight: 60,
-                                  isExpand: false,
-                                  /*decoration: const BoxDecoration(
-                                      borderRadius: BorderRadius.only(
-                                          topLeft: Radius.circular(40),
-                                          topRight: Radius.circular(40)),
-                                      shape: BoxShape.rectangle,
-                                      color: kColorWhite),*/
-                                  decoration: ShapeDecoration(
-                                    color: kColorWhite,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.only(
-                                        topLeft: Radius.circular(40),
-                                        topRight: Radius.circular(40),
-                                      ),
-                                    ),
-                                  ),
-                                  headerBuilder: (context, bottomSheetOffset) {
-                                    return buildHeader(
-                                        context, bottomSheetOffset);
-                                  },
-                                  builder: (context, offset) {
-                                    return SliverChildListDelegate(
-                                      <Widget>[
-                                        AnimatedPreInformationContainer(
-                                            offset: offset, marker: cluster.items.first),
-                                        BuildBody(marker: cluster.items.first),
-                                      ],
-                                    );
-                                  },
-                                  anchors: [0.0, 0.45, 0.85]);
-            }
-          },
-          icon: await _getMarkerBitmap(cluster.isMultiple ? 125 : 75,
-              text: cluster.isMultiple ? cluster.count.toString() : null),
-        );
-      }
 
   Future<Marker> Function(Cluster<CustMarker>) get _markerBuilder =>
       (cluster) async {

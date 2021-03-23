@@ -1,14 +1,11 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:recycle_hub/bloc/eco_guide_blocs/eco_menu_bloc.dart';
-import 'package:recycle_hub/bloc/map_screen_blocs/markers_collection_bloc.dart';
 import 'package:recycle_hub/bloc/navigation_bloc.dart';
 import 'package:recycle_hub/bloc/qr_bloc.dart';
-import 'package:recycle_hub/screens/qr_scanner_screen.dart';
+import 'package:recycle_hub/icons/nav_bar_icons_icons.dart';
 import 'package:recycle_hub/style/theme.dart';
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:recycle_hub/tab_icons_icons.dart';
 
 class BottomNavBarV2 extends StatefulWidget {
   final IconThemeData unselectedIconThemeData;
@@ -42,7 +39,6 @@ class _BottomNavBarV2State extends State<BottomNavBarV2> {
             width: size.width,
             height: 70,
             child: Stack(
-              overflow: Overflow.visible,
               children: [
                 CustomPaint(
                   size: Size(size.width, 70),
@@ -79,7 +75,7 @@ class _BottomNavBarV2State extends State<BottomNavBarV2> {
                       IconButtonV2(
                         label: "Карта",
                         icon: Icon(
-                          Icons.map_outlined,
+                          NavBarIcons.location,
                           size: size.width / 13,
                         ),
                         spacing: 0,
@@ -87,14 +83,14 @@ class _BottomNavBarV2State extends State<BottomNavBarV2> {
                         unselectedIconThemeData: widget.unselectedIconThemeData,
                         isActive: widget.currentItem == 0 ? true : false,
                         ontap: () {
-                          widget.func(0);
+                          widget.func();
                           bottomNavBarBloc.pickItem(0);
                         },
                       ),
                       IconButtonV2(
                         label: "ЭкоГид",
                         icon: Icon(
-                          TabIcons.guide_book,
+                          NavBarIcons.ecogid,
                           size: size.width / 15.5,
                         ),
                         spacing: 4,
@@ -102,9 +98,9 @@ class _BottomNavBarV2State extends State<BottomNavBarV2> {
                         unselectedIconThemeData: widget.unselectedIconThemeData,
                         isActive: widget.currentItem == 1 ? true : false,
                         ontap: () {
-                          widget.func(1);
+                          widget.func();
                           bottomNavBarBloc.pickItem(1);
-                          ecoMenu.backToMenu();
+                          ecoGuideMenu.backToMenu();
                         },
                       ),
                       SizedBox(
@@ -113,7 +109,7 @@ class _BottomNavBarV2State extends State<BottomNavBarV2> {
                       IconButtonV2(
                         label: "ЭкоКоин",
                         icon: Icon(
-                          Icons.copyright_outlined,
+                          NavBarIcons.coin,
                           size: size.width / 13,
                         ),
                         spacing: 0,
@@ -121,14 +117,14 @@ class _BottomNavBarV2State extends State<BottomNavBarV2> {
                         unselectedIconThemeData: widget.unselectedIconThemeData,
                         isActive: widget.currentItem == 2 ? true : false,
                         ontap: () {
-                          widget.func(2);
+                          widget.func();
                           bottomNavBarBloc.pickItem(2);
                         },
                       ),
                       IconButtonV2(
                         label: "Профиль",
                         icon: Icon(
-                          Icons.person_outlined,
+                          NavBarIcons.profile,
                           size: size.width / 13,
                         ),
                         spacing: 0,
@@ -136,7 +132,7 @@ class _BottomNavBarV2State extends State<BottomNavBarV2> {
                         unselectedIconThemeData: widget.unselectedIconThemeData,
                         isActive: widget.currentItem == 3 ? true : false,
                         ontap: () {
-                          widget.func(3);
+                          widget.func();
                           bottomNavBarBloc.pickItem(3);
                         },
                       ),
@@ -175,7 +171,7 @@ class BNBCustomPainter extends CustomPainter {
     canvas.drawShadow(path, Colors.black, 5, true);
     canvas.drawPath(path, paint);*/
 
-    //canvas.drawShadow(path, Colors.black, 5, true);
+    canvas.drawShadow(path, Colors.black, 5, true);
     canvas.drawPath(path, paint);
   }
 

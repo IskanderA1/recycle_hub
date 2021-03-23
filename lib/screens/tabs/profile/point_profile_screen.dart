@@ -51,7 +51,7 @@ class _PointProfileScreenState extends State<PointProfileScreen> {
     Size _size = MediaQuery.of(context).size;
     return WillPopScope(
       onWillPop: () {
-        profileMenuBloc.mapEventToState(ProfileMenuEvents.USER_PROFILE);
+        profileMenuBloc.mapEventToState(ProfileMenuStates.USER_PROFILE);
         return;
       },
       child: Scaffold(
@@ -66,7 +66,7 @@ class _PointProfileScreenState extends State<PointProfileScreen> {
               color: kColorWhite,
             ),
             onPressed: () {
-              profileMenuBloc.mapEventToState(ProfileMenuEvents.USER_PROFILE);
+              profileMenuBloc.mapEventToState(ProfileMenuStates.USER_PROFILE);
             },
           ),
         ),

@@ -1,31 +1,31 @@
 import 'dart:async';
 
-enum EcoMenuItem{CONTAINER,REFERENCE,ADVICE,TEST,MENU}
+enum EcoGuideMenuItem{CONTAINER,REFERENCE,ADVICE,TEST,MENU}
 
 class EcoMenuBloc{
-  final StreamController<EcoMenuItem> _serviceItemController = StreamController<EcoMenuItem>.broadcast();
+  final StreamController<EcoGuideMenuItem> _serviceItemController = StreamController<EcoGuideMenuItem>.broadcast();
 
-  EcoMenuItem defaultItem = EcoMenuItem.MENU;
-  Stream<EcoMenuItem> get itemStream =>_serviceItemController.stream;
+  EcoGuideMenuItem defaultItem = EcoGuideMenuItem.MENU;
+  Stream<EcoGuideMenuItem> get itemStream =>_serviceItemController.stream;
 
   void pickItem(int i){
     switch(i){
       case 0:
-        _serviceItemController.sink.add(EcoMenuItem.CONTAINER);
+        _serviceItemController.sink.add(EcoGuideMenuItem.CONTAINER);
         break;
       case 1:
-        _serviceItemController.sink.add(EcoMenuItem.REFERENCE);
+        _serviceItemController.sink.add(EcoGuideMenuItem.REFERENCE);
         break;
       case 2:
-        _serviceItemController.sink.add(EcoMenuItem.ADVICE);
+        _serviceItemController.sink.add(EcoGuideMenuItem.ADVICE);
         break;
       case 3:
-        _serviceItemController.sink.add(EcoMenuItem.TEST);
+        _serviceItemController.sink.add(EcoGuideMenuItem.TEST);
         break;
     }
   }
   void backToMenu(){
-    _serviceItemController.sink.add(EcoMenuItem.MENU);
+    _serviceItemController.sink.add(EcoGuideMenuItem.MENU);
   }
 
   close() {
@@ -33,4 +33,4 @@ class EcoMenuBloc{
   }
 
 }
-final ecoMenu = EcoMenuBloc();
+final ecoGuideMenu = EcoMenuBloc();

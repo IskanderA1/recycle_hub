@@ -1,44 +1,42 @@
-import 'package:recycle_hub/model/map_models.dart/coord.dart';
+import 'dart:async';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:recycle_hub/model/map_models.dart/filter_model.dart';
-import 'package:recycle_hub/model/map_models.dart/markers_collection.dart';
 import 'package:recycle_hub/model/map_responses/markers_response.dart';
 import 'package:recycle_hub/repo/google_map_repo.dart';
-import 'package:rxdart/rxdart.dart';
 
 class MarkersCollectionBloc {
   GoogleMapRepo _repo = GoogleMapRepo();
-  BehaviorSubject<MarkersCollectionResponse> _behaviorSubject =
-      BehaviorSubject<MarkersCollectionResponse>();
+
+  StreamController<MarkersCollectionResponse> _behaviorSubject =
+      StreamController<MarkersCollectionResponse>.broadcast();
 
   MarkerCollectionResponseLoading defaultItem =
       MarkerCollectionResponseLoading();
 
-  Stream<MarkersCollectionResponse> get stream => _behaviorSubject.stream;
+  LatLng lastLatLng;
+  double lastZoom;
 
-  MarkersCollectionResponse collection;
+  Stream<MarkersCollectionResponse> get stream => _behaviorSubject.stream;
 
   pickEvent(MarkersCollectionResponse type) {
     _behaviorSubject.sink.add(type);
   }
 
-  Future<MarkersCollectionResponse> loadMarkers() async {
+  loadMarkersFromLast() async {
     _behaviorSubject.sink.add(MarkerCollectionResponseLoading());
-    MarkersCollectionResponse _response = await _repo.loadMarkersFrom4Coords(
-        Coords(lat: 33, lng: 33),
-        Coords(lat: 60, lng: 33),
-        Coords(lat: 60, lng: 60),
-        Coords(lat: 33, lng: 60));
-    _behaviorSubject.sink.add(_response);
-    collection = _response;
-    return _response;
+    _repo.loadMarkersFrom4Coords(lastLatLng, lastZoom).then((value) =>_behaviorSubject.sink.add(value));
+  }
+
+  loadMarkers(LatLng latLng, double zoom) async {
+    lastLatLng = latLng;
+    lastZoom = zoom;
+    _behaviorSubject.sink.add(MarkerCollectionResponseLoading());
+    _repo.loadMarkersFrom4Coords(latLng, zoom).then((value) =>_behaviorSubject.sink.add(value));
   }
 
   filterMarkers(MapFilterModel filter) async {
     //_behaviorSubject.sink.add(MarkerCollectionResponseLoading());
-    MarkersCollectionResponse _response =
-        await _repo.getMarkersByFilter(filter);
-    _behaviorSubject.sink.add(_response);
-    collection = _response;
+    _repo.getMarkersByFilter(filter).then((value) =>_behaviorSubject.sink.add(value));
   }
 
   dispose() {

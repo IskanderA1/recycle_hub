@@ -41,6 +41,12 @@ final kBoxDecorationStyle = BoxDecoration(
   ],
 );
 
+final kOfferPointScreenInputDecor = BoxDecoration(
+  color: kColorWhite,
+  borderRadius: BorderRadius.circular(10),
+  border: Border.all(width:2, color: Color(0xFFECECEC)),
+);
+
 final kListItemBoxDecorationStyle = BoxDecoration(
   color: Colors.white,
   borderRadius: BorderRadius.circular(25.0),
@@ -110,3 +116,5 @@ final kBoxImageBackgroundStyle = BoxDecoration(
 final kLeftButtonBottomRadius = BorderRadius.only(topLeft: Radius.circular(10));
 final kRightButtonBottomRadius =
     BorderRadius.only(topRight: Radius.circular(10));
+
+final kEcoCoinString = "Тут вы можете выполнять задания и получать внутреннюю валюту для последующего обмена на услуги и товары партнеров в магазине";

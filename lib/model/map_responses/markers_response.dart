@@ -6,10 +6,12 @@ class MarkersCollectionResponse {
       : this.markers = MarkersCollection.fromMap(data);
 
   MarkersCollectionResponse.withError() : markers = null;
+  MarkersCollectionResponse.fromList(List list) : this.markers = MarkersCollection.fromList(list);
 }
 
 class MarkersCollectionResponseOk extends MarkersCollectionResponse {
   MarkersCollectionResponseOk(var data) : super(data);
+  MarkersCollectionResponseOk.fromList(List list) : super.fromList(list);
 }
 
 class MarkerCollectionResponseWithError extends MarkersCollectionResponse {

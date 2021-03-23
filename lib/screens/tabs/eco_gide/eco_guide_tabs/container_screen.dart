@@ -6,10 +6,7 @@ import 'package:recycle_hub/bloc/eco_guide_blocs/trash_details_bloc.dart';
 import 'package:recycle_hub/elements/loader.dart';
 import 'package:recycle_hub/model/eco_guide_models/filter_model.dart';
 import 'package:recycle_hub/model/eco_guide_models/filter_response.dart';
-
 import '../../../../bloc/eco_guide_blocs/trash_details_bloc.dart';
-import '../../../../style/theme.dart';
-import '../../../../style/theme.dart';
 import '../../../../style/theme.dart';
 
 List<SvgPicture> containerImages = [
@@ -56,7 +53,7 @@ class _ContainerScreenState extends State<ContainerScreen> {
           leading: IconButton(
             icon: Icon(Icons.arrow_back_sharp),
             onPressed: () {
-              ecoMenu.backToMenu();
+              ecoGuideMenu.backToMenu();
             },
           ),
         ),

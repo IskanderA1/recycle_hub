@@ -106,7 +106,7 @@ class CustMarker {
       name: map['name'],
       paybackType: map['payback_type'],
       receptionType: map['reception_type'],
-      workTime: WorkingTime.fromMap(map['work_time']),
+      workTime: map['work_time'] != null ? WorkingTime.fromMap(map['work_time']) : null,
     );
   }
 

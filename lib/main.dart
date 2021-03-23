@@ -15,9 +15,13 @@ import 'model/map_models.dart/marker.dart';
 import 'model/map_models.dart/work_day.dart';
 import 'model/map_models.dart/work_time.dart';
 import 'model/user_model.dart';
+import 'model/transactions/transaction_model.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  ///total hive types number = 8
+  ///to build models type in console
+  ///flutter packages pub run build_runner build --delete-conflicting-outputs
   Directory directory = await getApplicationDocumentsDirectory();
     Hive.init(directory.path);
   Hive.registerAdapter(UserModelAdapter());
@@ -27,6 +31,7 @@ Future<void> main() async {
   Hive.registerAdapter(ContactAdapter());
   Hive.registerAdapter(AcceptTypeAdapter());
   Hive.registerAdapter(CoordsAdapter());
+  Hive.registerAdapter(TransactionModelAdapter());
   Hive.openBox('user');
   Hive.openBox('markers');
   runApp(

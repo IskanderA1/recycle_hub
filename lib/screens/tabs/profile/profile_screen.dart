@@ -1,55 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hive/hive.dart';
 import 'package:recycle_hub/bloc/auth_user_bloc.dart';
-import '../../../model/user_model.dart';
-import '../../../style/theme.dart';
 import 'package:recycle_hub/bloc/profile_bloc/profile_bloc.dart';
-import 'package:hive_flutter/hive_flutter.dart';
+import 'package:recycle_hub/icons/user_profile_icons_icons.dart';
+import 'package:recycle_hub/style/theme.dart';
 
-List<Widget> svgIcons = [
-  SvgPicture.asset(
-    "svg/profile_2.svg",
-    height: 30,
-    width: 30,
-    color: kColorGreyDark,
-  ),
-  SvgPicture.asset(
-    "svg/profile_3.svg",
-    height: 30,
-    width: 30,
-    color: kColorGreyDark,
-  ),
-  SvgPicture.asset(
-    "svg/profile_4.svg",
-    height: 30,
-    width: 30,
-    color: kColorGreyDark,
-  ),
-  SvgPicture.asset(
-    "svg/profile_5.svg",
-    height: 30,
-    width: 30,
-    color: kColorGreyDark,
-  ),
-  SvgPicture.asset(
-    "svg/profile_6.svg",
-    height: 30,
-    width: 30,
-    color: kColorGreyDark,
-  ),
-  SvgPicture.asset(
-    "svg/profile_7.svg",
-    height: 30,
-    width: 30,
-    color: kColorGreyDark,
-  ),
-  SvgPicture.asset(
-    "svg/profile_1.svg",
-    height: 30,
-    width: 30,
-    color: kColorGreyDark,
-  ),
+List<IconData> svgIcons = [
+  UserProfileIcons.user,
+  UserProfileIcons.wallet,
+  UserProfileIcons.pie_chart,
+  UserProfileIcons.cash_payment,
+  UserProfileIcons.ask,
+  UserProfileIcons.log_out,
+  UserProfileIcons.achievement,
 ];
 
 class ProfileScreen extends StatefulWidget {
@@ -69,7 +32,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     Size _size = MediaQuery.of(context).size;
     return WillPopScope(
       onWillPop: () {
-        profileMenuBloc.mapEventToState(ProfileMenuEvents.USER_PROFILE);
+        profileMenuBloc.mapEventToState(ProfileMenuStates.USER_PROFILE);
         return;
       },
       child: Scaffold(
@@ -134,7 +97,7 @@ Widget buildAppBar() {
           alignment: Alignment.centerLeft,
           child: InkWell(
             onTap: () {
-              profileMenuBloc.mapEventToState(ProfileMenuEvents.POINT_PROFILE);
+              profileMenuBloc.mapEventToState(ProfileMenuStates.POINT_PROFILE);
             },
             child: Icon(
               Icons.arrow_back_sharp,
@@ -289,7 +252,7 @@ Widget buildAchievments(String status, double made) {
         Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Container(height: 30, width: 30, child: svgIcons[6]),
+            Container(height: 30, width: 30, child: Icon(svgIcons[6], color: kColorGreyDark,)),
             SizedBox(
               width: 15,
             ),
@@ -448,9 +411,7 @@ Widget buildMenu() {
           buildListItem(2, "Статистика"),
           buildListItem(3, "Как заработать баллы?"),
           buildListItem(4, "Задать вопрос авторам"),
-          GestureDetector(
-              onTap: () => authBloc.authLogOut(),
-              child: buildListItem(5, "Выйти")),
+          buildListItem(5, "Выйти"),
         ],
       ),
     ),
@@ -458,33 +419,42 @@ Widget buildMenu() {
 }
 
 Widget buildListItem(int index, String text) {
-  return Container(
-    padding: EdgeInsets.only(top: 12, bottom: 12),
-    decoration: BoxDecoration(
-        border: Border(bottom: BorderSide(color: kLightGrey, width: 0.5))),
-    child: Stack(children: [
-      Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          Container(height: 30, width: 30, child: svgIcons[index]),
-          SizedBox(
-            width: 5,
-          ),
-          Text(
-            text,
-            style: TextStyle(
-              color: index + 2 == svgIcons.length ? kColorRed : kColorBlack,
+  return GestureDetector(
+    onTap: (){
+      if(index == 2) profileMenuBloc.mapEventToState(ProfileMenuStates.STATISTIC);
+      else if(index == 3) profileMenuBloc.mapEventToState(ProfileMenuStates.HOWGETCOIN);
+      else if(index == 5) authBloc.authLogOut();
+      else if(index == 1) profileMenuBloc.mapEventToState(ProfileMenuStates.PURSE);
+      else if(index == 0) profileMenuBloc.mapEventToState(ProfileMenuStates.EDITPROFILE);
+    },
+      child: Container(
+      padding: EdgeInsets.only(top: 12, bottom: 12),
+      decoration: BoxDecoration(
+          border: Border(bottom: BorderSide(color: kLightGrey, width: 0.5))),
+      child: Stack(children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Container(height: 30, width: 30, child: Icon(svgIcons[index], color: kColorGreyDark,)),
+            SizedBox(
+              width: 5,
             ),
-          )
-        ],
-      ),
-      Align(
-          alignment: Alignment.centerRight,
-          child: Icon(
-            Icons.arrow_forward_ios_sharp,
-            color: kLightGrey,
-          ))
-    ]),
+            Text(
+              text,
+              style: TextStyle(
+                color: index + 2 == svgIcons.length ? kColorRed : kColorBlack,
+              ),
+            )
+          ],
+        ),
+        Align(
+            alignment: Alignment.centerRight,
+            child: Icon(
+              Icons.arrow_forward_ios_sharp,
+              color: kLightGrey,
+            ))
+      ]),
+    ),
   );
 }
 

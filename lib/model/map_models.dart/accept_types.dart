@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:hive/hive.dart';
 part 'accept_types.g.dart';
+
 @HiveType(typeId: 2)
 class AcceptType {
   @HiveField(0)

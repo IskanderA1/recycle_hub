@@ -43,6 +43,11 @@ dependencies:
   hive: ^1.4.4+1
   hive_flutter: ^0.3.1
   path_provider: ^1.6.27
+  menu_button: ^1.4.1
+  step_progress_indicator: ^0.2.5+8
+  url_launcher: ^6.0.2
+  image_picker: ^0.6.7+22
+  steps_indicator: ^1.3.0
 
 dev_dependencies:
   flutter_test:
@@ -74,15 +79,46 @@ flutter:
       fonts:
         - asset: assets/fonts/Gilroy/gilroy-regular.ttf
         - asset: assets/fonts/Gilroy/gilroy-bold.ttf
-        - asset: fonts/gilroy-medium.ttf
+        - asset: assets/fonts/gilroy-medium.ttf
           style: normal
     - family: GilroyMedium
       fonts:
         - asset: assets/fonts/Gilroy/gilroy-medium.ttf
           weight: 400
-    - family: LofOut
+    - family: EcoCoinIcons
+      fonts:
+        - asset: assets/fonts/EcoCoinIcons.ttf
+
+    - family: EcoGuideIcons
+      fonts:
+        - asset: assets/fonts/EcoGuideIcons.ttf
+
+    - family: HowToGetCoinIcons
+      fonts:
+        - asset: assets/fonts/HowToGetCoinIcons.ttf
+
+    - family: MenuIcons
+      fonts:
+        - asset: assets/fonts/MenuIcons.ttf
+
+    - family: MyPyrchaseIcons
+      fonts:
+        - asset: assets/fonts/MyPyrchaseIcons.ttf
+
+    - family: NavBarIcons
+      fonts:
+        - asset: assets/fonts/NavBarIcons.ttf
+
+    - family: PPProfileIcons
+      fonts:
+        - asset: assets/fonts/PPProfileIcons.ttf
+
+    - family: UserProfileIcons
+      fonts:
+        - asset: assets/fonts/UserProfileIcons.ttf
+
+    - family: UserProfileIcons
       fonts:
         - asset: assets/fonts/LofOut.ttf
-    - family: TabIcons
-      fonts:
-        - asset: assets/fonts/TabIcons.ttf
+
+    

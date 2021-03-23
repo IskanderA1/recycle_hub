@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:recycle_hub/style/theme.dart';
 
 ///Отрисовка headerа bottomsheet'a
 Widget buildHeader(BuildContext context, double bottomSheetOffset) {

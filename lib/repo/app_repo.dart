@@ -5,6 +5,8 @@ import 'package:recycle_hub/model/user_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import '../model/user_model.dart';
+import '../model/transactions/transaction_response.dart';
+import 'package:recycle_hub/model/new_point_model.dart';
 
 class AppRepository {
   static String mainUrl = "http://eco.loliallen.com/api";
@@ -13,7 +15,7 @@ class AppRepository {
     hiveOpen();
   }
 
-  hiveOpen()async{
+  hiveOpen() async {
     userBox = await Hive.openBox('user');
   }
 
@@ -29,15 +31,15 @@ class AppRepository {
         print(data["token"]);
         UserModel user = UserModel(
           id: data["_id"]["! @ # \$ & * ~oid"],
-        username: data["username"],
-        name: data["name"],
-        password: data["password"],
-        image: data["image"],
-        confirmed: data["confirmed"],
-        ecoCoins: data["eco_coins"],
-        refCode: data["code"],
-        qrCode: data["qrcode"],
-        token: data["token"],
+          username: data["username"],
+          name: data["name"],
+          password: data["password"],
+          image: data["image"],
+          confirmed: data["confirmed"],
+          ecoCoins: data["eco_coins"],
+          refCode: data["code"],
+          qrCode: data["qrcode"],
+          token: data["token"],
         );
         userBox.put('user', user);
         print(userBox.get('user').toString());
@@ -55,19 +57,22 @@ class AppRepository {
   Future<UserResponse> userAuthLocal() async {
     var box = await Hive.openBox('user');
     UserModel user = box.get('user');
-    if(user!= null){
-    if (user.token != null) {
-      try {
-        UserResponse userResponse = await userAuth(user.username, user.password);
-        return userResponse;
-      } catch (error, stacktrace) {
-        print("Exception occured: $error stackTrace: $stacktrace");
-        return UserAuthFailed("Нет сети");
+    if (user != null) {
+      if (user.token != null) {
+        try {
+          UserResponse userResponse =
+              await userAuth(user.username, user.password);
+          return userResponse;
+        } catch (error, stacktrace) {
+          print("Exception occured: $error stackTrace: $stacktrace");
+          return UserAuthFailed("Нет сети");
+        }
+      } else {
+        return UserUnlogged();
       }
     } else {
       return UserUnlogged();
-    }}else {
-      return UserUnlogged();}
+    }
   }
 
   ///Запрос на регистрацию
@@ -96,15 +101,15 @@ class AppRepository {
       if (response.statusCode == 200) {
         UserModel user = UserModel(
           id: data["_id"]["! @ # \$ & * ~oid"],
-        username: data["username"],
-        name: data["name"],
-        password: data["password"],
-        image: data["image"],
-        confirmed: data["confirmed"],
-        ecoCoins: data["eco_coins"],
-        refCode: data["code"],
-        qrCode: data["qrcode"],
-        token: data["token"],
+          username: data["username"],
+          name: data["name"],
+          password: data["password"],
+          image: data["image"],
+          confirmed: data["confirmed"],
+          ecoCoins: data["eco_coins"],
+          refCode: data["code"],
+          qrCode: data["qrcode"],
+          token: data["token"],
         );
         userBox.put('user', user);
         return UserRegOk();
@@ -218,6 +223,44 @@ class AppRepository {
       return isF;
     } catch (error) {
       return true;
+    }
+  }
+
+  Future<TransactionsResponse> getTransactions() async {
+    var box = await Hive.openBox('user');
+    UserModel user = box.get('user', defaultValue: null);
+    if (user != null) {
+      try {
+        var response = await http.get(
+          mainUrl + "/api/recycle?id=${user.id}&type=user",
+        );
+        if (response.statusCode == 200) {
+          List<Map<String, dynamic>> data = json.decode(response.body);
+          return TransactionsResponseOk(data);
+        }
+      } catch (error, stacktrace) {
+        print("Exception occured: $error stackTrace: $stacktrace");
+        return TransactionsResponseError(error);
+      }
+    }
+  }
+
+  Future sendNewOfferPoint(NewPoint newPoint) async {
+    var box = await Hive.openBox('user');
+    UserModel user = box.get('user', defaultValue: null);
+    if (user != null) {
+      try {
+        var response = await http.get(
+          mainUrl + "/api/recycle?id=${user.id}&type=user",
+        );
+        if (response.statusCode == 200) {
+          List<Map<String, dynamic>> data = json.decode(response.body);
+          return TransactionsResponseOk(data);
+        }
+      } catch (error, stacktrace) {
+        print("Exception occured: $error stackTrace: $stacktrace");
+        return TransactionsResponseError(error);
+      }
     }
   }
 }

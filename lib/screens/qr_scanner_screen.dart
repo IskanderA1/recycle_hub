@@ -83,7 +83,7 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
               placeholder: (BuildContext context, url) => LoaderWidget(),
               errorWidget: (BuildContext context, url, error) =>
                   Icon(Icons.error),
-              imageUrl: "http://eco.loliallen.com/" + authBloc.user.qrCode,
+              imageUrl: "http://eco.loliallen.com" + authBloc.user.qrCode,
             )),
           ),
           SizedBox(

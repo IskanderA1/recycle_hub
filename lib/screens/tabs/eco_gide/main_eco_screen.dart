@@ -15,20 +15,20 @@ class _EcoMainScreenState extends State<EcoMainScreen> {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
-      stream: ecoMenu.itemStream,
-      initialData: ecoMenu.defaultItem,
+      stream: ecoGuideMenu.itemStream,
+      initialData: ecoGuideMenu.defaultItem,
       // ignore: missing_return
-      builder: (context, AsyncSnapshot<EcoMenuItem> snapshot) {
+      builder: (context, AsyncSnapshot<EcoGuideMenuItem> snapshot) {
         switch (snapshot.data) {
-          case EcoMenuItem.MENU:
+          case EcoGuideMenuItem.MENU:
             return MainEcoGuideScreen();
-          case EcoMenuItem.CONTAINER:
+          case EcoGuideMenuItem.CONTAINER:
             return ContainerScreen();
-          case EcoMenuItem.REFERENCE:
+          case EcoGuideMenuItem.REFERENCE:
             return ReferenceBookScreen();
-          case EcoMenuItem.ADVICE:
+          case EcoGuideMenuItem.ADVICE:
             return AdviceScreen();
-          case EcoMenuItem.TEST:
+          case EcoGuideMenuItem.TEST:
             return TestScreen();
         }
       },

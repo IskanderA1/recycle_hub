@@ -11,7 +11,6 @@ import 'package:recycle_hub/model/map_responses/feedbacks_collection_response.da
 import 'package:recycle_hub/screens/tabs/map/widgets/loader_widget.dart';
 import 'package:recycle_hub/style/theme.dart';
 import 'package:flutter_star_rating/flutter_star_rating.dart';
-
 import 'filter_card_widget.dart';
 import 'working_days_widget.dart';
 

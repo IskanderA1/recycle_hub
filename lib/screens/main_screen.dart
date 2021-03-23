@@ -20,7 +20,6 @@ class _MainScreenState extends State<MainScreen> {
   @override
   void initState() {
     globalStateBloc.getComeIn();
-    markersCollectionBloc.loadMarkers();
     super.initState();
   }
 

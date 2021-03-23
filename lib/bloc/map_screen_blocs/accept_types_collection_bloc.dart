@@ -18,9 +18,10 @@ class AcceptTypesCollectionBloc {
 
   Future<AcceptTypesCollectionResponse> loadAcceptTypes() async {
     _behaviorSubject.sink.add(AcceptTypesCollectionResponseLoading());
-    var _response = await _repo.getAcceptTypes();
-    _behaviorSubject.sink.add(_response);
-    return _response;
+    _repo.getAcceptTypes().then((value) {
+      _behaviorSubject.sink.add(value);
+      return value;
+      });
   }
 
   close() {

@@ -1,12 +1,15 @@
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
+import 'package:hive/hive.dart';
 import 'package:recycle_hub/model/map_models.dart/marker.dart';
 
 class MarkersCollection {
+  @HiveField(0)
   final List<CustMarker> markers;
+  final DateTime date;
   MarkersCollection({
     this.markers,
-  });
+  }):date = DateTime.now();
 
   MarkersCollection copyWith({
     List<CustMarker> markers,
@@ -24,7 +27,12 @@ class MarkersCollection {
 
   MarkersCollection.fromMap(List map)
       : this.markers =
-            List<CustMarker>.from(map?.map((x) => CustMarker.fromMap(x)));
+            List<CustMarker>.from(map?.map((x) => CustMarker.fromMap(x))),
+            date = DateTime.now();
+
+  MarkersCollection.fromList(List list)
+     :  this.markers = list,
+        date = DateTime.now();
 
   String toJson() => json.encode(toMap());
 

@@ -1,7 +1,9 @@
 import 'package:rxdart/rxdart.dart';
 
-enum ProfileMenuEvents { USER_PROFILE, POINT_PROFILE }
-enum ProfileMenuStates { USER_PROFILE, POINT_PROFILE }
+enum ProfileMenuStates {BACK, USER_PROFILE, POINT_PROFILE, 
+STATISTIC, HOWGETCOIN, OFFERNEWPOINT, 
+PURSE, STORE, EDITPROFILE,
+MYPURCHASES, TOPUPSHISTORY }
 
 class ProfileMenuBloc {
   BehaviorSubject<ProfileMenuStates> _subject =
@@ -10,13 +12,40 @@ class ProfileMenuBloc {
 
   final defaultState = ProfileMenuStates.USER_PROFILE;
 
-  void mapEventToState(ProfileMenuEvents event) {
+  void mapEventToState(ProfileMenuStates event) {
     switch (event) {
-      case ProfileMenuEvents.USER_PROFILE:
+      case ProfileMenuStates.USER_PROFILE:
         _subject.sink.add(ProfileMenuStates.USER_PROFILE);
         break;
-      case ProfileMenuEvents.POINT_PROFILE:
+      case ProfileMenuStates.POINT_PROFILE:
         _subject.sink.add(ProfileMenuStates.POINT_PROFILE);
+        break;
+      case ProfileMenuStates.STATISTIC:
+        _subject.sink.add(ProfileMenuStates.STATISTIC);
+        break;
+      case ProfileMenuStates.HOWGETCOIN:
+        _subject.sink.add(ProfileMenuStates.HOWGETCOIN);
+        break;
+      case ProfileMenuStates.BACK:
+        _subject.sink.add(ProfileMenuStates.BACK);
+        break;
+      case ProfileMenuStates.OFFERNEWPOINT:
+        _subject.sink.add(ProfileMenuStates.OFFERNEWPOINT);
+        break;
+      case ProfileMenuStates.PURSE:
+        _subject.sink.add(ProfileMenuStates.PURSE);
+        break;
+      case ProfileMenuStates.STORE:
+        _subject.sink.add(ProfileMenuStates.STORE);
+        break;
+      case ProfileMenuStates.EDITPROFILE:
+        _subject.sink.add(ProfileMenuStates.EDITPROFILE);
+        break;
+      case ProfileMenuStates.MYPURCHASES:
+        _subject.sink.add(ProfileMenuStates.MYPURCHASES);
+        break;
+      case ProfileMenuStates.TOPUPSHISTORY:
+        _subject.sink.add(ProfileMenuStates.TOPUPSHISTORY);
         break;
     }
   }
