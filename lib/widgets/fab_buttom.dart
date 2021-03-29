@@ -1,7 +1,10 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:recycle_hub/bloc/eco_coin_bloc.dart/eco_coin_menu_bloc.dart';
 import 'package:recycle_hub/bloc/eco_guide_blocs/eco_menu_bloc.dart';
 import 'package:recycle_hub/bloc/navigation_bloc.dart';
+import 'package:recycle_hub/bloc/profile_bloc/profile_bloc.dart';
+import 'package:recycle_hub/bloc/profile_bloc/transactions_model.dart';
 import 'package:recycle_hub/bloc/qr_bloc.dart';
 import 'package:recycle_hub/icons/nav_bar_icons_icons.dart';
 import 'package:recycle_hub/style/theme.dart';
@@ -12,14 +15,12 @@ class BottomNavBarV2 extends StatefulWidget {
   final IconThemeData selectedIconThemeData;
   final int currentItem;
   final Color backgraundColor;
-  Function func;
 
   BottomNavBarV2(
       {@required this.selectedIconThemeData,
       @required this.unselectedIconThemeData,
       @required this.currentItem,
-      @required this.backgraundColor,
-      @required this.func});
+      @required this.backgraundColor});
   @override
   _BottomNavBarV2State createState() => _BottomNavBarV2State();
 }
@@ -83,7 +84,6 @@ class _BottomNavBarV2State extends State<BottomNavBarV2> {
                         unselectedIconThemeData: widget.unselectedIconThemeData,
                         isActive: widget.currentItem == 0 ? true : false,
                         ontap: () {
-                          widget.func();
                           bottomNavBarBloc.pickItem(0);
                         },
                       ),
@@ -91,14 +91,13 @@ class _BottomNavBarV2State extends State<BottomNavBarV2> {
                         label: "ЭкоГид",
                         icon: Icon(
                           NavBarIcons.ecogid,
-                          size: size.width / 15.5,
+                          size: size.width / 13,
                         ),
                         spacing: 4,
                         selectedIconThemeData: widget.selectedIconThemeData,
                         unselectedIconThemeData: widget.unselectedIconThemeData,
                         isActive: widget.currentItem == 1 ? true : false,
                         ontap: () {
-                          widget.func();
                           bottomNavBarBloc.pickItem(1);
                           ecoGuideMenu.backToMenu();
                         },
@@ -117,7 +116,7 @@ class _BottomNavBarV2State extends State<BottomNavBarV2> {
                         unselectedIconThemeData: widget.unselectedIconThemeData,
                         isActive: widget.currentItem == 2 ? true : false,
                         ontap: () {
-                          widget.func();
+                          ecoCoinMenuBloc.pickState(EcoCoinMenuItems.MENU);
                           bottomNavBarBloc.pickItem(2);
                         },
                       ),
@@ -132,7 +131,7 @@ class _BottomNavBarV2State extends State<BottomNavBarV2> {
                         unselectedIconThemeData: widget.unselectedIconThemeData,
                         isActive: widget.currentItem == 3 ? true : false,
                         ontap: () {
-                          widget.func();
+                          profileMenuBloc.mapEventToState(ProfileMenuStates.MENU);
                           bottomNavBarBloc.pickItem(3);
                         },
                       ),

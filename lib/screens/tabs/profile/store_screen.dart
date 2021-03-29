@@ -24,6 +24,7 @@ class _StoreScreenState extends State<StoreScreen> {
 
   @override
   void initState() {
+    storeTabBarBloc.mapEventToState(StoreStates.SERVICES);
     _goodsGridView = GridView.count(
       crossAxisCount: 2,
       mainAxisSpacing: 10.0,
@@ -31,9 +32,8 @@ class _StoreScreenState extends State<StoreScreen> {
       children: [
         Container(
           decoration: BoxDecoration(
-            color: kColorWhite,
-            borderRadius: BorderRadius.all(Radius.circular(15))
-          ),
+              color: kColorWhite,
+              borderRadius: BorderRadius.all(Radius.circular(15))),
           child: Column(
             children: [
               Icon(
@@ -41,33 +41,44 @@ class _StoreScreenState extends State<StoreScreen> {
                 size: 50,
                 color: kColorGreyDark,
               ),
-              SizedBox(height: 5,),
-              Text("Название товара", style: TextStyle(
-                color: kColorBlack,
-                fontFamily: 'GillroyMeduim',
-                fontSize: 14,
-              ),),
-              SizedBox(height: 5,),
-              Text("400 гр", style: TextStyle(
-                color: const Color(0xFF8B8B97),
-                fontFamily: 'GillroyMeduim',
-                fontSize: 14,
-              ),),
-              SizedBox(height:5),
-              Text("Название товара", style: TextStyle(
-                color: kColorBlack,
-                fontFamily: 'GillroyMeduim',
-                fontSize: 14,
-                fontWeight: FontWeight.bold
-              ),)
+              SizedBox(
+                height: 5,
+              ),
+              Text(
+                "Название товара",
+                style: TextStyle(
+                  color: kColorBlack,
+                  fontFamily: 'GillroyMeduim',
+                  fontSize: 14,
+                ),
+              ),
+              SizedBox(
+                height: 5,
+              ),
+              Text(
+                "400 гр",
+                style: TextStyle(
+                  color: const Color(0xFF8B8B97),
+                  fontFamily: 'GillroyMeduim',
+                  fontSize: 14,
+                ),
+              ),
+              SizedBox(height: 5),
+              Text(
+                "Название товара",
+                style: TextStyle(
+                    color: kColorBlack,
+                    fontFamily: 'GillroyMeduim',
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold),
+              )
             ],
           ),
         ),
         Container(
           decoration: BoxDecoration(
-            color: kColorWhite,
-            borderRadius: BorderRadius.all(Radius.circular(15))
-          ),
+              color: kColorWhite,
+              borderRadius: BorderRadius.all(Radius.circular(15))),
           child: Column(
             children: [
               Icon(
@@ -75,32 +86,44 @@ class _StoreScreenState extends State<StoreScreen> {
                 size: 50,
                 color: kColorGreyDark,
               ),
-              SizedBox(height: 5,),
-              Text("Название товара", style: TextStyle(
-                color: kColorBlack,
-                fontFamily: 'GillroyMeduim',
-                fontSize: 14,
-              ),),
-              SizedBox(height: 5,),
-              Text("400 гр", style: TextStyle(
-                color: const Color(0xFF8B8B97),
-                fontFamily: 'GillroyMeduim',
-                fontSize: 14,
-              ),),
-              SizedBox(height:5),
-              Text("Название товара", style: TextStyle(
-                color: kColorBlack,
-                fontFamily: 'GillroyMeduim',
-                fontSize: 14,
-                fontWeight: FontWeight.bold
-              ),)
+              SizedBox(
+                height: 5,
+              ),
+              Text(
+                "Название товара",
+                style: TextStyle(
+                  color: kColorBlack,
+                  fontFamily: 'GillroyMeduim',
+                  fontSize: 14,
+                ),
+              ),
+              SizedBox(
+                height: 5,
+              ),
+              Text(
+                "400 гр",
+                style: TextStyle(
+                  color: const Color(0xFF8B8B97),
+                  fontFamily: 'GillroyMeduim',
+                  fontSize: 14,
+                ),
+              ),
+              SizedBox(height: 5),
+              Text(
+                "Название товара",
+                style: TextStyle(
+                    color: kColorBlack,
+                    fontFamily: 'GillroyMeduim',
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold),
+              )
             ],
           ),
-        ),Container(
+        ),
+        Container(
           decoration: BoxDecoration(
-            color: kColorWhite,
-            borderRadius: BorderRadius.all(Radius.circular(15))
-          ),
+              color: kColorWhite,
+              borderRadius: BorderRadius.all(Radius.circular(15))),
           child: Column(
             children: [
               Icon(
@@ -108,25 +131,37 @@ class _StoreScreenState extends State<StoreScreen> {
                 size: 50,
                 color: kColorGreyDark,
               ),
-              SizedBox(height: 5,),
-              Text("Название товара", style: TextStyle(
-                color: kColorBlack,
-                fontFamily: 'GillroyMeduim',
-                fontSize: 14,
-              ),),
-              SizedBox(height: 5,),
-              Text("400 гр", style: TextStyle(
-                color: const Color(0xFF8B8B97),
-                fontFamily: 'GillroyMeduim',
-                fontSize: 14,
-              ),),
-              SizedBox(height:5),
-              Text("Название товара", style: TextStyle(
-                color: kColorBlack,
-                fontFamily: 'GillroyMeduim',
-                fontSize: 14,
-                fontWeight: FontWeight.bold
-              ),)
+              SizedBox(
+                height: 5,
+              ),
+              Text(
+                "Название товара",
+                style: TextStyle(
+                  color: kColorBlack,
+                  fontFamily: 'GillroyMeduim',
+                  fontSize: 14,
+                ),
+              ),
+              SizedBox(
+                height: 5,
+              ),
+              Text(
+                "400 гр",
+                style: TextStyle(
+                  color: const Color(0xFF8B8B97),
+                  fontFamily: 'GillroyMeduim',
+                  fontSize: 14,
+                ),
+              ),
+              SizedBox(height: 5),
+              Text(
+                "Название товара",
+                style: TextStyle(
+                    color: kColorBlack,
+                    fontFamily: 'GillroyMeduim',
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold),
+              )
             ],
           ),
         )
@@ -134,7 +169,6 @@ class _StoreScreenState extends State<StoreScreen> {
     );
     super.initState();
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -155,8 +189,7 @@ class _StoreScreenState extends State<StoreScreen> {
             color: kColorWhite,
             size: 25,
           ),
-          onPressed: () =>
-              widget.onBackCall(),
+          onPressed: () => widget.onBackCall(),
         ),
       ),
       body: Container(
@@ -222,7 +255,13 @@ class _StoreScreenState extends State<StoreScreen> {
                               });
                             },
                             child: Container(
-                              color: _selected == 0 ? kColorGreen : kColorWhite,
+                              decoration: BoxDecoration(
+                                  color: _selected == 0
+                                      ? kColorGreen
+                                      : kColorWhite,
+                                  borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(4),
+                                      bottomLeft: Radius.circular(4))),
                               child: Center(
                                 child: Text(
                                   "Услуги",
@@ -243,15 +282,17 @@ class _StoreScreenState extends State<StoreScreen> {
                         Expanded(
                           child: GestureDetector(
                             onTap: () {
-                              storeTabBarBloc.mapEventToState(StoreStates.TOEAT);
+                              storeTabBarBloc
+                                  .mapEventToState(StoreStates.TOEAT);
                               setState(() {
                                 _selected = 1;
                               });
                             },
                             child: Container(
                               decoration: BoxDecoration(
-                                  color:
-                                      _selected == 1 ? kColorGreen : kColorWhite,
+                                  color: _selected == 1
+                                      ? kColorGreen
+                                      : kColorWhite,
                                   borderRadius: BorderRadius.only(
                                       topRight: Radius.circular(4),
                                       bottomRight: Radius.circular(4))),
@@ -280,16 +321,17 @@ class _StoreScreenState extends State<StoreScreen> {
                   child: StreamBuilder(
                     stream: storeTabBarBloc.subject,
                     initialData: storeTabBarBloc.defaultState,
-                    builder: (BuildContext context, AsyncSnapshot<StoreStates> snapshot){
-                      if(snapshot.hasData){
-                        if(snapshot.data == StoreStates.TOEAT){
+                    builder: (BuildContext context,
+                        AsyncSnapshot<StoreStates> snapshot) {
+                      if (snapshot.hasData) {
+                        if (snapshot.data == StoreStates.TOEAT) {
                           return Padding(
                             padding: EdgeInsets.all(15),
                             child: _goodsGridView,
                           );
                         }
                         return Container();
-                      }else{
+                      } else {
                         return Container();
                       }
                     },

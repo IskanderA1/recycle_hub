@@ -27,6 +27,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     //userBox = Hive.box('user');
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     Size _size = MediaQuery.of(context).size;
@@ -51,8 +52,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     SizedBox(
                       height: 17,
                     ),
-                    buildProfileAvatar(Hive.box('user').get('user').name,
-                      "ЭКОЛОГ"),
+                    buildProfileAvatar(
+                        Hive.box('user').get('user').name, "ЭКОЛОГ"),
                     SizedBox(
                       height: 24,
                     ),
@@ -109,7 +110,7 @@ Widget buildAppBar() {
       ),
       Container(
           alignment: Alignment.center,
-          padding: EdgeInsets.only(top: 12),
+          padding: EdgeInsets.only(top: 30),
           child: Text(
             "Профиль",
             style: TextStyle(
@@ -166,16 +167,16 @@ Widget buildProfileAvatar(String name, String status) {
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-           Text(
-                          name,
-                          style: TextStyle(
+            Text(name,
+                style: TextStyle(
                   color: kColorWhite,
+                  fontFamily: 'GillroyMedium',
                   fontSize: 18,
-                )
-                      ),
+                )),
             Text(status,
                 style: TextStyle(
                   color: kColorWhite,
+                  fontFamily: 'GillroyMedium',
                   fontSize: 12,
                 ))
           ],
@@ -252,7 +253,13 @@ Widget buildAchievments(String status, double made) {
         Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Container(height: 30, width: 30, child: Icon(svgIcons[6], color: kColorGreyDark,)),
+            Container(
+                height: 30,
+                width: 30,
+                child: Icon(
+                  svgIcons[6],
+                  color: kColorGreyDark,
+                )),
             SizedBox(
               width: 15,
             ),
@@ -420,14 +427,19 @@ Widget buildMenu() {
 
 Widget buildListItem(int index, String text) {
   return GestureDetector(
-    onTap: (){
-      if(index == 2) profileMenuBloc.mapEventToState(ProfileMenuStates.STATISTIC);
-      else if(index == 3) profileMenuBloc.mapEventToState(ProfileMenuStates.HOWGETCOIN);
-      else if(index == 5) authBloc.authLogOut();
-      else if(index == 1) profileMenuBloc.mapEventToState(ProfileMenuStates.PURSE);
-      else if(index == 0) profileMenuBloc.mapEventToState(ProfileMenuStates.EDITPROFILE);
+    onTap: () {
+      if (index == 2)
+        profileMenuBloc.mapEventToState(ProfileMenuStates.STATISTIC);
+      else if (index == 3)
+        profileMenuBloc.mapEventToState(ProfileMenuStates.HOWGETCOIN);
+      else if (index == 5)
+        authBloc.authLogOut();
+      else if (index == 1)
+        profileMenuBloc.mapEventToState(ProfileMenuStates.PURSE);
+      else if (index == 0)
+        profileMenuBloc.mapEventToState(ProfileMenuStates.EDITPROFILE);
     },
-      child: Container(
+    child: Container(
       padding: EdgeInsets.only(top: 12, bottom: 12),
       decoration: BoxDecoration(
           border: Border(bottom: BorderSide(color: kLightGrey, width: 0.5))),
@@ -435,7 +447,13 @@ Widget buildListItem(int index, String text) {
         Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Container(height: 30, width: 30, child: Icon(svgIcons[index], color: kColorGreyDark,)),
+            Container(
+                height: 30,
+                width: 30,
+                child: Icon(
+                  svgIcons[index],
+                  color: kColorGreyDark,
+                )),
             SizedBox(
               width: 5,
             ),

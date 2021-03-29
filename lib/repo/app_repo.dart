@@ -1,6 +1,8 @@
 import 'dart:convert';
+import 'package:dio/dio.dart';
 import 'package:hive/hive.dart';
 import 'package:recycle_hub/model/authorisation_models/user_response.dart';
+import 'package:recycle_hub/model/invite_model.dart';
 import 'package:recycle_hub/model/user_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -9,8 +11,9 @@ import '../model/transactions/transaction_response.dart';
 import 'package:recycle_hub/model/new_point_model.dart';
 
 class AppRepository {
-  static String mainUrl = "http://eco.loliallen.com/api";
+  static const String mainUrl = "http://eco.loliallen.com/api";
   Box userBox;
+  Dio _dio = Dio();
   AppRepository() {
     hiveOpen();
   }
@@ -30,7 +33,7 @@ class AppRepository {
         prefs.setBool("isFirstIn", false);
         print(data["token"]);
         UserModel user = UserModel(
-          id: data["_id"]["! @ # \$ & * ~oid"],
+          id: data["_id"][r"$oid"],
           username: data["username"],
           name: data["name"],
           password: data["password"],
@@ -261,6 +264,22 @@ class AppRepository {
         print("Exception occured: $error stackTrace: $stacktrace");
         return TransactionsResponseError(error);
       }
+    }
+  }
+
+  Future<Invite> getInvite(String id) async {
+    if (id == null) return null;
+    try {
+      final response = await _dio
+          .post(mainUrl + '/invitation', data: {"user_id": "$id"});
+      if (response.statusCode == 201) {
+        return Invite.fromMap(response.data);
+      } else {
+        return null;
+      }
+    } catch (error) {
+      print(error.toString());
+      return null;
     }
   }
 }

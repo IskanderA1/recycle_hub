@@ -16,35 +16,26 @@ class Page4 extends StatelessWidget {
     return Container(
         child: Stack(
       children: [
-        CustomPainterSecond(),
+        //CustomPainterSecond(),
         Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            Spacer(flex: 7,),
             Container(
-              child: Stack(children: [
-                Image(
-                  width: ScreenUtil().screenWidth,
-                  height: ScreenUtil().screenHeight * 0.4,
-                  color: Color(0xFFDBCCB6),
-                  image: Svg('assets/icons/onboarding_4/Clouds.svg'),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 100, vertical: 100),
-                  child: Image(
-                    width: ScreenUtil().screenWidth * 0.8,
-                    height: ScreenUtil().screenWidth * 0.6,
-                    //color: Color(0xFFDBCCB6),
-                    image: Svg('assets/icons/onboarding_4/People.svg'),
-                  ),
-                )
-              ]),
+              padding: const EdgeInsets.symmetric(
+                    horizontal: 100),
+              child: Image(
+                width: ScreenUtil().screenWidth * 0.8,
+                height: ScreenUtil().screenWidth * 0.6,
+                //color: Color(0xFFDBCCB6),
+                image: Svg('assets/icons/onboarding_4/People.svg'),
+              ),
             ),
-            Spacer(flex: 1),
+            Spacer(flex: 2),
             Text(
               "CONFIDENTIALITY",
               style: TextStyle(
-                  color: kColorWhite,
+                  color: kColorBlack,
                   fontSize: 35,
                   fontFamily: "Gilroy",
                   fontWeight: FontWeight.w700),
@@ -56,14 +47,14 @@ class Page4 extends StatelessWidget {
                 text: TextSpan(
                     text: "Нажимая Принять, вы соглашаетесь с ",
                     style: TextStyle(
-                        fontSize: 16, fontFamily: "Gilroy", color: kColorWhite),
+                        fontSize: 16, fontFamily: "Gilroy", color: kColorBlack),
                     children: <TextSpan>[
                       TextSpan(
                           text: "политикой конфиденциальности.",
                           style: TextStyle(
                               fontSize: 16,
                               fontFamily: "Gilroy",
-                              color: kColorWhite,
+                              color: kColorBlack,
                               decoration: TextDecoration.underline),
                           recognizer: TapGestureRecognizer()
                             ..onTap = () {
@@ -76,7 +67,7 @@ class Page4 extends StatelessWidget {
                     ]),
               ),
             ),
-            Spacer(flex: 2),
+            Spacer(flex: 4),
           ],
         ),
       ],

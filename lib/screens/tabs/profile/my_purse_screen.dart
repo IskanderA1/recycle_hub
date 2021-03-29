@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
+import 'package:provider/provider.dart';
 import 'package:recycle_hub/bloc/profile_bloc/profile_bloc.dart';
+import 'package:recycle_hub/features/transactions/domain/state/transactions_state.dart';
 import 'package:recycle_hub/icons/my_pyrchase_icons_icons.dart';
 import 'package:recycle_hub/screens/tabs/eco_coin/eco_coin_screens/eco_coin_screen.dart';
 import 'package:recycle_hub/style/theme.dart';
@@ -20,7 +23,7 @@ class _MyPurseScreenState extends State<MyPurseScreen> {
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: kColorWhite, size: 25),
           onPressed: () =>
-              profileMenuBloc.mapEventToState(ProfileMenuStates.BACK),
+              profileMenuBloc.mapEventToState(ProfileMenuStates.MENU),
         ),
         title: Text(
           "Кошелек",
@@ -63,8 +66,10 @@ class _MyPurseScreenState extends State<MyPurseScreen> {
                     EcoCoinHorisontalDivider(),
                     MenuItemWidget(
                       name: "История пополнений",
-                      func: () =>profileMenuBloc
-                            .mapEventToState(ProfileMenuStates.TOPUPSHISTORY),
+                      func: () async {
+                        profileMenuBloc
+                            .mapEventToState(ProfileMenuStates.TOPUPSHISTORY);
+                      },
                       iconData: MyPyrchaseIcons.shopping_cart,
                     ),
                     EcoCoinHorisontalDivider(),

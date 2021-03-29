@@ -158,7 +158,7 @@ class _MyPurchasesScreenState extends State<MyPurchasesScreen> {
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: kColorWhite, size: 25),
           onPressed: () =>
-              profileMenuBloc.mapEventToState(ProfileMenuStates.BACK),
+              profileMenuBloc.mapEventToState(ProfileMenuStates.MENU),
         ),
         title: Text(
           "Мои покупки",

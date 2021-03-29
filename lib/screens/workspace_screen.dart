@@ -66,7 +66,6 @@ class _WorkSpaceState extends State<WorkSpaceScreen> {
           child: Container(
             height: 70,
             child: BottomNavBarV2(
-              func: (){},
               selectedIconThemeData:
                   Theme.of(context).bottomNavigationBarTheme.selectedIconTheme,
               unselectedIconThemeData: Theme.of(context)

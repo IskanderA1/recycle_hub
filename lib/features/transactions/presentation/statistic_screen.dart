@@ -1,11 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_screenutil/screen_util.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:hive/hive.dart';
+import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import 'package:recycle_hub/bloc/profile_bloc/profile_bloc.dart';
+import 'package:recycle_hub/features/transactions/domain/model/statistic_model.dart';
+import 'package:recycle_hub/features/transactions/domain/state/transactions_state.dart';
+import 'package:recycle_hub/screens/tabs/map/widgets/loader_widget.dart';
 import 'package:recycle_hub/style/theme.dart';
 import 'package:menu_button/menu_button.dart';
 import 'package:step_progress_indicator/step_progress_indicator.dart';
+import 'package:mobx/mobx.dart';
 
 List<Widget> sIcons = [
   SvgPicture.asset("svg/blue_container.svg"),
@@ -22,19 +29,43 @@ class StatisticScreen extends StatefulWidget {
 }
 
 class _StatisticScreenState extends State<StatisticScreen> {
-  DropDownMenuItem _selectedItem = DropDownMenuItem(count: 1, name: "Месяц");
-  List<DropDownMenuItem> _itemsList = [
-    DropDownMenuItem(count: 1, name: "Неделя"),
-    DropDownMenuItem(count: 1, name: "Месяц"),
-    DropDownMenuItem(count: 3, name: "Месяца"),
-    DropDownMenuItem(count: 1, name: "Год")
+  List<DropDownMenuItem> _datesList = [
+    DropDownMenuItem(count: 1, name: "Неделя", duration: Duration(days: 7)),
+    DropDownMenuItem(count: 1, name: "Месяц", duration: Duration(days: 30)),
+    DropDownMenuItem(count: 3, name: "Месяца", duration: Duration(days: 92)),
+    DropDownMenuItem(count: 1, name: "Год", duration: Duration(days: 365))
   ];
+  DropDownMenuItem _currentPeriod;
+  TransactionsState _transactionsState;
+  ReactionDisposer _disposer;
+
+  @override
+  void initState() {
+    super.initState();
+    _currentPeriod = _datesList[0];
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _transactionsState ??= Provider.of<TransactionsState>(context);
+    _disposer = reaction(
+        (_) => _transactionsState.errorMessage,
+        (String message) => ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(message), duration: Duration(seconds: 5))));
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _disposer();
+  }
 
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () {
-        profileMenuBloc.mapEventToState(ProfileMenuStates.BACK);
+        profileMenuBloc.mapEventToState(ProfileMenuStates.MENU);
         return;
       },
       child: Scaffold(
@@ -47,7 +78,7 @@ class _StatisticScreenState extends State<StatisticScreen> {
           ),
           leading: GestureDetector(
             onTap: () {
-              profileMenuBloc.mapEventToState(ProfileMenuStates.BACK);
+              profileMenuBloc.mapEventToState(ProfileMenuStates.MENU);
             },
             child: Icon(
               Icons.arrow_back,
@@ -61,7 +92,7 @@ class _StatisticScreenState extends State<StatisticScreen> {
           width: double.infinity,
           color: Color(0xFFF2F2F2),
           child: Padding(
-            padding: const EdgeInsets.fromLTRB(0, 25, 0, 0),
+            padding: const EdgeInsets.fromLTRB(15, 20, 15, 0),
             child: Container(
               decoration: BoxDecoration(
                   color: kColorWhite,
@@ -79,53 +110,61 @@ class _StatisticScreenState extends State<StatisticScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              "2021",
+                              _currentPeriod.from.year == _currentPeriod.to.year
+                                  ? "${_currentPeriod.to.year}"
+                                  : "${_currentPeriod.from.year} - ${_currentPeriod.to.year}",
                               style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 22,
                                   fontFamily: 'Gillroy'),
                             ),
-                            Text("April 24 - May 24",
+                            Text(
+                                "${_currentPeriod.monthFrom} ${_currentPeriod.from.day} - ${_currentPeriod.monthTo} ${_currentPeriod.to.day}",
                                 style: TextStyle(
                                     fontSize: 14, fontFamily: 'Gillroy')),
                           ],
                         ),
-                        MenuButton<DropDownMenuItem>(
-                          decoration: BoxDecoration(
-                              color: Color(0xFFF7F7F7),
-                              shape: BoxShape.rectangle,
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(15))),
-                          selectedItem: _selectedItem,
-                          itemBackgroundColor: Color(0xFFF7F7F7),
-                          menuButtonBackgroundColor: Color(0xFFF7F7F7),
-                          child: NormalChildButton(
-                            selectedItem: _selectedItem,
-                          ),
-                          items: _itemsList,
-                          itemBuilder: (DropDownMenuItem item) => Container(
-                            height: 30,
+                        ClipRRect(
+                          borderRadius: BorderRadius.all(Radius.circular(15)),
+                          child: MenuButton<DropDownMenuItem>(
                             decoration: BoxDecoration(
-                              color: Color(0xFFF7F7F7),
-                            ),
-                            alignment: Alignment.centerLeft,
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 0, horizontal: 20),
-                            child: Text("${item.count} ${item.name}"),
-                          ),
-                          toggledChild: Container(
+                                color: Color(0xFFF7F7F7),
+                                shape: BoxShape.rectangle,
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(15))),
+                            selectedItem: _currentPeriod,
+                            itemBackgroundColor: Color(0xFFF7F7F7),
+                            menuButtonBackgroundColor: Color(0xFFF7F7F7),
                             child: NormalChildButton(
-                              selectedItem: _selectedItem,
+                              selectedItem: _currentPeriod,
                             ),
+                            items: _datesList,
+                            itemBuilder: (DropDownMenuItem item) => Container(
+                              height: 30,
+                              decoration: BoxDecoration(
+                                color: Color(0xFFF7F7F7),
+                              ),
+                              alignment: Alignment.centerLeft,
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 0, horizontal: 20),
+                              child: Text("${item.count} ${item.name}"),
+                            ),
+                            toggledChild: Container(
+                              child: NormalChildButton(
+                                selectedItem: _currentPeriod,
+                              ),
+                            ),
+                            onItemSelected: (DropDownMenuItem item) {
+                              _transactionsState.getTransacts(
+                                  Hive.box('user').get('user').id);
+                              setState(() {
+                                _currentPeriod = item;
+                              });
+                            },
+                            onMenuButtonToggle: (bool isTohgle) {
+                              print(isTohgle);
+                            },
                           ),
-                          onItemSelected: (DropDownMenuItem item) {
-                            setState(() {
-                              _selectedItem = item;
-                            });
-                          },
-                          onMenuButtonToggle: (bool isTohgle) {
-                            print(isTohgle);
-                          },
                         )
                       ],
                     ),
@@ -140,65 +179,18 @@ class _StatisticScreenState extends State<StatisticScreen> {
                     SizedBox(
                       height: 20,
                     ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-                          child: StatisticListElement(
-                            svgId: 0,
-                            name: "Бумага",
-                            kg: "24",
-                            percent: "23",
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-                          child: StatisticListElement(
-                            svgId: 1,
-                            name: "Пластик",
-                            kg: "24",
-                            percent: "23",
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-                          child: StatisticListElement(
-                            svgId: 2,
-                            name: "Стекло",
-                            kg: "24",
-                            percent: "23",
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-                          child: StatisticListElement(
-                            svgId: 3,
-                            name: "Отходы",
-                            kg: "24",
-                            percent: "23",
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-                          child: StatisticListElement(
-                            svgId: 4,
-                            name: "Мусор",
-                            kg: "24",
-                            percent: "23",
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-                          child: StatisticListElement(
-                            svgId: 5,
-                            name: "Прочие отходы",
-                            kg: "24",
-                            percent: "23",
-                          ),
-                        ),
-                      ],
-                    ),
+                    Observer(builder: (_) {
+                      if (_transactionsState.state == StoreState.INIT) {
+                        return Container();
+                      }
+                      if (_transactionsState.state == StoreState.LOADING) {
+                        return LoaderWidget();
+                      }
+                      if (_transactionsState.state == StoreState.LOADED) {
+                        return StatisticWidget(
+                            statisticModel: _transactionsState.statisticModel);
+                      }
+                    }),
                     SizedBox(
                       height: 20,
                     ),
@@ -250,13 +242,30 @@ class _StatisticScreenState extends State<StatisticScreen> {
                                             fontSize: 12,
                                             fontFamily: 'Gillroy',
                                           )),
-                                      Text("99.34",
-                                      style: TextStyle(
-                                            color: const Color(0xFF484848),
-                                            fontSize: 13,
-                                            fontFamily: 'Gillroy',
-                                            fontWeight: FontWeight.bold
-                                          )),
+                                      Observer(builder: (_) {
+                                        if (_transactionsState.state ==
+                                            StoreState.INIT) {
+                                          return Container();
+                                        }
+                                        if (_transactionsState.state ==
+                                            StoreState.LOADING) {
+                                          return SpinKitWave(
+                                            color: kColorGreen,
+                                            size: 20,
+                                          );
+                                        }
+                                        if (_transactionsState.state ==
+                                            StoreState.LOADED) {
+                                          return Text(
+                                              "${_transactionsState.statisticModel.totalKG}кг",
+                                              style: TextStyle(
+                                                  color:
+                                                      const Color(0xFF484848),
+                                                  fontSize: 13,
+                                                  fontFamily: 'Gillroy',
+                                                  fontWeight: FontWeight.bold));
+                                        }
+                                      }),
                                     ],
                                   )
                                 ],
@@ -290,8 +299,8 @@ class _StatisticScreenState extends State<StatisticScreen> {
                                     width: 40,
                                     decoration: BoxDecoration(
                                         color: const Color(0xFFF3DE77),
-                                        borderRadius:
-                                            BorderRadius.all(Radius.circular(10))),
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(10))),
                                     child: Icon(
                                       Icons.attach_money,
                                       color: const Color(0xFFC8BB42),
@@ -309,13 +318,31 @@ class _StatisticScreenState extends State<StatisticScreen> {
                                             fontSize: 12,
                                             fontFamily: 'Gillroy',
                                           )),
-                                      Text(r'$'+" 14.34",
-                                      style: TextStyle(
-                                            color: const Color(0xFF484848),
-                                            fontSize: 13,
-                                            fontFamily: 'Gillroy',
-                                            fontWeight: FontWeight.bold
-                                          )),
+                                      Observer(builder: (_) {
+                                        if (_transactionsState.state ==
+                                            StoreState.INIT) {
+                                          return Container();
+                                        }
+                                        if (_transactionsState.state ==
+                                            StoreState.LOADING) {
+                                          return SpinKitWave(
+                                            color: kColorGreen,
+                                            size: 20,
+                                          );
+                                        }
+                                        if (_transactionsState.state ==
+                                            StoreState.LOADED) {
+                                          return Text(
+                                              r'$' +
+                                                  " ${_transactionsState.statisticModel.summ}",
+                                              style: TextStyle(
+                                                  color:
+                                                      const Color(0xFF484848),
+                                                  fontSize: 13,
+                                                  fontFamily: 'Gillroy',
+                                                  fontWeight: FontWeight.bold));
+                                        }
+                                      }),
                                     ],
                                   )
                                 ],
@@ -333,6 +360,79 @@ class _StatisticScreenState extends State<StatisticScreen> {
           ),
         ),
       ),
+    );
+  }
+}
+
+class StatisticWidget extends StatelessWidget {
+  const StatisticWidget({Key key, @required this.statisticModel})
+      : super(key: key);
+  final StatisticModel statisticModel;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Padding(
+          padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+          child: StatisticListElement(
+            svgId: 0,
+            name: "Бумага",
+            kg: "${statisticModel.paperKG}",
+            percent: "${(statisticModel.paperKG * 100 / statisticModel.totalKG).roundToDouble()}",
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+          child: StatisticListElement(
+            svgId: 1,
+            name: "Пластик",
+            kg: "${statisticModel.plasticKG}",
+            percent:
+                "${(statisticModel.plasticKG * 100 / statisticModel.totalKG).roundToDouble()}",
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+          child: StatisticListElement(
+            svgId: 2,
+            name: "Стекло",
+            kg: "${statisticModel.glassKG}",
+            percent: "${(statisticModel.glassKG * 100 / statisticModel.totalKG).roundToDouble()}",
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+          child: StatisticListElement(
+            svgId: 3,
+            name: "Отходы",
+            kg: "${statisticModel.othodyKG}",
+            percent:
+                "${(statisticModel.othodyKG * 100 / statisticModel.totalKG).roundToDouble()}",
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+          child: StatisticListElement(
+            svgId: 4,
+            name: "Мусор",
+            kg: "${statisticModel.garbageKG}",
+            percent:
+                "${(statisticModel.garbageKG * 100 / statisticModel.totalKG).roundToDouble()}",
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+          child: StatisticListElement(
+            svgId: 5,
+            name: "Прочие отходы",
+            kg: "${statisticModel.othersKG}",
+            percent:
+                "${(statisticModel.othersKG * 100 / statisticModel.totalKG).roundToDouble()}",
+          ),
+        ),
+      ],
     );
   }
 }
@@ -390,14 +490,14 @@ class StatisticListElement extends StatelessWidget {
                     Column(
                       children: [
                         Text(
-                          "${kg}кг",
+                          "$kgкг",
                           style: TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.w700,
                               fontFamily: 'Gillroy'),
                         ),
                         Text(
-                          "${percent}% от общего",
+                          "$percent% от общего",
                           style: TextStyle(
                               fontSize: 10,
                               color: kColorBlack.withOpacity(0.6),
@@ -413,7 +513,7 @@ class StatisticListElement extends StatelessWidget {
                 StepProgressIndicator(
                   totalSteps: 100,
                   direction: Axis.horizontal,
-                  currentStep: 34,
+                  currentStep: int.parse(percent.split('.')[0]),
                   size: 10,
                   selectedSize: 8,
                   unselectedSize: 8,
@@ -444,9 +544,7 @@ class NormalChildButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: Color(0xFFF7F7F7),
-        borderRadius: BorderRadius.circular(20)
-      ),
+          color: Color(0xFFF7F7F7), borderRadius: BorderRadius.circular(20)),
       width: 120,
       height: 30,
       child: Padding(
@@ -480,5 +578,16 @@ class NormalChildButton extends StatelessWidget {
 class DropDownMenuItem {
   String name;
   int count;
-  DropDownMenuItem({@required this.name, @required this.count});
+  Duration duration;
+  DateTime to;
+  DateTime from;
+  String monthFrom;
+  String monthTo;
+  DropDownMenuItem(
+      {@required this.name, @required this.count, @required this.duration}) {
+    to = DateTime.now();
+    from = to.subtract(duration);
+    monthFrom = DateFormat.MMMM().format(from);
+    monthTo = DateFormat.MMMM().format(to);
+  }
 }

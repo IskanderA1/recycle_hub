@@ -78,6 +78,9 @@ class _MainEcoGuideScreenState extends State<MainEcoGuideScreen> {
                   controller: widget._searchController,
                 ),
               ),
+              SizedBox(
+                height: 20,
+              ),
               Column(
                 children: [
                   buildBtn("Виды отходов", 0),
@@ -114,11 +117,7 @@ Widget buildBtn(String text, int index) {
               Container(
                 height: 25,
                 width: 25,
-                child: Icon(
-                  icons[index],
-                  size: 25,
-                  color: kColorGreyDark
-                ),
+                child: Icon(icons[index], size: 25, color: kColorGreyDark),
               ),
               SizedBox(
                 width: 8,

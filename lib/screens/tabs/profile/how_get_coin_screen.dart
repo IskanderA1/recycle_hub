@@ -20,7 +20,7 @@ class _HowToGetCoinScreenState extends State<HowToGetCoinScreen> {
       appBar: AppBar(
         leading: IconButton(
           icon: Icon(Icons.arrow_back,color: kColorWhite, size: 25),
-          onPressed: ()=>profileMenuBloc.mapEventToState(ProfileMenuStates.BACK),
+          onPressed: ()=>profileMenuBloc.mapEventToState(ProfileMenuStates.MENU),
         ),
         title: Text("Как заработать баллы?", style: TextStyle(
           color: kColorWhite,
@@ -51,7 +51,7 @@ class _HowToGetCoinScreenState extends State<HowToGetCoinScreen> {
                     EcoCoinHorisontalDivider(),
                     MenuItemWidget(
                       name: "Пригласить друга",
-                      func: () {},
+                      func: () =>profileMenuBloc.mapEventToState(ProfileMenuStates.INVITE),
                       iconData: HowToGetCoinIcons.add_user,
                     ),
                     EcoCoinHorisontalDivider(),

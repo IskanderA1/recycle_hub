@@ -37,7 +37,7 @@ dependencies:
   flutter_svg_provider: ^0.1.8
   flutter_screenutil: ^4.0.3+2
   mask_text_input_formatter: ^1.2.1
-  qr_code_scanner:
+  #qr_code_scanner:
   #device_preview: ^0.6.2-beta
   google_maps_cluster_manager: ^0.3.0
   hive: ^1.4.4+1
@@ -48,12 +48,21 @@ dependencies:
   url_launcher: ^6.0.2
   image_picker: ^0.6.7+22
   steps_indicator: ^1.3.0
+  flutter_mobx: ^1.1.0+2
+  mobx: ^1.2.1+3
+  #hive: ^2.0.0
+  #hive_flutter: ^1.0.0
+  provider: ^4.3.3
+  flutter_sequence_animation: ^3.0.1
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   hive_generator: ^0.8.2
   build_runner: ^1.11.5
+  mobx_codegen: ^1.1.1+1
+  #build_runner: ^1.10.0
+  #hive_generator: ^1.0.0
 
 
 flutter:
@@ -62,16 +71,13 @@ flutter:
     - assets/fonts/
     - assets/icons/
     - assets/icons/onboarding_1/People.svg
-    - assets/icons/onboarding_1/Clouds.svg
     - assets/icons/onboarding_2/People.svg
-    - assets/icons/onboarding_2/Clouds.svg
     - assets/icons/onboarding_3/People.svg
-    - assets/icons/onboarding_3/Clouds.svg
     - assets/icons/onboarding_4/People.svg
-    - assets/icons/onboarding_4/Clouds.svg
-    - assets/svg/
-    - svg/
+    - assets/svg/background.svg
     - assets/icons/reg/reg_logo.svg
+    - svg/
+    - assets/onboarding/back.png
 
   uses-material-design: true
   fonts:
@@ -117,7 +123,7 @@ flutter:
       fonts:
         - asset: assets/fonts/UserProfileIcons.ttf
 
-    - family: UserProfileIcons
+    - family: LofOut
       fonts:
         - asset: assets/fonts/LofOut.ttf
 

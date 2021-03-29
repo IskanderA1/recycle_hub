@@ -1,9 +1,19 @@
 import 'package:rxdart/rxdart.dart';
 
-enum ProfileMenuStates {BACK, USER_PROFILE, POINT_PROFILE, 
-STATISTIC, HOWGETCOIN, OFFERNEWPOINT, 
-PURSE, STORE, EDITPROFILE,
-MYPURCHASES, TOPUPSHISTORY }
+enum ProfileMenuStates {
+  MENU,
+  USER_PROFILE,
+  POINT_PROFILE,
+  STATISTIC,
+  HOWGETCOIN,
+  OFFERNEWPOINT,
+  PURSE,
+  STORE,
+  EDITPROFILE,
+  MYPURCHASES,
+  TOPUPSHISTORY,
+  INVITE
+}
 
 class ProfileMenuBloc {
   BehaviorSubject<ProfileMenuStates> _subject =
@@ -26,8 +36,8 @@ class ProfileMenuBloc {
       case ProfileMenuStates.HOWGETCOIN:
         _subject.sink.add(ProfileMenuStates.HOWGETCOIN);
         break;
-      case ProfileMenuStates.BACK:
-        _subject.sink.add(ProfileMenuStates.BACK);
+      case ProfileMenuStates.MENU:
+        _subject.sink.add(ProfileMenuStates.MENU);
         break;
       case ProfileMenuStates.OFFERNEWPOINT:
         _subject.sink.add(ProfileMenuStates.OFFERNEWPOINT);
@@ -46,6 +56,9 @@ class ProfileMenuBloc {
         break;
       case ProfileMenuStates.TOPUPSHISTORY:
         _subject.sink.add(ProfileMenuStates.TOPUPSHISTORY);
+        break;
+      case ProfileMenuStates.INVITE:
+        _subject.sink.add(ProfileMenuStates.INVITE);
         break;
     }
   }

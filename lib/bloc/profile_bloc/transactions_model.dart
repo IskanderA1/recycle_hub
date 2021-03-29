@@ -17,5 +17,3 @@ class ProfileMenuBloc {
     _subject?.close();
   }
 }
-
-final profileMenuBloc = ProfileMenuBloc();

@@ -19,7 +19,7 @@ import 'model/transactions/transaction_model.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  ///total hive types number = 8
+  ///total hive types next free number = 16
   ///to build models type in console
   ///flutter packages pub run build_runner build --delete-conflicting-outputs
   Directory directory = await getApplicationDocumentsDirectory();

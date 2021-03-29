@@ -12,12 +12,14 @@ class IndicatorAnimatedSwitcher extends StatefulWidget {
 class _IndicatorAnimatedSwitcherState extends State<IndicatorAnimatedSwitcher> {
   @override
   Widget build(BuildContext context) {
-    Color selected = widget.selected == 0 || widget.selected == 2
+    /*Color selected = widget.selected == 0 || widget.selected == 2
         ? kColorGreyDark
         : kColorWhite;
     Color unselected = widget.selected == 0 || widget.selected == 2
         ? kColorGreyLight
-        : kColorWhite.withOpacity(0.5);
+        : kColorWhite.withOpacity(0.5);*/
+    Color selected = kColorGreyLight;
+    Color unselected = kColorGreyVeryLight;
     return AnimatedSwitcher(
       duration: Duration(milliseconds: 500),
       child: Container(

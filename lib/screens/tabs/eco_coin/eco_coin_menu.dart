@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:recycle_hub/bloc/eco_coin_bloc.dart/eco_coin_menu_bloc.dart';
 import 'package:recycle_hub/bloc/eco_guide_blocs/eco_menu_bloc.dart';
 import 'package:recycle_hub/bloc/navigation_bloc.dart';
+import 'package:recycle_hub/screens/offer_new_point.dart';
 import 'package:recycle_hub/screens/tabs/eco_coin/eco_coin_screens/give_garbage_instruction_screen.dart';
 import 'package:recycle_hub/screens/tabs/profile/store_screen.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'eco_coin_screens/eco_coin_offer_new_point_screen.dart';
 import 'eco_coin_screens/eco_coin_screen.dart';
 
 class EcoCoinMainScreen extends StatefulWidget {
@@ -37,7 +37,7 @@ class _EcoCoinMainScreenState extends State<EcoCoinMainScreen> {
             } else if (snapshot.data == EcoCoinMenuItems.GIVEGARBAGE) {
               return GiveGarbageInstructionScreen();
             } else if (snapshot.data == EcoCoinMenuItems.OFFERNEWPOINT) {
-              return EcoOfferNewPointScreen();
+              return OfferNewPointScreen(onBack: ()=>ecoCoinMenuBloc.pickState(EcoCoinMenuItems.MENU));
             } else if (snapshot.data == EcoCoinMenuItems.RECOMMEND) {
               
               return EcoCoinScreen();

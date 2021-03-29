@@ -1,10 +1,17 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:recycle_hub/bloc/profile_bloc/profile_bloc.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:recycle_hub/model/new_point_model.dart';
 import 'package:recycle_hub/style/style.dart';
 import 'package:recycle_hub/style/theme.dart';
 
 class OfferNewPointScreen extends StatefulWidget {
+  final Function onBack;
+  const OfferNewPointScreen({
+    Key key,
+    @required this.onBack,
+  }) : super(key: key);
   @override
   _OfferNewPointScreenState createState() => _OfferNewPointScreenState();
 }
@@ -12,16 +19,44 @@ class OfferNewPointScreen extends StatefulWidget {
 class _OfferNewPointScreenState extends State<OfferNewPointScreen> {
   TextEditingController _address = TextEditingController();
   TextEditingController _phoneNumber = TextEditingController();
-  TextEditingController _companyName = TextEditingController();
+  TextEditingController _discription = TextEditingController();
+  File _image;
+  NewPoint newPoint;
+  final picker = ImagePicker();
+
+  Future getImage() async {
+    final pickedFile = await picker.getImage(source: ImageSource.camera);
+
+    setState(() {
+      if (pickedFile != null) {
+        _image = File(pickedFile.path);
+      } else {
+        print('No image selected.');
+      }
+    });
+  }
+
+  Future getImageFromStorage() async {
+    final pickedFile = await picker.getImage(source: ImageSource.gallery);
+
+    setState(() {
+      if (pickedFile != null) {
+        _image = File(pickedFile.path);
+      } else {
+        print('No image selected.');
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () {
-        profileMenuBloc.mapEventToState(ProfileMenuStates.BACK);
+        widget.onBack();
         return;
       },
       child: Scaffold(
-        backgroundColor: kColorWhite,
+        backgroundColor: kColorGreyVeryLight,
         appBar: AppBar(
           centerTitle: true,
           title: Text(
@@ -30,7 +65,7 @@ class _OfferNewPointScreenState extends State<OfferNewPointScreen> {
           ),
           leading: GestureDetector(
             onTap: () {
-              profileMenuBloc.mapEventToState(ProfileMenuStates.BACK);
+              widget.onBack();
             },
             child: Icon(
               Icons.arrow_back,
@@ -41,148 +76,183 @@ class _OfferNewPointScreenState extends State<OfferNewPointScreen> {
         ),
         body: GestureDetector(
           onTap: () => FocusScope.of(context).unfocus(),
-          child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(15, 20, 15, 0),
             child: Container(
-              height: ScreenUtil().screenHeight-90,
-              width: double.infinity,
-              color: Color(0xFFF2F2F2),
+              decoration: BoxDecoration(
+                  color: kColorWhite,
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(25),
+                      topRight: Radius.circular(25))),
               child: Padding(
-                padding: const EdgeInsets.fromLTRB(0, 25, 0, 0),
-                child: Container(
-                  decoration: BoxDecoration(
-                      color: kColorWhite,
-                      borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(25),
-                          topRight: Radius.circular(25))),
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(30, 30, 30, 30),
-                    child: Column(
-                      children: [
-                        Text(
-                          "Заполните нужную информацию\nо пункте приёма:",
-                          style: TextStyle(
-                              fontFamily: 'Gillroy',
-                              fontWeight: FontWeight.bold,
-                              fontSize: 18),
+                padding: const EdgeInsets.fromLTRB(25, 20, 25, 60),
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Text(
+                        "Заполните нужную информацию\nо пункте приёма:",
+                        style: TextStyle(
+                            fontFamily: 'Gillroy',
+                            fontWeight: FontWeight.bold,
+                            fontSize: 18),
+                            textAlign: TextAlign.center,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 15, bottom: 15),
+                        child: OfferPonitTextFields(
+                          address: _address,
+                          hintText: "Адрес",
+                          adText: "Адрес пункта приема",
                         ),
-                        Padding(
-                          padding: const EdgeInsets.all(15.0),
-                          child: OfferPonitTextFields(
-                            address: _address,
-                            hintText: "Адрес",
-                            adText: "Адрес пункта приема",
-                          ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 15, bottom: 15),
+                        child: OfferPonitTextFields(
+                          address: _phoneNumber,
+                          hintText: "Номер телефона",
+                          adText: "Номер телефона",
                         ),
-                        Padding(
-                          padding: const EdgeInsets.all(15.0),
-                          child: OfferPonitTextFields(
-                            address: _phoneNumber,
-                            hintText: "Номер телефона",
-                            adText: "Номер телефона",
-                          ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 15, bottom: 15),
+                        child: OfferPonitTextFields(
+                          address: _discription,
+                          hintText: "Описание",
+                          adText: "Описание пункта приема",
                         ),
-                        Padding(
-                          padding: const EdgeInsets.all(15.0),
-                          child: OfferPonitTextFields(
-                            address: _companyName,
-                            hintText: "Название",
-                            adText: "Название организации",
-                          ),
-                        ),
-                        Text(
+                      ),
+                      _image != null
+                          ? Image.file(
+                              _image,
+                              fit: BoxFit.scaleDown,
+                              frameBuilder: (context, child, frame,
+                                  wasSynchronouslyLoaded) {
+                                if (wasSynchronouslyLoaded ?? false) {
+                                  return child;
+                                }
+                                return AnimatedOpacity(
+                                  child: Stack(
+                                    children: <Widget>[
+                                      child,
+                                      Align(
+                                        alignment: Alignment.topRight,
+                                        child: Padding(
+                                          padding: EdgeInsets.all(25),
+                                          child: GestureDetector(
+                                            onTap:(){
+                                              setState(() {
+                                                _image = null;
+                                              });
+                                            },
+                                            child: Icon(Icons.close),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  opacity: frame == null ? 0 : 1,
+                                  duration: const Duration(seconds: 1),
+                                  curve: Curves.easeOut,
+                                );
+                              },
+                            )
+                          : Container(),
+                      Center(
+                        child: Text(
                           "Добавить фото",
                           style: TextStyle(
                               fontFamily: 'GillroyMedium',
                               fontSize: 16,
                               color: Color(0xFF8D8D8D)),
                         ),
-                        Spacer(),
-                        Row(
-                          children: [
-                            GestureDetector(
-                                onTap: () {},
-                                child: Container(
-                                  height: 45,
-                                  width: 140,
-                                  decoration: BoxDecoration(
-                                      color: kColorGreen,
-                                      borderRadius: BorderRadius.all(
-                                          Radius.circular(10))),
-                                  child: Center(
-                                    child: Text(
-                                      "Из устройства",
-                                      style: TextStyle(
-                                          color: kColorWhite,
-                                          fontFamily: 'GillroyMedium',
-                                          fontSize: 14),
-                                    ),
+                      ),
+                      SizedBox(height: 20),
+                      Row(
+                        children: [
+                          GestureDetector(
+                              onTap: () => getImageFromStorage(),
+                              child: Container(
+                                height: 45,
+                                width: 140,
+                                decoration: BoxDecoration(
+                                    color: kColorGreen,
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(10))),
+                                child: Center(
+                                  child: Text(
+                                    "Из устройства",
+                                    style: TextStyle(
+                                        color: kColorWhite,
+                                        fontFamily: 'GillroyMedium',
+                                        fontSize: 14),
                                   ),
-                                )),
-                            Spacer(),
-                            GestureDetector(
-                                onTap: () {},
-                                child: Container(
-                                  height: 45,
-                                  width: 140,
-                                  decoration: BoxDecoration(
-                                      color: const Color(0xFFECECEC),
-                                      borderRadius: BorderRadius.all(
-                                          Radius.circular(10))),
-                                  child: Center(
-                                    child: Text(
-                                      "Камера",
-                                      style: TextStyle(
-                                          color: kColorBlack,
-                                          fontFamily: 'GillroyMedium',
-                                          fontSize: 14),
-                                    ),
+                                ),
+                              )),
+                          Spacer(),
+                          GestureDetector(
+                              onTap: () => getImage(),
+                              child: Container(
+                                height: 45,
+                                width: 140,
+                                decoration: BoxDecoration(
+                                    color: const Color(0xFFECECEC),
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(10))),
+                                child: Center(
+                                  child: Text(
+                                    "Камера",
+                                    style: TextStyle(
+                                        color: kColorBlack,
+                                        fontFamily: 'GillroyMedium',
+                                        fontSize: 14),
                                   ),
-                                ))
-                          ],
-                        ),
-                        Spacer(),
-                        Row(
-                          children: [
-                            Container(
-                              height: 15,
-                              width: 15,
-                              decoration: BoxDecoration(
-                                  color: kColorGreen, shape: BoxShape.circle),
-                            ),
-                            SizedBox(
-                              width: 10,
-                            ),
-                            Text(
-                              "Ваш запрос будет отправлен модератору",
-                              style: TextStyle(
-                                  fontSize: 13, fontFamily: 'GillroyMedium'),
-                            )
-                          ],
-                        ),
-                        Spacer(),
-                        GestureDetector(
-                          child: Container(
-                            width: 300,
-                            height: 50,
+                                ),
+                              ))
+                        ],
+                      ),
+                      SizedBox(height: 20),
+                      Row(
+                        children: [
+                          Container(
+                            height: 15,
+                            width: 15,
                             decoration: BoxDecoration(
-                                color: kColorGreen,
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(15))),
-                            child: Center(
-                              child: Text("Отправить",
-                                  style: TextStyle(
-                                      fontSize: 18,
-                                      color: kColorWhite,
-                                      fontWeight: FontWeight.bold,
-                                      fontFamily: 'GillroyMedium')),
-                            ),
+                                color: kColorGreen, shape: BoxShape.circle),
+                          ),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          Text(
+                            "Ваш запрос будет отправлен модератору",
+                            style: TextStyle(
+                                fontSize: 13, fontFamily: 'GillroyMedium'),
+                          )
+                        ],
+                      ),
+                      SizedBox(height: 20),
+                      GestureDetector(
+                        child: Container(
+                          width: 300,
+                          height: 50,
+                          decoration: BoxDecoration(
+                              color: kColorGreen,
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(15))),
+                          child: Center(
+                            child: Text("Отправить",
+                                style: TextStyle(
+                                    fontSize: 18,
+                                    color: kColorWhite,
+                                    fontWeight: FontWeight.bold,
+                                    fontFamily: 'GillroyMedium')),
                           ),
                         ),
-                        Spacer(
-                          flex: 3,
-                        ),
-                      ],
-                    ),
+                      ),
+                      SizedBox(height: 100),
+                    ],
                   ),
                 ),
               ),
@@ -210,7 +280,6 @@ class OfferPonitTextFields extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 300,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[

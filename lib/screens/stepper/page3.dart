@@ -11,31 +11,22 @@ class Page3 extends StatelessWidget {
     return Container(
         child: Stack(
       children: [
-        CustomPainterFirst(),
+        //CustomPainterFirst(),
         Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            Spacer(flex: 7,),
             Container(
-              child: Stack(children: [
-                Image(
-                  width: ScreenUtil().screenWidth,
-                  height: ScreenUtil().screenHeight * 0.4,
-                  color: Color(0xFFDBCCB6),
-                  image: Svg('assets/icons/onboarding_3/Clouds.svg'),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 100, vertical: 100),
-                  child: Image(
-                    width: ScreenUtil().screenWidth * 0.8,
-                    height: ScreenUtil().screenWidth * 0.6,
-                    //color: Color(0xFFDBCCB6),
-                    image: Svg('assets/icons/onboarding_3/People.svg'),
-                  ),
-                )
-              ]),
+              padding: const EdgeInsets.symmetric(
+                    horizontal: 80),
+              child: Image(
+                width: ScreenUtil().screenWidth * 0.8,
+                height: ScreenUtil().screenWidth * 0.6,
+                //color: Color(0xFFDBCCB6),
+                image: Svg('assets/icons/onboarding_3/People.svg'),
+              ),
             ),
-            Spacer(flex: 1),
+            Spacer(flex: 2),
             Text(
               "REUSE",
               style: TextStyle(
@@ -44,7 +35,7 @@ class Page3 extends StatelessWidget {
                   fontFamily: "Gilroy",
                   fontWeight: FontWeight.w700),
             ),
-            Spacer(flex: 4),
+            Spacer(flex: 5),
           ],
         ),
       ],
