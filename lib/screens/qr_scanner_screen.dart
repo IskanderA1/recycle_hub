@@ -76,12 +76,12 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
             color: kColorWhite,
             height: 310,
             child: Center(
-                child: CachedNetworkImage(
+                child: /*CachedNetworkImage(
               placeholder: (BuildContext context, url) => LoaderWidget(),
               errorWidget: (BuildContext context, url, error) =>
                   Icon(Icons.error),
               imageUrl: "http://eco.loliallen.com" + authBloc.user.qrCode,
-            )),
+            )*/SizedBox.shrink()),
           ),
           SizedBox(
             height: 20,

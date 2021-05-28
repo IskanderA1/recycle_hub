@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:recycle_hub/bloc/profile_bloc/profile_bloc.dart';
 import 'package:recycle_hub/style/style.dart';
 import 'package:recycle_hub/style/theme.dart';

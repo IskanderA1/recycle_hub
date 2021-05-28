@@ -10,11 +10,11 @@ import '../model/user_model.dart';
 import '../model/transactions/transaction_response.dart';
 import 'package:recycle_hub/model/new_point_model.dart';
 
-class AppRepository {
+class AppService {
   static const String mainUrl = "http://eco.loliallen.com/api";
   Box userBox;
   Dio _dio = Dio();
-  AppRepository() {
+  AppService() {
     hiveOpen();
   }
 

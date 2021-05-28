@@ -1,11 +1,11 @@
 import 'package:recycle_hub/bloc/auth_user_bloc.dart';
 import 'package:rxdart/rxdart.dart';
-import 'package:recycle_hub/repo/app_repo.dart';
+import 'package:recycle_hub/api/app_repo.dart';
 
 enum GLobalStates { FIRSTIN, AUTH, TABS }
 
 class GlobalStateBloc {
-  final AppRepository _repository = AppRepository();
+  final AppService _repository = AppService();
   final BehaviorSubject<GLobalStates> _subject =
       BehaviorSubject<GLobalStates>();
 

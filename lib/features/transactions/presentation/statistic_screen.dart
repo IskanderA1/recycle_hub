@@ -124,7 +124,7 @@ class _StatisticScreenState extends State<StatisticScreen> {
                                     fontSize: 14, fontFamily: 'Gillroy')),
                           ],
                         ),
-                        ClipRRect(
+                        /*ClipRRect(
                           borderRadius: BorderRadius.all(Radius.circular(15)),
                           child: MenuButton<DropDownMenuItem>(
                             decoration: BoxDecoration(
@@ -165,7 +165,7 @@ class _StatisticScreenState extends State<StatisticScreen> {
                               print(isTohgle);
                             },
                           ),
-                        )
+                        )*/
                       ],
                     ),
                     SizedBox(

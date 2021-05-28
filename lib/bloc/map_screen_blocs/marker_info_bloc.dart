@@ -1,7 +1,7 @@
 import 'package:recycle_hub/model/map_models.dart/coord.dart';
 import 'package:recycle_hub/model/map_models.dart/markers_collection.dart';
 import 'package:recycle_hub/model/map_responses/markers_response.dart';
-import 'package:recycle_hub/repo/google_map_repo.dart';
+import 'package:recycle_hub/api/google_map_repo.dart';
 import 'package:rxdart/rxdart.dart';
 
 enum Mode { INFO, FEEFBACK }

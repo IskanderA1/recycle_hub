@@ -22,7 +22,7 @@ class NavBarStateBloc {
   }
 
   close() {
-    _navBarStateController?.close();
+    _navBarStateController.close();
   }
 }
 

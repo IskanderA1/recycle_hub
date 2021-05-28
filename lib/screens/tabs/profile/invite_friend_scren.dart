@@ -4,7 +4,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hive/hive.dart';
 import 'package:recycle_hub/bloc/profile_bloc/profile_bloc.dart';
 import 'package:recycle_hub/model/invite_model.dart';
-import 'package:recycle_hub/repo/app_repo.dart';
+import 'package:recycle_hub/api/app_repo.dart';
 import 'package:recycle_hub/screens/tabs/map/widgets/loader_widget.dart';
 import 'package:recycle_hub/style/theme.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -36,7 +36,7 @@ class _InviteScreenState extends State<InviteScreen> {
         ),
         backgroundColor: kColorGreyVeryLight,
         body: FutureBuilder(
-          future: AppRepository().getInvite(Hive.box('user').get('user').id),
+          future: AppService().getInvite(Hive.box('user').get('user').id),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return LoaderWidget();

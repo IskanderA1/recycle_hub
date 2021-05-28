@@ -19,44 +19,26 @@ class UserModelAdapter extends TypeAdapter<UserModel> {
     return UserModel(
       id: fields[0] as String,
       username: fields[1] as String,
-      surname: fields[2] as String,
-      name: fields[3] as String,
-      password: fields[4] as String,
-      image: fields[5] as String,
-      confirmed: fields[6] as bool,
-      ecoCoins: fields[7] as int,
-      refCode: fields[8] as int,
-      qrCode: fields[9] as String,
-      token: fields[10] as String,
+      name: fields[2] as String,
+      confirmed: fields[3] as bool,
+      ecoCoins: fields[4] as int,
     );
   }
 
   @override
   void write(BinaryWriter writer, UserModel obj) {
     writer
-      ..writeByte(11)
+      ..writeByte(5)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
       ..write(obj.username)
       ..writeByte(2)
-      ..write(obj.surname)
-      ..writeByte(3)
       ..write(obj.name)
-      ..writeByte(4)
-      ..write(obj.password)
-      ..writeByte(5)
-      ..write(obj.image)
-      ..writeByte(6)
+      ..writeByte(3)
       ..write(obj.confirmed)
-      ..writeByte(7)
-      ..write(obj.ecoCoins)
-      ..writeByte(8)
-      ..write(obj.refCode)
-      ..writeByte(9)
-      ..write(obj.qrCode)
-      ..writeByte(10)
-      ..write(obj.token);
+      ..writeByte(4)
+      ..write(obj.ecoCoins);
   }
 
   @override

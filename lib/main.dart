@@ -51,7 +51,7 @@ class MyApp extends StatelessWidget {
     ]);
     
     return ScreenUtilInit(
-      allowFontScaling: false,
+      //allowFontScaling: false,
       builder: () => MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'RecycleHub',
@@ -66,14 +66,14 @@ _checkPermissions() async {
   var status = await Permission.location.status;
   var dataAccess = await Permission.storage.status;
 
-  if(dataAccess.isUndetermined){
+  if(!dataAccess.isGranted){
     await Permission.storage.request();
   }
   /*if ((await Permission.accessMediaLocation.isUndetermined)) {
     Permission.accessMediaLocation.request();
   }*/
 
-  if (status.isUndetermined) {
+  if (!status.isGranted) {
     // We didn't ask for permission yet.
     await Permission.location.request();
   }

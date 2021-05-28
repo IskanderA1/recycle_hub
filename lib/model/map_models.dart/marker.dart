@@ -10,6 +10,140 @@ part 'marker.g.dart';
 
 @HiveType(typeId: 1)
 class CustMarker {
+  CustMarker({
+    this.id,
+    this.name,
+    this.partner,
+    this.partnerName,
+    this.paybackType,
+    this.receptionType,
+    this.workTime,
+    this.contacts,
+    this.acceptTypes,
+    this.coords,
+    this.description,
+    this.getBonus,
+  });
+
+  @HiveField(0)
+  String id;
+  @HiveField(1)
+  String name;
+  @HiveField(2)
+  String partner;
+  @HiveField(3)
+  String partnerName;
+  @HiveField(4)
+  String paybackType;
+  @HiveField(5)
+  String receptionType;
+  @HiveField(6)
+  WorkTime workTime;
+  @HiveField(7)
+  List<String> contacts;
+  @HiveField(8)
+  List<String> acceptTypes;
+  @HiveField(9)
+  List<double> coords;
+  @HiveField(10)
+  String description;
+  @HiveField(11)
+  bool getBonus;
+
+  CustMarker copyWith({
+    String id,
+    String name,
+    String partner,
+    String partnerName,
+    String paybackType,
+    String receptionType,
+    WorkTime workTime,
+    List<String> contacts,
+    List<String> acceptTypes,
+    List<double> coords,
+    String description,
+    bool getBonus,
+  }) =>
+      CustMarker(
+        id: id ?? this.id,
+        name: name ?? this.name,
+        partner: partner ?? this.partner,
+        partnerName: partnerName ?? this.partnerName,
+        paybackType: paybackType ?? this.paybackType,
+        receptionType: receptionType ?? this.receptionType,
+        workTime: workTime ?? this.workTime,
+        contacts: contacts ?? this.contacts,
+        acceptTypes: acceptTypes ?? this.acceptTypes,
+        coords: coords ?? this.coords,
+        description: description ?? this.description,
+        getBonus: getBonus ?? this.getBonus,
+      );
+
+  factory CustMarker.fromJson(String str) =>
+      CustMarker.fromMap(json.decode(str));
+
+  String toJson() => json.encode(toMap());
+
+  factory CustMarker.fromMap(Map<String, dynamic> json) => CustMarker(
+        id: json["id"],
+        name: json["name"],
+        partner: json["partner"],
+        partnerName: json["partner_name"],
+        paybackType: json["payback_type"],
+        receptionType: json["reception_type"],
+        workTime: WorkTime.fromMap(json["work_time"]),
+        contacts: List<String>.from(json["contacts"].map((x) => x)),
+        acceptTypes: List<String>.from(json["accept_types"].map((x) => x)),
+        coords: List<double>.from(json["coords"].map((x) => x.toDouble())),
+        description: json["description"],
+        getBonus: json["getBonus"],
+      );
+
+  Map<String, dynamic> toMap() => {
+        "id": id,
+        "name": name,
+        "partner": partner,
+        "partner_name": partnerName,
+        "payback_type": paybackType,
+        "reception_type": receptionType,
+        "work_time": workTime.toMap(),
+        "contacts": List<dynamic>.from(contacts.map((x) => x)),
+        "accept_types": List<dynamic>.from(acceptTypes.map((x) => x)),
+        "coords": List<dynamic>.from(coords.map((x) => x)),
+        "description": description,
+        "getBonus": getBonus,
+      };
+}
+
+class WorkTime {
+  WorkTime({
+    this.empty,
+  });
+
+  String empty;
+
+  WorkTime copyWith({
+    String empty,
+  }) =>
+      WorkTime(
+        empty: empty ?? this.empty,
+      );
+
+  factory WorkTime.fromJson(String str) => WorkTime.fromMap(json.decode(str));
+
+  String toJson() => json.encode(toMap());
+
+  factory WorkTime.fromMap(Map<String, dynamic> json) => WorkTime(
+        empty: json["ПН-ПТ"],
+      );
+
+  Map<String, dynamic> toMap() => {
+        "ПН-ПТ": empty,
+      };
+}
+
+/*@HiveType(typeId: 1)
+class CustMarker {
   @HiveField(0)
   String id;
   @HiveField(1)
@@ -153,3 +287,4 @@ class CustMarker {
         workTime.hashCode;
   }
 }
+*/

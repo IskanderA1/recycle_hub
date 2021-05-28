@@ -7,7 +7,7 @@ import 'package:recycle_hub/bloc/eco_coin_bloc.dart/eco_coin_menu_bloc.dart';
 import 'package:recycle_hub/bloc/profile_bloc/profile_bloc.dart';
 import 'package:recycle_hub/model/map_models.dart/contact_model.dart';
 import 'package:recycle_hub/model/map_models.dart/coord.dart';
-import 'package:recycle_hub/repo/app_repo.dart';
+import 'package:recycle_hub/api/app_repo.dart';
 import 'package:recycle_hub/style/style.dart';
 import 'package:recycle_hub/style/theme.dart';
 import 'package:recycle_hub/model/new_point_model.dart';

@@ -12,7 +12,7 @@ class TransactionsResponse {
 
   Map<String, dynamic> toMap() {
     return {
-      'transactions': transactions?.map((x) => x.toMap())?.toList(),
+      'transactions': transactions.map((x) => x.toMap()).toList(),
       'error': error,
     };
   }

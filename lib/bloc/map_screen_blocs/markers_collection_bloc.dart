@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:recycle_hub/model/map_models.dart/filter_model.dart';
 import 'package:recycle_hub/model/map_responses/markers_response.dart';
-import 'package:recycle_hub/repo/google_map_repo.dart';
+import 'package:recycle_hub/api/google_map_repo.dart';
 
 class MarkersCollectionBloc {
   GoogleMapRepo _repo = GoogleMapRepo();

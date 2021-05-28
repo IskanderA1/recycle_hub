@@ -8,13 +8,13 @@ class ContainerModel {
   ContainerModel.fromJson(Map<String, dynamic> json) {
     name = json['name'];
     if (json['allowed'] != null) {
-      allowed = new List<Allowed>();
+      allowed = new List<Allowed>.empty(growable: true);
       json['allowed'].forEach((v) {
         allowed.add(new Allowed.fromJson(v));
       });
     }
     if (json['forbidden'] != null) {
-      forbidden = new List<Forbidden>();
+      forbidden = new List<Forbidden>.empty(growable: true);
       json['forbidden'].forEach((v) {
         forbidden.add(new Forbidden.fromJson(v));
       });
@@ -43,7 +43,7 @@ class Allowed {
   Allowed.fromJson(Map<String, dynamic> json) {
     name = json['name'];
     if (json['subjects'] != null) {
-      subjects = new List<Subjects>();
+      subjects = new List<Subjects>.empty(growable: true);
       json['subjects'].forEach((v) {
         subjects.add(new Subjects.fromJson(v));
       });

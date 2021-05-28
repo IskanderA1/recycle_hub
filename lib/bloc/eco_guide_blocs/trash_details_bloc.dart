@@ -1,6 +1,6 @@
 
 import 'package:recycle_hub/model/eco_guide_models/filter_response.dart';
-import 'package:recycle_hub/repo/eco_quide_repo.dart';
+import 'package:recycle_hub/api/eco_quide_repo.dart';
 import 'package:rxdart/rxdart.dart';
 
 class TrashDetailsBloc {

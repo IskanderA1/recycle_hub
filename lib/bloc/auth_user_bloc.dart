@@ -3,10 +3,10 @@ import 'package:recycle_hub/bloc/navigation_bloc.dart';
 import 'package:recycle_hub/model/authorisation_models/user_response.dart';
 import 'package:recycle_hub/model/user_model.dart';
 import 'package:rxdart/rxdart.dart';
-import 'package:recycle_hub/repo/app_repo.dart';
+import 'package:recycle_hub/api/app_repo.dart';
 
 class AuthUserBloc {
-  final AppRepository _repository = AppRepository();
+  final AppService _repository = AppService();
   final BehaviorSubject<UserResponse> _subject =
       BehaviorSubject<UserResponse>();
   UserModel user;
