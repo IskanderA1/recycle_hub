@@ -35,10 +35,12 @@ class _InviteScreenState extends State<InviteScreen> {
           centerTitle: true,
         ),
         backgroundColor: kColorGreyVeryLight,
-        body: FutureBuilder(
+        body: InviteWidget(
+                code: 1324234234,
+              )/*FutureBuilder(
           future: AppService().getInvite(Hive.box('user').get('user').id),
           builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
+            /*if (snapshot.connectionState == ConnectionState.waiting) {
               return LoaderWidget();
             }
             if (snapshot.data is Invite) {
@@ -46,9 +48,9 @@ class _InviteScreenState extends State<InviteScreen> {
                 code: snapshot.data.code,
               );
             }
-            return LoaderWidget();
+            return LoaderWidget();*/
           },
-        ));
+        )*/);
   }
 }
 

@@ -18,45 +18,48 @@ class CustMarkerAdapter extends TypeAdapter<CustMarker> {
     };
     return CustMarker(
       id: fields[0] as String,
-      acceptTypes: (fields[1] as List)?.cast<AcceptType>(),
-      address: fields[2] as String,
-      contacts: (fields[3] as List)?.cast<Contact>(),
-      coords: fields[4] as Coords,
-      description: fields[5] as String,
-      images: (fields[6] as List)?.cast<String>(),
-      name: fields[7] as String,
-      paybackType: fields[8] as String,
-      receptionType: fields[9] as String,
-      workTime: fields[10] as WorkingTime,
+      name: fields[1] as String,
+      partner: fields[2] as String,
+      partnerName: fields[3] as String,
+      paybackType: fields[4] as String,
+      receptionType: fields[5] as String,
+      workTime: fields[6] as WorkingTime,
+      contacts: (fields[7] as List)?.cast<String>(),
+      acceptTypes: (fields[8] as List)?.cast<String>(),
+      coords: (fields[9] as List)?.cast<double>(),
+      description: fields[10] as String,
+      getBonus: fields[11] as bool,
     );
   }
 
   @override
   void write(BinaryWriter writer, CustMarker obj) {
     writer
-      ..writeByte(11)
+      ..writeByte(12)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
-      ..write(obj.acceptTypes)
-      ..writeByte(2)
-      ..write(obj.address)
-      ..writeByte(3)
-      ..write(obj.contacts)
-      ..writeByte(4)
-      ..write(obj.coords)
-      ..writeByte(5)
-      ..write(obj.description)
-      ..writeByte(6)
-      ..write(obj.images)
-      ..writeByte(7)
       ..write(obj.name)
-      ..writeByte(8)
+      ..writeByte(2)
+      ..write(obj.partner)
+      ..writeByte(3)
+      ..write(obj.partnerName)
+      ..writeByte(4)
       ..write(obj.paybackType)
-      ..writeByte(9)
+      ..writeByte(5)
       ..write(obj.receptionType)
+      ..writeByte(6)
+      ..write(obj.workTime)
+      ..writeByte(7)
+      ..write(obj.contacts)
+      ..writeByte(8)
+      ..write(obj.acceptTypes)
+      ..writeByte(9)
+      ..write(obj.coords)
       ..writeByte(10)
-      ..write(obj.workTime);
+      ..write(obj.description)
+      ..writeByte(11)
+      ..write(obj.getBonus);
   }
 
   @override

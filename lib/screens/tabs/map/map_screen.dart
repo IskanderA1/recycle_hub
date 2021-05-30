@@ -125,7 +125,7 @@ class _MyGoogleMapWidgetState extends State<MyGoogleMapWidget> {
       if(event is MarkersCollectionResponseOk){
         setState(()  {
            //markers = await _getMarkers(Cluster(event.markers.markers.map((markItem) => ClusterItem(LatLng(markItem.coords.lat, markItem.coords.lng), item: markItem))));
-           _items = event.markers.markers.map((markItem) => ClusterItem(LatLng(markItem.coords.lat, markItem.coords.lng), item: markItem)).toList();
+           _items = event.markers.markers.map((markItem) => ClusterItem(LatLng(markItem.coords[0], markItem.coords[1]), item: markItem)).toList();
           _list = event.markers.markers.map((item) => MarkerCardWidget(
               index: item.hashCode,
               marker: item,
@@ -142,7 +142,7 @@ class _MyGoogleMapWidgetState extends State<MyGoogleMapWidget> {
                               borderRadius: BorderRadius.circular(5)),
                           child: Center(
                             child: AutoSizeText(
-                              "  ${acceptsItem.name}  ",
+                              "  $acceptsItem  ",
                               style: TextStyle(
                                   fontFamily: 'GilroyMedium', fontSize: 14),
                               textAlign: TextAlign.center,
@@ -588,7 +588,7 @@ class MarkerCardWidget extends StatelessWidget {
                 children: [
                   Flexible(
                     child: Text(
-                      marker.address,
+                      "Казань, Большая Красная, 55",//marker.address,
                       style: TextStyle(
                         color: index % 2 == 0 ? kColorWhite : kColorBlack,
                         fontFamily: "Gilroy",

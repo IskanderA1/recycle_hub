@@ -38,7 +38,7 @@ class CustMarker {
   @HiveField(5)
   String receptionType;
   @HiveField(6)
-  WorkTime workTime;
+  WorkingTime workTime;
   @HiveField(7)
   List<String> contacts;
   @HiveField(8)
@@ -57,7 +57,7 @@ class CustMarker {
     String partnerName,
     String paybackType,
     String receptionType,
-    WorkTime workTime,
+    WorkingTime workTime,
     List<String> contacts,
     List<String> acceptTypes,
     List<double> coords,
@@ -91,7 +91,7 @@ class CustMarker {
         partnerName: json["partner_name"],
         paybackType: json["payback_type"],
         receptionType: json["reception_type"],
-        workTime: WorkTime.fromMap(json["work_time"]),
+        workTime: WorkingTime.fromMap(json["work_time"]),
         contacts: List<String>.from(json["contacts"].map((x) => x)),
         acceptTypes: List<String>.from(json["accept_types"].map((x) => x)),
         coords: List<double>.from(json["coords"].map((x) => x.toDouble())),
@@ -115,32 +115,6 @@ class CustMarker {
       };
 }
 
-class WorkTime {
-  WorkTime({
-    this.empty,
-  });
-
-  String empty;
-
-  WorkTime copyWith({
-    String empty,
-  }) =>
-      WorkTime(
-        empty: empty ?? this.empty,
-      );
-
-  factory WorkTime.fromJson(String str) => WorkTime.fromMap(json.decode(str));
-
-  String toJson() => json.encode(toMap());
-
-  factory WorkTime.fromMap(Map<String, dynamic> json) => WorkTime(
-        empty: json["ПН-ПТ"],
-      );
-
-  Map<String, dynamic> toMap() => {
-        "ПН-ПТ": empty,
-      };
-}
 
 /*@HiveType(typeId: 1)
 class CustMarker {

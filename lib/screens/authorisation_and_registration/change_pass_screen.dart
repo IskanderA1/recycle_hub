@@ -186,14 +186,14 @@ class _ChangePassScreenState extends State<ChangePassScreen> {
         elevation: 5.0,
         onPressed: () {
           if (_tfKey.currentState.validate()) {
-            authBloc.forgetPassCodeSend(_email.text).then((i) {
+            /*/authBloc.forgetPassCodeSend(_email.text).then((i) {
               if (i == 0) {
                 Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
                         builder: (context) => ForgetConfirmCodeScreen()));
               }
-            });
+            });*/
           }
         },
         padding: EdgeInsets.all(15.0),

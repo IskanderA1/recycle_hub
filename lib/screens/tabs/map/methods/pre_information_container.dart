@@ -73,7 +73,7 @@ class _AnimatedPreInformationContainerState
                     children: [
                       Flexible(
                         child: AutoSizeText(
-                          widget.marker.address,
+                          "Казань, Большая Красная, 55",//widget.marker.address,
                           style: TextStyle(fontSize: 16),
                           overflow: TextOverflow.visible,
                         ),
@@ -112,7 +112,7 @@ class _AnimatedPreInformationContainerState
               itemCount: widget.marker.acceptTypes.length,
               itemBuilder: (context, index) {
                 return AutoSizeText(
-                  "  ${widget.marker.acceptTypes[index].name}  ",
+                  "  ${widget.marker.acceptTypes[index]}  ",
                   style: TextStyle(backgroundColor: Color(0xFFF2F2F2)),
                 );
               },

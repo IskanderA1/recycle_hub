@@ -77,15 +77,15 @@ class SessionManager {
   Future<void> initializeApi() async {
     var response;
     try {
-      response = await CommonRequest.makeRequest("initialize",
-          method: CommonRequestMethod.post, needAuthorization: false);
+      /*response = await CommonRequest.makeRequest("initialize",
+          method: CommonRequestMethod.post, needAuthorization: false);*/
     } catch (e) {
       throw e;
     }
 
-    var authorizationToken = response.headers["authorization"];
+    //var authorizationToken = response.headers["authorization"];
 
-    await this.saveToken(authorizationToken);
+    //await this.saveToken(authorizationToken);
   }
 
   Future<void> relogin() async {

@@ -13,8 +13,8 @@ enum CommonRequestMethod { get, post, put, delete }
 enum CommonRequestEncoding { json, url }
 
 class CommonRequest {
-  static const String devURL = "http://167.172.105.146:5000/api/";
-  static const String prodURL = "http://167.172.105.146:5000/api/";
+  static const String devURL = "https://167.172.105.146:5000/api";
+  static const String prodURL = "https://167.172.105.146:5000/api";
 
   static const String apiURL = prodURL;
   static http.Client get defaultClient => IOClient(HttpClient()

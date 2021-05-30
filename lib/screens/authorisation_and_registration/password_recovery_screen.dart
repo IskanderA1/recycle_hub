@@ -200,11 +200,11 @@ class _PasswordRecoveryScreenState extends State<PasswordRecoveryScreen> {
             setState(() {
               _isSimilarPasswords = "";
             });
-            authBloc.passChange(_firstPass.text).then((i) {
+            /*authBloc.passChange(_firstPass.text).then((i) {
               if (i == 0) {
                 Navigator.pop(context);
               }
-            });
+            });*/
           }
         },
         padding: EdgeInsets.all(15.0),

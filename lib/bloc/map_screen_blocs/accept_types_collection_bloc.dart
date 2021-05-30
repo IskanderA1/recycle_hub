@@ -1,9 +1,10 @@
+import 'package:recycle_hub/api/services/map_service.dart';
 import 'package:recycle_hub/model/map_responses/accept_types_collection_response.dart';
 import 'package:recycle_hub/api/google_map_repo.dart';
 import 'package:rxdart/rxdart.dart';
 
 class AcceptTypesCollectionBloc {
-  GoogleMapRepo _repo = GoogleMapRepo();
+  MapService _service = MapService();
   BehaviorSubject<AcceptTypesCollectionResponse> _behaviorSubject =
       BehaviorSubject<AcceptTypesCollectionResponse>();
 
@@ -18,7 +19,7 @@ class AcceptTypesCollectionBloc {
 
   Future<AcceptTypesCollectionResponse> loadAcceptTypes() async {
     _behaviorSubject.sink.add(AcceptTypesCollectionResponseLoading());
-    _repo.getAcceptTypes().then((value) {
+    _service.getAcceptTypes().then((value) {
       _behaviorSubject.sink.add(value);
       return value;
       });

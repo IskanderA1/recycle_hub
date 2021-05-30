@@ -177,14 +177,14 @@ class _ForgetConfirmCodeScreenState extends State<ForgetConfirmCodeScreen> {
         elevation: 5.0,
         onPressed: () {
           if (_tfKey.currentState.validate()) {
-            authBloc.forgetPassCodeConfirm(_code.text).then((i) {
+            /*authBloc.forgetPassCodeConfirm(_code.text).then((i) {
               if (i == 0) {
                 Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
                         builder: (context) => PasswordRecoveryScreen()));
               }
-            });
+            });*/
             /*Navigator.push(
                 context,
                 MaterialPageRoute(

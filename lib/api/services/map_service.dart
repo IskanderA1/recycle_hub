@@ -110,8 +110,8 @@ class MapService {
         if (model.filters.isNotEmpty) {
           for (String filter in model.filters) {
             localList = localList.where((element) {
-              for (AcceptType item in element.acceptTypes) {
-                if (item.varName == filter) return true;
+              for (String item in element.acceptTypes) {
+                if (item == filter) return true;
               }
               return false;
             }).toList();

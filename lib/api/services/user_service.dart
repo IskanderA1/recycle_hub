@@ -4,11 +4,18 @@ import 'package:recycle_hub/api/request/request.dart';
 import 'package:recycle_hub/api/request/session_manager.dart';
 import 'package:recycle_hub/helpers/jwt_parser.dart';
 import 'package:recycle_hub/model/authorisation_models/user_response.dart';
+import 'package:recycle_hub/model/invite_model.dart';
+import 'package:recycle_hub/model/new_point_model.dart';
 import 'package:recycle_hub/model/user_model.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class UserService {
+  static const _kUsername = "user_service.username";
+
   static final UserService _instance = UserService._internal();
+
+  SharedPreferences _preferences;
 
   UserModel get user => _user;
 
@@ -18,7 +25,15 @@ class UserService {
     return _instance;
   }
 
-  UserService._internal();
+  UserService._internal() {
+    getPrefs();
+  }
+
+  getPrefs() async {
+    if (_preferences == null) {
+      _preferences = await SharedPreferences.getInstance();
+    }
+  }
 
   Future<http.Response> login(String login, String password) async {
     var response = await CommonRequest.makeRequest('login',
@@ -87,7 +102,6 @@ class UserService {
       Map<String, dynamic> data = jsonDecode(response.body);
       print(data);
       if (response.statusCode == 200) {
-        userBox.put('user', user);
         return UserRegOk();
       } else {
         print(response.reasonPhrase);
@@ -100,13 +114,10 @@ class UserService {
   }
 
   ///Отправка кода на указанный емайл
-  Future<UserResponse> sendCode(String username) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString("username", username);
+  /*Future<UserResponse> sendCode(String username) async {
+    _preferences.setString("username", username);
     try {
-      var response = await http.post(
-        mainUrl + '/forget?username=$username',
-      );
+      var response = await CommonRequest.makeRequest(endpoint);
       if (response.statusCode == 200) {
         return UserForgetPassCodeSended();
       } else {
@@ -117,30 +128,31 @@ class UserService {
       print("Exception occured: $error stackTrace: $stacktrace");
       return UserForgetPassCodeSendFailed(error);
     }
-  }
+  }*/
 
   ///Проверка кода для сброса пароля и регистрации
-  Future<UserResponse> confirmCode(String code) async {
-    UserModel user = userBox.get('user');
+  Future<bool> confirmCode(String code) async {
     try {
-      var response = await http.get(
-        mainUrl + "/forget?username=${user.username}&code=$code",
-      );
+      String username = await _preferences.getString(_kUsername);
+      if (username == null) {}
+      var response = await CommonRequest.makeRequest("confirm",
+          body: {"username": username, "code": code},
+          method: CommonRequestMethod.post,
+          needAuthorization: false);
       Map<String, dynamic> data = jsonDecode(response.body);
       print(data);
       if (response.statusCode == 200) {
-        return UserLoggedIn.fromUser(user);
+        return true;
       } else {
-        print(response.reasonPhrase);
-        return UserCodeConfirmFailed(data['message']);
+        return false;
       }
     } catch (error, stacktrace) {
       print("Exception occured: $error stackTrace: $stacktrace");
-      return UserCodeConfirmFailed("Нет сети");
+      return false;
     }
   }
 
-  Future<UserResponse> forgetConfirmCode(String code) async {
+  /*Future<UserResponse> forgetConfirmCode(String code) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String username = prefs.getString("username");
     try {
@@ -160,10 +172,10 @@ class UserService {
       print("Exception occured: $error stackTrace: $stacktrace");
       return UserCodeConfirmFailed("Нет сети");
     }
-  }
+  }*/
 
   ///Изменени пароля
-  Future<UserResponse> changePass(String pass) async {
+  /*Future<UserResponse> changePass(String pass) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String username = prefs.getString("username");
     String code = prefs.getString("code");
@@ -182,10 +194,68 @@ class UserService {
       print("Exception occured: $error stackTrace: $stacktrace");
       return UserPassChangeFailed();
     }
-  }
+  }*/
 
   Future<UserResponse> userLogOut() async {
-    userBox.delete('user');
     return UserUnlogged();
+  }
+
+  Future<String> getTransactions() async {
+    /*var box = await Hive.openBox('user');
+    UserModel user = box.get('user', defaultValue: null);
+    if (user != null) {
+      try {
+        var response = await http.get(
+          mainUrl + "/api/recycle?id=${user.id}&type=user",
+        );
+        if (response.statusCode == 200) {
+          List<Map<String, dynamic>> data = json.decode(response.body);
+          return TransactionsResponseOk(data);
+        }
+      } catch (error, stacktrace) {
+        print("Exception occured: $error stackTrace: $stacktrace");
+        return TransactionsResponseError(error);
+      }
+    }*/
+    await Future.delayed(Duration(milliseconds: 300));
+    return "ABCDEFG";
+  }
+
+  Future sendNewOfferPoint(NewPoint newPoint) async {
+    /*var box = await Hive.openBox('user');
+    UserModel user = box.get('user', defaultValue: null);
+    if (user != null) {
+      try {
+        var response = await http.get(
+          mainUrl + "/api/recycle?id=${user.id}&type=user",
+        );
+        if (response.statusCode == 200) {
+          List<Map<String, dynamic>> data = json.decode(response.body);
+          return TransactionsResponseOk(data);
+        }
+      } catch (error, stacktrace) {
+        print("Exception occured: $error stackTrace: $stacktrace");
+        return TransactionsResponseError(error);
+      }
+    }*/
+    await Future.delayed(Duration(milliseconds: 300));
+    return;
+  }
+
+  Future<String> getInvite(String id) async {
+    /*if (id == null) return null;
+    try {
+      //final response = await CommonRequest.makeRequest("");
+      if (response.statusCode == 201) {
+        return Invite.fromMap(response.data);
+      } else {
+        return null;
+      }
+    } catch (error) {
+      print(error.toString());
+      return null;
+    }*/
+    await Future.delayed(Duration(milliseconds: 300));
+    return "ABCDEFG";
   }
 }

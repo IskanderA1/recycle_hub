@@ -1,3 +1,4 @@
+import 'package:recycle_hub/api/services/user_service.dart';
 import 'package:recycle_hub/bloc/global_state_bloc.dart';
 import 'package:recycle_hub/bloc/navigation_bloc.dart';
 import 'package:recycle_hub/model/authorisation_models/user_response.dart';
@@ -6,7 +7,7 @@ import 'package:rxdart/rxdart.dart';
 import 'package:recycle_hub/api/app_repo.dart';
 
 class AuthUserBloc {
-  final AppService _repository = AppService();
+  final UserService _repository = UserService();
   final BehaviorSubject<UserResponse> _subject =
       BehaviorSubject<UserResponse>();
   UserModel user;
@@ -17,20 +18,23 @@ class AuthUserBloc {
 
   auth(String login, String password) async {
     _subject.sink.add(UserLoading());
-    UserResponse response = await _repository.userAuth(login, password);
-    _subject.sink.add(response);
-    if (response is UserLoggedIn) {
-      user = response.user;
+    final response = await _repository.login(login, password);
+    if(response.statusCode == 200){
+      UserModel user = await _repository.userInfo();
+      UserResponse resp = UserLoggedIn.fromUser(user);
+      _subject.sink.add(resp);
       bottomNavBarBloc.pickItem(0);
+    }else{
+      
     }
   }
 
   Future<int> authLocal() async {
     _subject.sink.add(UserLoading());
-    UserResponse response = await _repository.userAuthLocal();
-    _subject.sink.add(response);
-    if (response is UserLoggedIn) {
-      user = response.user;
+    final user = await _repository.userInfo();
+    if(user != null){
+      UserResponse response = UserLoggedIn.fromUser(user);
+      _subject.sink.add(response);
       return 0;
     }
     return -1;
@@ -58,15 +62,14 @@ class AuthUserBloc {
   }
 
   Future<int> confirmCode(String code) async {
-    UserResponse response = await _repository.confirmCode(code);
-    _subject.sink.add(response);
-    if (response is UserLoggedIn) {
+    final bool res = await _repository.confirmCode(code);
+    if(res){
       return 0;
     }
     return -1;
   }
 
-  forgetPassCodeSend(String username) async {
+  /*forgetPassCodeSend(String username) async {
     _subject.sink.add(UserLoading());
     UserResponse response = await _repository.sendCode(username);
     _subject.sink.add(response);
@@ -94,7 +97,7 @@ class AuthUserBloc {
       return 0;
     }
     return -1;
-  }
+  }*/
 
   dispose() {
     _subject.close();

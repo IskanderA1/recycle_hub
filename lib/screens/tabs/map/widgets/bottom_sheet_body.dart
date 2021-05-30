@@ -175,7 +175,7 @@ class NewWidget extends StatefulWidget {
 class _NewWidgetState extends State<NewWidget> {
   @override
   Widget build(BuildContext context) {
-    List<Widget> _list = widget.marker.acceptTypes
+    /*List<Widget> _list = widget.marker.acceptTypes
         .map((card) => FilterCardWidget(
             isSelected: false,
             acceptType: card,
@@ -183,15 +183,15 @@ class _NewWidgetState extends State<NewWidget> {
             onUp: () {},
             onpressed: () {},
             size: widget.size.width * 0.7))
-        .toList();
-    List<Widget> _pictureList = widget.marker.images
+        .toList();*/
+    /*List<Widget> _pictureList = widget.marker.images
         .map((img) => CachedNetworkImage(
               placeholder: (BuildContext context, url) => LoaderWidget(),
               imageUrl: "http://eco.loliallen.com$img",
               errorWidget: (BuildContext context, url, error) =>
                   Icon(Icons.error),
             ))
-        .toList();
+        .toList();*/
     Size _size = MediaQuery.of(context).size;
     return Column(
       children: [
@@ -246,13 +246,13 @@ class _NewWidgetState extends State<NewWidget> {
                   ),
                 ],
               ),
-              GridView.count(
+              /*GridView.count(
                 childAspectRatio: 5 / 4,
                 children: _list,
                 crossAxisCount: 2,
                 shrinkWrap: true,
                 controller: ScrollController(keepScrollOffset: false),
-              )
+              )*/
             ],
           ),
         ),
@@ -274,14 +274,14 @@ class _NewWidgetState extends State<NewWidget> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     AutoSizeText(
-                      widget.marker.contacts[0].phone,
+                      widget.marker.contacts[0],
                       style: TextStyle(
                           color: kColorGreen,
                           fontFamily: 'Gilroy',
                           fontSize: 16),
                     ),
                     AutoSizeText(
-                      widget.marker.contacts[0].name,
+                      widget.marker.contacts[0],
                       style: TextStyle(
                           color: kColorBlack,
                           fontFamily: 'GilroyMedium',
@@ -295,14 +295,14 @@ class _NewWidgetState extends State<NewWidget> {
                       height: 15,
                     ),
                     AutoSizeText(
-                      widget.marker.contacts[1].phone,
+                      widget.marker.contacts[1],
                       style: TextStyle(
                           color: kColorGreen,
                           fontFamily: 'Gilroy',
                           fontSize: 16),
                     ),
                     AutoSizeText(
-                      widget.marker.contacts[1].name,
+                      widget.marker.contacts[1],
                       style: TextStyle(
                           color: kColorBlack,
                           fontFamily: 'GilroyMedium',
@@ -334,7 +334,7 @@ class _NewWidgetState extends State<NewWidget> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Text(
-                      widget.marker.address,
+                      "Казань, Большая Красная, 55",//widget.marker.address,
                       overflow: TextOverflow.clip,
                       style: TextStyle(
                           color: kColorBlack,
@@ -419,12 +419,12 @@ class _NewWidgetState extends State<NewWidget> {
           ),
         ),
         myDivider(),
-        GridView.count(
+        /*GridView.count(
           crossAxisCount: 1,
           children: _pictureList,
           shrinkWrap: true,
           controller: ScrollController(keepScrollOffset: false),
-        )
+        )*/
       ],
     );
   }
