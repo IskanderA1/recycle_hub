@@ -1,4 +1,4 @@
-import 'package:recycle_hub/api/request/session_manager.dart';
+/* import 'package:recycle_hub/api/request/session_manager.dart';
 import 'package:recycle_hub/api/services/user_service.dart';
 import 'package:recycle_hub/bloc/auth_user_bloc.dart';
 import 'package:recycle_hub/helpers/settings.dart';
@@ -37,3 +37,4 @@ class GlobalStateBloc {
 }
 
 final globalStateBloc = GlobalStateBloc();
+ */
