@@ -3,6 +3,7 @@ import 'package:hive/hive.dart';
 
 import 'work_day.dart';
 part 'work_time.g.dart';
+
 @HiveType(typeId: 4)
 class WorkingTime {
   @HiveField(0)
@@ -103,25 +104,25 @@ class WorkingTime {
     String retStr = "";
     switch (i) {
       case 'Monday':
-        retStr = "${mon.first}-${mon.fourth}";
+        retStr = mon != null ? "${mon.first}-${mon.fourth}" : '--.--';
         break;
       case 'Tuesday':
-        retStr = "${thu.first}-${thu.fourth}";
+        retStr = thu != null ? "${thu.first}-${thu.fourth}" : '--.--';
         break;
       case 'Wednesday':
-        retStr = "${wed.first}-${wed.fourth}";
+        retStr = wed != null ? "${wed.first}-${wed.fourth}" : '--.--';
         break;
       case 'Thursday':
-        retStr = "${thr.first}-${thr.fourth}";
+        retStr = thr != null ? "${thr.first}-${thr.fourth}" : '--.--';
         break;
       case 'Friday':
-        retStr = "${fri.first}-${fri.fourth}";
+        retStr = fri != null ? "${fri.first}-${fri.fourth}" : '--.--';
         break;
       case 'Saturday':
-        retStr = "${sat.first}-${sat.fourth}";
+        retStr = sat != null ? '${sat.first}-${sat.fourth}' : '--.--';
         break;
       case 'Sunday':
-        retStr = "${sun.first}-${sun.fourth}";
+        retStr = sun != null ? "${sun.first}-${sun.fourth}" : '--.--';
         break;
     }
     return retStr;
@@ -132,30 +133,31 @@ class WorkingTime {
       return "";
     }
     String retStr = "";
+    WorkDay day;
     switch (i) {
       case 0:
-        retStr = "${mon.second}\n${mon.third}";
+        day = mon;
         break;
       case 1:
-        retStr = "${thu.second}\n${thu.third}";
+        day = thu;
         break;
       case 2:
-        retStr = "${wed.second}\n${wed.third}";
+        day = wed;
         break;
       case 3:
-        retStr = "${thr.second}\n${thr.third}";
+        day = thr;
         break;
       case 4:
-        retStr = "${fri.second}\n${fri.third}";
+        day = fri;
         break;
       case 5:
-        retStr = "${sat.second}\n${sat.third}";
+        day = sat;
         break;
       case 6:
-        retStr = "${sun.second}\n${sun.third}";
+        day = sun;
         break;
     }
-    return retStr;
+    return day != null ? "${day.second}\n${day.third}" : '--.--';
   }
 
   String toJson() => json.encode(toMap());

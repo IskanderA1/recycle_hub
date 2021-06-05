@@ -36,11 +36,15 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
   Stream<AuthState> _mapInitToState() async* {
     bool isfirst = await Settings().getIsFirstLaunch();
-    if (isfirst) {
+    if (isfirst == null || isfirst == true) {
       yield AuthStateFirstIn();
       return;
     }
     String token = await SessionManager().getAuthorizationToken();
+    if (token == null) {
+      await SessionManager().relogin();
+      token = await SessionManager().getAuthorizationToken();
+    }
     if (token != null) {
       try {
         UserModel user = await UserService().userInfo();
@@ -81,6 +85,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       if (response.statusCode == 200) {
         final user = await userService.userInfo();
         if (user != null) {
+          Settings().isFirstLaunch = false;
           yield AuthStateLogedIn(user: user);
         } else {
           yield AuthStateLogOuted();

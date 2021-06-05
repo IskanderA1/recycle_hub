@@ -281,7 +281,7 @@ class _NewWidgetState extends State<NewWidget> {
                           fontSize: 16),
                     ),
                     AutoSizeText(
-                      widget.marker.contacts[0],
+                      'Администратор',
                       style: TextStyle(
                           color: kColorBlack,
                           fontFamily: 'GilroyMedium',
@@ -295,14 +295,14 @@ class _NewWidgetState extends State<NewWidget> {
                       height: 15,
                     ),
                     AutoSizeText(
-                      widget.marker.contacts[1],
+                      widget.marker.contacts[0],
                       style: TextStyle(
                           color: kColorGreen,
                           fontFamily: 'Gilroy',
                           fontSize: 16),
                     ),
                     AutoSizeText(
-                      widget.marker.contacts[1],
+                      'Партнер',
                       style: TextStyle(
                           color: kColorBlack,
                           fontFamily: 'GilroyMedium',
@@ -369,7 +369,7 @@ class _NewWidgetState extends State<NewWidget> {
             backColor: kColorWhite,
             hasSelection: true,
             fontSize: 14,
-            size: Size(_size.width - 50, _size.height / 6.7),
+            size: Size(_size.width - 50, _size.height / 6.5),
           ),
         ),
         myDivider(),

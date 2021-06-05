@@ -70,7 +70,7 @@ class _ConfirmCodeScreenState extends State<ConfirmCodeScreen> {
                         Spacer(
                           flex: 1,
                         ),
-                        StreamBuilder(
+                        /*StreamBuilder(
                           stream: authBloc.subject,
                           builder: (BuildContext ctx,
                               AsyncSnapshot<UserResponse> snapshot) {
@@ -95,7 +95,7 @@ class _ConfirmCodeScreenState extends State<ConfirmCodeScreen> {
                               style: TextStyle(fontSize: 14, color: kColorRed),
                             );
                           },
-                        ),
+                        ),*/
                         Spacer(flex: 1),
                         _confirmButton(),
                         Spacer(
@@ -174,11 +174,11 @@ class _ConfirmCodeScreenState extends State<ConfirmCodeScreen> {
         elevation: 5.0,
         onPressed: () {
           if (_tfKey.currentState.validate()) {
-            authBloc.confirmCode(_code.text).then((i) {
+            /*authBloc.confirmCode(_code.text).then((i) {
               if (i == 0) {
                 Navigator.pop(context);
               }
-            });
+            });*/
             /*Navigator.push(
                 context,
                 MaterialPageRoute(

@@ -73,7 +73,7 @@ class _ForgetConfirmCodeScreenState extends State<ForgetConfirmCodeScreen> {
                         Spacer(
                           flex: 1,
                         ),
-                        StreamBuilder(
+                        /*StreamBuilder(
                           stream: authBloc.subject,
                           builder: (BuildContext ctx,
                               AsyncSnapshot<UserResponse> snapshot) {
@@ -98,7 +98,7 @@ class _ForgetConfirmCodeScreenState extends State<ForgetConfirmCodeScreen> {
                               style: TextStyle(fontSize: 14, color: kColorRed),
                             );
                           },
-                        ),
+                        ),*/
                         Spacer(flex: 1),
                         _confirmButton(),
                         Spacer(

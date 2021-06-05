@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:recycle_hub/bloc/auth/auth_bloc.dart';
 import 'package:recycle_hub/bloc/auth_user_bloc.dart';
 import 'package:recycle_hub/bloc/global_state_bloc.dart';
 import 'package:recycle_hub/elements/loader.dart';
 import 'package:recycle_hub/model/authorisation_models/user_response.dart';
+import 'package:recycle_hub/screens/stepper/stepper.dart';
 
 import 'auth_screen.dart';
 import 'registration_screen.dart';
@@ -16,11 +19,10 @@ class AuthorisationMainScreen extends StatefulWidget {
 class _AuthorisationMainScreenState extends State<AuthorisationMainScreen> {
   final loginController = TextEditingController();
   final passController = TextEditingController();
+  AuthBloc authBloc;
 
   @override
   void initState() {
-    //globalStateBloc.getComeIn();
-    //authBloc.auth();
     super.initState();
   }
 
@@ -31,28 +33,21 @@ class _AuthorisationMainScreenState extends State<AuthorisationMainScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder(
-        stream: authBloc.subject,
-        initialData: UserUnlogged(),
-        // ignore: missing_return
-        builder: (context, AsyncSnapshot<UserResponse> snapshot) {
-          if (snapshot.hasData) {
-            if (snapshot.data is UserLoggedIn) {
-              globalStateBloc.pickItem(GLobalStates.TABS);
-              return buildLoadingScaffold();
-            } else if (snapshot.data is UserLoading) {
-              return buildLoadingScaffold();
-            } else if (snapshot.data is UserAuthFailed) {
-              return AuthScreen();
-            } else if (snapshot.data is UserUnlogged) {
-              return AuthScreen();
-            }
+    return BlocBuilder<AuthBloc, AuthState>(
+        bloc: authBloc,
+        builder: (context, state) {
+          if (state is AuthStateLogedIn) {
+            return buildLoadingScaffold();
+          } else if (state is AuthStateLoading) {
+            return buildLoadingScaffold();
+          } else if (state is AuthStateFail) {
             return AuthScreen();
-          } else if (snapshot.hasError) {
-            return buildLoadingScaffold();
-          } else {
-            return buildLoadingScaffold();
-          }
+          } else if (state is AuthStateLogOuted) {
+            return AuthScreen();
+          }/*else if (state is AuthStateFirstIn){
+            return WellcomePageStepper();
+          }*/
+          return AuthScreen();
         });
   }
 }

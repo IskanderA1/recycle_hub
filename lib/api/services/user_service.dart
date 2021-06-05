@@ -3,12 +3,14 @@ import 'dart:convert';
 import 'package:recycle_hub/api/request/request.dart';
 import 'package:recycle_hub/api/request/session_manager.dart';
 import 'package:recycle_hub/helpers/jwt_parser.dart';
+import 'package:recycle_hub/model/api_error.dart';
 import 'package:recycle_hub/model/authorisation_models/user_response.dart';
 import 'package:recycle_hub/model/invite_model.dart';
 import 'package:recycle_hub/model/new_point_model.dart';
 import 'package:recycle_hub/model/user_model.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:developer' as developer;
 
 class UserService {
   static const _kUsername = "user_service.username";
@@ -36,13 +38,21 @@ class UserService {
   }
 
   Future<http.Response> login(String login, String password) async {
-    var response = await CommonRequest.makeRequest('login',
-        body: {
-          "username": login,
-          "password": password,
-        },
-        method: CommonRequestMethod.post,
-        needAuthorization: false);
+    var response;
+    try {
+      response = await CommonRequest.makeRequest('login',
+          body: {
+            "username": login,
+            "password": password,
+          },
+          method: CommonRequestMethod.post,
+          needAuthorization: false);
+    } on ApiError catch (e) {
+      developer.log("ERROR: ${e.errorDescription}");
+    } catch (e) {
+      developer.log("ERROR: ${e.errorDescription}");
+    }
+
     if (response.statusCode == 200) {
       Map<String, dynamic> data = jsonDecode(response.body);
       String jwtToken = data['access_token'];

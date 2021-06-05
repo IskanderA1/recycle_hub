@@ -1,9 +1,11 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 
 import 'package:recycle_hub/bloc/garb_collection_type_bloc.dart';
+import 'package:recycle_hub/bloc/map/map_bloc.dart';
 import 'package:recycle_hub/bloc/map_screen_blocs/accept_types_collection_bloc.dart';
 import 'package:recycle_hub/bloc/map_screen_blocs/markers_collection_bloc.dart';
 import 'package:recycle_hub/bloc/marker_work_mode_bloc.dart';
@@ -30,11 +32,13 @@ class _MapFilterDetailScreenState extends State<MapFilterDetailScreen> {
   List<FilterCardWidget> filterCards;
   GarbageCollectionTypeBloc garbageCollBloc = GarbageCollectionTypeBloc();
   MarkerWorkModeBloc markerWorkModeBloc = MarkerWorkModeBloc();
+  MapBloc mapBloc;
   /*GlobalKey<FilterCardWidgetState> _key =
       GlobalKey<FilterCardWidgetState>(debugLabel: "__myKey__");*/
 
   @override
   void initState() {
+    mapBloc = BlocProvider.of<MapBloc>(context);
     acceptTypesCollectionBloc.loadAcceptTypes();
     super.initState();
   }
@@ -56,7 +60,7 @@ class _MapFilterDetailScreenState extends State<MapFilterDetailScreen> {
             centerTitle: true,
             leading: GestureDetector(
               onTap: () {
-                markersCollectionBloc.loadMarkersFromLast();
+                //markersCollectionBloc.loadMarkersFromLast();
                 Navigator.pop(context);
               },
               child: Icon(Icons.arrow_back),
@@ -180,7 +184,7 @@ class _MapFilterDetailScreenState extends State<MapFilterDetailScreen> {
                     alignment: Alignment.bottomCenter,
                     child: GestureDetector(
                       onTap: () {
-                        markersCollectionBloc.filterMarkers(currentFilterModel);
+                        //markersCollectionBloc.filterMarkers(currentFilterModel);
                         Navigator.pop(context);
                       },
                       child: ConstrainedBox(
@@ -235,7 +239,7 @@ class _MapFilterDetailScreenState extends State<MapFilterDetailScreen> {
       print(currentFilterModel.filters[i]);
     }
     print("///////////////////");
-    markersCollectionBloc.filterMarkers(currentFilterModel);
+    //markersCollectionBloc.filterMarkers(currentFilterModel);
   }
 
   _markerModeCheck() {

@@ -53,7 +53,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       height: 17,
                     ),
                     buildProfileAvatar(
-                        Hive.box('user').get('user').name, "ЭКОЛОГ"),
+                        'Name'/*Hive.box('user').get('user').name*/, "ЭКОЛОГ"),
                     SizedBox(
                       height: 24,
                     ),
@@ -432,8 +432,8 @@ Widget buildListItem(int index, String text) {
         profileMenuBloc.mapEventToState(ProfileMenuStates.STATISTIC);
       else if (index == 3)
         profileMenuBloc.mapEventToState(ProfileMenuStates.HOWGETCOIN);
-      else if (index == 5)
-        authBloc.authLogOut();
+      //else if (index == 5)
+        //authBloc.authLogOut();
       else if (index == 1)
         profileMenuBloc.mapEventToState(ProfileMenuStates.PURSE);
       else if (index == 0)

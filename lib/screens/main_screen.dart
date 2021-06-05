@@ -1,4 +1,8 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:recycle_hub/bloc/auth/auth_bloc.dart';
 import 'package:recycle_hub/bloc/auth_user_bloc.dart';
 import 'package:recycle_hub/bloc/global_state_bloc.dart';
 import 'package:recycle_hub/bloc/map_screen_blocs/markers_collection_bloc.dart';
@@ -16,52 +20,68 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   final loginController = TextEditingController();
   final passController = TextEditingController();
+  AuthBloc authBloc;
+  StreamSubscription<AuthState> _authSub;
 
   @override
   void initState() {
-    globalStateBloc.getComeIn();
+    authBloc = AuthBloc();
+    authBloc.stream.listen((state) {
+      if (state is AuthStateLogOuted) {
+        globalStateBloc.pickItem(GLobalStates.AUTH);
+      } else if (state is AuthStateLogedIn) {
+        globalStateBloc.pickItem(GLobalStates.TABS);
+      }else if (state is AuthStateFirstIn){
+        globalStateBloc.pickItem(GLobalStates.FIRSTIN);
+      }
+      else{
+        globalStateBloc.pickItem(GLobalStates.AUTH);
+      }
+    });
+    authBloc.add(AuthEventInit());
     super.initState();
   }
 
   @override
   void dispose() {
-    globalStateBloc.dispose();
-    authBloc.dispose();
-    markersCollectionBloc.dispose();
+    authBloc.close();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder(
-        stream: globalStateBloc.subject,
-        // ignore: missing_return
-        builder: (context, AsyncSnapshot<GLobalStates> snapshot) {
-          if (snapshot.hasData) {
-            /*if (snapshot.data.error != null &&
-                snapshot.data.error.length > 0) {
-              if (snapshot.data.error == "Loading") {
-                return buildLoadingWidget();
-              }
-              if (snapshot.data.error == "Авторизуйтесь") {
+    return BlocProvider<AuthBloc>.value(
+      value: authBloc,
+      child: StreamBuilder(
+          stream: globalStateBloc.subject,
+          // ignore: missing_return
+          builder: (context, AsyncSnapshot<GLobalStates> snapshot) {
+            if (snapshot.hasData) {
+              /*if (snapshot.data.error != null &&
+                  snapshot.data.error.length > 0) {
+                if (snapshot.data.error == "Loading") {
+                  return buildLoadingWidget();
+                }
+                if (snapshot.data.error == "Авторизуйтесь") {
+                  //TODO: Заменить на AuthScreen после того как сделаем
+                  return WorkSpaceScreen();
+                }
                 //TODO: Заменить на AuthScreen после того как сделаем
                 return WorkSpaceScreen();
+              }*/
+              if (snapshot.data == GLobalStates.FIRSTIN) {
+                return WellcomePageStepper();
+              } else if (snapshot.data == GLobalStates.AUTH) {
+                return AuthorisationMainScreen();
+              } else if (snapshot.data == GLobalStates.TABS) {
+                return WorkSpaceScreen();
               }
-              //TODO: Заменить на AuthScreen после того как сделаем
-              return WorkSpaceScreen();
-            }*/
-            if (snapshot.data == GLobalStates.FIRSTIN) {
-              return WellcomePageStepper();
-            } else if (snapshot.data == GLobalStates.AUTH) {
-              return AuthorisationMainScreen();
-            } else if (snapshot.data == GLobalStates.TABS) {
-              return WorkSpaceScreen();
+            } else if (snapshot.hasError) {
+              return buildLoadingWidget();
+            } else {
+              return buildLoadingWidget();
             }
-          } else if (snapshot.hasError) {
-            return buildLoadingWidget();
-          } else {
-            return buildLoadingWidget();
-          }
-        });
+          }),
+    );
   }
 }

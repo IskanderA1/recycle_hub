@@ -32,15 +32,15 @@ class MapService {
     _box = await Hive.openBox(_boxKey);
   }
 
-  void _checkBox() async {
+  Future<void> _checkBox() async {
     if (_box == null || !_box.isOpen) {
       _box = await Hive.openBox(_boxKey);
     }
   }
 
-  Future<MarkersCollectionResponse> loadMarkersFrom4Coords(
+  Future<List<CustMarker>> loadMarkersFrom4Coords(
       LatLng latLng, double zoom) async {
-    _checkBox();
+    await _checkBox();
     Coords x1, x2, x3, x4;
     if (zoom > 10) {
       x1 = Coords(lat: latLng.latitude - 0.5, lng: latLng.longitude + 0.5);
@@ -49,7 +49,7 @@ class MapService {
       x4 = Coords(lat: latLng.latitude - 0.5, lng: latLng.longitude - 0.5);
     }
     try {
-      DateTime lastDownLoad =
+      /*DateTime lastDownLoad =
           _box.get('lastTime', defaultValue: DateTime(2020, 12, 21));
       Duration dur = DateTime.now().difference(lastDownLoad);
       if (dur < Duration(minutes: 1)) {
@@ -58,9 +58,9 @@ class MapService {
         if (localList.isNotEmpty) {
           developer.log("Маркеры загружены из локального хранилища",
               name: _devLog);
-          return MarkersCollectionResponseOk.fromList(localList);
+          return localList;
         }
-      }
+      }*/
 
       print("Запрос отправлен");
       var response = await CommonRequest.makeRequest('rec_points',
@@ -77,19 +77,18 @@ class MapService {
             data.map((marker) => CustMarker.fromMap(marker)));
         _box.put(_boxListKey, list);
         _box.put('lastTime', DateTime.now());
-        return MarkersCollectionResponseOk.fromList(list);
+        return list;
       } else {
-        return MarkerCollectionResponseWithError(err: "Список пуст");
+        throw Exception("Список пуст");
       }
     } catch (error, stacktrace) {
       developer.log("Exception occured: $error stackTrace: $stacktrace",
           name: _devLog);
-      return MarkerCollectionResponseWithError(err: "Нет сети");
+      rethrow;
     }
   }
 
-  Future<MarkersCollectionResponse> getMarkersByFilter(
-      MapFilterModel model) async {
+  Future<List<CustMarker>> getMarkersByFilter(MapFilterModel model) async {
     _checkBox();
     try {
       Hive.openBox(_boxKey);
@@ -118,7 +117,7 @@ class MapService {
           }
         }
         print("Маркеры загружены из локального хранилища");
-        return MarkersCollectionResponseOk.fromList(localList);
+        return localList;
       }
 
       String _filters = '[';
@@ -156,14 +155,16 @@ class MapService {
       var data = jsonDecode(response.body);
       print(data);
       if (data.isNotEmpty) {
-        return MarkersCollectionResponseOk(data);
+        return List<CustMarker>.from(data.map((e) {
+          return CustMarker.fromMap(e);
+        }));
       } else {
-        return MarkerCollectionResponseEmptyList(err: "Список пуст");
+        return [];
       }
     } catch (error, stacktrace) {
       developer.log("Exception occured: $error stackTrace: $stacktrace",
           name: _devLog);
-      return MarkerCollectionResponseWithError(err: "Нет сети");
+      rethrow;
     }
   }
 

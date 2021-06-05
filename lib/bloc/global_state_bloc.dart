@@ -1,4 +1,4 @@
-/* import 'package:recycle_hub/api/request/session_manager.dart';
+import 'package:recycle_hub/api/request/session_manager.dart';
 import 'package:recycle_hub/api/services/user_service.dart';
 import 'package:recycle_hub/bloc/auth_user_bloc.dart';
 import 'package:recycle_hub/helpers/settings.dart';
@@ -8,7 +8,7 @@ import 'package:recycle_hub/api/app_repo.dart';
 enum GLobalStates { FIRSTIN, AUTH, TABS }
 
 class GlobalStateBloc {
-  /* final UserService _repository = AppService(); */
+  UserService _service = UserService();
   final BehaviorSubject<GLobalStates> _subject =
       BehaviorSubject<GLobalStates>();
 
@@ -17,11 +17,7 @@ class GlobalStateBloc {
     if (_comeIn == true) {
       _subject.sink.add(GLobalStates.FIRSTIN);
     } else {
-      int i = await authBloc.authLocal();
-      if (i == 0)
-        pickItem(GLobalStates.TABS);
-      else
-        pickItem(GLobalStates.AUTH);
+      pickItem(GLobalStates.TABS);
     }
   }
 
@@ -37,4 +33,3 @@ class GlobalStateBloc {
 }
 
 final globalStateBloc = GlobalStateBloc();
- */

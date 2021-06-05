@@ -44,18 +44,12 @@ class WorkDay {
 
   factory WorkDay.fromMap(var map) {
     if (map == null) return null;
-    if(map is List<dynamic>) return WorkDay(
-      first: "00:00",
-      second: "00:00",
-      third: "00:00",
-      fourth: "00:00"
-    );
 
     return WorkDay(
-      first: map['0'],
-      second: map['1'],
-      third: map['2'],
-      fourth: map['3'],
+      first: map[0],
+      second: map[0],
+      third: map[0],
+      fourth: map[3],
     );
   }
 

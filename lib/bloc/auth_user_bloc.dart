@@ -1,4 +1,4 @@
-import 'package:recycle_hub/api/services/user_service.dart';
+/* import 'package:recycle_hub/api/services/user_service.dart';
 import 'package:recycle_hub/bloc/global_state_bloc.dart';
 import 'package:recycle_hub/bloc/navigation_bloc.dart';
 import 'package:recycle_hub/model/authorisation_models/user_response.dart';
@@ -107,3 +107,4 @@ class AuthUserBloc {
 }
 
 final authBloc = AuthUserBloc();
+ */

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg_provider/flutter_svg_provider.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:recycle_hub/bloc/auth/auth_bloc.dart';
 import 'package:recycle_hub/bloc/auth_user_bloc.dart';
 import 'package:recycle_hub/model/authorisation_models/user_response.dart';
 import 'package:recycle_hub/screens/authorisation_and_registration/registration_screen.dart';
@@ -19,9 +21,11 @@ class _AuthScreenState extends State<AuthScreen> {
   final loginController = TextEditingController();
   final passController = TextEditingController();
   bool _obscureText = true;
+  AuthBloc authBloc;
 
   @override
   void initState() {
+    authBloc = BlocProvider.of<AuthBloc>(context);
     super.initState();
   }
 
@@ -151,14 +155,10 @@ class _AuthScreenState extends State<AuthScreen> {
             height: 10,
           ),
           Align(
-            alignment: Alignment.centerLeft,
-            child: StreamBuilder(
-              stream: authBloc.subject,
-              initialData: UserUnlogged(),
-              builder:
-                  (BuildContext context, AsyncSnapshot<UserResponse> snapshot) {
-                if (snapshot.hasData) {
-                  if (snapshot.data is UserAuthFailed) {
+              alignment: Alignment.centerLeft,
+              child: BlocBuilder<AuthBloc, AuthState>(
+                builder: (context, state) {
+                  if (state is UserAuthFailed) {
                     return Text(
                       "Неверный E-mail",
                       style: TextStyle(
@@ -167,17 +167,15 @@ class _AuthScreenState extends State<AuthScreen> {
                           fontSize: 14),
                     );
                   }
-                }
-                return Text(
-                  "",
-                  style: TextStyle(
-                      color: kColorRegGoogle,
-                      fontFamily: "GilroyMedium",
-                      fontSize: 14),
-                );
-              },
-            ),
-          )
+                  return Text(
+                    "",
+                    style: TextStyle(
+                        color: kColorRegGoogle,
+                        fontFamily: "GilroyMedium",
+                        fontSize: 14),
+                  );
+                },
+              ))
         ],
       ),
     );
@@ -240,21 +238,17 @@ class _AuthScreenState extends State<AuthScreen> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              StreamBuilder(
-                stream: authBloc.subject,
-                initialData: UserUnlogged(),
-                builder: (BuildContext context,
-                    AsyncSnapshot<UserResponse> snapshot) {
-                  if (snapshot.hasData) {
-                    if (snapshot.data is UserAuthFailed) {
-                      return Text(
-                        "Неверный пароль",
-                        style: TextStyle(
-                            color: kColorRegGoogle,
-                            fontFamily: "GilroyMedium",
-                            fontSize: 14),
-                      );
-                    }
+              BlocBuilder<AuthBloc, AuthState>(
+                bloc: authBloc,
+                builder: (context, state) {
+                  if (state is AuthStateFail) {
+                    return Text(
+                      "Неверный пароль",
+                      style: TextStyle(
+                          color: kColorRegGoogle,
+                          fontFamily: "GilroyMedium",
+                          fontSize: 14),
+                    );
                   }
                   return Text(
                     "",
@@ -296,7 +290,7 @@ class _AuthScreenState extends State<AuthScreen> {
       child: RaisedButton(
         elevation: 5.0,
         onPressed: () {
-          authBloc.auth(loginController.text, passController.text);
+          authBloc.add(AuthEventLogin(login: loginController.text, password: passController.text));
         },
         padding: EdgeInsets.all(15.0),
         shape: RoundedRectangleBorder(

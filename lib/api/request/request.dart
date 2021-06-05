@@ -69,7 +69,7 @@ class CommonRequest {
       case CommonRequestMethod.put:
         return _putRequest(baseURL, endpoint, params, body, headers);
       default:
-        return http.post(Uri(path:apiURL + endpoint), headers: headers);
+        return http.post(Uri(path: apiURL + endpoint), headers: headers);
     }
   }
 
@@ -86,16 +86,16 @@ class CommonRequest {
 
   static Future<http.Response> _getRequest(String baseURL, String endpoint,
       Map<String, dynamic> body, Map<String, String> headers) async {
-    String url = endpoint;
+    String url = '$baseURL/$endpoint';
     if (body != null) {
       String params = buildQueryString(body);
-      url = endpoint + params;
+      url = '$endpoint/$params';
     }
     developer.log("GET: $baseURL/$url", name: 'recycle.api.request');
 
     var response;
     try {
-      response = await defaultClient.get(Uri(path: url), headers: headers);
+      response = await defaultClient.get(Uri.parse(url), headers: headers);
     } on http.ClientException catch (e) {
       throw ApiError(
           type: ApiErrorType.descriptionError, errorDescription: e.message);
@@ -115,18 +115,18 @@ class CommonRequest {
       Map<String, dynamic> params,
       dynamic body,
       Map<String, String> headers) async {
-    String url = baseURL + endpoint;
+    String url = baseURL + '/' + endpoint;
     if (params != null) {
       String queryParams = buildQueryString(params);
       endpoint = endpoint + queryParams;
     }
-    String jsonBody = jsonEncode(body);
-    developer.log("\n\nPOST: $url", name: 'recycle.api.request');
+    //String jsonBody = jsonEncode(body);
+    developer.log("\nPOST: $url", name: 'recycle.api.request');
 
     var response;
     try {
-      response = await defaultClient.post(Uri(path: url),
-          headers: headers, body: jsonBody);
+      response = await defaultClient.post(Uri.parse(url),
+          headers: headers, body: body);
     } on http.ClientException catch (e) {
       throw ApiError(
           type: ApiErrorType.descriptionError, errorDescription: e.message);
@@ -146,12 +146,12 @@ class CommonRequest {
       String params = buildQueryString(body);
       endpoint = endpoint + params;
     }
-    developer.log("DELETE: $endpoint", name: 'recycle.api.request');
+    String url = '$baseURL/$endpoint';
+    developer.log("DELETE: $url", name: 'recycle.api.request');
 
     var response;
     try {
-      response =
-          await defaultClient.delete(Uri(path: baseURL + endpoint), headers: headers);
+      response = await defaultClient.delete(Uri.parse(url), headers: headers);
     } on http.ClientException catch (e) {
       throw ApiError(
           type: ApiErrorType.descriptionError, errorDescription: e.message);
@@ -171,7 +171,7 @@ class CommonRequest {
       Map<String, dynamic> params,
       dynamic body,
       Map<String, dynamic> headers) async {
-    String url = baseURL + endpoint;
+    String url = '$baseURL/$endpoint';
 
     if (params != null) {
       String urlParams = buildQueryString(params);
@@ -182,12 +182,13 @@ class CommonRequest {
     var response;
     try {
       if (body != null) {
-        String jsonBody = jsonEncode(body);
+        //String jsonBody = jsonEncode(body);
 
-        response =
-            await defaultClient.put(Uri(path: baseURL + endpoint), headers: headers, body: jsonBody);
+        response = await defaultClient.put(Uri.parse(url),
+            headers: headers, body: body);
       } else {
-        response = await defaultClient.put(Uri(path: baseURL + url), headers: headers);
+        response =
+            await defaultClient.put(Uri(path: baseURL + url), headers: headers);
       }
     } on http.ClientException catch (e) {
       throw ApiError(

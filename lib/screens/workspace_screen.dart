@@ -2,6 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:recycle_hub/bloc/map/map_bloc.dart';
 import 'package:recycle_hub/bloc/navigation_bloc.dart';
 import 'package:recycle_hub/elements/drawer.dart';
 import 'package:recycle_hub/screens/tabs/eco_gide/main_eco_screen.dart';
@@ -19,20 +21,22 @@ class WorkSpaceScreen extends StatefulWidget {
 class _WorkSpaceState extends State<WorkSpaceScreen> {
   StreamSubscription streamSubscription;
   int _currentInd;
+  MapBloc mapBloc;
   @override
   void initState() {
+    mapBloc = MapBloc()..add(MapEventInit());
     _currentInd = 0;
     streamSubscription = bottomNavBarBloc.itemStream.listen((event) {
       setState(() {
-        if(event == NavBarItem.MAP){
+        if (event == NavBarItem.MAP) {
           _currentInd = 0;
-      }else if(event == NavBarItem.ECO_GIDE){
-        _currentInd = 1;
-      }else if(event == NavBarItem.ECO_COIN){
-        _currentInd = 2;
-      }else {
-        _currentInd=3;
-      }
+        } else if (event == NavBarItem.ECO_GIDE) {
+          _currentInd = 1;
+        } else if (event == NavBarItem.ECO_COIN) {
+          _currentInd = 2;
+        } else {
+          _currentInd = 3;
+        }
       });
     });
     super.initState();
@@ -40,13 +44,12 @@ class _WorkSpaceState extends State<WorkSpaceScreen> {
 
   @override
   void dispose() {
+    streamSubscription.cancel();
     super.dispose();
   }
 
-  void changeCurrent(){
-    setState(() {
-      
-    });
+  void changeCurrent() {
+    setState(() {});
   }
 
   @override
@@ -56,7 +59,10 @@ class _WorkSpaceState extends State<WorkSpaceScreen> {
       drawer: CustomDrawer(),
       body: Stack(children: [
         IndexedStack(index: _currentInd, children: [
-          MapScreen(),
+          BlocProvider.value(
+            value: mapBloc,
+            child: MapScreen(),
+          ),
           EcoMainScreen(),
           EcoCoinMainScreen(),
           ProfileMenuScreen(),

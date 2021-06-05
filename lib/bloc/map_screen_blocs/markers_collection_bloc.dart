@@ -1,4 +1,4 @@
-import 'dart:async';
+/* import 'dart:async';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:recycle_hub/api/services/map_service.dart';
 import 'package:recycle_hub/model/map_models.dart/filter_model.dart';
@@ -46,3 +46,4 @@ class MarkersCollectionBloc {
 }
 
 MarkersCollectionBloc markersCollectionBloc = MarkersCollectionBloc();
+ */

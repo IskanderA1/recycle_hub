@@ -78,7 +78,7 @@ class _ReqistrationScreenState extends State<ReqistrationScreen> {
                           Spacer(
                             flex: 2,
                           ),
-                          StreamBuilder(
+                          /*StreamBuilder(
                             stream: authBloc.subject,
                             builder: (BuildContext ctx,
                                 AsyncSnapshot<UserResponse> snapshot) {
@@ -97,7 +97,7 @@ class _ReqistrationScreenState extends State<ReqistrationScreen> {
                                     TextStyle(fontSize: 14, color: kColorRed),
                               );
                             },
-                          ),
+                          ),*/
                           Spacer(
                             flex: 2,
                           ),
@@ -375,7 +375,7 @@ class _ReqistrationScreenState extends State<ReqistrationScreen> {
       child: RaisedButton(
         elevation: 5.0,
         onPressed: () {
-          authBloc
+          /*authBloc
               .registrUser(_name.text, _surname.text, _email.text,
                   _password.text, _refCode.text)
               .then((i) {
@@ -383,7 +383,7 @@ class _ReqistrationScreenState extends State<ReqistrationScreen> {
               Navigator.pushReplacement(context,
                   MaterialPageRoute(builder: (context) => ConfirmCodeScreen()));
             }
-          });
+          });*/
         },
         padding: EdgeInsets.all(15.0),
         shape: RoundedRectangleBorder(

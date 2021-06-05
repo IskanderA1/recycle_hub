@@ -1,5 +1,7 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:recycle_hub/bloc/auth/auth_bloc.dart';
 import 'package:recycle_hub/bloc/auth_user_bloc.dart';
 import 'package:recycle_hub/model/authorisation_models/user_response.dart';
 import 'package:recycle_hub/screens/authorisation_and_registration/forget_confirm_code_screen.dart';
@@ -87,19 +89,20 @@ class _ChangePassScreenState extends State<ChangePassScreen> {
                               fontFamily: "GilroyMedium",
                               fontSize: 14),
                         ),
-                        StreamBuilder(
-                          stream: authBloc.subject,
-                          builder: (BuildContext ctx,
-                              AsyncSnapshot<UserResponse> snapshot) {
-                            if (snapshot.hasData) {
-                              if (snapshot.data
-                                  is UserForgetPassCodeSendFailed) {
-                                return Text(
-                                  snapshot.data.error,
-                                  style:
-                                      TextStyle(fontSize: 14, color: kColorRed),
-                                );
-                              }
+                        BlocBuilder<AuthBloc, AuthState>(
+                          buildWhen: (prevSt, newSt) {
+                            if (!(newSt is AuthStateFail)) {
+                              return false;
+                            }
+                            return true;
+                          },
+                          builder: (context, state) {
+                            if (state is AuthStateFail) {
+                              return Text(
+                                state.error,
+                                style:
+                                    TextStyle(fontSize: 14, color: kColorRed),
+                              );
                             }
                             return Text(
                               "",

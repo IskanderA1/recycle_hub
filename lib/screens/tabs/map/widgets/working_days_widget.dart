@@ -29,6 +29,16 @@ class WorkingDaysWidget extends StatefulWidget {
 }
 
 class _WorkingDaysWidgetState extends State<WorkingDaysWidget> {
+  Widget divider() {
+    return VerticalDivider(
+      color: widget.wColor,
+      indent: 3,
+      endIndent: 3,
+      width: 2,
+      thickness: 0.6,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     DateTime date = DateTime.now();
@@ -78,13 +88,7 @@ class _WorkingDaysWidgetState extends State<WorkingDaysWidget> {
                       backColor: widget.backColor,
                       fontSize: widget.fontSize,
                     ),
-                    VerticalDivider(
-                      color: widget.wColor,
-                      indent: 3,
-                      endIndent: 3,
-                      width: 2,
-                      thickness: 0.6,
-                    ),
+                    divider(),
                     DayWidget(
                       dayName: "ВТ",
                       dayArr: widget.workingTime.mon,
@@ -94,13 +98,7 @@ class _WorkingDaysWidgetState extends State<WorkingDaysWidget> {
                       backColor: widget.backColor,
                       fontSize: widget.fontSize,
                     ),
-                    VerticalDivider(
-                      color: widget.wColor,
-                      indent: 3,
-                      endIndent: 3,
-                      width: 2,
-                      thickness: 0.6,
-                    ),
+                    divider(),
                     DayWidget(
                       dayName: "СР",
                       dayArr: widget.workingTime.mon,
@@ -110,13 +108,7 @@ class _WorkingDaysWidgetState extends State<WorkingDaysWidget> {
                       backColor: widget.backColor,
                       fontSize: widget.fontSize,
                     ),
-                    VerticalDivider(
-                      color: widget.wColor,
-                      indent: 3,
-                      endIndent: 3,
-                      width: 2,
-                      thickness: 0.6,
-                    ),
+                    divider(),
                     DayWidget(
                       dayName: "ЧТ",
                       dayArr: widget.workingTime.mon,
@@ -126,13 +118,7 @@ class _WorkingDaysWidgetState extends State<WorkingDaysWidget> {
                       backColor: widget.backColor,
                       fontSize: widget.fontSize,
                     ),
-                    VerticalDivider(
-                      color: widget.wColor,
-                      indent: 3,
-                      endIndent: 3,
-                      width: 2,
-                      thickness: 0.6,
-                    ),
+                    divider(),
                     DayWidget(
                       dayName: "ПТ",
                       dayArr: widget.workingTime.mon,
@@ -142,13 +128,7 @@ class _WorkingDaysWidgetState extends State<WorkingDaysWidget> {
                       backColor: widget.backColor,
                       fontSize: widget.fontSize,
                     ),
-                    VerticalDivider(
-                      color: widget.wColor,
-                      indent: 3,
-                      endIndent: 3,
-                      width: 2,
-                      thickness: 0.6,
-                    ),
+                    divider(),
                     DayWidget(
                       dayName: "СБ",
                       dayArr: widget.workingTime.mon,
@@ -158,13 +138,7 @@ class _WorkingDaysWidgetState extends State<WorkingDaysWidget> {
                       backColor: widget.backColor,
                       fontSize: widget.fontSize,
                     ),
-                    VerticalDivider(
-                      color: widget.wColor,
-                      indent: 3,
-                      endIndent: 3,
-                      width: 2,
-                      thickness: 0.6,
-                    ),
+                    divider(),
                     DayWidget(
                       dayName: "ВС",
                       dayArr: widget.workingTime.mon,
@@ -188,13 +162,7 @@ class _WorkingDaysWidgetState extends State<WorkingDaysWidget> {
                       backColor: widget.backColor,
                       fontSize: widget.fontSize,
                     ),
-                    VerticalDivider(
-                      color: widget.wColor,
-                      indent: 3,
-                      endIndent: 3,
-                      width: 2,
-                      thickness: 0.6,
-                    ),
+                    divider(),
                     DayWidget(
                       dayName: "ВТ",
                       dayArr: widget.workingTime.mon,
@@ -204,13 +172,7 @@ class _WorkingDaysWidgetState extends State<WorkingDaysWidget> {
                       backColor: widget.backColor,
                       fontSize: widget.fontSize,
                     ),
-                    VerticalDivider(
-                      color: widget.wColor,
-                      indent: 3,
-                      endIndent: 3,
-                      width: 2,
-                      thickness: 0.6,
-                    ),
+                    divider(),
                     DayWidget(
                       dayName: "СР",
                       dayArr: widget.workingTime.mon,
@@ -220,13 +182,7 @@ class _WorkingDaysWidgetState extends State<WorkingDaysWidget> {
                       backColor: widget.backColor,
                       fontSize: widget.fontSize,
                     ),
-                    VerticalDivider(
-                      color: widget.wColor,
-                      indent: 3,
-                      endIndent: 3,
-                      width: 2,
-                      thickness: 0.6,
-                    ),
+                    divider(),
                     DayWidget(
                       dayName: "ЧТ",
                       dayArr: widget.workingTime.mon,
@@ -236,13 +192,7 @@ class _WorkingDaysWidgetState extends State<WorkingDaysWidget> {
                       backColor: widget.backColor,
                       fontSize: widget.fontSize,
                     ),
-                    VerticalDivider(
-                      color: widget.wColor,
-                      indent: 3,
-                      endIndent: 3,
-                      width: 2,
-                      thickness: 0.6,
-                    ),
+                    divider(),
                     DayWidget(
                       dayName: "ПТ",
                       dayArr: widget.workingTime.mon,
@@ -252,13 +202,7 @@ class _WorkingDaysWidgetState extends State<WorkingDaysWidget> {
                       backColor: widget.backColor,
                       fontSize: widget.fontSize,
                     ),
-                    VerticalDivider(
-                      color: widget.wColor,
-                      indent: 3,
-                      endIndent: 3,
-                      width: 2,
-                      thickness: 0.6,
-                    ),
+                    divider(),
                     DayWidget(
                       dayName: "СБ",
                       dayArr: widget.workingTime.mon,
@@ -268,13 +212,7 @@ class _WorkingDaysWidgetState extends State<WorkingDaysWidget> {
                       backColor: widget.backColor,
                       fontSize: widget.fontSize,
                     ),
-                    VerticalDivider(
-                      color: widget.wColor,
-                      indent: 3,
-                      endIndent: 3,
-                      width: 2,
-                      thickness: 0.6,
-                    ),
+                    divider(),
                     DayWidget(
                       dayName: "ВС",
                       dayArr: widget.workingTime.mon,
@@ -311,6 +249,7 @@ class DayWidget extends StatelessWidget {
   final Color textUnSelectedColor;
   final Color backColor;
   final double fontSize;
+  static const String str = "--.--";
 
   @override
   Widget build(BuildContext context) {
@@ -330,7 +269,7 @@ class DayWidget extends StatelessWidget {
                   color: isSelected ? textSelectedColor : textUnSelectedColor),
             ),
             Text(
-              "${dayArr.first}\n${dayArr.fourth}",
+              dayArr != null ? "${dayArr.first}\n${dayArr.fourth}" : str,
               style: TextStyle(
                   fontFamily: 'GilroyMedium',
                   fontSize: fontSize,
@@ -344,7 +283,7 @@ class DayWidget extends StatelessWidget {
                   fontWeight: FontWeight.w900),
             ),
             Text(
-              "${dayArr.second}\n${dayArr.third}",
+              dayArr != null ? "${dayArr.second}\n${dayArr.third}" : str,
               style: TextStyle(
                   fontFamily: 'GilroyMedium',
                   fontSize: fontSize,
@@ -361,6 +300,16 @@ class DaysRow extends StatelessWidget {
   final WorkingTime workingTime;
   final double sSize;
   final double fontSize;
+
+  Widget divider() {
+    return VerticalDivider(
+      color: kColorBlack,
+      indent: 3,
+      endIndent: 3,
+      width: 2,
+      thickness: 0.6,
+    );
+  }
 
   const DaysRow(
       {Key key,
@@ -380,13 +329,7 @@ class DaysRow extends StatelessWidget {
           textUnSelectedColor: kColorWhite,
           backColor: kColorWhite,
           fontSize: fontSize),
-      VerticalDivider(
-        color: kColorBlack,
-        indent: 3,
-        endIndent: 3,
-        width: 2,
-        thickness: 0.6,
-      ),
+      divider(),
       DayWidget(
           dayName: "ВТ",
           dayArr: workingTime.mon,
@@ -395,13 +338,7 @@ class DaysRow extends StatelessWidget {
           textUnSelectedColor: kColorWhite,
           backColor: kColorWhite,
           fontSize: fontSize),
-      VerticalDivider(
-        color: kColorBlack,
-        indent: 3,
-        endIndent: 3,
-        width: 2,
-        thickness: 0.6,
-      ),
+      divider(),
       DayWidget(
           dayName: "СР",
           dayArr: workingTime.mon,
@@ -410,13 +347,7 @@ class DaysRow extends StatelessWidget {
           textUnSelectedColor: kColorWhite,
           backColor: kColorWhite,
           fontSize: fontSize),
-      VerticalDivider(
-        color: kColorBlack,
-        indent: 3,
-        endIndent: 3,
-        width: 2,
-        thickness: 0.6,
-      ),
+      divider(),
       DayWidget(
           dayName: "ЧТ",
           dayArr: workingTime.mon,
@@ -425,13 +356,7 @@ class DaysRow extends StatelessWidget {
           textUnSelectedColor: kColorWhite,
           backColor: kColorWhite,
           fontSize: fontSize),
-      VerticalDivider(
-        color: kColorBlack,
-        indent: 3,
-        endIndent: 3,
-        width: 2,
-        thickness: 0.6,
-      ),
+      divider(),
       DayWidget(
           dayName: "ПТ",
           dayArr: workingTime.mon,
@@ -440,13 +365,7 @@ class DaysRow extends StatelessWidget {
           textUnSelectedColor: kColorWhite,
           backColor: kColorWhite,
           fontSize: fontSize),
-      VerticalDivider(
-        color: kColorBlack,
-        indent: 3,
-        endIndent: 3,
-        width: 2,
-        thickness: 0.6,
-      ),
+      divider(),
       DayWidget(
           dayName: "СБ",
           dayArr: workingTime.mon,
@@ -455,13 +374,7 @@ class DaysRow extends StatelessWidget {
           textUnSelectedColor: kColorWhite,
           backColor: kColorWhite,
           fontSize: fontSize),
-      VerticalDivider(
-        color: kColorBlack,
-        indent: 3,
-        endIndent: 3,
-        width: 2,
-        thickness: 0.6,
-      ),
+      divider(),
       DayWidget(
           dayName: "ВС",
           dayArr: workingTime.mon,
