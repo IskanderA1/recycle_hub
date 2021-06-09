@@ -21,7 +21,7 @@ class TransactionAdapter extends TypeAdapter<Transaction> {
       recPointId: fields[1] as String,
       filterId: fields[2] as String,
       filterName: fields[3] as String,
-      amount: fields[4] as int,
+      amount: fields[4] as double,
       reward: fields[5] as int,
       status: fields[6] as String,
       date: fields[7] as DateTime,

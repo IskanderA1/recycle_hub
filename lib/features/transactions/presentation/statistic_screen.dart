@@ -8,6 +8,8 @@ import 'package:provider/provider.dart';
 import 'package:recycle_hub/bloc/profile_bloc/profile_bloc.dart';
 import 'package:recycle_hub/features/transactions/domain/model/statistic_model.dart';
 import 'package:recycle_hub/features/transactions/domain/state/transactions_state.dart';
+import 'package:recycle_hub/features/transactions/presentation/components/drop_down_menu_button.dart';
+import 'package:recycle_hub/helpers/messager_helper.dart';
 import 'package:recycle_hub/screens/tabs/map/widgets/loader_widget.dart';
 import 'package:recycle_hub/style/theme.dart';
 import 'package:menu_button/menu_button.dart';
@@ -49,10 +51,8 @@ class _StatisticScreenState extends State<StatisticScreen> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     _transactionsState ??= Provider.of<TransactionsState>(context);
-    _disposer = reaction(
-        (_) => _transactionsState.errorMessage,
-        (String message) => ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(message), duration: Duration(seconds: 5))));
+    _disposer = reaction((_) => _transactionsState.errorMessage,
+        (String message) => showMessage(context: context, message: message));
   }
 
   @override
@@ -124,7 +124,7 @@ class _StatisticScreenState extends State<StatisticScreen> {
                                     fontSize: 14, fontFamily: 'Gillroy')),
                           ],
                         ),
-                        /*ClipRRect(
+                        ClipRRect(
                           borderRadius: BorderRadius.all(Radius.circular(15)),
                           child: MenuButton<DropDownMenuItem>(
                             decoration: BoxDecoration(
@@ -135,8 +135,9 @@ class _StatisticScreenState extends State<StatisticScreen> {
                             selectedItem: _currentPeriod,
                             itemBackgroundColor: Color(0xFFF7F7F7),
                             menuButtonBackgroundColor: Color(0xFFF7F7F7),
-                            child: NormalChildButton(
-                              selectedItem: _currentPeriod,
+                            child: DropDownMenuChildButton(
+                              selectedItem:
+                                  "${_currentPeriod.count} ${_currentPeriod.name}",
                             ),
                             items: _datesList,
                             itemBuilder: (DropDownMenuItem item) => Container(
@@ -150,13 +151,14 @@ class _StatisticScreenState extends State<StatisticScreen> {
                               child: Text("${item.count} ${item.name}"),
                             ),
                             toggledChild: Container(
-                              child: NormalChildButton(
-                                selectedItem: ${_currentPeriod.count} ${_selectedItem.name},
+                              child: DropDownMenuChildButton(
+                                selectedItem:
+                                    "${_currentPeriod.count} ${_currentPeriod.name}",
                               ),
                             ),
                             onItemSelected: (DropDownMenuItem item) {
                               _transactionsState.getTransacts(
-                                  Hive.box('user').get('user').id);
+                                  item.from, item.to);
                               setState(() {
                                 _currentPeriod = item;
                               });
@@ -165,7 +167,7 @@ class _StatisticScreenState extends State<StatisticScreen> {
                               print(isTohgle);
                             },
                           ),
-                        )*/
+                        )
                       ],
                     ),
                     SizedBox(
@@ -188,7 +190,9 @@ class _StatisticScreenState extends State<StatisticScreen> {
                       }
                       if (_transactionsState.state == StoreState.LOADED) {
                         return StatisticWidget(
-                            statisticModel: _transactionsState.statisticModel, totalKG: _transactionsState.totalKG,);
+                          statisticModel: _transactionsState.statisticModel,
+                          totalKG: _transactionsState.totalKG,
+                        );
                       }
                     }),
                     SizedBox(
@@ -256,12 +260,7 @@ class _StatisticScreenState extends State<StatisticScreen> {
                                         }
                                         if (_transactionsState.state ==
                                             StoreState.LOADED) {
-                                          double totalKG = 0;
-                                          _transactionsState.statisticModel
-                                              .forEach((element) {
-                                            totalKG += element.count;
-                                          });
-                                          return Text("$totalKG кг",
+                                          return Text("${_transactionsState.totalKG} кг",
                                               style: TextStyle(
                                                   color:
                                                       const Color(0xFF484848),
@@ -377,16 +376,21 @@ class StatisticWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
+      shrinkWrap: true,
       itemCount: statisticModel.length,
       itemBuilder: (context, index) {
-      return StatisticListElement(
+        if(statisticModel[index] == null){
+          return Container();
+        }
+        return StatisticListElement(
           svgId: 0,
-          name: "Бумага",
-          kg: "${statisticModel[index].filterType.name}",
+          name: "${statisticModel[index].filterType.name}",
+          kg: "${statisticModel[index].count}",
           percent:
               "${(statisticModel[index].count * 100 / totalKG).roundToDouble()}",
         );
-    },);
+      },
+    );
   }
 }
 

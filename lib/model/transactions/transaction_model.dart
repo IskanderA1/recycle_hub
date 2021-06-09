@@ -29,7 +29,7 @@ class Transaction {
   @HiveField(3)
   String filterName;
   @HiveField(4)
-  int amount;
+  double amount;
   @HiveField(5)
   int reward;
   @HiveField(6)
@@ -42,7 +42,7 @@ class Transaction {
     String recPointId,
     String filterId,
     String filterName,
-    int amount,
+    double amount,
     int reward,
     String status,
     DateTime date,

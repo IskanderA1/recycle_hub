@@ -1,6 +1,11 @@
 import 'package:http/http.dart' as http;
 
-enum RequestErrorCode { apiUnreachable, unknown }
+enum RequestErrorCode {
+  apiUnreachable,
+  unknown,
+  notEnoughMoney,
+  productIsOver
+   }
 
 class RequestError extends Error {
   RequestErrorCode code;

@@ -109,7 +109,7 @@ class SessionManager {
     DateTime time = await Settings().getSessionTokenTime();
     DateTime nowTime = DateTime.now();
     Duration duration = nowTime.difference(time);
-    if (duration.inHours >= 2) {
+    if (duration.inHours >= 1) {
       return true;
     }
     return false;

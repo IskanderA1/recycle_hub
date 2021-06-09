@@ -3,10 +3,12 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:hive/hive.dart';
 import 'package:mobx/mobx.dart';
 import 'package:provider/provider.dart';
+import 'package:recycle_hub/api/services/user_service.dart';
+import 'package:recycle_hub/helpers/messager_helper.dart';
 import 'package:recycle_hub/model/transactions/transaction_model.dart';
 import 'package:recycle_hub/screens/tabs/map/widgets/loader_widget.dart';
 import 'package:steps_indicator/steps_indicator.dart';
-
+import '../../../model/transactions/user_transaction_model.dart';
 import 'package:recycle_hub/bloc/profile_bloc/profile_bloc.dart';
 import 'package:recycle_hub/features/transactions/domain/state/transactions_state.dart';
 import 'package:recycle_hub/style/theme.dart';
@@ -30,12 +32,10 @@ class _TopUpHistoryScreenState extends State<TopUpHistoryScreen> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     Provider.of<TransactionsState>(context, listen: false)
-        .getTransacts(Hive.box('user').get('user').id);
+        .getTransacts(DateTime.parse("2020-02-27"), DateTime.now());
     _transactionsState ??= Provider.of<TransactionsState>(context);
-    _disposer = reaction(
-        (_) => _transactionsState.errorMessage,
-        (String message) => ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(message), duration: Duration(seconds: 2))));
+    _disposer = reaction((_) => _transactionsState.errorMessage,
+        (String message) => showMessage(context: context, message: message));
   }
 
   @override
@@ -66,9 +66,7 @@ class _TopUpHistoryScreenState extends State<TopUpHistoryScreen> {
       backgroundColor: kColorGreyVeryLight,
       body: Observer(builder: (_) {
         if (_transactionsState.state == StoreState.LOADED) {
-          return SingleChildScrollView(
-              child: TopUpCards(
-                  transactions: _transactionsState.transactions));
+          return TopUpCards(transactions: UserService().userTransactions);
         }
         return LoaderWidget();
       }),
@@ -90,27 +88,28 @@ class TopUp {
 
 enum TopUpStatus { INPROGRESS, COMPLETED }
 
-class TopUpCards extends StatelessWidget {
-  final List<Transaction> transactions;
+class TopUpCards extends StatefulWidget {
+  final List<UserTransaction> transactions;
   const TopUpCards({
     Key key,
     @required this.transactions,
   }) : super(key: key);
+
+  @override
+  _TopUpCardsState createState() => _TopUpCardsState();
+}
+
+class _TopUpCardsState extends State<TopUpCards> {
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-        shrinkWrap: true,
-        itemCount: transactions.length,
-        padding: EdgeInsets.all(20),
-        itemBuilder: (BuildContext context, int i) {
-          return GestureDetector(
-            /*onTap: () => Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => PurchaseDetailScreen(
-                          purchase: list[i],
-                        ))),*/
-            child: Card(
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 60),
+      child: ListView.builder(
+          shrinkWrap: true,
+          itemCount: widget.transactions.length,
+          padding: EdgeInsets.all(20),
+          itemBuilder: (BuildContext context, int i) {
+            return Card(
               child: Container(
                 padding: EdgeInsets.fromLTRB(15, 20, 15, 20),
                 decoration: BoxDecoration(
@@ -154,8 +153,7 @@ class TopUpCards extends StatelessWidget {
                                         fontFamily: 'GillroyMedium'),
                                   ),
                                   Text(
-                                    //TODO: Дописать количество экокоинов после изменения модели
-                                    "${transactions[i].reward} Экокоинов",
+                                    "${widget.transactions[i].ecoCoins} Экокоинов",
                                     style: const TextStyle(
                                         color: kColorBlack,
                                         fontFamily: 'GillroyMedium'),
@@ -195,24 +193,26 @@ class TopUpCards extends StatelessWidget {
                               left: 10, right: 10, top: 10),
                           child: StepsIndicator(
                             lineLength: 100,
-                            selectedStep: transactions[i].status == 'c' ? 2 : 1,
+                            selectedStep:
+                                widget.transactions[i].status == 'c' ? 2 : 1,
                             nbSteps: 3,
                             doneStepSize: 15,
-                            doneStepColor: transactions[i].status == 'c'
+                            doneStepColor: widget.transactions[i].status == 'c'
                                 ? kColorGreen
                                 : kColorRed,
-                            doneLineColor: transactions[i].status == 'c'
+                            doneLineColor: widget.transactions[i].status == 'c'
                                 ? kColorGreen
                                 : kColorRed,
                             doneLineThickness: 2.5,
                             undoneLineColor: kColorGreyLight,
                             unselectedStepColorIn: kColorGreyLight,
                             unselectedStepColorOut: kColorGreyLight,
-                            selectedStepColorOut: transactions[i].status == 'c'
-                                ? kColorGreen
-                                : kColorRed,
+                            selectedStepColorOut:
+                                widget.transactions[i].status == 'c'
+                                    ? kColorGreen
+                                    : kColorRed,
                             selectedStepBorderSize: 0,
-                            selectedStepColorIn: transactions[i].status == 'c'
+                            selectedStepColorIn: widget.transactions[i].status == 'c'
                                 ? kColorGreen
                                 : kColorRed,
                             unselectedStepSize: 15,
@@ -222,14 +222,14 @@ class TopUpCards extends StatelessWidget {
                       ],
                     ),
                     Align(
-                      alignment: transactions[i].status == 'c'
+                      alignment: widget.transactions[i].status == 'c'
                           ? Alignment.centerRight
                           : Alignment.center,
                       child: Padding(
-                        padding: transactions[i].status == 'c'
+                        padding: widget.transactions[i].status == 'c'
                             ? const EdgeInsets.only(right: 15)
                             : EdgeInsets.zero,
-                        child: transactions[i].status == 'c'
+                        child: widget.transactions[i].status == 'c'
                             ? Text(
                                 "Завершено",
                                 style: const TextStyle(
@@ -251,8 +251,8 @@ class TopUpCards extends StatelessWidget {
                   ],
                 ),
               ),
-            ),
-          );
-        });
+            );
+          }),
+    );
   }
 }

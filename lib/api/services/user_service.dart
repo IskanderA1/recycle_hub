@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:recycle_hub/api/request/request.dart';
 import 'package:recycle_hub/api/request/session_manager.dart';
+import 'package:recycle_hub/api/services/store_service.dart';
 import 'package:recycle_hub/helpers/jwt_parser.dart';
 import 'package:recycle_hub/model/api_error.dart';
 import 'package:recycle_hub/model/authorisation_models/user_response.dart';
@@ -24,6 +25,12 @@ class UserService {
   List<UserTransaction> _userTransactions;
 
   List<Transaction> _transactions;
+
+  double _garbagesGiven = 0;
+
+  List<UserTransaction> get userTransactions =>_userTransactions;
+  List<Transaction> get transactions => _transactions;
+  double get garbageGiven => _garbagesGiven;
 
   UserModel get user => _user;
 
@@ -91,6 +98,9 @@ class UserService {
       Map<String, dynamic> data = jsonDecode(response.body);
       var user = UserModel.fromMap(data);
       _user = user;
+      await loadUserStatistic();
+      await StoreService().loadProducts();
+      await StoreService().loadPurchases();
       return user;
     } else {
       return null;
@@ -102,12 +112,50 @@ class UserService {
     try {
       response = await CommonRequest.makeRequest('transactions');
       if (response.statusCode == 200) {
-        var data = jsonDecode(response.body);
-        //_userTransactions = List<UserTransaction>.from(data.map(e)=>UserTransaction.)
-      }else{
+        var data = json.decode(response.body);
+        print(data);
+        if (data.isNotEmpty) {
+          _userTransactions = List<UserTransaction>.from(data.map((e) {
+            return UserTransaction.fromMap(e);
+          }));
+        }else{
+          _userTransactions = [];
+        }
+      } else {
         _userTransactions = [];
       }
-    } catch (e) {}
+    } catch (e) {
+      developer.log("Error type: ${e.runtimeType} ${e.toString()}", name : 'api.services.user_service');
+      _userTransactions = [];
+    }
+
+    try {
+      response = await CommonRequest.makeRequest('recycle');
+      if (response.statusCode == 200) {
+        var data = json.decode(response.body);
+        print(data);
+        if (data.isNotEmpty) {
+          _transactions = List<Transaction>.from(data.map((e) {
+            return Transaction.fromMap(e);
+          }));
+        }else{
+          _transactions = [];
+        }
+      } else {
+        _transactions = [];
+      }
+    } catch (e) {
+      developer.log("Error type: ${e.runtimeType} ${e.toString()}", name : 'api.services.user_service');
+      _transactions = [];
+    }
+
+    if(_transactions.isNotEmpty){
+      _transactions.forEach((element) {
+        //if(element.status == 'c'){
+          _garbagesGiven += element.amount;
+        //}
+      });
+    }
   }
 
   ///Запрос на регистрацию

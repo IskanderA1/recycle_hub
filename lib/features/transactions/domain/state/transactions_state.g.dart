@@ -113,8 +113,8 @@ mixin _$TransactionsState on TransactionsStateBase, Store {
       AsyncAction('TransactionsStateBase.getTransacts');
 
   @override
-  Future<List<UserTransaction>> getTransacts(String id) {
-    return _$getTransactsAsyncAction.run(() => super.getTransacts(id));
+  Future<List<Transaction>> getTransacts(DateTime from, DateTime to) {
+    return _$getTransactsAsyncAction.run(() => super.getTransacts(from, to));
   }
 
   @override

@@ -141,6 +141,17 @@ mixin _$AdminTransactionsState on TransactionsStateB, Store {
   }
 
   @override
+  void toState(AdmStoreState newState) {
+    final _$actionInfo = _$TransactionsStateBActionController.startAction(
+        name: 'TransactionsStateB.toState');
+    try {
+      return super.toState(newState);
+    } finally {
+      _$TransactionsStateBActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 userToken: ${userToken},

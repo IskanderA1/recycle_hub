@@ -6,6 +6,7 @@ import 'package:recycle_hub/bloc/auth/auth_bloc.dart';
 import 'package:recycle_hub/bloc/auth_user_bloc.dart';
 import 'package:recycle_hub/bloc/global_state_bloc.dart';
 import 'package:recycle_hub/bloc/map_screen_blocs/markers_collection_bloc.dart';
+import 'package:recycle_hub/bloc/navigation_bloc.dart';
 import 'package:recycle_hub/elements/loader.dart';
 import 'package:recycle_hub/screens/stepper/stepper.dart';
 import 'package:recycle_hub/screens/workspace_screen.dart';
@@ -30,6 +31,7 @@ class _MainScreenState extends State<MainScreen> {
       if (state is AuthStateLogOuted) {
         globalStateBloc.pickItem(GLobalStates.AUTH);
       } else if (state is AuthStateLogedIn) {
+        bottomNavBarBloc.pickItem(0);
         globalStateBloc.pickItem(GLobalStates.TABS);
       } else if (state is AuthStateFirstIn) {
         globalStateBloc.pickItem(GLobalStates.FIRSTIN);

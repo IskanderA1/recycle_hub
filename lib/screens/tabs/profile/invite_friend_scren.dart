@@ -3,6 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hive/hive.dart';
 import 'package:recycle_hub/bloc/profile_bloc/profile_bloc.dart';
+import 'package:recycle_hub/helpers/clipboard_helper.dart';
+import 'package:recycle_hub/helpers/network_helper.dart';
 import 'package:recycle_hub/model/invite_model.dart';
 import 'package:recycle_hub/api/app_repo.dart';
 import 'package:recycle_hub/screens/tabs/map/widgets/loader_widget.dart';
@@ -110,11 +112,7 @@ class InviteWidget extends StatelessWidget {
                   ),
                   GestureDetector(
                     onTap: () {
-                      Clipboard.setData(ClipboardData(text: "$code"));
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                        content: Text("Код скопирован в буфер обмена"),
-                        duration: Duration(seconds: 1),
-                      ));
+                      saveToCache("$code", context);
                     },
                     child: Icon(
                       Icons.copy,
@@ -188,7 +186,7 @@ class InviteWidget extends StatelessWidget {
                       )),
                       onTap: () {
                         try {
-                          openUrl('https://vk.com/feed');
+                          openUrl('https://vk.com/feed',context);
                         } catch (error) {
                           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                             content: Text("Не удалось открыть приложение VK"),
@@ -206,7 +204,7 @@ class InviteWidget extends StatelessWidget {
                       onTap: () {
                         try {
                           openUrl(
-                              'https://www.instagram.com/<INSTAGRAM_PROFILE>/');
+                              'https://www.instagram.com/<INSTAGRAM_PROFILE>/',context);
                         } catch (error) {
                           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                             content:
@@ -224,7 +222,7 @@ class InviteWidget extends StatelessWidget {
                       )),
                       onTap: () {
                         try {
-                          openUrl('https://www.facebook.com');
+                          openUrl('https://www.facebook.com',context);
                         } catch (error) {
                           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                             content:
@@ -244,13 +242,4 @@ class InviteWidget extends StatelessWidget {
   }
 }
 
-void openUrl(String url) async {
-  if (await canLaunch(url)) {
-    await launch(
-      url,
-      universalLinksOnly: true,
-    );
-  } else {
-    throw 'There was a problem to open the url: $url';
-  }
-}
+

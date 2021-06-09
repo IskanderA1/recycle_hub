@@ -6,6 +6,7 @@ import 'package:recycle_hub/features/transactions/domain/model/transaction/trans
 import 'package:recycle_hub/features/transactions/domain/repository/repository.dart';
 import 'package:recycle_hub/model/transactions/transaction_model.dart';
 import 'local/service/local_service.dart';
+import '../../../model/transactions/user_transaction_model.dart';
 
 class TransactionsDataRepository extends TransactionsRepository {
   final ApiUtil apiUtil;
@@ -13,11 +14,11 @@ class TransactionsDataRepository extends TransactionsRepository {
   TransactionsDataRepository(this.apiUtil, this.localService);
 
   @override
-  Future<List<Transaction>> getTransactions(String id) async {
+  Future<List<UserTransaction>> getUserTransactions() async {
     try {
-      var transacts = await localService.getTransactions();
-      if (transacts != null) return transacts;
-      transacts = await apiUtil.getTransaction(id);
+      //var transacts = await localService.getTransactions();
+      //if (transacts != null) return transacts;
+      final transacts = await apiUtil.getUserTrensactions();
       //localService.putTransactions(transacts);
       return transacts;
     } catch (error) {
@@ -25,9 +26,8 @@ class TransactionsDataRepository extends TransactionsRepository {
     }
   }
 
-  @override
-  Future<List<Transaction>> filterTransactions(
-      String id, DateTime from, DateTime to) async {
+  /*@override
+  Future<List<Transaction>> filterTransactions(DateTime from, DateTime to) async {
     try {
       var transacts = await localService.getTransactions();
       if (transacts == null) {
@@ -38,7 +38,7 @@ class TransactionsDataRepository extends TransactionsRepository {
     } catch (error) {
       rethrow;
     }
-  }
+  }*/
 
   @override
   Future<void> createGarbageCollect(
@@ -49,7 +49,7 @@ class TransactionsDataRepository extends TransactionsRepository {
           body: {
             "user_token": userToken,
             "filter_type": filterTypeId,
-            "amount": '${ammount.toInt()}'
+            "amount": ammount.toInt()
           });
       if (response.statusCode != 200) {
         print(jsonDecode(response.body));
@@ -61,8 +61,7 @@ class TransactionsDataRepository extends TransactionsRepository {
   }
 
   @override
-  Future<List<Transaction>> getGarbageCollects(
-      String userToken, String filterTypeId, double ammount) async {
+  Future<List<Transaction>> getTransactions() async {
     try {
       var response = await CommonRequest.makeRequest('recycle');
       if (response.statusCode == 200) {
@@ -77,7 +76,7 @@ class TransactionsDataRepository extends TransactionsRepository {
   }
 
   @override
-  Future<Transaction> getGargagecCollectById(String recycleId) async {
+  Future<Transaction> getTransactionById(String recycleId) async {
     try {
       var response = await CommonRequest.makeRequest('recycle', params: {
         "recycle_id": recycleId

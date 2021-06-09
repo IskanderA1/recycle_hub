@@ -3,9 +3,11 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mobx/mobx.dart';
 import 'package:provider/provider.dart';
 import 'package:recycle_hub/bloc/map/map_bloc.dart';
 import 'package:recycle_hub/bloc/navigation_bloc.dart';
+import 'package:recycle_hub/bloc/store/store_bloc.dart';
 import 'package:recycle_hub/elements/drawer.dart';
 import 'package:recycle_hub/features/transactions/data/api/api_util.dart';
 import 'package:recycle_hub/features/transactions/data/api/service/service.dart';
@@ -28,14 +30,28 @@ class WorkSpaceScreen extends StatefulWidget {
 }
 
 class _WorkSpaceState extends State<WorkSpaceScreen> {
+  StoreBloc storeBloc;
+
   StreamSubscription streamSubscription;
   int _currentInd;
   MapBloc mapBloc;
+  List<Widget> screenWidgets;
   @override
   void initState() {
     FilterTypesService().getFilters();
     mapBloc = MapBloc()..add(MapEventInit());
     _currentInd = 0;
+    storeBloc ??= StoreBloc()..add(StoreEventInit());
+    screenWidgets = [
+      BlocProvider.value(
+        value: mapBloc,
+        child: MapScreen(),
+      ),
+      Container(),
+      Container(),
+      Container(),
+      Container(),
+    ];
     streamSubscription = bottomNavBarBloc.itemStream.listen((event) {
       setState(() {
         if (event == NavBarItem.MAP) {
@@ -49,9 +65,42 @@ class _WorkSpaceState extends State<WorkSpaceScreen> {
         } else {
           _currentInd = 3;
         }
+        if (screenWidgets[_currentInd] is Container) {
+          screenWidgets[_currentInd] = getWidgetById(_currentInd);
+        }
       });
     });
     super.initState();
+  }
+
+  Widget getWidgetById(int id) {
+    switch (id) {
+      case 0:
+        return BlocProvider.value(
+          value: mapBloc,
+          child: MapScreen(),
+        );
+        break;
+      case 1:
+        return EcoMainScreen();
+        break;
+      case 2:
+        return EcoCoinMainScreen();
+        break;
+      case 3:
+        return BlocProvider.value(
+          value: storeBloc,
+          child: ProfileMenuScreen(),
+        );
+        break;
+      case 4:
+        return Provider<AdminTransactionsState>(
+            create: (_) => TransactionsModule.getAdminModule(),
+            child: AdminTransactionsPanelMainScreen());
+      default:
+        return Container();
+        break;
+    }
   }
 
   @override
@@ -70,18 +119,7 @@ class _WorkSpaceState extends State<WorkSpaceScreen> {
       resizeToAvoidBottomInset: false,
       drawer: CustomDrawer(),
       body: Stack(children: [
-        IndexedStack(index: _currentInd, children: [
-          BlocProvider.value(
-            value: mapBloc,
-            child: MapScreen(),
-          ),
-          EcoMainScreen(),
-          EcoCoinMainScreen(),
-          ProfileMenuScreen(),
-          Provider<AdminTransactionsState>(
-              create: (_) => TransactionsModule.getAdminModule(),
-              child: AdminTransactionsPanelMainScreen())
-        ]),
+        IndexedStack(index: _currentInd, children: screenWidgets),
         Align(
           alignment: Alignment.bottomCenter,
           child: Container(

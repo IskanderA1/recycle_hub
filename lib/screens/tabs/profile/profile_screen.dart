@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive/hive.dart';
+import 'package:recycle_hub/api/services/user_service.dart';
 import 'package:recycle_hub/bloc/auth/auth_bloc.dart';
 import 'package:recycle_hub/bloc/auth_user_bloc.dart';
 import 'package:recycle_hub/bloc/profile_bloc/profile_bloc.dart';
@@ -70,7 +71,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     SizedBox(
                       height: 24,
                     ),
-                    buildStatus(10, 78, 94),
+                    buildStatus(10, UserService().user.ecoCoins,
+                        UserService().garbageGiven),
                     SizedBox(
                       height: 5,
                     ),
@@ -199,7 +201,7 @@ Widget buildProfileAvatar(String name, String status) {
   );
 }
 
-Widget buildStatus(int place, int balance, int made) {
+Widget buildStatus(int place, int balance, double made) {
   return Container(
     decoration: BoxDecoration(
       color: kColorWhite,

@@ -31,7 +31,7 @@ class CommonRequest {
     Map<String, String> headers = {};
 
     if ([CommonRequestMethod.post, CommonRequestMethod.put].contains(method)) {
-      //
+      headers["content-type"] = "application/json";
     }
 
     if (needAuthorization) {
@@ -128,7 +128,7 @@ class CommonRequest {
     var response;
     try {
       response = await defaultClient.post(Uri.parse(url),
-          headers: headers, body: body);
+          headers: headers, body: jsonBody);
     } on http.ClientException catch (e) {
       throw ApiError(
           type: ApiErrorType.descriptionError, errorDescription: e.message);

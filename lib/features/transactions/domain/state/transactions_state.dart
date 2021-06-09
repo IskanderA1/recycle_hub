@@ -48,40 +48,38 @@ abstract class TransactionsStateBase with Store {
   }
 
   @action
-  Future<List<UserTransaction>> getTransacts(String id) async {
-    if (id == null) {
-      errorMessage = "Идентификатор null";
-      return [];
-    }
+  Future<List<Transaction>> getTransacts(DateTime from, DateTime to) async {
+    totalKG = 0;
+    summ = 0;
     try {
       errorMessage = null;
       _transactionsFuture =
-          ObservableFuture(_registrationRepository.getTransactions(id));
+          ObservableFuture(_registrationRepository.getTransactions());
       transactions = await _transactionsFuture;
       if (transactions != null && transactions != null) {
         if (transactions.isNotEmpty) {
-          List<StatisticModel> statistic =
-              List<StatisticModel>.empty(growable: true);
+          statisticModel != null
+              ? statisticModel.clear()
+              : statisticModel = List<StatisticModel>.empty(growable: true);
           var filters = await FilterTypesService().getFilters();
-          var rnd = Random();
           filters.forEach((element) {
-            statistic.add(StatisticModel(
-                filterType: element.copyWith(),
-                count: rnd.nextInt(100).toDouble()));
-          });
-          statistic = statistic.map((e) {
+            var e = StatisticModel(filterType: element.copyWith(), count: 0);
             transactions.forEach((element) {
-              totalKG += element.amount;
-              summ += element.reward;
-              if (e.filterType.id == element.id) {
+              if (e.filterType.id == element.filterId &&
+                  element.status == 'c') {
                 e.count += element.amount;
               }
             });
             if (e.count != 0) {
-              return e;
+              statisticModel.add(e);
             }
-          }).toList();
-          this.statisticModel = statistic;
+          });
+          transactions.forEach((element) {
+            if (element.status == 'c') {
+              totalKG += element.amount;
+              summ += element.reward;
+            }
+          });
         }
       }
     } catch (error) {

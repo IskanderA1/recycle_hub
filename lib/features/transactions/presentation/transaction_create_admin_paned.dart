@@ -12,7 +12,7 @@ import 'package:recycle_hub/helpers/filter_types.dart';
 import 'package:recycle_hub/model/map_models.dart/accept_types.dart';
 import 'package:recycle_hub/style/theme.dart';
 import './components/drop_down_menu_button.dart';
-import '../../../helpers/scaffold_messager_helper.dart';
+import '../../../helpers/messager_helper.dart';
 import '../../../elements/common_button.dart';
 import '../../../model/garbage.dart';
 
@@ -102,17 +102,29 @@ class _TransactionCreateAdminPanelScreenState
                                       child: Row(
                                         children: [
                                           if (_selectedFilterType != null)
-                                            buildropDownMenu(),
+                                            Column(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: [
+                                                Text("Тип вторсырья"),
+                                                buildropDownMenu(),
+                                              ],
+                                            ),
                                           SizedBox(
                                             width: 20,
                                           ),
                                           Expanded(
-                                            child: TextField(
-                                              keyboardType:
-                                                  TextInputType.number,
-                                              controller: _massTextController,
-                                              decoration:
-                                                  inputAdminPanelDecorWidget(),
+                                            child: Column(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: [
+                                                Text("Вес"),
+                                                TextField(
+                                                  keyboardType:
+                                                      TextInputType.number,
+                                                  controller: _massTextController,
+                                                  decoration:
+                                                      inputAdminPanelDecorWidget(),
+                                                ),
+                                              ],
                                             ),
                                           ),
                                         ],
@@ -181,9 +193,12 @@ class _TransactionCreateAdminPanelScreenState
                                         SizedBox(),
                                       ],
                                     ),
-                                    Align(
-                                        alignment: Alignment.centerLeft,
-                                        child: Text("Прикрепить фото")),
+                                    Padding(
+                                      padding: const EdgeInsets.only(top: 10),
+                                      child: Align(
+                                          alignment: Alignment.centerLeft,
+                                          child: Text("Прикрепить фото")),
+                                    ),
                                     image == null
                                         ? Placeholder()
                                         : Image.file(
@@ -245,9 +260,7 @@ class _TransactionCreateAdminPanelScreenState
         child: MenuButton<FilterType>(
           decoration: BoxDecoration(
               color: Color(0xFFF7F7F7),
-              border: Border.all(color: Colors.grey, width: 1),
-              shape: BoxShape.rectangle,
-              borderRadius: BorderRadius.all(Radius.circular(15))),
+              shape: BoxShape.rectangle,),
           selectedItem: _selectedFilterType,
           itemBackgroundColor: Color(0xFFF7F7F7),
           menuButtonBackgroundColor: Color(0xFFF7F7F7),
