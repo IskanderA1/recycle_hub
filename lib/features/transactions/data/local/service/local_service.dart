@@ -1,5 +1,6 @@
 import 'package:hive/hive.dart';
 import 'package:recycle_hub/features/transactions/domain/model/transaction/transactions_model.dart';
+import 'package:recycle_hub/model/transactions/transaction_model.dart';
 
 class LocalService{
   static const _BOX_NAME = 'transactions';
@@ -14,7 +15,7 @@ class LocalService{
     _box = await Hive.openBox(_BOX_NAME);
   }
 
-  Future<Transactions> getTransactions() async {
+  Future<List<Transaction>> getTransactions() async {
     if (!_box.isOpen) {
       _box = await Hive.openBox(_BOX_NAME);
     }
@@ -22,7 +23,7 @@ class LocalService{
     return transacts;
   }
 
-  Future<void> putTransactions(Transactions transactions) async {
+  Future<void> putTransactions(List<Transaction> transactions) async {
     if (!_box.isOpen) {
       _box = await Hive.openBox(_BOX_NAME);
     }

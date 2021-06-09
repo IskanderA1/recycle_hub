@@ -3,12 +3,11 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:hive/hive.dart';
 import 'package:mobx/mobx.dart';
 import 'package:provider/provider.dart';
+import 'package:recycle_hub/model/transactions/transaction_model.dart';
 import 'package:recycle_hub/screens/tabs/map/widgets/loader_widget.dart';
 import 'package:steps_indicator/steps_indicator.dart';
 
 import 'package:recycle_hub/bloc/profile_bloc/profile_bloc.dart';
-import 'package:recycle_hub/features/transactions/domain/model/transaction/transaction_model.dart';
-import 'package:recycle_hub/features/transactions/domain/model/transaction/transactions_model.dart';
 import 'package:recycle_hub/features/transactions/domain/state/transactions_state.dart';
 import 'package:recycle_hub/style/theme.dart';
 
@@ -69,7 +68,7 @@ class _TopUpHistoryScreenState extends State<TopUpHistoryScreen> {
         if (_transactionsState.state == StoreState.LOADED) {
           return SingleChildScrollView(
               child: TopUpCards(
-                  transactions: _transactionsState.transactions.list));
+                  transactions: _transactionsState.transactions));
         }
         return LoaderWidget();
       }),
@@ -156,7 +155,7 @@ class TopUpCards extends StatelessWidget {
                                   ),
                                   Text(
                                     //TODO: Дописать количество экокоинов после изменения модели
-                                    "${transactions[i].ammount} Экокоинов",
+                                    "${transactions[i].reward} Экокоинов",
                                     style: const TextStyle(
                                         color: kColorBlack,
                                         fontFamily: 'GillroyMedium'),

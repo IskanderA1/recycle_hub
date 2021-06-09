@@ -6,7 +6,7 @@ import 'package:recycle_hub/style/theme.dart';
 class DialogContainer extends StatelessWidget {
   DialogContainer({Key key, this.acceptType}) : super(key: key);
 
-  final AcceptType acceptType;
+  final FilterType acceptType;
 
   String _keyWords = "";
   String _badWords = "";

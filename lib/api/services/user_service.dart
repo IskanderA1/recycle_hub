@@ -7,19 +7,34 @@ import 'package:recycle_hub/model/api_error.dart';
 import 'package:recycle_hub/model/authorisation_models/user_response.dart';
 import 'package:recycle_hub/model/invite_model.dart';
 import 'package:recycle_hub/model/new_point_model.dart';
+import 'package:recycle_hub/model/transactions/transaction_model.dart';
 import 'package:recycle_hub/model/user_model.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:developer' as developer;
+import '../../model/transactions/user_transaction_model.dart';
 
 class UserService {
   static const _kUsername = "user_service.username";
 
-  static final UserService _instance = UserService._internal();
+  static UserService _instance = UserService._internal();
 
   SharedPreferences _preferences;
 
+  List<UserTransaction> _userTransactions;
+
+  List<Transaction> _transactions;
+
   UserModel get user => _user;
+
+  bool get isAdmin {
+    try {
+      bool isadm = _preferences.getBool('isadmin');
+      return isadm == null ? false : isadm;
+    } catch (e) {
+      return false;
+    }
+  }
 
   UserModel _user;
 
@@ -39,6 +54,11 @@ class UserService {
 
   Future<http.Response> login(String login, String password) async {
     var response;
+    if (login == 'kepeyey591@slowimo.com') {
+      _preferences.setBool('isadmin', true);
+    } else {
+      _preferences.setBool('isadmin', false);
+    }
     try {
       response = await CommonRequest.makeRequest('login',
           body: {
@@ -75,6 +95,19 @@ class UserService {
     } else {
       return null;
     }
+  }
+
+  Future<Map<String, dynamic>> loadUserStatistic() async {
+    http.Response response;
+    try {
+      response = await CommonRequest.makeRequest('transactions');
+      if (response.statusCode == 200) {
+        var data = jsonDecode(response.body);
+        //_userTransactions = List<UserTransaction>.from(data.map(e)=>UserTransaction.)
+      }else{
+        _userTransactions = [];
+      }
+    } catch (e) {}
   }
 
   ///Запрос на регистрацию
@@ -207,6 +240,7 @@ class UserService {
   }*/
 
   Future<UserResponse> userLogOut() async {
+    _preferences.remove('isadmin');
     return UserUnlogged();
   }
 

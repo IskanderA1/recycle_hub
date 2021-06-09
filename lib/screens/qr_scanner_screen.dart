@@ -1,13 +1,90 @@
 import 'dart:ui';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:qr_flutter/qr_flutter.dart';
+import 'package:recycle_hub/bloc/auth/auth_bloc.dart';
 import 'package:recycle_hub/bloc/auth_user_bloc.dart';
+import 'package:recycle_hub/bloc/profile/profile_bloc.dart';
 import 'package:recycle_hub/bloc/qr_bloc.dart';
 import 'package:recycle_hub/screens/tabs/map/widgets/loader_widget.dart';
 import '../style/theme.dart';
 import 'tabs/map/widgets/loader_widget.dart';
 
-class QRScannerScreen extends StatefulWidget {
+class QRCodeContainer extends StatelessWidget {
+  const QRCodeContainer({Key key, this.userState}) : super(key: key);
+
+  final AuthStateLogedIn userState;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: MediaQuery.of(context).size.height - 80,
+      padding: EdgeInsets.only(bottom: 16, left: 16, right: 16),
+      decoration: BoxDecoration(
+          color: kColorWhite,
+          borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(25), topRight: Radius.circular(25))),
+      child: Column(
+        children: [
+          Container(
+            child: InkWell(
+              onTap: () {},
+              child: Container(
+                width: double.infinity,
+                alignment: Alignment.topCenter,
+                child: Icon(
+                  Icons.expand_more_sharp,
+                  color: kColorGreyDark,
+                  size: 50,
+                ),
+              ),
+            ),
+            color: Colors.transparent,
+          ),
+          Container(
+            alignment: Alignment.center,
+            child: Wrap(
+              children: [
+                Text(
+                  "Покажите этот qr код сотруднику пункта приёма и зарабатывайте баллы",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontWeight: FontWeight.w600, fontSize: 15),
+                ),
+              ],
+            ),
+          ),
+          SizedBox(
+            height: 30,
+          ),
+          Container(
+            color: kColorWhite,
+            height: 310,
+            child: Center(
+              child: QrImage(
+                data: userState.user.token,
+                version: QrVersions.auto,
+              ),
+            ),
+          ),
+          SizedBox(
+            height: 20,
+          ),
+          Container(
+            child: Text(
+              "Мой QR-код",
+              style: TextStyle(
+                  color: kColorBlack,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 17),
+            ),
+          )
+        ],
+      ),
+    );
+  }
+}
+
+/* class QRScannerScreen extends StatefulWidget {
   @override
   _QRScannerScreenState createState() => _QRScannerScreenState();
 }
@@ -43,7 +120,7 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
           Container(
             child: InkWell(
               onTap: () {
-                qrBloc.mapEventToState(QROnCloseEvent());
+                
               },
               child: Container(
                 width: double.infinity,
@@ -76,12 +153,12 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
             color: kColorWhite,
             height: 310,
             child: Center(
-                child: /*CachedNetworkImage(
-              placeholder: (BuildContext context, url) => LoaderWidget(),
-              errorWidget: (BuildContext context, url, error) =>
-                  Icon(Icons.error),
-              imageUrl: "http://eco.loliallen.com" + authBloc.user.qrCode,
-            )*/SizedBox.shrink()),
+              child: QrImage(
+                data: "sdfsdfsdfsdf sdf sd fsd f",
+                version: QrVersions.auto,
+                size: 200.0,
+              ),
+            ),
           ),
           SizedBox(
             height: 20,
@@ -199,4 +276,4 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
     //   });
     // }
   }
-}
+} */

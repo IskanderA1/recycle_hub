@@ -151,7 +151,7 @@ class _StatisticScreenState extends State<StatisticScreen> {
                             ),
                             toggledChild: Container(
                               child: NormalChildButton(
-                                selectedItem: _currentPeriod,
+                                selectedItem: ${_currentPeriod.count} ${_selectedItem.name},
                               ),
                             ),
                             onItemSelected: (DropDownMenuItem item) {
@@ -188,7 +188,7 @@ class _StatisticScreenState extends State<StatisticScreen> {
                       }
                       if (_transactionsState.state == StoreState.LOADED) {
                         return StatisticWidget(
-                            statisticModel: _transactionsState.statisticModel);
+                            statisticModel: _transactionsState.statisticModel, totalKG: _transactionsState.totalKG,);
                       }
                     }),
                     SizedBox(
@@ -256,8 +256,12 @@ class _StatisticScreenState extends State<StatisticScreen> {
                                         }
                                         if (_transactionsState.state ==
                                             StoreState.LOADED) {
-                                          return Text(
-                                              "${_transactionsState.statisticModel.totalKG}кг",
+                                          double totalKG = 0;
+                                          _transactionsState.statisticModel
+                                              .forEach((element) {
+                                            totalKG += element.count;
+                                          });
+                                          return Text("$totalKG кг",
                                               style: TextStyle(
                                                   color:
                                                       const Color(0xFF484848),
@@ -334,7 +338,7 @@ class _StatisticScreenState extends State<StatisticScreen> {
                                             StoreState.LOADED) {
                                           return Text(
                                               r'$' +
-                                                  " ${_transactionsState.statisticModel.summ}",
+                                                  " ${_transactionsState.summ}",
                                               style: TextStyle(
                                                   color:
                                                       const Color(0xFF484848),
@@ -365,75 +369,24 @@ class _StatisticScreenState extends State<StatisticScreen> {
 }
 
 class StatisticWidget extends StatelessWidget {
-  const StatisticWidget({Key key, @required this.statisticModel})
+  const StatisticWidget({Key key, @required this.statisticModel, this.totalKG})
       : super(key: key);
-  final StatisticModel statisticModel;
+  final List<StatisticModel> statisticModel;
+  final double totalKG;
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        Padding(
-          padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-          child: StatisticListElement(
-            svgId: 0,
-            name: "Бумага",
-            kg: "${statisticModel.paperKG}",
-            percent: "${(statisticModel.paperKG * 100 / statisticModel.totalKG).roundToDouble()}",
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-          child: StatisticListElement(
-            svgId: 1,
-            name: "Пластик",
-            kg: "${statisticModel.plasticKG}",
-            percent:
-                "${(statisticModel.plasticKG * 100 / statisticModel.totalKG).roundToDouble()}",
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-          child: StatisticListElement(
-            svgId: 2,
-            name: "Стекло",
-            kg: "${statisticModel.glassKG}",
-            percent: "${(statisticModel.glassKG * 100 / statisticModel.totalKG).roundToDouble()}",
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-          child: StatisticListElement(
-            svgId: 3,
-            name: "Отходы",
-            kg: "${statisticModel.othodyKG}",
-            percent:
-                "${(statisticModel.othodyKG * 100 / statisticModel.totalKG).roundToDouble()}",
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-          child: StatisticListElement(
-            svgId: 4,
-            name: "Мусор",
-            kg: "${statisticModel.garbageKG}",
-            percent:
-                "${(statisticModel.garbageKG * 100 / statisticModel.totalKG).roundToDouble()}",
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-          child: StatisticListElement(
-            svgId: 5,
-            name: "Прочие отходы",
-            kg: "${statisticModel.othersKG}",
-            percent:
-                "${(statisticModel.othersKG * 100 / statisticModel.totalKG).roundToDouble()}",
-          ),
-        ),
-      ],
-    );
+    return ListView.builder(
+      itemCount: statisticModel.length,
+      itemBuilder: (context, index) {
+      return StatisticListElement(
+          svgId: 0,
+          name: "Бумага",
+          kg: "${statisticModel[index].filterType.name}",
+          percent:
+              "${(statisticModel[index].count * 100 / totalKG).roundToDouble()}",
+        );
+    },);
   }
 }
 
@@ -452,124 +405,83 @@ class StatisticListElement extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisSize: MainAxisSize.max,
-      children: [
-        Container(
-          decoration: BoxDecoration(
-              color: Color(0xFFF2F2F2),
-              borderRadius: BorderRadius.all(Radius.circular(10))),
-          child: Padding(
-            padding: const EdgeInsets.all(5.0),
-            child: sIcons[svgId],
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+      child: Row(
+        mainAxisSize: MainAxisSize.max,
+        children: [
+          Container(
+            decoration: BoxDecoration(
+                color: Color(0xFFF2F2F2),
+                borderRadius: BorderRadius.all(Radius.circular(10))),
+            child: Padding(
+              padding: const EdgeInsets.all(5.0),
+              child: sIcons[svgId],
+            ),
+            height: 40,
+            width: 40,
           ),
-          height: 40,
-          width: 40,
-        ),
-        SizedBox(
-          width: 10,
-        ),
-        Expanded(
-          child: Container(
-            //width: ScreenUtil().screenWidth - 120,
-            //padding: EdgeInsets.all(0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  mainAxisSize: MainAxisSize.max,
-                  children: [
-                    Text(
-                      name,
-                      style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w700,
-                          fontFamily: 'Gillroy'),
-                    ),
-                    Column(
-                      children: [
-                        Text(
-                          "$kgкг",
-                          style: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w700,
-                              fontFamily: 'Gillroy'),
-                        ),
-                        Text(
-                          "$percent% от общего",
-                          style: TextStyle(
-                              fontSize: 10,
-                              color: kColorBlack.withOpacity(0.6),
-                              fontFamily: 'Gillroy'),
-                        )
-                      ],
-                    )
-                  ],
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                StepProgressIndicator(
-                  totalSteps: 100,
-                  direction: Axis.horizontal,
-                  currentStep: int.parse(percent.split('.')[0]),
-                  size: 10,
-                  selectedSize: 8,
-                  unselectedSize: 8,
-                  padding: 0,
-                  selectedColor: kColorGreen,
-                  unselectedColor: Color(0xFFF7F7F7),
-                  roundedEdges: Radius.circular(5),
-                )
-              ],
+          SizedBox(
+            width: 10,
+          ),
+          Expanded(
+            child: Container(
+              //width: ScreenUtil().screenWidth - 120,
+              //padding: EdgeInsets.all(0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    mainAxisSize: MainAxisSize.max,
+                    children: [
+                      Text(
+                        name,
+                        style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w700,
+                            fontFamily: 'Gillroy'),
+                      ),
+                      Column(
+                        children: [
+                          Text(
+                            "$kgкг",
+                            style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w700,
+                                fontFamily: 'Gillroy'),
+                          ),
+                          Text(
+                            "$percent% от общего",
+                            style: TextStyle(
+                                fontSize: 10,
+                                color: kColorBlack.withOpacity(0.6),
+                                fontFamily: 'Gillroy'),
+                          )
+                        ],
+                      )
+                    ],
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  StepProgressIndicator(
+                    totalSteps: 100,
+                    direction: Axis.horizontal,
+                    currentStep: int.parse(percent.split('.')[0]),
+                    size: 10,
+                    selectedSize: 8,
+                    unselectedSize: 8,
+                    padding: 0,
+                    selectedColor: kColorGreen,
+                    unselectedColor: Color(0xFFF7F7F7),
+                    roundedEdges: Radius.circular(5),
+                  )
+                ],
+              ),
             ),
           ),
-        ),
-      ],
-    );
-  }
-}
-
-class NormalChildButton extends StatelessWidget {
-  const NormalChildButton({
-    Key key,
-    @required DropDownMenuItem selectedItem,
-  })  : _selectedItem = selectedItem,
-        super(key: key);
-
-  final DropDownMenuItem _selectedItem;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-          color: Color(0xFFF7F7F7), borderRadius: BorderRadius.circular(20)),
-      width: 120,
-      height: 30,
-      child: Padding(
-        padding: const EdgeInsets.only(left: 20, right: 20),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            Flexible(
-                child: Text(
-              "${_selectedItem.count} ${_selectedItem.name}",
-              overflow: TextOverflow.visible,
-            )),
-            const SizedBox(
-              width: 15,
-              height: 20,
-              child: FittedBox(
-                fit: BoxFit.fill,
-                child: Icon(
-                  Icons.arrow_drop_down,
-                  color: kColorGreyLight,
-                ),
-              ),
-            )
-          ],
-        ),
+        ],
       ),
     );
   }

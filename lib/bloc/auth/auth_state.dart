@@ -25,9 +25,11 @@ class AuthStateNeedConfirm extends AuthState {}
 
 class AuthStateLogedIn extends AuthState {
   final UserModel user;
+  final bool isAdmin;
 
   AuthStateLogedIn({
-    @required this.user
+    @required this.user,
+    this.isAdmin = false
   });
 
   @override

@@ -55,6 +55,9 @@ dependencies:
   equatable: ^2.0.2
   flutter_mobx: ^2.0.0
   mobx: ^2.0.1
+  qr_flutter: ^4.0.0
+  qr_code_scanner: ^0.4.0
+  
 
 dev_dependencies:
   flutter_test:
@@ -70,6 +73,7 @@ flutter:
     - assets/fonts/
     - assets/icons/
     - assets/icons/onboarding_1/People.svg
+    - assets/icons/onboarding_1/Clouds.svg
     - assets/icons/onboarding_2/People.svg
     - assets/icons/onboarding_3/People.svg
     - assets/icons/onboarding_4/People.svg

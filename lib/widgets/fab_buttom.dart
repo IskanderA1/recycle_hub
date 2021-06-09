@@ -1,12 +1,16 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:recycle_hub/bloc/auth/auth_bloc.dart';
 import 'package:recycle_hub/bloc/eco_coin_bloc.dart/eco_coin_menu_bloc.dart';
 import 'package:recycle_hub/bloc/eco_guide_blocs/eco_menu_bloc.dart';
 import 'package:recycle_hub/bloc/navigation_bloc.dart';
 import 'package:recycle_hub/bloc/profile_bloc/profile_bloc.dart';
 import 'package:recycle_hub/bloc/profile_bloc/transactions_model.dart';
 import 'package:recycle_hub/bloc/qr_bloc.dart';
+import 'package:recycle_hub/elements/custom_bottom_sheet.dart';
 import 'package:recycle_hub/icons/nav_bar_icons_icons.dart';
+import 'package:recycle_hub/screens/qr_scanner_screen.dart';
 import 'package:recycle_hub/style/theme.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 
@@ -26,6 +30,14 @@ class BottomNavBarV2 extends StatefulWidget {
 }
 
 class _BottomNavBarV2State extends State<BottomNavBarV2> {
+  AuthBloc authBLoc;
+
+  @override
+  void initState() {
+    this.authBLoc = BlocProvider.of<AuthBloc>(context);
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
@@ -54,8 +66,28 @@ class _BottomNavBarV2State extends State<BottomNavBarV2> {
                       elevation: 0,
                       backgroundColor: kColorGreen,
                       onPressed: () {
-                        qrBloc
-                            .mapEventToState(QRInitialEvent(context: context));
+                        AuthState state = authBLoc.state;
+                        if (state is AuthStateLogedIn) {
+                          if (state.isAdmin) {
+                            bottomNavBarBloc.pickItem(4);
+                            return;
+                          }
+                        }
+                        showModalBottomSheetCustom(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.vertical(
+                                  top: Radius.circular(25))),
+                          context: context,
+                          builder: (context) {
+                            if (state is AuthStateLogedIn) {
+                              return QRCodeContainer(
+                                userState: state,
+                              );
+                            } else {
+                              return SizedBox.shrink();
+                            }
+                          },
+                        );
                       },
                       child: Container(
                         child: Icon(
@@ -131,7 +163,8 @@ class _BottomNavBarV2State extends State<BottomNavBarV2> {
                         unselectedIconThemeData: widget.unselectedIconThemeData,
                         isActive: widget.currentItem == 3 ? true : false,
                         ontap: () {
-                          profileMenuBloc.mapEventToState(ProfileMenuStates.MENU);
+                          profileMenuBloc
+                              .mapEventToState(ProfileMenuStates.MENU);
                           bottomNavBarBloc.pickItem(3);
                         },
                       ),

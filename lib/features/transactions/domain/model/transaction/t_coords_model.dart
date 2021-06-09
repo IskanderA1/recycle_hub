@@ -1,4 +1,4 @@
-class TCoords {
+/* class TCoords {
     TCoords({
         this.lat,
         this.lng,
@@ -16,4 +16,4 @@ class TCoords {
         "lat": lat,
         "lng": lng,
     };
-}
+} */

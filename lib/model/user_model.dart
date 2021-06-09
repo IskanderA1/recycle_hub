@@ -16,6 +16,9 @@ class UserModel {
     this.name,
     this.confirmed,
     this.ecoCoins,
+    this.freezeEcoCoins,
+    this.token,
+    this.inviteCode,
   });
 
   @HiveField(0)
@@ -28,6 +31,12 @@ class UserModel {
   bool confirmed;
   @HiveField(4)
   int ecoCoins;
+  @HiveField(5)
+  int freezeEcoCoins;
+  @HiveField(6)
+  String token;
+  @HiveField(7)
+  String inviteCode;
 
   UserModel copyWith({
     String id,
@@ -35,6 +44,9 @@ class UserModel {
     String name,
     bool confirmed,
     int ecoCoins,
+    int freezeEcoCoins,
+    String token,
+    String inviteCode,
   }) =>
       UserModel(
         id: id ?? this.id,
@@ -42,6 +54,9 @@ class UserModel {
         name: name ?? this.name,
         confirmed: confirmed ?? this.confirmed,
         ecoCoins: ecoCoins ?? this.ecoCoins,
+        freezeEcoCoins: freezeEcoCoins ?? this.freezeEcoCoins,
+        token: token ?? this.token,
+        inviteCode: inviteCode ?? this.inviteCode,
       );
 
   factory UserModel.fromJson(String str) => UserModel.fromMap(json.decode(str));
@@ -54,6 +69,9 @@ class UserModel {
         name: json["name"],
         confirmed: json["confirmed"],
         ecoCoins: json["eco_coins"],
+        freezeEcoCoins: json["freeze_eco_coins"],
+        token: json["token"],
+        inviteCode: json["invite_code"],
       );
 
   Map<String, dynamic> toMap() => {
@@ -62,5 +80,8 @@ class UserModel {
         "name": name,
         "confirmed": confirmed,
         "eco_coins": ecoCoins,
+        "freeze_eco_coins": freezeEcoCoins,
+        "token": token,
+        "invite_code": inviteCode,
       };
 }

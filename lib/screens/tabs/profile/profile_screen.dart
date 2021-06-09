@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive/hive.dart';
+import 'package:recycle_hub/bloc/auth/auth_bloc.dart';
 import 'package:recycle_hub/bloc/auth_user_bloc.dart';
 import 'package:recycle_hub/bloc/profile_bloc/profile_bloc.dart';
 import 'package:recycle_hub/icons/user_profile_icons_icons.dart';
@@ -21,10 +23,22 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+  AuthBloc authBloc;
+  AuthStateLogedIn userState;
+
   //Box<UserModel> userBox;
   @override
   void initState() {
     //userBox = Hive.box('user');
+    authBloc ??= BlocProvider.of<AuthBloc>(context);
+    if (authBloc.state is AuthStateLogedIn) {
+      userState = authBloc.state;
+    }
+    authBloc.stream.listen((st) {
+      if (authBloc.state is AuthStateLogedIn) {
+        userState = authBloc.state;
+      }
+    });
     super.initState();
   }
 
@@ -52,8 +66,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     SizedBox(
                       height: 17,
                     ),
-                    buildProfileAvatar(
-                        'Name'/*Hive.box('user').get('user').name*/, "ЭКОЛОГ"),
+                    buildProfileAvatar(userState.user.name, "ЭКОЛОГ"),
                     SizedBox(
                       height: 24,
                     ),
@@ -73,7 +86,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             SizedBox(
                               height: 10,
                             ),
-                            buildMenu()
+                            buildMenu(authBloc)
                           ],
                         ),
                       ),
@@ -404,7 +417,7 @@ Widget _buildProgressIndicator(int lastKGindex) {
   );
 }
 
-Widget buildMenu() {
+Widget buildMenu(AuthBloc authBloc) {
   return Container(
     padding: EdgeInsets.only(top: 17, bottom: 0, right: 17, left: 17),
     decoration: BoxDecoration(
@@ -418,14 +431,14 @@ Widget buildMenu() {
           buildListItem(2, "Статистика"),
           buildListItem(3, "Как заработать баллы?"),
           buildListItem(4, "Задать вопрос авторам"),
-          buildListItem(5, "Выйти"),
+          buildListItem(5, "Выйти", authBloc: authBloc),
         ],
       ),
     ),
   );
 }
 
-Widget buildListItem(int index, String text) {
+Widget buildListItem(int index, String text, {AuthBloc authBloc}) {
   return GestureDetector(
     onTap: () {
       if (index == 2)
@@ -433,11 +446,16 @@ Widget buildListItem(int index, String text) {
       else if (index == 3)
         profileMenuBloc.mapEventToState(ProfileMenuStates.HOWGETCOIN);
       //else if (index == 5)
-        //authBloc.authLogOut();
+      //authBloc.authLogOut();
       else if (index == 1)
         profileMenuBloc.mapEventToState(ProfileMenuStates.PURSE);
       else if (index == 0)
         profileMenuBloc.mapEventToState(ProfileMenuStates.EDITPROFILE);
+      else if (index == 5) {
+        if (authBloc != null) {
+          authBloc.add(AuthEventLogout());
+        }
+      }
     },
     child: Container(
       padding: EdgeInsets.only(top: 12, bottom: 12),

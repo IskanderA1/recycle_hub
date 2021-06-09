@@ -22,13 +22,16 @@ class UserModelAdapter extends TypeAdapter<UserModel> {
       name: fields[2] as String,
       confirmed: fields[3] as bool,
       ecoCoins: fields[4] as int,
+      freezeEcoCoins: fields[5] as int,
+      token: fields[6] as String,
+      inviteCode: fields[7] as String,
     );
   }
 
   @override
   void write(BinaryWriter writer, UserModel obj) {
     writer
-      ..writeByte(5)
+      ..writeByte(8)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -38,7 +41,13 @@ class UserModelAdapter extends TypeAdapter<UserModel> {
       ..writeByte(3)
       ..write(obj.confirmed)
       ..writeByte(4)
-      ..write(obj.ecoCoins);
+      ..write(obj.ecoCoins)
+      ..writeByte(5)
+      ..write(obj.freezeEcoCoins)
+      ..writeByte(6)
+      ..write(obj.token)
+      ..writeByte(7)
+      ..write(obj.inviteCode);
   }
 
   @override

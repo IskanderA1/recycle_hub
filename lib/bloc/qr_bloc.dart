@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+/* import 'package:flutter/material.dart';
 import 'package:recycle_hub/screens/qr_scanner_screen.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -64,3 +64,4 @@ class QRBloc {
 }
 
 final qrBloc = QRBloc();
+ */

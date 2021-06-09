@@ -1,52 +1,46 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'transaction_model.dart';
+part of 'user_transaction_model.dart';
 
 // **************************************************************************
 // TypeAdapterGenerator
 // **************************************************************************
 
-class TransactionAdapter extends TypeAdapter<Transaction> {
+class UserTransactionAdapter extends TypeAdapter<UserTransaction> {
   @override
-  final int typeId = 7;
+  final int typeId = 17;
 
   @override
-  Transaction read(BinaryReader reader) {
+  UserTransaction read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return Transaction(
+    return UserTransaction(
       id: fields[0] as String,
-      recPointId: fields[1] as String,
-      filterId: fields[2] as String,
-      filterName: fields[3] as String,
-      amount: fields[4] as int,
-      reward: fields[5] as int,
-      status: fields[6] as String,
-      date: fields[7] as DateTime,
+      actionType: fields[1] as String,
+      actionId: fields[2] as String,
+      ecoCoins: fields[3] as int,
+      status: fields[4] as String,
+      date: fields[5] as DateTime,
     );
   }
 
   @override
-  void write(BinaryWriter writer, Transaction obj) {
+  void write(BinaryWriter writer, UserTransaction obj) {
     writer
-      ..writeByte(8)
+      ..writeByte(6)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
-      ..write(obj.recPointId)
+      ..write(obj.actionType)
       ..writeByte(2)
-      ..write(obj.filterId)
+      ..write(obj.actionId)
       ..writeByte(3)
-      ..write(obj.filterName)
+      ..write(obj.ecoCoins)
       ..writeByte(4)
-      ..write(obj.amount)
-      ..writeByte(5)
-      ..write(obj.reward)
-      ..writeByte(6)
       ..write(obj.status)
-      ..writeByte(7)
+      ..writeByte(5)
       ..write(obj.date);
   }
 
@@ -56,7 +50,7 @@ class TransactionAdapter extends TypeAdapter<Transaction> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is TransactionAdapter &&
+      other is UserTransactionAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }

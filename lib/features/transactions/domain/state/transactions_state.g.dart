@@ -21,13 +21,13 @@ mixin _$TransactionsState on TransactionsStateBase, Store {
       Atom(name: 'TransactionsStateBase._transactionsFuture');
 
   @override
-  ObservableFuture<Transactions> get _transactionsFuture {
+  ObservableFuture<List<Transaction>> get _transactionsFuture {
     _$_transactionsFutureAtom.reportRead();
     return super._transactionsFuture;
   }
 
   @override
-  set _transactionsFuture(ObservableFuture<Transactions> value) {
+  set _transactionsFuture(ObservableFuture<List<Transaction>> value) {
     _$_transactionsFutureAtom.reportWrite(value, super._transactionsFuture, () {
       super._transactionsFuture = value;
     });
@@ -36,13 +36,13 @@ mixin _$TransactionsState on TransactionsStateBase, Store {
   final _$transactionsAtom = Atom(name: 'TransactionsStateBase.transactions');
 
   @override
-  Transactions get transactions {
+  List<Transaction> get transactions {
     _$transactionsAtom.reportRead();
     return super.transactions;
   }
 
   @override
-  set transactions(Transactions value) {
+  set transactions(List<Transaction> value) {
     _$transactionsAtom.reportWrite(value, super.transactions, () {
       super.transactions = value;
     });
@@ -52,13 +52,13 @@ mixin _$TransactionsState on TransactionsStateBase, Store {
       Atom(name: 'TransactionsStateBase.statisticModel');
 
   @override
-  StatisticModel get statisticModel {
+  List<StatisticModel> get statisticModel {
     _$statisticModelAtom.reportRead();
     return super.statisticModel;
   }
 
   @override
-  set statisticModel(StatisticModel value) {
+  set statisticModel(List<StatisticModel> value) {
     _$statisticModelAtom.reportWrite(value, super.statisticModel, () {
       super.statisticModel = value;
     });
@@ -79,11 +79,41 @@ mixin _$TransactionsState on TransactionsStateBase, Store {
     });
   }
 
+  final _$totalKGAtom = Atom(name: 'TransactionsStateBase.totalKG');
+
+  @override
+  double get totalKG {
+    _$totalKGAtom.reportRead();
+    return super.totalKG;
+  }
+
+  @override
+  set totalKG(double value) {
+    _$totalKGAtom.reportWrite(value, super.totalKG, () {
+      super.totalKG = value;
+    });
+  }
+
+  final _$summAtom = Atom(name: 'TransactionsStateBase.summ');
+
+  @override
+  double get summ {
+    _$summAtom.reportRead();
+    return super.summ;
+  }
+
+  @override
+  set summ(double value) {
+    _$summAtom.reportWrite(value, super.summ, () {
+      super.summ = value;
+    });
+  }
+
   final _$getTransactsAsyncAction =
       AsyncAction('TransactionsStateBase.getTransacts');
 
   @override
-  Future<Transactions> getTransacts(String id) {
+  Future<List<UserTransaction>> getTransacts(String id) {
     return _$getTransactsAsyncAction.run(() => super.getTransacts(id));
   }
 
@@ -93,6 +123,8 @@ mixin _$TransactionsState on TransactionsStateBase, Store {
 transactions: ${transactions},
 statisticModel: ${statisticModel},
 errorMessage: ${errorMessage},
+totalKG: ${totalKG},
+summ: ${summ},
 state: ${state}
     ''';
   }

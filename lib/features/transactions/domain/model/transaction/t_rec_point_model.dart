@@ -1,4 +1,4 @@
-import 'package:hive/hive.dart';
+/* import 'package:hive/hive.dart';
 import 'package:recycle_hub/features/transactions/domain/model/transaction/t_contact_model.dart';
 import 'package:recycle_hub/features/transactions/domain/model/transaction/t_coords_model.dart';
 import 't_working_time_model.dart';
@@ -62,4 +62,4 @@ class To {
         "reception_type": receptionType,
         "work_time": workTime.toJson(),
     };
-}
+} */

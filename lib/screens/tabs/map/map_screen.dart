@@ -38,7 +38,9 @@ class MapScreen extends StatefulWidget {
 }
 
 class _MapScreenState extends State<MapScreen> {
-  CameraPosition cameraPosition;
+  CameraPosition cameraPosition =
+      CameraPosition(target: LatLng(55.7985293, 49.1156465), zoom: 5);
+  final Completer<GoogleMapController> _controller = Completer();
   MapBloc mapBloc;
 
   @override
@@ -50,51 +52,57 @@ class _MapScreenState extends State<MapScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<String>(
+    return Scaffold(
+        appBar: mapScreenAppBar(),
+        body: BlocBuilder(
+          bloc: mapBloc,
+          buildWhen: (previous, current) {
+            if (previous is MapStateError) {
+              developer.log(
+                  "Got previous map screen error: ${previous.discription}",
+                  name: 'map.map_screen');
+              return false;
+            }
+            if (current is MapStateError) {
+              developer.log(
+                  "Got current map screen error: ${current.discription}",
+                  name: 'map.map_screen');
+              return false;
+            }
+
+            if (previous is MapStateLoaded && current is MapStateLoaded) {
+              if (previous.markers == null || current.markers == null) {
+                return true;
+              }
+              return previous.markers.length == current.markers.length;
+            }
+            return true;
+          },
+          builder: (context, state) {
+            developer.log("Map rebuilds with: ${state.runtimeType}",
+                name: 'screens.tabs.map.map_screen');
+            if (state is MapStateLoaded) {
+              return GoogleMapWidget(
+                  cameraPosition: cameraPosition,
+                  state: state,
+                  mapController: _controller);
+            } else {
+              return LoaderWidget();
+            }
+          },
+        ));
+    /*return FutureBuilder<String>(
       future: getCurrentPosition(),
       builder: (context, snapshot) {
+        developer.log("FutureBuilderState: ${snapshot.connectionState}",
+            name: 'screens.tabs.map.map_screen');
         if (snapshot.hasData) {
-          return Scaffold(
-              appBar: mapScreenAppBar(),
-              body: BlocBuilder(
-                bloc: mapBloc,
-                buildWhen: (previous, current) {
-                  if (previous is MapStateError) {
-                    developer.log(
-                        "Got previous map screen error: ${previous.discription}",
-                        name: 'map.map_screen');
-                    return false;
-                  }
-                  if (current is MapStateError) {
-                    developer.log(
-                        "Got current map screen error: ${current.discription}",
-                        name: 'map.map_screen');
-                    return false;
-                  }
-
-                  if (previous is MapStateLoaded && current is MapStateLoaded) {
-                    if (previous.markers == null || current.markers == null) {
-                      return false;
-                    }
-                    return previous.markers.length == current.markers.length;
-                  }
-                },
-                builder: (context, state) {
-                  if (state is MapStateLoaded) {
-                    return GoogleMapWidget(
-                      cameraPosition: cameraPosition,
-                      state: state,
-                    );
-                  } else {
-                    return LoaderWidget();
-                  }
-                },
-              ));
+          );
         } else {
           return LoaderWidget();
         }
       },
-    );
+    );*/
   }
 
   AppBar mapScreenAppBar() {
@@ -117,7 +125,10 @@ class _MapScreenState extends State<MapScreen> {
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) {
-                return MapFilterDetailScreen();
+                return BlocProvider.value(
+                  value: mapBloc,
+                  child: MapFilterDetailScreen(),
+                );
               }),
             );
           },
@@ -135,33 +146,37 @@ class _MapScreenState extends State<MapScreen> {
     } on Exception {
       currentLocation = null;
     }
-    setState(() {
-      cameraPosition = CameraPosition(
-        target: LatLng(currentLocation.latitude, currentLocation.longitude),
-        zoom: 12,
-      );
-    });
+    cameraPosition = CameraPosition(
+      target: LatLng(currentLocation.latitude, currentLocation.longitude),
+      zoom: 12,
+    );
+    developer.log("User location: ${currentLocation.toString()}",
+        name: 'screens.tabs.map.map_screen');
+    GoogleMapController controller = await _controller.future;
+    controller.animateCamera(CameraUpdate.newCameraPosition(cameraPosition));
     return "Ok";
   }
 }
 
 class GoogleMapWidget extends StatefulWidget {
-  GoogleMapWidget({Key key, this.cameraPosition, this.state}) : super(key: key);
+  GoogleMapWidget(
+      {Key key,
+      @required this.cameraPosition,
+      @required this.state,
+      @required this.mapController})
+      : super(key: key);
   final CameraPosition cameraPosition;
   final MapStateLoaded state;
+  final Completer<GoogleMapController> mapController;
 
   @override
   _GoogleMapWidgetState createState() => _GoogleMapWidgetState();
 }
 
 class _GoogleMapWidgetState extends State<GoogleMapWidget> {
-  final Completer<GoogleMapController> _controller = Completer();
-
   final MapType _currentMapType = MapType.normal;
 
   Set<Marker> markers = Set<Marker>();
-
-  StreamSubscription<MapState> mapSub;
 
   MapBloc mapBloc;
 
@@ -241,7 +256,7 @@ class _GoogleMapWidgetState extends State<GoogleMapWidget> {
     } on Exception {
       currentLocation = null;
     }
-    controller = await _controller.future;
+    controller = await widget.mapController.future;
     controller.animateCamera(CameraUpdate.newCameraPosition(
       CameraPosition(
         bearing: 0,
@@ -261,8 +276,8 @@ class _GoogleMapWidgetState extends State<GoogleMapWidget> {
               onCameraMove: clusterManager.onCameraMove,
               onCameraIdle: clusterManager.updateMap,
               onMapCreated: (GoogleMapController controller) {
-                if (!_controller.isCompleted) {
-                  _controller.complete(controller);
+                if (!widget.mapController.isCompleted) {
+                  widget.mapController.complete(controller);
                 }
                 clusterManager.setMapController(controller);
               },
@@ -731,7 +746,7 @@ class _GoogleMapWidgetState extends State<GoogleMapWidget> {
   }
 
   void northSouth() async {
-    GoogleMapController zController = await _controller.future;
+    GoogleMapController zController = await widget.mapController.future;
     var currentZoomLevel = await zController.getZoomLevel();
 
     currentZoomLevel = currentZoomLevel;
@@ -746,7 +761,7 @@ class _GoogleMapWidgetState extends State<GoogleMapWidget> {
   }
 
   void zoomIncrement() async {
-    GoogleMapController zController = await _controller.future;
+    GoogleMapController zController = await widget.mapController.future;
     var currentZoomLevel = await zController.getZoomLevel();
 
     currentZoomLevel = currentZoomLevel + 2;
@@ -761,7 +776,7 @@ class _GoogleMapWidgetState extends State<GoogleMapWidget> {
   }
 
   void zoomDecrement() async {
-    GoogleMapController zController = await _controller.future;
+    GoogleMapController zController = await widget.mapController.future;
     var currentZoomLevel = await zController.getZoomLevel();
 
     currentZoomLevel = currentZoomLevel - 2;

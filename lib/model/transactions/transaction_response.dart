@@ -3,7 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'transaction_model.dart';
 
 class TransactionsResponse {
-  List<TransactionModel> transactions;
+  List<Transaction> transactions;
   String error;
   TransactionsResponse({
     @required this.transactions,
@@ -19,8 +19,8 @@ class TransactionsResponse {
 
   TransactionsResponse.fromJson(var source) {
     Map<String, dynamic> map = json.decode(source);
-    this.transactions = List<TransactionModel>.from(
-        map['transactions']?.map((x) => TransactionModel.fromMap(x)));
+    this.transactions = List<Transaction>.from(
+        map['transactions']?.map((x) => Transaction.fromMap(x)));
     this.error = map['error'];
   }
 

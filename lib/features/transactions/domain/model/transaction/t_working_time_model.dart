@@ -1,4 +1,4 @@
-class WorkTime {
+/* class WorkTime {
     WorkTime({
         this.empty,
         this.workTime,
@@ -37,3 +37,4 @@ class WorkTime {
         "ЧТ": Map.from(indigo).map((k, v) => MapEntry<String, dynamic>(k, v)),
     };
 }
+ */

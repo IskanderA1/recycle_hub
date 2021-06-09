@@ -5,7 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:recycle_hub/model/map_models.dart/accept_types.dart';
 
 class AcceptTypesCollection {
-  List<AcceptType> acceptTypes;
+  List<FilterType> acceptTypes;
   List<String> acceptTypesStrings;
   AcceptTypesCollection({
     this.acceptTypes,
@@ -40,7 +40,7 @@ class AcceptTypesCollection {
   }
 
   AcceptTypesCollection copyWith({
-    List<AcceptType> acceptTypes,
+    List<FilterType> acceptTypes,
     List<String> acceptTypesStrings,
   }) {
     return AcceptTypesCollection(
@@ -57,8 +57,8 @@ class AcceptTypesCollection {
   }
 
   AcceptTypesCollection.fromMap(List<dynamic> map)
-      : this.acceptTypes = List<AcceptType>.from(
-            map?.map((x) => AcceptType.fromMapForFilter(x))),
+      : this.acceptTypes = List<FilterType>.from(
+            map?.map((x) => FilterType.fromMap(x))),
         this.acceptTypesStrings = List<String>.from(map?.map((x) => "$x"));
 
   String toJson() => json.encode(toMap());

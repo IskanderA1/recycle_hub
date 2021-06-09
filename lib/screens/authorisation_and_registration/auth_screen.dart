@@ -18,8 +18,8 @@ class AuthScreen extends StatefulWidget {
 }
 
 class _AuthScreenState extends State<AuthScreen> {
-  final loginController = TextEditingController();
-  final passController = TextEditingController();
+  final loginController = TextEditingController()..text  = 'ramzil.galimov@gmail.com';
+  final passController = TextEditingController()..text = '1234';
   bool _obscureText = true;
   AuthBloc authBloc;
 

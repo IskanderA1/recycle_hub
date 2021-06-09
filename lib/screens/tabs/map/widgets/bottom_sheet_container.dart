@@ -173,6 +173,12 @@ class NewWidget extends StatefulWidget {
 }
 
 class _NewWidgetState extends State<NewWidget> {
+  //https://i04.fotocdn.net/s126/e69aeb6043a52824/public_pin_l/2868756737.jpg
+  var _pictureListStrings = [
+    "https://srt.su/wp-content/uploads/learning-hub_-singapore-hufton_and_crow.jpg",
+    "https://srt.su/wp-content/uploads/learning-hub_-singapore-hufton_and_crow.jpg"
+  ];
+
   @override
   Widget build(BuildContext context) {
     /*List<Widget> _list = widget.marker.acceptTypes
@@ -184,14 +190,14 @@ class _NewWidgetState extends State<NewWidget> {
             onpressed: () {},
             size: widget.size.width * 0.7))
         .toList();*/
-    /*List<Widget> _pictureList = widget.marker.images
+    List<Widget> _pictureList = _pictureListStrings
         .map((img) => CachedNetworkImage(
               placeholder: (BuildContext context, url) => LoaderWidget(),
-              imageUrl: "http://eco.loliallen.com$img",
+              imageUrl: "$img",
               errorWidget: (BuildContext context, url, error) =>
                   Icon(Icons.error),
             ))
-        .toList();*/
+        .toList();
     Size _size = MediaQuery.of(context).size;
     return Column(
       children: [
@@ -334,7 +340,7 @@ class _NewWidgetState extends State<NewWidget> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Text(
-                      "Казань, Большая Красная, 55",//widget.marker.address,
+                      "Казань, Большая Красная, 55", //widget.marker.address,
                       overflow: TextOverflow.clip,
                       style: TextStyle(
                           color: kColorBlack,
@@ -419,12 +425,12 @@ class _NewWidgetState extends State<NewWidget> {
           ),
         ),
         myDivider(),
-        /*GridView.count(
+        GridView.count(
           crossAxisCount: 1,
           children: _pictureList,
           shrinkWrap: true,
           controller: ScrollController(keepScrollOffset: false),
-        )*/
+        )
       ],
     );
   }

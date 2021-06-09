@@ -91,7 +91,7 @@ class CommonRequest {
       String params = buildQueryString(body);
       url = '$endpoint/$params';
     }
-    developer.log("GET: $baseURL/$url", name: 'recycle.api.request');
+    developer.log("GET: $url", name: 'recycle.api.request');
 
     var response;
     try {
@@ -120,8 +120,10 @@ class CommonRequest {
       String queryParams = buildQueryString(params);
       endpoint = endpoint + queryParams;
     }
-    //String jsonBody = jsonEncode(body);
+    String jsonBody = jsonEncode(body);
     developer.log("\nPOST: $url", name: 'recycle.api.request');
+    developer.log("\nJSONBODY: $jsonBody", name: 'recycle.api.request');
+    developer.log("\nBODY: $body", name: 'recycle.api.request');
 
     var response;
     try {
@@ -134,6 +136,7 @@ class CommonRequest {
       throw ApiError(
           type: ApiErrorType.descriptionError, errorDescription: e.message);
     } catch (e) {
+      developer.log("Error on: ${e.toString()}", name: 'recycle.api.request');
       throw e;
     }
 

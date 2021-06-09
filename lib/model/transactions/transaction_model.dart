@@ -1,105 +1,87 @@
-import 'dart:convert';
-import 'package:flutter/foundation.dart';
-import 'package:hive/hive.dart';
-import 'package:recycle_hub/model/map_models.dart/marker.dart';
-import '../user_model.dart';
+// To parse this JSON data, do
+//
+//     final transaction = transactionFromMap(jsonString);
 
+import 'dart:convert';
+
+import 'package:hive/hive.dart';
 part 'transaction_model.g.dart';
 
 @HiveType(typeId: 7)
-class TransactionModel {
-  @HiveField(0)
-  UserModel recUser;
-  @HiveField(1)
-  String id;
-  @HiveField(2)
-  CustMarker recPoint;
-  @HiveField(3)
-  int ammount;
-  //TODO: Добавить поле фильтр тайп
-  @HiveField(4)
-  String image;
-  @HiveField(5)
-  int reward;
-  TransactionModel({
-    @required this.recUser,
-    @required this.id,
-    @required this.recPoint,
-    @required this.ammount,
-    @required this.image,
-    @required this.reward,
+class Transaction {
+  Transaction({
+    this.id,
+    this.recPointId,
+    this.filterId,
+    this.filterName,
+    this.amount,
+    this.reward,
+    this.status,
+    this.date,
   });
 
-  TransactionModel copyWith({
-    UserModel recUser,
+  @HiveField(0)
+  String id;
+  @HiveField(1)
+  String recPointId;
+  @HiveField(2)
+  String filterId;
+  @HiveField(3)
+  String filterName;
+  @HiveField(4)
+  int amount;
+  @HiveField(5)
+  int reward;
+  @HiveField(6)
+  String status;
+  @HiveField(7)
+  DateTime date;
+
+  Transaction copyWith({
     String id,
-    CustMarker recPoint,
-    int ammount,
-    String image,
+    String recPointId,
+    String filterId,
+    String filterName,
+    int amount,
     int reward,
-  }) {
-    return TransactionModel(
-      recUser: recUser ?? this.recUser,
-      id: id ?? this.id,
-      recPoint: recPoint ?? this.recPoint,
-      ammount: ammount ?? this.ammount,
-      image: image ?? this.image,
-      reward: reward ?? this.reward,
-    );
-  }
+    String status,
+    DateTime date,
+  }) =>
+      Transaction(
+        id: id ?? this.id,
+        recPointId: recPointId ?? this.recPointId,
+        filterId: filterId ?? this.filterId,
+        filterName: filterName ?? this.filterName,
+        amount: amount ?? this.amount,
+        reward: reward ?? this.reward,
+        status: status ?? this.status,
+        date: date ?? this.date,
+      );
 
-  Map<String, dynamic> toMap() {
-    return {
-      '_from': recUser.toMap(),
-      '_id': id,
-      '_to': recPoint.toMap(),
-      'ammount': ammount,
-      'image': image,
-      'reward': reward,
-    };
-  }
-
-  factory TransactionModel.fromMap(Map<String, dynamic> map) {
-    return TransactionModel(
-      recUser: UserModel.fromMap(map['_from']),
-      id: map['_id'],
-      recPoint: CustMarker.fromMap(map['_to']),
-      ammount: map['ammount'],
-      image: map['image'],
-      reward: map['reward'],
-    );
-  }
+  factory Transaction.fromJson(String str) =>
+      Transaction.fromMap(json.decode(str));
 
   String toJson() => json.encode(toMap());
 
-  factory TransactionModel.fromJson(String source) =>
-      TransactionModel.fromMap(json.decode(source));
+  factory Transaction.fromMap(Map<String, dynamic> json) => Transaction(
+        id: json["id"],
+        recPointId: json["rec_point_id"],
+        filterId: json["filter_id"],
+        filterName: json["filter_name"],
+        amount: json["amount"],
+        reward: json["reward"],
+        status: json["status"],
+        date: DateTime.parse(json["date"]),
+      );
 
-  @override
-  String toString() {
-    return 'TransactionModel(recUser: $recUser, id: $id, recPoint: $recPoint, ammount: $ammount, image: $image, reward: $reward)';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    if (identical(this, other)) return true;
-
-    return other is TransactionModel &&
-        other.recUser == recUser &&
-        other.id == id &&
-        other.recPoint == recPoint &&
-        other.ammount == ammount &&
-        other.image == image &&
-        other.reward == reward;
-  }
-
-  @override
-  int get hashCode {
-    return recUser.hashCode ^
-        id.hashCode ^
-        recPoint.hashCode ^
-        ammount.hashCode ^
-        image.hashCode ^
-        reward.hashCode;
-  }
+  Map<String, dynamic> toMap() => {
+        "id": id,
+        "rec_point_id": recPointId,
+        "filter_id": filterId,
+        "filter_name": filterName,
+        "amount": amount,
+        "reward": reward,
+        "status": status,
+        "date": date.toIso8601String(),
+      };
 }

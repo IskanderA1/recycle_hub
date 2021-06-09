@@ -1,4 +1,4 @@
-      
+/*       
 class FilterType {
     FilterType({
         this.id,
@@ -30,4 +30,4 @@ class FilterType {
         "name": name,
         "var_name": varName,
     };
-}
+} */

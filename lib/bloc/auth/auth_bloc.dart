@@ -31,6 +31,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       yield* _mapLoginToState(event);
     } else if (event is AuthEventRegister) {
       yield* _mapRegisterToState(event);
+    } else if (event is AuthEventLogout) {
+      yield* _mapLogoutToState();
     }
   }
 
@@ -47,10 +49,15 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     }
     if (token != null) {
       try {
-        UserModel user = await UserService().userInfo();
+        UserModel user = await userService.userInfo();
         if (user != null) {
           StaticData.user.value = user;
-          yield AuthStateLogedIn(user: user);
+          if (userService.isAdmin) {
+            yield AuthStateLogedIn(user: user, isAdmin: true);
+          } else {
+            yield AuthStateLogedIn(user: user);
+          }
+
           Settings().isFirstLaunch = false;
         } else {
           yield AuthStateLogOuted();
@@ -86,7 +93,11 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         final user = await userService.userInfo();
         if (user != null) {
           Settings().isFirstLaunch = false;
-          yield AuthStateLogedIn(user: user);
+          if (userService.isAdmin) {
+            yield AuthStateLogedIn(user: user, isAdmin: true);
+          } else {
+            yield AuthStateLogedIn(user: user);
+          }
         } else {
           yield AuthStateLogOuted();
         }
@@ -101,6 +112,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   Stream<AuthState> _mapLogoutToState() async* {
     try {
       await userService.userLogOut();
+      SessionManager().clearSession();
+      StaticData.user = null;
+      yield AuthStateLogOuted();
     } catch (e) {
       print(e.toString());
     }

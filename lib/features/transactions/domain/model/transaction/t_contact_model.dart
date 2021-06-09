@@ -1,4 +1,4 @@
-class TContact {
+/* class TContact {
     TContact({
         this.name,
         this.phone,
@@ -16,4 +16,4 @@ class TContact {
         "name": name,
         "phone": phone,
     };
-}
+} */

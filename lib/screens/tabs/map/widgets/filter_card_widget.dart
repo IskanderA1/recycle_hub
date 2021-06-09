@@ -8,7 +8,7 @@ import 'package:recycle_hub/custom_icons.dart';
 import 'dialog_container.dart';
 
 class FilterCardWidget extends StatefulWidget {
-  final AcceptType acceptType;
+  final FilterType acceptType;
   final Function onpressed;
   final Function onUp;
   final bool tapable;

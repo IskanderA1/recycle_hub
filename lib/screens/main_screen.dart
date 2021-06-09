@@ -31,10 +31,9 @@ class _MainScreenState extends State<MainScreen> {
         globalStateBloc.pickItem(GLobalStates.AUTH);
       } else if (state is AuthStateLogedIn) {
         globalStateBloc.pickItem(GLobalStates.TABS);
-      }else if (state is AuthStateFirstIn){
+      } else if (state is AuthStateFirstIn) {
         globalStateBloc.pickItem(GLobalStates.FIRSTIN);
-      }
-      else{
+      } else {
         globalStateBloc.pickItem(GLobalStates.AUTH);
       }
     });
@@ -74,7 +73,7 @@ class _MainScreenState extends State<MainScreen> {
               } else if (snapshot.data == GLobalStates.AUTH) {
                 return AuthorisationMainScreen();
               } else if (snapshot.data == GLobalStates.TABS) {
-                return WorkSpaceScreen();
+                return  WorkSpaceScreen();
               }
             } else if (snapshot.hasError) {
               return buildLoadingWidget();
