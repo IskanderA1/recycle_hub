@@ -1,19 +1,13 @@
 import 'dart:convert';
 
-import 'package:dio/dio.dart';
 import 'package:recycle_hub/api/request/request.dart';
-import 'package:recycle_hub/features/transactions/domain/model/transaction/transactions_model.dart';
 import 'package:recycle_hub/model/transactions/transaction_model.dart';
 
 class ApiTransactionsService {
-  static const _BASE_URL = 'https://167.172.105.146:5000/api/';
-
-  final Dio _dio = Dio(BaseOptions(baseUrl: _BASE_URL));
 
   Future<List<Transaction>> getTransactions(String id) async {
     try {
       final response = await CommonRequest.makeRequest('transactions');
-      ;
       if (response.statusCode == 200) {
         var data = json.decode(response.body);
         print(data);
