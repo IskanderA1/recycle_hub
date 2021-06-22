@@ -4,8 +4,11 @@ enum RequestErrorCode {
   apiUnreachable,
   unknown,
   notEnoughMoney,
-  productIsOver
-   }
+  productIsOver,
+  noSuchUser,
+  recoverCodeInvalid,
+  userAlreadyExists
+}
 
 class RequestError extends Error {
   RequestErrorCode code;
@@ -13,7 +16,7 @@ class RequestError extends Error {
   http.Response response;
 
   RequestError(
-      { this.description, this.response, this.code = RequestErrorCode.unknown});
+      {this.description, this.response, this.code = RequestErrorCode.unknown});
 
   @override
   String toString() => "RequestError {descripiton: $description}";

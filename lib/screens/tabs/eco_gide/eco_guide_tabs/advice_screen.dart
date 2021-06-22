@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:recycle_hub/bloc/eco_guide_blocs/eco_menu_bloc.dart';
 import 'advice_details.dart';
 import '../../../../style/theme.dart';
@@ -115,7 +116,9 @@ class _AdviceScreenState extends State<AdviceScreen> {
                                 child: Hero(
                               tag: "first_image",
                               child: Image.network(
-                                  "https://www.accenture.com/t20200128T032529Z__w__/lu-en/_acnmedia/Accenture/Redesign-Assets/DotCom/Images/Global/Thumbnail400x400/8/Accenture-australian-water-utility-blue-400x400.jpg"),
+                                  "https://www.accenture.com/t20200128T032529Z__w__/lu-en/_acnmedia/Accenture/Redesign-Assets/DotCom/Images/Global/Thumbnail400x400/8/Accenture-australian-water-utility-blue-400x400.jpg",
+                                  ),
+                              
                             )),
                             Expanded(
                                 child: Container(

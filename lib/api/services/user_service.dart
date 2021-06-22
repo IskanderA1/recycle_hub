@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:recycle_hub/api/request/api_error.dart';
 import 'package:recycle_hub/api/request/request.dart';
 import 'package:recycle_hub/api/request/session_manager.dart';
 import 'package:recycle_hub/api/services/store_service.dart';
@@ -28,7 +29,7 @@ class UserService {
 
   double _garbagesGiven = 0;
 
-  List<UserTransaction> get userTransactions =>_userTransactions;
+  List<UserTransaction> get userTransactions => _userTransactions;
   List<Transaction> get transactions => _transactions;
   double get garbageGiven => _garbagesGiven;
 
@@ -118,14 +119,15 @@ class UserService {
           _userTransactions = List<UserTransaction>.from(data.map((e) {
             return UserTransaction.fromMap(e);
           }));
-        }else{
+        } else {
           _userTransactions = [];
         }
       } else {
         _userTransactions = [];
       }
     } catch (e) {
-      developer.log("Error type: ${e.runtimeType} ${e.toString()}", name : 'api.services.user_service');
+      developer.log("Error type: ${e.runtimeType} ${e.toString()}",
+          name: 'api.services.user_service');
       _userTransactions = [];
     }
 
@@ -138,30 +140,84 @@ class UserService {
           _transactions = List<Transaction>.from(data.map((e) {
             return Transaction.fromMap(e);
           }));
-        }else{
+        } else {
           _transactions = [];
         }
       } else {
         _transactions = [];
       }
     } catch (e) {
-      developer.log("Error type: ${e.runtimeType} ${e.toString()}", name : 'api.services.user_service');
+      developer.log("Error type: ${e.runtimeType} ${e.toString()}",
+          name: 'api.services.user_service');
       _transactions = [];
     }
 
-    if(_transactions.isNotEmpty){
+    if (_transactions.isNotEmpty) {
       _transactions.forEach((element) {
         //if(element.status == 'c'){
-          _garbagesGiven += element.amount;
+        _garbagesGiven += element.amount;
         //}
       });
+    }
+  }
+
+  Future<void> sendCode({String username}) async {
+    try {
+      final response = await CommonRequest.makeRequest("/api/send_check_code",
+          method: CommonRequestMethod.post,
+          body: {"username": username},
+          needAuthorization: false);
+      if (response.statusCode != 201) {
+        throw RequestError(code: RequestErrorCode.noSuchUser);
+      }
+      SessionManager().saveLogin(username);
+    } catch (e) {
+      throw RequestError(code: RequestErrorCode.noSuchUser);
+    }
+  }
+
+  Future<bool> chechCode({String username, String code}) async {
+    try {
+      final response = await CommonRequest.makeRequest(
+          "/api/get_recovery_token",
+          method: CommonRequestMethod.post,
+          body: {"username": username, "code": code},
+          needAuthorization: false);
+      if (response.statusCode == 201) {
+        var data = jsonDecode(response.body);
+        SessionManager().saveToken(data["recovery_token"]);
+        developer.log('Code is valid', name: 'api.services.user_service');
+        return true;
+      } else {
+        developer.log('Code is invalid', name: 'api.services.user_service');
+        throw RequestError(code: RequestErrorCode.recoverCodeInvalid);
+      }
+    } catch (e) {
+      throw RequestError(code: RequestErrorCode.recoverCodeInvalid);
+    }
+  }
+
+  Future<void> changePassword({String password}) async {
+    try {
+      final response = await CommonRequest.makeRequest("/api/change_password",
+          method: CommonRequestMethod.post,
+          body: {"password": password, "password_repeat": password});
+      if (response.statusCode == 201) {
+        SessionManager().savePassword(password);
+        developer.log('Password successfully changed',
+            name: 'api.services.user_service');
+      } else {
+        throw RequestError(code: RequestErrorCode.recoverCodeInvalid);
+      }
+    } catch (e) {
+      throw RequestError(code: RequestErrorCode.unknown);
     }
   }
 
   ///Запрос на регистрацию
   ///Если запрос успешен, сохраняет пользователя в БД
   ///затем, после подтверждения кода, в другом методе, возвращается юзер
-  Future<UserResponse> regUser(String name, String surname, String username,
+  Future<UserModel> regUser(String name, String surname, String username,
       String pass, String code) async {
     try {
       var response;
@@ -169,20 +225,20 @@ class UserService {
         response = await CommonRequest.makeRequest('register',
             method: CommonRequestMethod.post,
             body: {
-              {
-                "name": '$name $surname',
-                "username": '$username',
-                "password": '$pass'
-              }
-            });
+              "name": name + ' ' + surname,
+              "username": username,
+              "password": pass
+            },
+            needAuthorization: false);
       } else {
         response = await CommonRequest.makeRequest('register',
             method: CommonRequestMethod.post,
             body: {
-              "name": '$name $surname',
-              "username": '$username',
-              "password": '$pass'
-            });
+              "name": name + ' ' + surname,
+              "username": username,
+              "password": pass
+            },
+            needAuthorization: false);
         /*response = await http.post(mainUrl + "/users?code=$code", body: {
           "name": '$name $surname',
           "username": '$username',
@@ -193,14 +249,14 @@ class UserService {
       Map<String, dynamic> data = jsonDecode(response.body);
       print(data);
       if (response.statusCode == 200) {
-        return UserRegOk();
+        return UserModel.fromMap(data);
       } else {
         print(response.reasonPhrase);
-        return UserRegFailed(data['message']);
+        throw RequestError(code: RequestErrorCode.userAlreadyExists);
       }
     } catch (error, stacktrace) {
       print("Exception occured: $error stackTrace: $stacktrace");
-      return UserRegFailed("Нет сети");
+      throw RequestError(code: RequestErrorCode.unknown);
     }
   }
 
@@ -224,7 +280,7 @@ class UserService {
   ///Проверка кода для сброса пароля и регистрации
   Future<bool> confirmCode(String code) async {
     try {
-      String username = await _preferences.getString(_kUsername);
+      String username = await SessionManager().getLogin();
       if (username == null) {}
       var response = await CommonRequest.makeRequest("confirm",
           body: {"username": username, "code": code},
@@ -233,6 +289,11 @@ class UserService {
       Map<String, dynamic> data = jsonDecode(response.body);
       print(data);
       if (response.statusCode == 200) {
+        final token = data['access_token'];
+        if(token == null){
+          return false;
+        }
+        SessionManager().saveToken(token);
         return true;
       } else {
         return false;

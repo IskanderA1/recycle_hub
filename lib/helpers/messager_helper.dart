@@ -6,7 +6,7 @@ void showMessage({BuildContext context, String message}) {
   var snackBar = SnackBar(
     shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.all(Radius.circular(25))),
-    backgroundColor: kColorGreen,
+    backgroundColor: kColorRed,
     elevation: 3.0,
     margin: EdgeInsets.fromLTRB(30, 0, 30, 30),
     behavior: SnackBarBehavior.floating,

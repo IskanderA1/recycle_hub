@@ -5,7 +5,9 @@ import 'package:recycle_hub/bloc/auth_user_bloc.dart';
 import 'package:recycle_hub/bloc/global_state_bloc.dart';
 import 'package:recycle_hub/elements/loader.dart';
 import 'package:recycle_hub/model/authorisation_models/user_response.dart';
+import 'package:recycle_hub/screens/authorisation_and_registration/reg_confirm_code_screen.dart';
 import 'package:recycle_hub/screens/stepper/stepper.dart';
+import 'package:recycle_hub/screens/tabs/map/widgets/loader_widget.dart';
 
 import 'auth_screen.dart';
 import 'registration_screen.dart';
@@ -23,6 +25,7 @@ class _AuthorisationMainScreenState extends State<AuthorisationMainScreen> {
 
   @override
   void initState() {
+    authBloc = BlocProvider.of<AuthBloc>(context);
     super.initState();
   }
 
@@ -40,11 +43,16 @@ class _AuthorisationMainScreenState extends State<AuthorisationMainScreen> {
             return buildLoadingScaffold();
           } else if (state is AuthStateLoading) {
             return buildLoadingScaffold();
-          } else if (state is AuthStateFail) {
+          } /*  else if (state is AuthStateFail) {
             return AuthScreen();
-          } else if (state is AuthStateLogOuted) {
+          } */
+          /* else if(state is AuthStateNeedConfirm){
+            return ConfirmCodeScreen();
+          } */
+          else if (state is AuthStateLogOuted) {
             return AuthScreen();
-          }/*else if (state is AuthStateFirstIn){
+          }
+          /*else if (state is AuthStateFirstIn){
             return WellcomePageStepper();
           }*/
           return AuthScreen();

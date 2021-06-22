@@ -98,15 +98,28 @@ class _TransactionCreateAdminPanelScreenState
                                   children: [
                                     Padding(
                                       padding: const EdgeInsets.only(
-                                          top: 5, bottom: 5),
+                                          top: 30, bottom: 5),
                                       child: Row(
                                         children: [
                                           if (_selectedFilterType != null)
                                             Column(
-                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
                                               children: [
-                                                Text("Тип вторсырья"),
-                                                buildropDownMenu(),
+                                                Text(
+                                                  "Тип вторсырья",
+                                                  style: TextStyle(
+                                                      fontSize: 14,
+                                                      fontFamily:
+                                                          'GilroyMedium',
+                                                      color: kColorGreyLight),
+                                                ),
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          top: 8),
+                                                  child: buildropDownMenu(),
+                                                ),
                                               ],
                                             ),
                                           SizedBox(
@@ -114,15 +127,32 @@ class _TransactionCreateAdminPanelScreenState
                                           ),
                                           Expanded(
                                             child: Column(
-                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
                                               children: [
-                                                Text("Вес"),
-                                                TextField(
-                                                  keyboardType:
-                                                      TextInputType.number,
-                                                  controller: _massTextController,
-                                                  decoration:
-                                                      inputAdminPanelDecorWidget(),
+                                                Text(
+                                                  "Вес",
+                                                  style: TextStyle(
+                                                      fontSize: 14,
+                                                      fontFamily:
+                                                          'GilroyMedium',
+                                                      color: kColorGreyLight),
+                                                ),
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          top: 8),
+                                                  child: Container(
+                                                    height: 45,
+                                                    child: TextField(
+                                                      keyboardType:
+                                                          TextInputType.number,
+                                                      controller:
+                                                          _massTextController,
+                                                      decoration:
+                                                          inputAdminPanelDecorWidget(),
+                                                    ),
+                                                  ),
                                                 ),
                                               ],
                                             ),
@@ -130,23 +160,28 @@ class _TransactionCreateAdminPanelScreenState
                                         ],
                                       ),
                                     ),
-                                    CommonButton(
-                                      height: 40,
-                                      width: 200,
-                                      text: "Добавить вторсырье",
-                                      ontap: () {
-                                        if (_massTextController.text.isEmpty) {
-                                          showMessage(
-                                              context: context,
-                                              message: 'Введите вес');
-                                          return;
-                                        }
-                                        state.saveFilterAndAmmount(
-                                            GarbageTupple(
-                                                filterType: _selectedFilterType,
-                                                ammount: double.parse(
-                                                    _massTextController.text)));
-                                      },
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: CommonButton(
+                                        text: "Добавить вторсырье",
+                                        backGroundColor: kColorGreyVeryLight,
+                                        ontap: () {
+                                          if (_massTextController
+                                              .text.isEmpty) {
+                                            showMessage(
+                                                context: context,
+                                                message: 'Введите вес');
+                                            return;
+                                          }
+                                          state.saveFilterAndAmmount(
+                                              GarbageTupple(
+                                                  filterType:
+                                                      _selectedFilterType,
+                                                  ammount: double.parse(
+                                                      _massTextController
+                                                          .text)));
+                                        },
+                                      ),
                                     ),
                                     Observer(
                                       builder: (context) {
@@ -162,10 +197,19 @@ class _TransactionCreateAdminPanelScreenState
                                                     MainAxisAlignment
                                                         .spaceAround,
                                                 children: [
-                                                  Text(state.garbages[index]
-                                                      .filterType.name),
                                                   Text(
-                                                      '${state.garbages[index].ammount}'),
+                                                    state.garbages[index]
+                                                        .filterType.name,
+                                                    style: const TextStyle(
+                                                        fontSize: 14,
+                                                        fontFamily: 'Gilroy'),
+                                                  ),
+                                                  Text(
+                                                    '${state.garbages[index].ammount}',
+                                                    style: const TextStyle(
+                                                        fontSize: 14,
+                                                        fontFamily: 'Gilroy'),
+                                                  ),
                                                   InkWell(
                                                     onTap: () {
                                                       state
@@ -188,8 +232,18 @@ class _TransactionCreateAdminPanelScreenState
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceAround,
                                       children: [
-                                        Text("Всего"),
-                                        Text('$summ кг'),
+                                        Text(
+                                          "Всего",
+                                          style: const TextStyle(
+                                              fontSize: 14,
+                                              fontFamily: 'Gilroy'),
+                                        ),
+                                        Text(
+                                          '$summ кг',
+                                          style: const TextStyle(
+                                              fontSize: 14,
+                                              fontFamily: 'Gilroy'),
+                                        ),
                                         SizedBox(),
                                       ],
                                     ),
@@ -197,7 +251,13 @@ class _TransactionCreateAdminPanelScreenState
                                       padding: const EdgeInsets.only(top: 10),
                                       child: Align(
                                           alignment: Alignment.centerLeft,
-                                          child: Text("Прикрепить фото")),
+                                          child: Text(
+                                            "Прикрепить фото",
+                                            style: TextStyle(
+                                                fontSize: 14,
+                                                fontFamily: 'GilroyMedium',
+                                                color: kColorGreyLight),
+                                          )),
                                     ),
                                     image == null
                                         ? Placeholder()
@@ -205,38 +265,51 @@ class _TransactionCreateAdminPanelScreenState
                                             image,
                                             height: 300,
                                           ),
-                                    Row(
-                                      children: [
-                                        CommonButton(
-                                            height: 40,
-                                            width: 150,
-                                            text: "Из устройства",
-                                            ontap: () {}),
-                                        CommonButton(
-                                            height: 40,
-                                            width: 100,
-                                            backGroundColor: kColorGreyLight,
-                                            text: "Камера",
-                                            ontap: () {})
-                                      ],
+                                    Padding(
+                                      padding: const EdgeInsets.only(top: 16),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          CommonButton(
+                                              height: 45,
+                                              width: 150,
+                                              text: "Из устройства",
+                                              textColor: kColorWhite,
+                                              ontap: () {}),
+                                          SizedBox(
+                                            width: 20,
+                                          ),
+                                          CommonButton(
+                                              height: 45,
+                                              width: 150,
+                                              backGroundColor:
+                                                  kColorGreyVeryLight,
+                                              text: "Камера",
+                                              ontap: () {})
+                                        ],
+                                      ),
                                     ),
-                                    CommonButton(
-                                        height: 40,
-                                        width: 240,
-                                        text: "Подтвердить прием",
-                                        ontap: () {
-                                          if (state.garbages.isEmpty) {
-                                            state.createGarbageCollection();
-                                            return;
-                                          }
-                                          state
-                                              .createGarbageCollection()
-                                              .then((v) {
-                                            showMessage(
-                                                context: context,
-                                                message: "Успешно отправлено");
-                                          });
-                                        }),
+                                    Padding(
+                                      padding: const EdgeInsets.only(top: 16),
+                                      child: CommonButton(
+                                          text: "Подтвердить прием",
+                                          textColor: kColorWhite,
+                                          ontap: () {
+                                            if (state.garbages.isEmpty) {
+                                              state.createGarbageCollection();
+                                              return;
+                                            }
+                                            state
+                                                .createGarbageCollection()
+                                                .then((v) {
+                                              showMessage(
+                                                  context: context,
+                                                  message:
+                                                      "Успешно отправлено");
+                                            });
+                                          }),
+                                    ),
                                     SizedBox(
                                       height: 100,
                                     )
@@ -250,45 +323,41 @@ class _TransactionCreateAdminPanelScreenState
 
   Widget buildropDownMenu() {
     return Container(
-      height: 50,
+      height: 45,
       width: 200,
       /*decoration: BoxDecoration(
         borderRadius: BorderRadius.all(Radius.circular(15))
       ),*/
-      child: ClipRRect(
-        borderRadius: BorderRadius.all(Radius.circular(15)),
-        child: MenuButton<FilterType>(
-          decoration: BoxDecoration(
-              color: Color(0xFFF7F7F7),
-              shape: BoxShape.rectangle,),
-          selectedItem: _selectedFilterType,
-          itemBackgroundColor: Color(0xFFF7F7F7),
-          menuButtonBackgroundColor: Color(0xFFF7F7F7),
+      child: MenuButton<FilterType>(
+        decoration: BoxDecoration(
+            shape: BoxShape.rectangle,
+            border: Border.all(color: kColorGreyLight, width: 1),
+            borderRadius: BorderRadius.circular(10)),
+        selectedItem: _selectedFilterType,
+        //itemBackgroundColor: Color(0xFFF7F7F7),
+        menuButtonBackgroundColor: Colors.transparent,
+        child: DropDownMenuChildButton(
+          selectedItem: _selectedFilterType.name,
+        ),
+        items: filterTypes,
+        itemBuilder: (FilterType item) => Container(
+          height: 45,
+          color: kColorWhite,
+          alignment: Alignment.centerLeft,
+          padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 20),
+          child: Text("${item.name}"),
+        ),
+        /*toggledChild: Container(
           child: DropDownMenuChildButton(
             selectedItem: _selectedFilterType.name,
           ),
-          items: filterTypes,
-          itemBuilder: (FilterType item) => Container(
-            height: 45,
-            decoration: BoxDecoration(
-              color: Color(0xFFF7F7F7),
-            ),
-            alignment: Alignment.centerLeft,
-            padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 20),
-            child: Text("${item.name}"),
-          ),
-          toggledChild: Container(
-            child: DropDownMenuChildButton(
-              selectedItem: _selectedFilterType.name,
-            ),
-          ),
-          onItemSelected: (FilterType item) {
-            _selectedFilterType = item;
-          },
-          onMenuButtonToggle: (bool isTohgle) {
-            print(isTohgle);
-          },
-        ),
+        ),*/
+        onItemSelected: (FilterType item) {
+          _selectedFilterType = item;
+        },
+        onMenuButtonToggle: (bool isTohgle) {
+          print(isTohgle);
+        },
       ),
     );
   }

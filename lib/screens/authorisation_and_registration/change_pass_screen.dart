@@ -1,11 +1,11 @@
+import 'dart:async';
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:recycle_hub/bloc/auth/auth_bloc.dart';
-import 'package:recycle_hub/bloc/auth_user_bloc.dart';
-import 'package:recycle_hub/model/authorisation_models/user_response.dart';
 import 'package:recycle_hub/screens/authorisation_and_registration/forget_confirm_code_screen.dart';
-import 'package:recycle_hub/screens/authorisation_and_registration/reg_confirm_code_screen.dart';
+import 'package:recycle_hub/screens/authorisation_and_registration/password_recovery_screen.dart';
+import 'package:recycle_hub/screens/tabs/map/widgets/loader_widget.dart';
 import 'package:recycle_hub/style/style.dart';
 import 'package:recycle_hub/style/theme.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -20,8 +20,53 @@ class _ChangePassScreenState extends State<ChangePassScreen> {
   String _isSimilarPasswords = "";
   final _tfKey = GlobalKey<FormState>();
 
+  AuthBloc bloc;
+  StreamSubscription<AuthState> _sub;
+
+  @override
+  void initState() {
+    bloc = BlocProvider.of<AuthBloc>(context);
+    _sub = bloc.stream.listen((state) {
+      if (state is AuthStateRecovery) {
+        if (state.passChanged) {
+          Navigator.pop(context);
+        }
+      }
+    });
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _sub.cancel();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
+    return Scaffold(
+      body: BlocBuilder<AuthBloc, AuthState>(
+          bloc: bloc,
+          builder: (context, state) {
+            if (state is AuthStateLoading) {
+              return LoaderWidget();
+            } else if (state is AuthStateRecovery) {
+              if (state.wasSend && !state.isCodeValid) {
+                return ForgetConfirmCodeScreen();
+              }
+              if (state.isCodeValid) {
+                return PasswordRecoveryScreen();
+              }
+              if (state.passChanged) {
+                return Container();
+              }
+            }
+            return _buildEmailEnterScreen(context);
+          }),
+    );
+  }
+
+  SafeArea _buildEmailEnterScreen(BuildContext context) {
     Size _size = MediaQuery.of(context).size;
     ScreenUtil _util = ScreenUtil();
     return SafeArea(
@@ -189,14 +234,8 @@ class _ChangePassScreenState extends State<ChangePassScreen> {
         elevation: 5.0,
         onPressed: () {
           if (_tfKey.currentState.validate()) {
-            /*/authBloc.forgetPassCodeSend(_email.text).then((i) {
-              if (i == 0) {
-                Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => ForgetConfirmCodeScreen()));
-              }
-            });*/
+            BlocProvider.of<AuthBloc>(context)
+                .add(AuthEventRecoverySendCode(username: _email.text));
           }
         },
         padding: EdgeInsets.all(15.0),

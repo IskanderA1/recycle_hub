@@ -68,7 +68,7 @@ class UserModel {
         username: json["username"],
         name: json["name"],
         confirmed: json["confirmed"],
-        ecoCoins: json["eco_coins"],
+        ecoCoins: json["eco_coins"] ?? 0,
         freezeEcoCoins: json["freeze_eco_coins"],
         token: json["token"],
         inviteCode: json["invite_code"],

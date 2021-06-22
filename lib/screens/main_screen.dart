@@ -8,6 +8,7 @@ import 'package:recycle_hub/bloc/global_state_bloc.dart';
 import 'package:recycle_hub/bloc/map_screen_blocs/markers_collection_bloc.dart';
 import 'package:recycle_hub/bloc/navigation_bloc.dart';
 import 'package:recycle_hub/elements/loader.dart';
+import 'package:recycle_hub/helpers/messager_helper.dart';
 import 'package:recycle_hub/screens/stepper/stepper.dart';
 import 'package:recycle_hub/screens/workspace_screen.dart';
 
@@ -27,7 +28,7 @@ class _MainScreenState extends State<MainScreen> {
   @override
   void initState() {
     authBloc = AuthBloc();
-    authBloc.stream.listen((state) {
+    _authSub = authBloc.stream.listen((state) {
       if (state is AuthStateLogOuted) {
         globalStateBloc.pickItem(GLobalStates.AUTH);
       } else if (state is AuthStateLogedIn) {
@@ -38,6 +39,9 @@ class _MainScreenState extends State<MainScreen> {
       } else {
         globalStateBloc.pickItem(GLobalStates.AUTH);
       }
+      if (state is AuthStateFail) {
+        showMessage(context: context, message: state.error);
+      }
     });
     authBloc.add(AuthEventInit());
     super.initState();
@@ -46,6 +50,7 @@ class _MainScreenState extends State<MainScreen> {
   @override
   void dispose() {
     authBloc.close();
+    _authSub.cancel();
     super.dispose();
   }
 
@@ -75,7 +80,7 @@ class _MainScreenState extends State<MainScreen> {
               } else if (snapshot.data == GLobalStates.AUTH) {
                 return AuthorisationMainScreen();
               } else if (snapshot.data == GLobalStates.TABS) {
-                return  WorkSpaceScreen();
+                return WorkSpaceScreen();
               }
             } else if (snapshot.hasError) {
               return buildLoadingWidget();

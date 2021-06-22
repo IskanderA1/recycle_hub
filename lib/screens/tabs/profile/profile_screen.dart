@@ -84,7 +84,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           padding: EdgeInsets.only(
                               bottom: _size.height * 0.05, top: 5),
                           children: [
-                            buildAchievments("Эколог", 94.3),
+                            buildAchievments("Эколог", UserService().garbageGiven),
                             SizedBox(
                               height: 10,
                             ),

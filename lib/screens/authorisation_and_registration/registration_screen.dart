@@ -1,5 +1,11 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:recycle_hub/bloc/auth/auth_bloc.dart';
 import 'package:recycle_hub/bloc/auth_user_bloc.dart';
+import 'package:recycle_hub/elements/loader.dart';
+import 'package:recycle_hub/helpers/messager_helper.dart';
 import 'package:recycle_hub/model/authorisation_models/user_response.dart';
 import 'package:recycle_hub/style/style.dart';
 import 'package:recycle_hub/style/theme.dart';
@@ -20,8 +26,44 @@ class _ReqistrationScreenState extends State<ReqistrationScreen> {
   TextEditingController _refCode = TextEditingController();
   bool _obscureText = true;
 
+  AuthBloc authBloc;
+
+  @override
+  void initState() {
+    authBloc = BlocProvider.of<AuthBloc>(context);
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
+    return BlocConsumer(
+      bloc: authBloc,
+      builder: (context, state) {
+        if (state is AuthStateNeedConfirm) {
+          return ConfirmCodeScreen();
+        } else if (state is AuthStateLogOuted) {
+          return _buildRegistrationScreen();
+        } else if (state is AuthStateLoading) {
+          return buildLoadingScaffold();
+        }
+        return _buildRegistrationScreen();
+      },
+      listener: (context, state) {
+        if (state is AuthStateFail) {
+          showMessage(context: context, message: state.error);
+        } else if (state is AuthStateLogedIn) {
+          Navigator.pop(context);
+        }
+      },
+    );
+  }
+
+  _buildRegistrationScreen() {
     Size _size = MediaQuery.of(context).size;
     ScreenUtil _util = ScreenUtil();
     return SafeArea(
@@ -106,6 +148,10 @@ class _ReqistrationScreenState extends State<ReqistrationScreen> {
                             flex: 1,
                           ),
                           _toAuthScreen(),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          _toConfirmScreen(),
                           Spacer(
                             flex: 6,
                           )
@@ -375,15 +421,12 @@ class _ReqistrationScreenState extends State<ReqistrationScreen> {
       child: RaisedButton(
         elevation: 5.0,
         onPressed: () {
-          /*authBloc
-              .registrUser(_name.text, _surname.text, _email.text,
-                  _password.text, _refCode.text)
-              .then((i) {
-            if (i == 0) {
-              Navigator.pushReplacement(context,
-                  MaterialPageRoute(builder: (context) => ConfirmCodeScreen()));
-            }
-          });*/
+          authBloc.add(AuthEventRegister(
+              username: _email.text,
+              name: _name.text,
+              surname: _surname.text,
+              pass: _password.text,
+              code: _refCode.text));
         },
         padding: EdgeInsets.all(15.0),
         shape: RoundedRectangleBorder(
@@ -425,6 +468,41 @@ class _ReqistrationScreenState extends State<ReqistrationScreen> {
             },
             child: Text(
               "Войти",
+              style: TextStyle(
+                  color: kColorGreen, fontFamily: "GilroyMedium", fontSize: 14),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _toConfirmScreen() {
+    return Container(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            "Есть код?",
+            style: TextStyle(
+                color: kColorGreyDark,
+                fontFamily: "GilroyMedium",
+                fontSize: 14),
+          ),
+          SizedBox(
+            width: 15,
+          ),
+          GestureDetector(
+            onTap: () {
+              if (_email.text.isEmpty) {
+                showMessage(
+                    context: context, message: 'Пожалуйста, введите логин');
+                return;
+              }
+              authBloc.add(AuthEventHasCode(username: _email.text));
+            },
+            child: Text(
+              "Подтвердить",
               style: TextStyle(
                   color: kColorGreen, fontFamily: "GilroyMedium", fontSize: 14),
             ),

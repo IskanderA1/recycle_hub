@@ -22,10 +22,10 @@ abstract class TransactionsStateBase with Store {
   ObservableFuture<List<Transaction>> _transactionsFuture;
 
   @observable
-  List<Transaction> transactions;
+  List<Transaction> transactions = List<Transaction>.empty(growable: true);
 
   @observable
-  List<StatisticModel> statisticModel;
+  List<StatisticModel> statisticModel = List<StatisticModel>.empty(growable: true);
 
   @observable
   String errorMessage;
@@ -80,10 +80,13 @@ abstract class TransactionsStateBase with Store {
               summ += element.reward;
             }
           });
+          return transactions;
         }
       }
+      return [];
     } catch (error) {
       errorMessage = error.toString();
+      return [];
     }
   }
 }

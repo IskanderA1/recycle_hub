@@ -264,7 +264,10 @@ class _AuthScreenState extends State<AuthScreen> {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => ChangePassScreen()));
+                          builder: (context) => BlocProvider<AuthBloc>.value(
+                            value: authBloc,
+                            child: ChangePassScreen(),
+                          )));
                   //authBloc.pickState(UserToForgetScr());
                 },
                 child: Text(
@@ -420,7 +423,10 @@ class _AuthScreenState extends State<AuthScreen> {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => ReqistrationScreen()));
+                      builder: (context) => BlocProvider<AuthBloc>.value(
+                        value: authBloc,
+                        child: ReqistrationScreen(),
+                      )));
             },
             child: Text(
               "Создать",

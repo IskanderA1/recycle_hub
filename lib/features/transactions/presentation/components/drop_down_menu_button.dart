@@ -14,7 +14,7 @@ class DropDownMenuChildButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-          color: Color(0xFFF7F7F7), borderRadius: BorderRadius.circular(20)),
+          color: kColorWhite, borderRadius: BorderRadius.circular(10)),
       width: 120,
       height: 30,
       child: Padding(
@@ -28,8 +28,8 @@ class DropDownMenuChildButton extends StatelessWidget {
               overflow: TextOverflow.visible,
             )),
             const SizedBox(
-              width: 15,
-              height: 20,
+              width: 20,
+              height: 25,
               child: FittedBox(
                 fit: BoxFit.fill,
                 child: Icon(

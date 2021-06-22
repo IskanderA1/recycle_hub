@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:recycle_hub/style/theme.dart';
 
 InputDecoration inputDecorWidget() {
   return InputDecoration(
@@ -27,17 +28,13 @@ InputDecoration inputDecorWidget() {
 InputDecoration inputAdminPanelDecorWidget() {
   return InputDecoration(
       enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.all(Radius.circular(25)),
-          borderSide: BorderSide(color: Colors.grey, width: 2.5)),
-      disabledBorder: OutlineInputBorder(
-        borderSide: BorderSide(color: Colors.grey, width: 2.5),
-        borderRadius: BorderRadius.all(Radius.circular(25)),
-      ),
+          borderRadius: BorderRadius.all(Radius.circular(10)),
+          borderSide: BorderSide(color: kColorGreyLight, width: 1)),
       focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.all(Radius.circular(25)),
-          borderSide: BorderSide(color: Colors.grey, width: 2.5)),
+          borderRadius: BorderRadius.all(Radius.circular(10)),
+          borderSide: BorderSide(color: kColorGreyLight, width: 1)),
       border: OutlineInputBorder(
-          borderRadius: BorderRadius.all(Radius.circular(25)),
-          borderSide: BorderSide(color: Colors.grey, width: 2.5)));
+          borderRadius: BorderRadius.all(Radius.circular(10)),
+          borderSide: BorderSide(color: kColorGreyLight, width: 1)));
 }
 

@@ -1,8 +1,8 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:recycle_hub/bloc/auth_user_bloc.dart';
-import 'package:recycle_hub/model/authorisation_models/user_response.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:recycle_hub/bloc/auth/auth_bloc.dart';
 import 'package:recycle_hub/style/style.dart';
 import 'package:recycle_hub/style/theme.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -18,6 +18,14 @@ class _ConfirmCodeScreenState extends State<ConfirmCodeScreen> {
   var maskFormatter = new MaskTextInputFormatter(
       mask: '######', filter: {"#": RegExp(r'[0-9]')});
   final _tfKey = GlobalKey<FormState>();
+
+  AuthBloc authBloc;
+
+  @override
+  void initState() {
+    authBloc = BlocProvider.of<AuthBloc>(context);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -174,15 +182,7 @@ class _ConfirmCodeScreenState extends State<ConfirmCodeScreen> {
         elevation: 5.0,
         onPressed: () {
           if (_tfKey.currentState.validate()) {
-            /*authBloc.confirmCode(_code.text).then((i) {
-              if (i == 0) {
-                Navigator.pop(context);
-              }
-            });*/
-            /*Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => PasswordRecoveryScreen()));*/
+            authBloc.add(AuthEventConfirm(code: _code.text));
           }
         },
         padding: EdgeInsets.all(15.0),
