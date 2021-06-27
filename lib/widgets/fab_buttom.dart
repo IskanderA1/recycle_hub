@@ -1,9 +1,13 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_it/get_it.dart';
 import 'package:recycle_hub/bloc/auth/auth_bloc.dart';
 import 'package:recycle_hub/bloc/eco_coin_bloc.dart/eco_coin_menu_bloc.dart';
+import 'package:recycle_hub/bloc/eco_coin_menu/eco_coin_menu_cubit.dart';
 import 'package:recycle_hub/bloc/eco_guide_blocs/eco_menu_bloc.dart';
+import 'package:recycle_hub/bloc/eco_guide_cubit/eco_guide_cubit_cubit.dart';
+import 'package:recycle_hub/bloc/nav_bar_cubit/nav_bar_cubit_cubit.dart';
 import 'package:recycle_hub/bloc/navigation_bloc.dart';
 import 'package:recycle_hub/bloc/profile_bloc/profile_bloc.dart';
 import 'package:recycle_hub/bloc/profile_bloc/transactions_model.dart';
@@ -69,7 +73,7 @@ class _BottomNavBarV2State extends State<BottomNavBarV2> {
                         AuthState state = authBLoc.state;
                         if (state is AuthStateLogedIn) {
                           if (state.isAdmin) {
-                            bottomNavBarBloc.pickItem(4);
+                            GetIt.I.get<NavBarCubit>().moveTo(NavBarItem.QRSCANNER);
                             return;
                           }
                         }
@@ -116,7 +120,7 @@ class _BottomNavBarV2State extends State<BottomNavBarV2> {
                         unselectedIconThemeData: widget.unselectedIconThemeData,
                         isActive: widget.currentItem == 0 ? true : false,
                         ontap: () {
-                          bottomNavBarBloc.pickItem(0);
+                          GetIt.I.get<NavBarCubit>().moveTo(NavBarItem.MAP);
                         },
                       ),
                       IconButtonV2(
@@ -130,8 +134,8 @@ class _BottomNavBarV2State extends State<BottomNavBarV2> {
                         unselectedIconThemeData: widget.unselectedIconThemeData,
                         isActive: widget.currentItem == 1 ? true : false,
                         ontap: () {
-                          bottomNavBarBloc.pickItem(1);
-                          ecoGuideMenu.backToMenu();
+                          GetIt.I.get<NavBarCubit>().moveTo(NavBarItem.ECO_GIDE);
+                          GetIt.I.get<EcoGuideCubit>().moveTo(EcoGuideMenuItem.MENU);
                         },
                       ),
                       SizedBox(
@@ -148,8 +152,8 @@ class _BottomNavBarV2State extends State<BottomNavBarV2> {
                         unselectedIconThemeData: widget.unselectedIconThemeData,
                         isActive: widget.currentItem == 2 ? true : false,
                         ontap: () {
-                          ecoCoinMenuBloc.pickState(EcoCoinMenuItems.MENU);
-                          bottomNavBarBloc.pickItem(2);
+                          GetIt.I.get<EcoCoinMenuCubit>().moveTo(EcoCoinMenuItems.MENU);
+                          GetIt.I.get<NavBarCubit>().moveTo(NavBarItem.ECO_COIN);
                         },
                       ),
                       IconButtonV2(
@@ -165,7 +169,7 @@ class _BottomNavBarV2State extends State<BottomNavBarV2> {
                         ontap: () {
                           profileMenuBloc
                               .mapEventToState(ProfileMenuStates.MENU);
-                          bottomNavBarBloc.pickItem(3);
+                          GetIt.I.get<NavBarCubit>().moveTo(NavBarItem.PROFILE);
                         },
                       ),
                     ],

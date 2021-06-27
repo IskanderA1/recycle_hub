@@ -1,45 +1,86 @@
 part of 'eco_test_bloc.dart';
 
 abstract class EcoTestState extends Equatable {
-  EcoTestResult get result;
-
-  List<EcoTestModel> get tests;
-
-  EcoTestModel get currentTest;
-
-  EcoTestQuestionModel get currentQuestion;
-
-  bool get isLoading;
-
-  String get error;
-
-  const EcoTestState();
-}
-
-class EcoTestInitializedState extends EcoTestState {
-  final EcoTestResult result;
-  final List<EcoTestModel> tests;
-  final EcoTestModel currentTest;
-  final EcoTestQuestionModel currentQuestion;
-  final bool isLoading;
-  final String error;
-
-  EcoTestInitializedState({
-    @required this.tests,
-    @required this.currentTest,
-    @required this.currentQuestion,
-    this.result,
-    this.isLoading = false,
-    this.error,
-  });
+  Attempt get attempt;
 
   @override
-  List<Object> get props => [
-        tests,
-        result,
-        currentTest,
-        currentQuestion,
-        isLoading,
-        error,
-      ];
+  List<Object> get props => [];
+}
+
+class EcoTestStateInitial extends EcoTestState {
+  @override
+  Attempt get attempt => null;
+
+  EcoTestStateInitial();
+
+  @override
+  List<Object> get props => [];
+}
+
+class EcoTestStateLoading extends EcoTestState {
+  @override
+  Attempt get attempt => null;
+
+  EcoTestStateLoading();
+
+  @override
+  List<Object> get props => [];
+}
+
+class EcoTestStateError extends EcoTestState {
+  @override
+  Attempt get attempt => null;
+
+  Object error;
+
+  EcoTestStateError(this.error);
+
+  @override
+  String toString(){
+    return error.toString();
+  }
+
+  @override
+  List<Object> get props => [];
+}
+
+class EcoTestStateLoaded extends EcoTestState {
+  Attempt currentAttempt;
+  Question currentQuestion;
+  TestItem test;
+  bool isLoading;
+
+  EcoTestStateLoaded({this.currentAttempt, this.test, this.currentQuestion, this.isLoading = false});
+
+  @override
+  Attempt get attempt => currentAttempt;
+
+  @override
+  List<Object> get props => [this.currentAttempt, this.test, this.isLoading];
+
+  EcoTestStateLoaded copyWith({
+    Attempt currentAttempt,
+    TestItem test,
+    bool isLoading,
+    Question question
+  }) {
+    return EcoTestStateLoaded(
+        currentAttempt: currentAttempt ?? this.currentAttempt,
+        test: test ?? this.test,
+        isLoading: isLoading ?? this.isLoading,
+        currentQuestion: question ?? this.currentQuestion);
+  }
+}
+
+class EcoTestStateCompleted extends EcoTestState {
+  AnswerResult result;
+  int gotPoints;
+
+  @override
+  Attempt get attempt => null;
+
+  EcoTestStateCompleted({this.result, this.gotPoints});
+
+  @override
+  List<Object> get props => [];
 }

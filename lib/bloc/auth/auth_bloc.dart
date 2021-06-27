@@ -97,6 +97,11 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       SessionManager().clearSession();
       yield AuthStateLogOuted();
     }
+    try{
+      UserService().loadLocation();
+    }catch(e){
+
+    }
   }
 
   Stream<AuthState> _mapLoginToState(AuthEventLogin event) async* {

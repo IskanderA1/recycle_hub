@@ -24,18 +24,19 @@ class CustMarkerAdapter extends TypeAdapter<CustMarker> {
       paybackType: fields[4] as String,
       receptionType: fields[5] as String,
       workTime: fields[6] as WorkingTime,
-      contacts: (fields[7] as List)?.cast<String>(),
-      acceptTypes: (fields[8] as List)?.cast<String>(),
-      coords: (fields[9] as List)?.cast<double>(),
-      description: fields[10] as String,
-      getBonus: fields[11] as bool,
+      address: fields[7] as String,
+      contacts: (fields[8] as List)?.cast<String>(),
+      acceptTypes: (fields[9] as List)?.cast<String>(),
+      coords: (fields[10] as List)?.cast<double>(),
+      description: fields[11] as String,
+      getBonus: fields[12] as bool,
     );
   }
 
   @override
   void write(BinaryWriter writer, CustMarker obj) {
     writer
-      ..writeByte(12)
+      ..writeByte(13)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -51,14 +52,16 @@ class CustMarkerAdapter extends TypeAdapter<CustMarker> {
       ..writeByte(6)
       ..write(obj.workTime)
       ..writeByte(7)
-      ..write(obj.contacts)
+      ..write(obj.address)
       ..writeByte(8)
-      ..write(obj.acceptTypes)
+      ..write(obj.contacts)
       ..writeByte(9)
-      ..write(obj.coords)
+      ..write(obj.acceptTypes)
       ..writeByte(10)
-      ..write(obj.description)
+      ..write(obj.coords)
       ..writeByte(11)
+      ..write(obj.description)
+      ..writeByte(12)
       ..write(obj.getBonus);
   }
 

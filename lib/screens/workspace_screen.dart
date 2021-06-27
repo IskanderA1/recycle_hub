@@ -3,9 +3,11 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_it/get_it.dart';
 import 'package:mobx/mobx.dart';
 import 'package:provider/provider.dart';
 import 'package:recycle_hub/bloc/map/map_bloc.dart';
+import 'package:recycle_hub/bloc/nav_bar_cubit/nav_bar_cubit_cubit.dart';
 import 'package:recycle_hub/bloc/navigation_bloc.dart';
 import 'package:recycle_hub/bloc/store/store_bloc.dart';
 import 'package:recycle_hub/elements/drawer.dart';
@@ -52,7 +54,7 @@ class _WorkSpaceState extends State<WorkSpaceScreen> {
       Container(),
       Container(),
     ];
-    streamSubscription = bottomNavBarBloc.itemStream.listen((event) {
+    streamSubscription = GetIt.I.get<NavBarCubit>().stream.listen((event) {
       setState(() {
         if (event == NavBarItem.MAP) {
           _currentInd = 0;
@@ -85,7 +87,10 @@ class _WorkSpaceState extends State<WorkSpaceScreen> {
         return EcoMainScreen();
         break;
       case 2:
-        return EcoCoinMainScreen();
+        return BlocProvider.value(
+          value: storeBloc,
+          child: EcoCoinMainScreen(),
+        );
         break;
       case 3:
         return BlocProvider.value(
@@ -131,7 +136,7 @@ class _WorkSpaceState extends State<WorkSpaceScreen> {
                   .bottomNavigationBarTheme
                   .unselectedIconTheme,
               backgraundColor: Theme.of(context).backgroundColor,
-              currentItem: bottomNavBarBloc.index,
+              currentItem: GetIt.I.get<NavBarCubit>().state.index,
             ),
           ),
         )

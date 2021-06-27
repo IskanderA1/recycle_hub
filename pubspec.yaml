@@ -57,6 +57,7 @@ dependencies:
   mobx: ^2.0.1
   qr_flutter: ^4.0.0
   qr_code_scanner: ^0.4.0
+  get_it: ^6.1.0
   
 
 dev_dependencies:

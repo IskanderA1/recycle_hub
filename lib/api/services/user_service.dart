@@ -1,5 +1,6 @@
 import 'dart:convert';
-
+import 'dart:math';
+import 'package:location/location.dart';
 import 'package:recycle_hub/api/request/api_error.dart';
 import 'package:recycle_hub/api/request/request.dart';
 import 'package:recycle_hub/api/request/session_manager.dart';
@@ -29,11 +30,30 @@ class UserService {
 
   double _garbagesGiven = 0;
 
+  Point _location;
+
   List<UserTransaction> get userTransactions => _userTransactions;
   List<Transaction> get transactions => _transactions;
   double get garbageGiven => _garbagesGiven;
-
   UserModel get user => _user;
+  Point get location {
+    if (_location == null) {
+      return Point(55.796127, 49.106414);
+    } else {
+      return _location;
+    }
+  }
+
+  Future<void> loadLocation() async {
+    LocationData currentLocation;
+    var location = new Location();
+    try {
+      currentLocation = await location.getLocation();
+      _location = Point(currentLocation.latitude, currentLocation.longitude);
+    } on Exception {
+      _location = Point(55.796127, 49.106414);
+    }
+  }
 
   bool get isAdmin {
     try {
@@ -290,7 +310,7 @@ class UserService {
       print(data);
       if (response.statusCode == 200) {
         final token = data['access_token'];
-        if(token == null){
+        if (token == null) {
           return false;
         }
         SessionManager().saveToken(token);

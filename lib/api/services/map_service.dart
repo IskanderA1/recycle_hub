@@ -75,6 +75,10 @@ class MapService {
       if (data.isNotEmpty) {
         List<CustMarker> list = List<CustMarker>.from(
             data.map((marker) => CustMarker.fromMap(marker)));
+            list.add(list[0].copyWith(paybackType: 'partner', coords: [
+          list[0].coords[0] + 0.00005,
+          list[0].coords[1] + 0.00005
+        ]));
         _box.put(_boxListKey, list);
         _box.put('lastTime', DateTime.now());
         return list;

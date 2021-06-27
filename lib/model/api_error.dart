@@ -5,7 +5,8 @@ enum ApiErrorType {
   error,
   invalid,
   internalError,
-  descriptionError
+  descriptionError,
+  testUnavailable
 }
 
 abstract class BaseError extends Error {

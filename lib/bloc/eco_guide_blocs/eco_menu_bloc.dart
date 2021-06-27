@@ -1,4 +1,4 @@
-import 'dart:async';
+/* import 'dart:async';
 
 enum EcoGuideMenuItem{CONTAINER,REFERENCE,ADVICE,TEST,MENU}
 
@@ -33,4 +33,4 @@ class EcoMenuBloc{
   }
 
 }
-final ecoGuideMenu = EcoMenuBloc();
+final ecoGuideMenu = EcoMenuBloc(); */

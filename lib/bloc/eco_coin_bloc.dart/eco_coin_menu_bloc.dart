@@ -1,10 +1,13 @@
-import 'dart:async';
+/* import 'dart:async';
 
 import 'package:rxdart/rxdart.dart';
 
-enum EcoCoinMenuItems{MENU, STORE, GIVEGARBAGE, OFFERNEWPOINT, ANSWERQUESTS, RECOMMEND, FEEDBACK}
+
 
 class EcoCoinMenuBloc{
+  EcoCoinMenuBloc(){
+    
+  }
   StreamController<EcoCoinMenuItems> _subject = StreamController<EcoCoinMenuItems>.broadcast();
 
   Stream<EcoCoinMenuItems> get stream => _subject.stream;
@@ -29,3 +32,4 @@ class EcoCoinMenuBloc{
 }
 
 EcoCoinMenuBloc ecoCoinMenuBloc = EcoCoinMenuBloc();
+ */

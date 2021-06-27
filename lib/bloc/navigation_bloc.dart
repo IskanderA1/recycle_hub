@@ -1,4 +1,4 @@
-import 'dart:async';
+/* import 'dart:async';
 
 enum NavBarItem { MAP, ECO_GIDE, ECO_COIN, PROFILE, QRSCANNER }
 
@@ -49,3 +49,4 @@ final bottomNavBarBloc = BottomNavBarBloc();
 //     yield MyOrdersPage();
 //     break;
 // }
+ */

@@ -1,56 +1,62 @@
-import 'package:equatable/equatable.dart';
+// To parse this JSON data, do
+//
+//     final question = questionFromMap(jsonString);
 
-/// модель вопроса
-class EcoTestQuestionModel extends Equatable {
-  String id;
-  String test;
-  String question;
-  String questionType;
-  List<String> answersVariants;
-  String correctAnswer;
-  int pointForAnswer;
+import 'dart:convert';
 
-  EcoTestQuestionModel(
-      {this.id,
-      this.test,
-      this.question,
-      this.questionType,
-      this.answersVariants,
-      this.correctAnswer,
-      this.pointForAnswer});
+class Question {
+    Question({
+        this.questionId,
+        this.question,
+        this.questionType,
+        this.answersVariants,
+        this.pointForAnswer,
+        this.image,
+    });
 
-  EcoTestQuestionModel.fromJson(dynamic json) {
-    id = json["id"];
-    test = json["test"];
-    question = json["question"];
-    questionType = json["question_type"];
-    answersVariants = json["answers_variants"] != null
-        ? json["answers_variants"].cast<String>()
-        : [];
-    correctAnswer = json["correct_answer"];
-    pointForAnswer = json["point_for_answer"];
-  }
+    String questionId;
+    String question;
+    String questionType;
+    List<String> answersVariants;
+    int pointForAnswer;
+    String image;
 
-  Map<String, dynamic> toJson() {
-    var map = <String, dynamic>{};
-    map["id"] = id;
-    map["test"] = test;
-    map["question"] = question;
-    map["question_type"] = questionType;
-    map["answers_variants"] = answersVariants;
-    map["correct_answer"] = correctAnswer;
-    map["point_for_answer"] = pointForAnswer;
-    return map;
-  }
+    Question copyWith({
+        String questionId,
+        String question,
+        String questionType,
+        List<String> answersVariants,
+        int pointForAnswer,
+        String image,
+    }) => 
+        Question(
+            questionId: questionId ?? this.questionId,
+            question: question ?? this.question,
+            questionType: questionType ?? this.questionType,
+            answersVariants: answersVariants ?? this.answersVariants,
+            pointForAnswer: pointForAnswer ?? this.pointForAnswer,
+            image: image ?? this.image,
+        );
 
-  @override
-  List<Object> get props => [
-        id,
-        test,
-        question,
-        questionType,
-        answersVariants,
-        correctAnswer,
-        pointForAnswer,
-      ];
+    factory Question.fromJson(String str) => Question.fromMap(json.decode(str));
+
+    String toJson() => json.encode(toMap());
+
+    factory Question.fromMap(Map<String, dynamic> json) => Question(
+        questionId: json["question_id"] == null ? null : json["question_id"],
+        question: json["question"] == null ? null : json["question"],
+        questionType: json["question_type"] == null ? null : json["question_type"],
+        answersVariants: json["answers_variants"] == null ? null : List<String>.from(json["answers_variants"].map((x) => x)),
+        pointForAnswer: json["point_for_answer"] == null ? null : json["point_for_answer"],
+        image: json["image"] == null ? null : json["image"],
+    );
+
+    Map<String, dynamic> toMap() => {
+        "question_id": questionId == null ? null : questionId,
+        "question": question == null ? null : question,
+        "question_type": questionType == null ? null : questionType,
+        "answers_variants": answersVariants == null ? null : List<dynamic>.from(answersVariants.map((x) => x)),
+        "point_for_answer": pointForAnswer == null ? null : pointForAnswer,
+        "image": image == null ? null : image,
+    };
 }

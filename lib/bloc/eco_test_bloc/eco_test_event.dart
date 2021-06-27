@@ -4,20 +4,21 @@ abstract class EcoTestEvent extends Equatable {
   const EcoTestEvent();
 }
 
-/// получение всех тестов
+/* /// получение всех тестов
 class EcoTestGetAllTestEvent extends EcoTestEvent {
   @override
   List<Object> get props => [];
-}
+} */
 
-/// получение вопросов по конкретному тесту
+/* /// получение вопросов по конкретному тесту
 class EcoTestGetQuestionByTestIdEvent extends EcoTestEvent {
   final String testId;
 
   EcoTestGetQuestionByTestIdEvent(this.testId);
   @override
   List<Object> get props => [testId];
-}
+} */
+
 
 /// Добавление ответа на вопрос теста
 class EcoTestAnswerToQuestionEvent extends EcoTestEvent {

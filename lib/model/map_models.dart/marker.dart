@@ -1,9 +1,5 @@
 import 'dart:convert';
-import 'package:flutter/foundation.dart';
 import 'package:hive/hive.dart';
-import 'package:recycle_hub/model/map_models.dart/accept_types.dart';
-import 'package:recycle_hub/model/map_models.dart/contact_model.dart';
-import 'package:recycle_hub/model/map_models.dart/coord.dart';
 import 'package:recycle_hub/model/map_models.dart/work_time.dart';
 
 part 'marker.g.dart';
@@ -18,6 +14,7 @@ class CustMarker {
     this.paybackType,
     this.receptionType,
     this.workTime,
+    this.address,
     this.contacts,
     this.acceptTypes,
     this.coords,
@@ -40,14 +37,16 @@ class CustMarker {
   @HiveField(6)
   WorkingTime workTime;
   @HiveField(7)
-  List<String> contacts;
+  String address;
   @HiveField(8)
-  List<String> acceptTypes;
+  List<String> contacts;
   @HiveField(9)
-  List<double> coords;
+  List<String> acceptTypes;
   @HiveField(10)
-  String description;
+  List<double> coords;
   @HiveField(11)
+  String description;
+  @HiveField(12)
   bool getBonus;
 
   CustMarker copyWith({
@@ -58,6 +57,7 @@ class CustMarker {
     String paybackType,
     String receptionType,
     WorkingTime workTime,
+    String address,
     List<String> contacts,
     List<String> acceptTypes,
     List<double> coords,
@@ -72,6 +72,7 @@ class CustMarker {
         paybackType: paybackType ?? this.paybackType,
         receptionType: receptionType ?? this.receptionType,
         workTime: workTime ?? this.workTime,
+        address: address ?? this.address,
         contacts: contacts ?? this.contacts,
         acceptTypes: acceptTypes ?? this.acceptTypes,
         coords: coords ?? this.coords,
@@ -92,6 +93,7 @@ class CustMarker {
         paybackType: json["payback_type"],
         receptionType: json["reception_type"],
         workTime: WorkingTime.fromMap(json["work_time"]),
+        address: json["address"],
         contacts: List<String>.from(json["contacts"].map((x) => x)),
         acceptTypes: List<String>.from(json["accept_types"].map((x) => x)),
         coords: List<double>.from(json["coords"].map((x) => x.toDouble())),
@@ -107,6 +109,7 @@ class CustMarker {
         "payback_type": paybackType,
         "reception_type": receptionType,
         "work_time": workTime.toMap(),
+        "address": address,
         "contacts": List<dynamic>.from(contacts.map((x) => x)),
         "accept_types": List<dynamic>.from(acceptTypes.map((x) => x)),
         "coords": List<dynamic>.from(coords.map((x) => x)),
@@ -114,7 +117,6 @@ class CustMarker {
         "getBonus": getBonus,
       };
 }
-
 
 /*@HiveType(typeId: 1)
 class CustMarker {

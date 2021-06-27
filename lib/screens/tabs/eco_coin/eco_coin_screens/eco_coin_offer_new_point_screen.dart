@@ -2,8 +2,10 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get_it/get_it.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:recycle_hub/bloc/eco_coin_bloc.dart/eco_coin_menu_bloc.dart';
+import 'package:recycle_hub/bloc/eco_coin_menu/eco_coin_menu_cubit.dart';
 import 'package:recycle_hub/bloc/profile_bloc/profile_bloc.dart';
 import 'package:recycle_hub/model/map_models.dart/contact_model.dart';
 import 'package:recycle_hub/model/map_models.dart/coord.dart';
@@ -53,7 +55,7 @@ class _EcoOfferNewPointScreenState extends State<EcoOfferNewPointScreen> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () {
-        ecoCoinMenuBloc.pickState(EcoCoinMenuItems.MENU);
+        GetIt.I.get<EcoCoinMenuCubit>().moveTo(EcoCoinMenuItems.MENU);
         return;
       },
       child: Scaffold(
@@ -66,7 +68,7 @@ class _EcoOfferNewPointScreenState extends State<EcoOfferNewPointScreen> {
           ),
           leading: GestureDetector(
             onTap: () {
-              ecoCoinMenuBloc.pickState(EcoCoinMenuItems.MENU);
+              GetIt.I.get<EcoCoinMenuCubit>().moveTo(EcoCoinMenuItems.MENU);
             },
             child: Icon(
               Icons.arrow_back,

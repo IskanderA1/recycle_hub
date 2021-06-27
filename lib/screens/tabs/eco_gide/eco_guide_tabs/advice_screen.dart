@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get_it/get_it.dart';
 import 'package:recycle_hub/bloc/eco_guide_blocs/eco_menu_bloc.dart';
+import 'package:recycle_hub/bloc/eco_guide_cubit/eco_guide_cubit_cubit.dart';
 import 'advice_details.dart';
 import '../../../../style/theme.dart';
 
@@ -19,7 +21,7 @@ class _AdviceScreenState extends State<AdviceScreen> {
         leading: IconButton(
           icon: Icon(Icons.arrow_back_sharp),
           onPressed: () {
-            ecoGuideMenu.backToMenu();
+            GetIt.I.get<EcoGuideCubit>().goBack();
           },
         ),
       ),

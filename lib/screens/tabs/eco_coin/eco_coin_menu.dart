@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:recycle_hub/bloc/eco_coin_bloc.dart/eco_coin_menu_bloc.dart';
-import 'package:recycle_hub/bloc/eco_guide_blocs/eco_menu_bloc.dart';
-import 'package:recycle_hub/bloc/navigation_bloc.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_it/get_it.dart';
+import 'package:recycle_hub/bloc/eco_coin_menu/eco_coin_menu_cubit.dart';
+import 'package:recycle_hub/bloc/eco_guide_cubit/eco_guide_cubit_cubit.dart';
+import 'package:recycle_hub/bloc/nav_bar_cubit/nav_bar_cubit_cubit.dart';
 import 'package:recycle_hub/screens/offer_new_point.dart';
 import 'package:recycle_hub/screens/tabs/eco_coin/eco_coin_screens/give_garbage_instruction_screen.dart';
 import 'package:recycle_hub/screens/tabs/profile/store_screen.dart';
@@ -16,43 +18,40 @@ class EcoCoinMainScreen extends StatefulWidget {
 class _EcoCoinMainScreenState extends State<EcoCoinMainScreen> {
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder(
-        stream: ecoCoinMenuBloc.stream,
-        initialData: ecoCoinMenuBloc.defaultItem,
-        builder:
-            (BuildContext context, AsyncSnapshot<EcoCoinMenuItems> snapshot) {
-          if (snapshot.hasData) {
-            if (snapshot.data == EcoCoinMenuItems.MENU) {
-              return EcoCoinScreen();
-            } else if (snapshot.data == EcoCoinMenuItems.STORE) {
-              return StoreScreen(onBackCall: ()=>ecoCoinMenuBloc.pickState(EcoCoinMenuItems.MENU),);
-            } else if (snapshot.data == EcoCoinMenuItems.ANSWERQUESTS) {
-              bottomNavBarBloc.pickItem(1);
-              ecoGuideMenu.pickItem(3);
-              return EcoCoinScreen();
-            } else if (snapshot.data == EcoCoinMenuItems.FEEDBACK) {
-              openApp(
-                  'https://pub.dev/packages/url_launcher');
-              return EcoCoinScreen();
-            } else if (snapshot.data == EcoCoinMenuItems.GIVEGARBAGE) {
-              return GiveGarbageInstructionScreen();
-            } else if (snapshot.data == EcoCoinMenuItems.OFFERNEWPOINT) {
-              return OfferNewPointScreen(onBack: ()=>ecoCoinMenuBloc.pickState(EcoCoinMenuItems.MENU));
-            } else if (snapshot.data == EcoCoinMenuItems.RECOMMEND) {
-              
-              return EcoCoinScreen();
-            }
+    return BlocBuilder<EcoCoinMenuCubit, EcoCoinMenuItems>(
+        bloc: GetIt.I.get<EcoCoinMenuCubit>(),
+        builder: (context, state) {
+          if (state == EcoCoinMenuItems.MENU) {
             return EcoCoinScreen();
-          } else {
-            return Container(
-              child: Center(child: Text("Что-то пошло не так")),
+          } else if (state == EcoCoinMenuItems.STORE) {
+            return StoreScreen(
+              onBackCall: () {
+                GetIt.I.get<EcoCoinMenuCubit>().moveTo(EcoCoinMenuItems.MENU);
+              },
             );
+          } else if (state == EcoCoinMenuItems.ANSWERQUESTS) {
+            GetIt.I.get<NavBarCubit>().moveTo(NavBarItem.ECO_GIDE);
+            GetIt.I.get<EcoGuideCubit>().moveTo(EcoGuideMenuItem.TEST);
+            return EcoCoinScreen();
+          } else if (state == EcoCoinMenuItems.FEEDBACK) {
+            openApp('https://pub.dev/packages/url_launcher');
+            return EcoCoinScreen();
+          } else if (state == EcoCoinMenuItems.GIVEGARBAGE) {
+            return GiveGarbageInstructionScreen();
+          } else if (state == EcoCoinMenuItems.OFFERNEWPOINT) {
+            return OfferNewPointScreen(
+                onBack: () => GetIt.I
+                    .get<EcoCoinMenuCubit>()
+                    .moveTo(EcoCoinMenuItems.MENU));
+          } else if (state == EcoCoinMenuItems.RECOMMEND) {
+            return EcoCoinScreen();
           }
+          return EcoCoinScreen();
         });
   }
 
   Future openApp(String url) async {
-    if (await canLaunch('url'))
+    if (await canLaunch(url))
       await launch(url);
     else
       // can't launch url, there is some error

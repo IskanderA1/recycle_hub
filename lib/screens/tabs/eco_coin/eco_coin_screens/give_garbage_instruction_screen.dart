@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get_it/get_it.dart';
 import 'package:recycle_hub/bloc/eco_coin_bloc.dart/eco_coin_menu_bloc.dart';
+import 'package:recycle_hub/bloc/eco_coin_menu/eco_coin_menu_cubit.dart';
 import 'package:recycle_hub/style/theme.dart';
 
 class GiveGarbageInstructionScreen extends StatefulWidget {
@@ -14,7 +16,9 @@ class _GiveGarbageInstructionScreenState
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () => ecoCoinMenuBloc.pickState(EcoCoinMenuItems.MENU),
+      onWillPop: () async {
+        GetIt.I.get<EcoCoinMenuCubit>().moveTo(EcoCoinMenuItems.MENU);
+      },
       child: Scaffold(
         appBar: AppBar(
           centerTitle: true,
@@ -24,7 +28,7 @@ class _GiveGarbageInstructionScreenState
           ),
           leading: GestureDetector(
             onTap: () {
-              ecoCoinMenuBloc.pickState(EcoCoinMenuItems.MENU);
+              GetIt.I.get<EcoCoinMenuCubit>().moveTo(EcoCoinMenuItems.MENU);
             },
             child: Icon(
               Icons.arrow_back,

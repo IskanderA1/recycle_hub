@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:recycle_hub/bloc/eco_guide_blocs/eco_menu_bloc.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_it/get_it.dart';
+import 'package:recycle_hub/bloc/eco_guide_cubit/eco_guide_cubit_cubit.dart';
 import 'package:recycle_hub/screens/tabs/eco_gide/eco_guide_tabs/advice_screen.dart';
 import 'package:recycle_hub/screens/tabs/eco_gide/eco_guide_tabs/container_screen.dart';
 import 'package:recycle_hub/screens/tabs/eco_gide/eco_guide_tabs/do_test_screen.dart';
@@ -14,12 +16,11 @@ class EcoMainScreen extends StatefulWidget {
 class _EcoMainScreenState extends State<EcoMainScreen> {
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder(
-      stream: ecoGuideMenu.itemStream,
-      initialData: ecoGuideMenu.defaultItem,
+    return BlocBuilder<EcoGuideCubit, EcoGuideMenuItem>(
+      bloc: GetIt.I.get<EcoGuideCubit>(),
       // ignore: missing_return
-      builder: (context, AsyncSnapshot<EcoGuideMenuItem> snapshot) {
-        switch (snapshot.data) {
+      builder: (context, state) {
+        switch (state) {
           case EcoGuideMenuItem.MENU:
             return MainEcoGuideScreen();
           case EcoGuideMenuItem.CONTAINER:

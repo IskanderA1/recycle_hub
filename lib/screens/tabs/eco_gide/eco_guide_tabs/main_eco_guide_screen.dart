@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get_it/get_it.dart';
 import 'package:recycle_hub/bloc/eco_guide_blocs/eco_menu_bloc.dart';
+import 'package:recycle_hub/bloc/eco_guide_cubit/eco_guide_cubit_cubit.dart';
 import 'package:recycle_hub/icons/eco_guide_icons_icons.dart';
 import '../../../../style/theme.dart';
 
@@ -100,7 +102,7 @@ class _MainEcoGuideScreenState extends State<MainEcoGuideScreen> {
 Widget buildBtn(String text, int index) {
   return InkWell(
     onTap: () {
-      ecoGuideMenu.pickItem(index);
+      GetIt.I.get<EcoGuideCubit>().moveTo(EcoGuideMenuItem.values[index]);
     },
     child: Container(
       padding: EdgeInsets.only(top: 16, bottom: 16),
