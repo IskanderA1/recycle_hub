@@ -174,10 +174,6 @@ class NewWidget extends StatefulWidget {
 
 class _NewWidgetState extends State<NewWidget> {
   //https://i04.fotocdn.net/s126/e69aeb6043a52824/public_pin_l/2868756737.jpg
-  var _pictureListStrings = [
-    "https://srt.su/wp-content/uploads/learning-hub_-singapore-hufton_and_crow.jpg",
-    "https://srt.su/wp-content/uploads/learning-hub_-singapore-hufton_and_crow.jpg"
-  ];
 
   @override
   Widget build(BuildContext context) {
@@ -190,7 +186,7 @@ class _NewWidgetState extends State<NewWidget> {
             onpressed: () {},
             size: widget.size.width * 0.7))
         .toList();*/
-    List<Widget> _pictureList = _pictureListStrings
+    List<Widget> _pictureList = widget.marker.images
         .map((img) => CachedNetworkImage(
               placeholder: (BuildContext context, url) => LoaderWidget(),
               imageUrl: "$img",

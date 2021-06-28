@@ -69,6 +69,21 @@ mixin _$AdminTransactionsState on TransactionsStateB, Store {
     });
   }
 
+  final _$imagesAtom = Atom(name: 'TransactionsStateB.images');
+
+  @override
+  List<File> get images {
+    _$imagesAtom.reportRead();
+    return super.images;
+  }
+
+  @override
+  set images(List<File> value) {
+    _$imagesAtom.reportWrite(value, super.images, () {
+      super.images = value;
+    });
+  }
+
   final _$stateAtom = Atom(name: 'TransactionsStateB.state');
 
   @override
@@ -141,6 +156,28 @@ mixin _$AdminTransactionsState on TransactionsStateB, Store {
   }
 
   @override
+  void addImage(File image) {
+    final _$actionInfo = _$TransactionsStateBActionController.startAction(
+        name: 'TransactionsStateB.addImage');
+    try {
+      return super.addImage(image);
+    } finally {
+      _$TransactionsStateBActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void deleteImage(File image) {
+    final _$actionInfo = _$TransactionsStateBActionController.startAction(
+        name: 'TransactionsStateB.deleteImage');
+    try {
+      return super.deleteImage(image);
+    } finally {
+      _$TransactionsStateBActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void toState(AdmStoreState newState) {
     final _$actionInfo = _$TransactionsStateBActionController.startAction(
         name: 'TransactionsStateB.toState');
@@ -158,6 +195,7 @@ userToken: ${userToken},
 garbages: ${garbages},
 errorMessage: ${errorMessage},
 loading: ${loading},
+images: ${images},
 state: ${state}
     ''';
   }

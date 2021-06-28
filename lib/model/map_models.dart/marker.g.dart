@@ -30,13 +30,14 @@ class CustMarkerAdapter extends TypeAdapter<CustMarker> {
       coords: (fields[10] as List)?.cast<double>(),
       description: fields[11] as String,
       getBonus: fields[12] as bool,
+      images: (fields[13] as List)?.cast<String>(),
     );
   }
 
   @override
   void write(BinaryWriter writer, CustMarker obj) {
     writer
-      ..writeByte(13)
+      ..writeByte(14)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -62,7 +63,9 @@ class CustMarkerAdapter extends TypeAdapter<CustMarker> {
       ..writeByte(11)
       ..write(obj.description)
       ..writeByte(12)
-      ..write(obj.getBonus);
+      ..write(obj.getBonus)
+      ..writeByte(13)
+      ..write(obj.images);
   }
 
   @override

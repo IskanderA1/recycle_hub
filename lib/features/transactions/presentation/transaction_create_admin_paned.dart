@@ -3,12 +3,14 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:menu_button/menu_button.dart';
 import 'package:provider/provider.dart';
 import 'package:recycle_hub/bloc/profile_bloc/profile_bloc.dart';
 import 'package:recycle_hub/elements/input_style.dart';
 import 'package:recycle_hub/features/transactions/domain/state/transactions_admin_panel_state.dart/transactions_admin_panel_state.dart';
 import 'package:recycle_hub/helpers/filter_types.dart';
+import 'package:recycle_hub/helpers/image_picker.dart';
 import 'package:recycle_hub/model/map_models.dart/accept_types.dart';
 import 'package:recycle_hub/style/theme.dart';
 import './components/drop_down_menu_button.dart';
@@ -32,6 +34,25 @@ class _TransactionCreateAdminPanelScreenState
   double summ = 0;
   AdminTransactionsState state;
   File image;
+
+  Future _getImage() async {
+    try {
+      final img = await getImage();
+      setState(() {
+        image = img;
+      });
+    } catch (e) {}
+  }
+
+  Future _getImageFromStorage() async {
+    try {
+      final img = await getImageFromStorage();
+      setState(() {
+        image = img;
+      });
+    } catch (e) {}
+  }
+
   @override
   void initState() {
     filterTypes = FilterTypesService().filters;
@@ -259,12 +280,47 @@ class _TransactionCreateAdminPanelScreenState
                                                 color: kColorGreyLight),
                                           )),
                                     ),
-                                    image == null
-                                        ? Placeholder()
-                                        : Image.file(
+                                    image != null
+                                        ? Image.file(
                                             image,
-                                            height: 300,
-                                          ),
+                                            fit: BoxFit.scaleDown,
+                                            frameBuilder: (context, child,
+                                                frame, wasSynchronouslyLoaded) {
+                                              if (wasSynchronouslyLoaded ??
+                                                  false) {
+                                                return child;
+                                              }
+                                              return AnimatedOpacity(
+                                                child: Stack(
+                                                  children: <Widget>[
+                                                    child,
+                                                    Align(
+                                                      alignment:
+                                                          Alignment.topRight,
+                                                      child: Padding(
+                                                        padding:
+                                                            EdgeInsets.all(25),
+                                                        child: GestureDetector(
+                                                          onTap: () {
+                                                            setState(() {
+                                                              image = null;
+                                                            });
+                                                          },
+                                                          child:
+                                                              Icon(Icons.close),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                                opacity: frame == null ? 0 : 1,
+                                                duration:
+                                                    const Duration(seconds: 1),
+                                                curve: Curves.easeOut,
+                                              );
+                                            },
+                                          )
+                                        : Container(),
                                     Padding(
                                       padding: const EdgeInsets.only(top: 16),
                                       child: Row(
@@ -276,7 +332,9 @@ class _TransactionCreateAdminPanelScreenState
                                               width: 150,
                                               text: "Из устройства",
                                               textColor: kColorWhite,
-                                              ontap: () {}),
+                                              ontap: () {
+                                                _getImageFromStorage();
+                                              }),
                                           SizedBox(
                                             width: 20,
                                           ),
@@ -286,7 +344,9 @@ class _TransactionCreateAdminPanelScreenState
                                               backGroundColor:
                                                   kColorGreyVeryLight,
                                               text: "Камера",
-                                              ontap: () {})
+                                              ontap: () {
+                                                _getImage();
+                                              })
                                         ],
                                       ),
                                     ),

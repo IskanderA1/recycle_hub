@@ -20,6 +20,7 @@ class CustMarker {
     this.coords,
     this.description,
     this.getBonus,
+    this.images,
   });
 
   @HiveField(0)
@@ -48,6 +49,8 @@ class CustMarker {
   String description;
   @HiveField(12)
   bool getBonus;
+  @HiveField(13)
+  List<String> images;
 
   CustMarker copyWith({
     String id,
@@ -63,6 +66,7 @@ class CustMarker {
     List<double> coords,
     String description,
     bool getBonus,
+    List<String> images,
   }) =>
       CustMarker(
         id: id ?? this.id,
@@ -78,6 +82,7 @@ class CustMarker {
         coords: coords ?? this.coords,
         description: description ?? this.description,
         getBonus: getBonus ?? this.getBonus,
+        images: images ?? this.images,
       );
 
   factory CustMarker.fromJson(String str) =>
@@ -86,35 +91,54 @@ class CustMarker {
   String toJson() => json.encode(toMap());
 
   factory CustMarker.fromMap(Map<String, dynamic> json) => CustMarker(
-        id: json["id"],
-        name: json["name"],
-        partner: json["partner"],
-        partnerName: json["partner_name"],
-        paybackType: json["payback_type"],
-        receptionType: json["reception_type"],
-        workTime: WorkingTime.fromMap(json["work_time"]),
-        address: json["address"],
-        contacts: List<String>.from(json["contacts"].map((x) => x)),
-        acceptTypes: List<String>.from(json["accept_types"].map((x) => x)),
-        coords: List<double>.from(json["coords"].map((x) => x.toDouble())),
-        description: json["description"],
-        getBonus: json["getBonus"],
+        id: json["id"] == null ? null : json["id"],
+        name: json["name"] == null ? null : json["name"],
+        partner: json["partner"] == null ? null : json["partner"],
+        partnerName: json["partner_name"] == null ? null : json["partner_name"],
+        paybackType: json["payback_type"] == null ? null : json["payback_type"],
+        receptionType:
+            json["reception_type"] == null ? null : json["reception_type"],
+        workTime: json["work_time"] == null
+            ? null
+            : WorkingTime.fromMap(json["work_time"]),
+        address: json["address"] == null ? null : json["address"],
+        contacts: json["contacts"] == null
+            ? null
+            : List<String>.from(json["contacts"].map((x) => x)),
+        acceptTypes: json["accept_types"] == null
+            ? null
+            : List<String>.from(json["accept_types"].map((x) => x)),
+        coords: json["coords"] == null
+            ? null
+            : List<double>.from(json["coords"].map((x) => x.toDouble())),
+        description: json["description"] == null ? null : json["description"],
+        getBonus: json["getBonus"] == null ? null : json["getBonus"],
+        images: json["images"] == null
+            ? null
+            : List<String>.from(json["images"].map((x) => x)),
       );
 
   Map<String, dynamic> toMap() => {
-        "id": id,
-        "name": name,
-        "partner": partner,
-        "partner_name": partnerName,
-        "payback_type": paybackType,
-        "reception_type": receptionType,
-        "work_time": workTime.toMap(),
-        "address": address,
-        "contacts": List<dynamic>.from(contacts.map((x) => x)),
-        "accept_types": List<dynamic>.from(acceptTypes.map((x) => x)),
-        "coords": List<dynamic>.from(coords.map((x) => x)),
-        "description": description,
-        "getBonus": getBonus,
+        "id": id == null ? null : id,
+        "name": name == null ? null : name,
+        "partner": partner == null ? null : partner,
+        "partner_name": partnerName == null ? null : partnerName,
+        "payback_type": paybackType == null ? null : paybackType,
+        "reception_type": receptionType == null ? null : receptionType,
+        "work_time": workTime == null ? null : workTime.toMap(),
+        "address": address == null ? null : address,
+        "contacts": contacts == null
+            ? null
+            : List<dynamic>.from(contacts.map((x) => x)),
+        "accept_types": acceptTypes == null
+            ? null
+            : List<dynamic>.from(acceptTypes.map((x) => x)),
+        "coords":
+            coords == null ? null : List<dynamic>.from(coords.map((x) => x)),
+        "description": description == null ? null : description,
+        "getBonus": getBonus == null ? null : getBonus,
+        "images":
+            images == null ? null : List<dynamic>.from(images.map((x) => x)),
       };
 }
 

@@ -44,13 +44,21 @@ class WorkDay {
 
   factory WorkDay.fromMap(var map) {
     if (map == null) return null;
-
-    return WorkDay(
-      first: map[0],
-      second: map[0],
-      third: map[0],
-      fourth: map[3],
-    );
+    try {
+      return WorkDay(
+        first: map[0],
+        second: map[1],
+        third: map[2],
+        fourth: map[3],
+      );
+    } catch (e) {
+      return WorkDay(
+        first: '--',
+        second: '--',
+        third: '--',
+        fourth: '--',
+      );
+    }
   }
 
   String toJson() => json.encode(toMap());

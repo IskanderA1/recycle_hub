@@ -49,8 +49,9 @@ class EcoTestStateLoaded extends EcoTestState {
   Question currentQuestion;
   TestItem test;
   bool isLoading;
+  AnswerResult lastAnswerResult;
 
-  EcoTestStateLoaded({this.currentAttempt, this.test, this.currentQuestion, this.isLoading = false});
+  EcoTestStateLoaded({this.currentAttempt, this.test, this.currentQuestion, this.isLoading = false, this.lastAnswerResult});
 
   @override
   Attempt get attempt => currentAttempt;

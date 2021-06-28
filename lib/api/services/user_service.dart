@@ -174,8 +174,11 @@ class UserService {
 
     if (_transactions.isNotEmpty) {
       _transactions.forEach((element) {
-        //if(element.status == 'c'){
-        _garbagesGiven += element.amount;
+        var localSumm = 0.0;
+        element.items.forEach((element) {
+          localSumm += element.amount;
+        });
+        _garbagesGiven += localSumm;
         //}
       });
     }

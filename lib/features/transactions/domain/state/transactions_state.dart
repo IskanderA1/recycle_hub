@@ -25,7 +25,8 @@ abstract class TransactionsStateBase with Store {
   List<Transaction> transactions = List<Transaction>.empty(growable: true);
 
   @observable
-  List<StatisticModel> statisticModel = List<StatisticModel>.empty(growable: true);
+  List<StatisticModel> statisticModel =
+      List<StatisticModel>.empty(growable: true);
 
   @observable
   String errorMessage;
@@ -65,18 +66,20 @@ abstract class TransactionsStateBase with Store {
           filters.forEach((element) {
             var e = StatisticModel(filterType: element.copyWith(), count: 0);
             transactions.forEach((element) {
-              if (e.filterType.id == element.filterId &&
-                  element.status == 'c') {
-                e.count += element.amount;
-              }
+              element.items.forEach((item) {
+                if (e.filterType.id == item.filterId && element.status == 'confirmed') {
+                  e.count += item.amount;
+                  //e.count += element.items.fold(0.0, (previousValue, element) => previousValue += element.amount);
+                }
+              });
             });
             if (e.count != 0) {
               statisticModel.add(e);
             }
           });
           transactions.forEach((element) {
-            if (element.status == 'c') {
-              totalKG += element.amount;
+            if (element.status == 'confirmed') {
+              totalKG += element.items.fold(0.0, (previousValue, element) => previousValue += element.amount);
               summ += element.reward;
             }
           });

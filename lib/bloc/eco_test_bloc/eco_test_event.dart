@@ -19,6 +19,13 @@ class EcoTestGetQuestionByTestIdEvent extends EcoTestEvent {
   List<Object> get props => [testId];
 } */
 
+/// Запуск теста. Ща стартует первый тест в сипск, потом можно
+/// добавить поле тестId
+class EcoTestStartTestEvent extends EcoTestEvent {
+  EcoTestStartTestEvent();
+  @override
+  List<Object> get props => [];
+}
 
 /// Добавление ответа на вопрос теста
 class EcoTestAnswerToQuestionEvent extends EcoTestEvent {
@@ -29,10 +36,9 @@ class EcoTestAnswerToQuestionEvent extends EcoTestEvent {
   List<Object> get props => [answer];
 }
 
-/// Запуск теста. Ща стартует первый тест в сипск, потом можно
-/// добавить поле тестId
-class EcoTestStartTestEvent extends EcoTestEvent {
-  EcoTestStartTestEvent();
+/// Добавление ответа на вопрос теста
+class EcoTestEventNextQuestion extends EcoTestEvent {
+  EcoTestEventNextQuestion();
   @override
   List<Object> get props => [];
 }

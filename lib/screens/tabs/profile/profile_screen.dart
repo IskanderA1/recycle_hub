@@ -58,7 +58,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
           alignment: Alignment.topCenter,
           child: Stack(
             children: [
-              Image.asset("svg/Mask Group.png"),
+              userState.user.image != null
+                  ? Image.network(userState.user.image)
+                  : Image.asset("svg/Mask Group.png"),
               Container(
                 child: ListView(
                   padding: EdgeInsets.only(left: 17, right: 17, top: 10),
@@ -84,7 +86,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           padding: EdgeInsets.only(
                               bottom: _size.height * 0.05, top: 5),
                           children: [
-                            buildAchievments("Эколог", UserService().garbageGiven),
+                            buildAchievments(
+                                "Эколог", UserService().garbageGiven),
                             SizedBox(
                               height: 10,
                             ),

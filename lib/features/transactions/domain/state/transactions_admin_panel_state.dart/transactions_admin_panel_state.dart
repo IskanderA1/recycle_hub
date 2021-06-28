@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/foundation.dart';
 import 'package:mobx/mobx.dart';
 
@@ -27,6 +29,9 @@ abstract class TransactionsStateB with Store {
   bool loading = false;
 
   @observable
+  List<File> images;
+
+  @observable
   AdmStoreState state = AdmStoreState.INIT;
 
   @action
@@ -50,6 +55,16 @@ abstract class TransactionsStateB with Store {
   @action
   void deleteFilterAndAmmount(int index) {
     this.garbages.removeAt(index);
+  }
+
+  @action
+  void addImage(File image) {
+    this.images.add(image);
+  }
+
+  @action
+  void deleteImage(File image) {
+    this.images.remove(image);
   }
 
   @action

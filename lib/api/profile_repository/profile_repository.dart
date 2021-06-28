@@ -82,7 +82,7 @@ class ProfileRepository {
     try {
       var response = await CommonRequest.makeRequest(
         '$kTest/$testId/$kAttempt',
-        method: CommonRequestMethod.get,
+        method: CommonRequestMethod.post,
       );
       var data = jsonDecode(response.body);
       print(data);
@@ -93,7 +93,13 @@ class ProfileRepository {
           throw Exception("Список вопросов пуст");
         }
       } else if (response.statusCode == 400) {
-        if (data['error'] != null &&
+        if (data != null &&
+            data['error'] == "yours freeze ecocoins less than test unlock") {
+          throw ApiError(
+              type: ApiErrorType.testNotEnoughCoins,
+              errorDescription:
+                  'У Вас недостаточно замороженных ЭкоКоинов для прохождения теста');
+        } else if (data['error'] != null &&
             data['error'] ==
                 "not enough time has passed since the last attempt") {
           throw ApiError(

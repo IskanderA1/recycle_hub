@@ -28,7 +28,15 @@ class EcoTestBloc extends Bloc<EcoTestEvent, EcoTestState> {
   @override
   Stream<EcoTestState> mapEventToState(
     EcoTestEvent event,
-  ) async* {}
+  ) async* {
+    if (event is EcoTestStartTestEvent) {
+      yield* _mapStartToState(event);
+    } else if (event is EcoTestAnswerToQuestionEvent) {
+      yield* _mapAnswerToState(event);
+    } else if (event is EcoTestEventNextQuestion) {
+      yield* _mapNextQuestionToState(event);
+    }
+  }
 
   Stream<EcoTestState> _mapStartToState(EcoTestStartTestEvent event) async* {
     yield EcoTestStateLoading();
@@ -85,10 +93,8 @@ class EcoTestBloc extends Bloc<EcoTestEvent, EcoTestState> {
       return;
     }
 
-    currentAnswerInd++;
-
     ///is completed
-    ///TODO: CREATE EVENT TO CONTNUE THE TASK
+    ///TODO: CREATE EVENT TO CONTNUE THE TEST
     if (result.isAttemptSuccess != null) {
       yield EcoTestStateCompleted(
           result: result,
@@ -98,10 +104,20 @@ class EcoTestBloc extends Bloc<EcoTestEvent, EcoTestState> {
         yield EcoTestStateLoaded(
             currentAttempt: currentAttempt,
             test: currentTest,
-            currentQuestion: currentAttempt.questions[currentAnswerInd]);
+            currentQuestion: currentAttempt.questions[currentAnswerInd],
+            lastAnswerResult: result);
       } catch (e) {
         yield EcoTestStateError('Что-то пошло не так');
       }
     }
+  }
+
+  Stream<EcoTestState> _mapNextQuestionToState(
+      EcoTestEventNextQuestion event) async* {
+    currentAnswerInd++;
+    yield EcoTestStateLoaded(
+        currentAttempt: currentAttempt,
+        test: currentTest,
+        currentQuestion: currentAttempt.questions[currentAnswerInd]);
   }
 }

@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:recycle_hub/helpers/image_picker.dart';
 import 'package:recycle_hub/model/new_point_model.dart';
 import 'package:recycle_hub/style/style.dart';
 import 'package:recycle_hub/style/theme.dart';
@@ -24,28 +25,22 @@ class _OfferNewPointScreenState extends State<OfferNewPointScreen> {
   NewPoint newPoint;
   final picker = ImagePicker();
 
-  Future getImage() async {
-    final pickedFile = await picker.getImage(source: ImageSource.camera);
-
-    setState(() {
-      if (pickedFile != null) {
-        _image = File(pickedFile.path);
-      } else {
-        print('No image selected.');
-      }
-    });
+  Future _getImage() async {
+    try {
+      final img = await getImage();
+      setState(() {
+        _image = img;
+      });
+    } catch (e) {}
   }
 
-  Future getImageFromStorage() async {
-    final pickedFile = await picker.getImage(source: ImageSource.gallery);
-
-    setState(() {
-      if (pickedFile != null) {
-        _image = File(pickedFile.path);
-      } else {
-        print('No image selected.');
-      }
-    });
+  Future _getImageFromStorage() async {
+    try {
+      final img = await getImageFromStorage();
+      setState(() {
+        _image = img;
+      });
+    } catch (e) {}
   }
 
   @override
@@ -98,7 +93,7 @@ class _OfferNewPointScreenState extends State<OfferNewPointScreen> {
                             fontFamily: 'Gillroy',
                             fontWeight: FontWeight.bold,
                             fontSize: 18),
-                            textAlign: TextAlign.center,
+                        textAlign: TextAlign.center,
                       ),
                       Padding(
                         padding: const EdgeInsets.only(top: 15, bottom: 15),
@@ -142,7 +137,7 @@ class _OfferNewPointScreenState extends State<OfferNewPointScreen> {
                                         child: Padding(
                                           padding: EdgeInsets.all(25),
                                           child: GestureDetector(
-                                            onTap:(){
+                                            onTap: () {
                                               setState(() {
                                                 _image = null;
                                               });
@@ -173,7 +168,7 @@ class _OfferNewPointScreenState extends State<OfferNewPointScreen> {
                       Row(
                         children: [
                           GestureDetector(
-                              onTap: () => getImageFromStorage(),
+                              onTap: () => _getImageFromStorage(),
                               child: Container(
                                 height: 45,
                                 width: 140,
@@ -193,7 +188,7 @@ class _OfferNewPointScreenState extends State<OfferNewPointScreen> {
                               )),
                           Spacer(),
                           GestureDetector(
-                              onTap: () => getImage(),
+                              onTap: () => _getImage(),
                               child: Container(
                                 height: 45,
                                 width: 140,
