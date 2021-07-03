@@ -30,11 +30,13 @@ class _MainEcoGuideScreenState extends State<MainEcoGuideScreen> {
   @override
   Widget build(BuildContext context) {
     Size _size = MediaQuery.of(context).size;
-    return GestureDetector(
-      onTap: () {
-        FocusScope.of(context).unfocus();
+    return WillPopScope(
+      onWillPop: (){
+        GetIt.I.get<EcoGuideCubit>().goBack();
       },
-      child: Scaffold(
+          child: Scaffold(/* onTap: () {
+        FocusScope.of(context).unfocus();
+      }, */
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
           leading: IconButton(

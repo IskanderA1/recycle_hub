@@ -13,12 +13,13 @@ enum CommonRequestMethod { get, post, put, delete }
 enum CommonRequestEncoding { json, url }
 
 class CommonRequest {
-  static const String devURL = "https://167.172.105.146:5000/api";
-  static const String prodURL = "https://167.172.105.146:5000/api";
+  static const String devURL = "https://167.172.105.146:7000/api";
+  static const String prodURL = "https://167.172.105.146:7000/api";
 
   static const String apiURL = prodURL;
   static http.Client get defaultClient => IOClient(HttpClient()
-    ..badCertificateCallback = ((t, s, h) => true)
+    ..badCertificateCallback =
+        ((X509Certificate cert, String host, int port) => true)
     ..connectionTimeout = Duration(seconds: 60)
     ..findProxy = HttpClient.findProxyFromEnvironment);
 
@@ -95,7 +96,9 @@ class CommonRequest {
 
     var response;
     try {
-      response = await defaultClient.get(Uri.parse(url), headers: headers);
+      response = await defaultClient.get(
+          Uri.https('167.172.105.146:7000', '/api/$endpoint', body),
+          headers: headers);
     } on http.ClientException catch (e) {
       throw ApiError(
           type: ApiErrorType.descriptionError, errorDescription: e.message);
@@ -121,9 +124,9 @@ class CommonRequest {
       endpoint = endpoint + queryParams;
     }
     String jsonBody = jsonEncode(body);
-    developer.log("\nPOST: $url", name: 'recycle.api.request');
-    developer.log("\nJSONBODY: $jsonBody", name: 'recycle.api.request');
-    developer.log("\nBODY: $body", name: 'recycle.api.request');
+    developer.log("POST: $url", name: 'recycle.api.request');
+    developer.log("JSONBODY: $jsonBody", name: 'recycle.api.request');
+    developer.log("BODY: $body", name: 'recycle.api.request');
 
     var response;
     try {

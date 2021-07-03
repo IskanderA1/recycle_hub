@@ -17,7 +17,6 @@ class MarkersListWidget extends StatefulWidget {
 }
 
 class _MarkersListWidgetState extends State<MarkersListWidget> {
-
   @override
   Widget build(BuildContext context) {
     return Container(color: kColorWhite, child: Column(children: widget.list));
@@ -42,7 +41,7 @@ class MarkerCardWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     Size _size = MediaQuery.of(context).size;
     return Padding(
-      padding: const EdgeInsets.fromLTRB(17, 30, 17, 30),
+      padding: const EdgeInsets.fromLTRB(16, 30, 16, 30),
       child: Container(
         decoration: BoxDecoration(
             color: marker.paybackType == 'partner' ? kColorGreen : kColorPink,
@@ -52,14 +51,16 @@ class MarkerCardWidget extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Padding(
-              padding: EdgeInsets.fromLTRB(15, 10, 15, 10),
+              padding: EdgeInsets.fromLTRB(16, 10, 16, 10),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   AutoSizeText(
                     marker.name,
                     style: TextStyle(
-                        color: marker.paybackType == 'partner' ? kColorWhite : kColorBlack,
+                        color: marker.paybackType == 'partner'
+                            ? kColorWhite
+                            : kColorBlack,
                         fontFamily: "Gilroy",
                         fontWeight: FontWeight.bold,
                         fontSize: 18),
@@ -68,16 +69,22 @@ class MarkerCardWidget extends StatelessWidget {
                       rating: 3.5,
                       spaceBetween: 1,
                       starConfig: StarConfig(
-                        fillColor: marker.paybackType == 'partner' ? kColorWhite : kColorBlack,
+                        fillColor: marker.paybackType == 'partner'
+                            ? kColorWhite
+                            : kColorBlack,
                         size: 15,
-                        emptyColor: marker.paybackType == 'partner' ? kColorGreen : kColorPink,
-                        strokeColor: marker.paybackType == 'partner' ? kColorWhite : kColorBlack,
+                        emptyColor: marker.paybackType == 'partner'
+                            ? kColorGreen
+                            : kColorPink,
+                        strokeColor: marker.paybackType == 'partner'
+                            ? kColorWhite
+                            : kColorBlack,
                       ))
                 ],
               ),
             ),
             Padding(
-              padding: EdgeInsets.fromLTRB(15, 5, 15, 5),
+              padding: EdgeInsets.fromLTRB(16, 5, 16, 5),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -85,7 +92,9 @@ class MarkerCardWidget extends StatelessWidget {
                     child: Text(
                       marker.address,
                       style: TextStyle(
-                        color: marker.paybackType == 'partner' ? kColorWhite : kColorBlack,
+                        color: marker.paybackType == 'partner'
+                            ? kColorWhite
+                            : kColorBlack,
                         fontFamily: "Gilroy",
                         fontWeight: FontWeight.w400,
                         fontSize: 18,
@@ -96,7 +105,9 @@ class MarkerCardWidget extends StatelessWidget {
                     child: AutoSizeText(
                       distance,
                       style: TextStyle(
-                          color: marker.paybackType == 'partner' ? kColorWhite : kColorBlack,
+                          color: marker.paybackType == 'partner'
+                              ? kColorWhite
+                              : kColorBlack,
                           fontFamily: "Gilroy",
                           fontWeight: FontWeight.w400,
                           fontSize: 18),
@@ -111,8 +122,12 @@ class MarkerCardWidget extends StatelessWidget {
                 alignment: Alignment.center,
                 child: WorkingDaysWidget(
                   workingTime: marker.workTime,
-                  wColor: marker.paybackType == 'partner' ? kColorWhite : kColorBlack,
-                  backColor: marker.paybackType == 'partner' ? kColorGreen : kColorPink,
+                  wColor: marker.paybackType == 'partner'
+                      ? kColorWhite
+                      : kColorBlack,
+                  backColor: marker.paybackType == 'partner'
+                      ? kColorGreen
+                      : kColorPink,
                   hasSelection: false,
                   fontSize: 13,
                   size: Size(_size.width - 50, 130),
@@ -122,14 +137,16 @@ class MarkerCardWidget extends StatelessWidget {
             Align(
               alignment: Alignment.centerLeft,
               child: Padding(
-                padding: EdgeInsets.fromLTRB(15, 4, 15, 4),
+                padding: EdgeInsets.fromLTRB(16, 4, 16, 4),
                 child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       AutoSizeText(
                         "Принимают на переработку:",
                         style: TextStyle(
-                            color: marker.paybackType == 'partner'  ? kColorWhite : kColorBlack,
+                            color: marker.paybackType == 'partner'
+                                ? kColorWhite
+                                : kColorBlack,
                             fontFamily: "Gilroy",
                             fontWeight: FontWeight.w400,
                             fontSize: 14),
@@ -137,10 +154,7 @@ class MarkerCardWidget extends StatelessWidget {
                     ]),
               ),
             ),
-            Container(
-                height: 60,
-                padding: EdgeInsets.fromLTRB(15, 2, 15, 2),
-                child: list)
+            Container(padding: EdgeInsets.fromLTRB(16, 2, 16, 18), child: list)
           ],
         ),
       ),

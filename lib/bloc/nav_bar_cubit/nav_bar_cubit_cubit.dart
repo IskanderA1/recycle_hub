@@ -8,17 +8,21 @@ class NavBarCubit extends Cubit<NavBarItem> {
 
   void moveTo(NavBarItem screen) {
     emit(screen);
-    if(_lastsList.length > 0){
+    if (_lastsList.length > 0) {
       _lastsList.removeAt(0);
     }
     _lastsList.add(screen);
   }
 
-  void goBack(){
-    if(_lastsList.length > 0){
-      emit(_lastsList.last);
+  void goBack() {
+    if (_lastsList.length > 0) {
       _lastsList.removeLast();
-    }else{
+      if (_lastsList.isEmpty) {
+        emit(NavBarItem.MAP);
+      } else {
+        emit(_lastsList.last);
+      }
+    } else {
       emit(NavBarItem.MAP);
     }
   }

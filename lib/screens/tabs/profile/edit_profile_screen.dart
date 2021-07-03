@@ -140,7 +140,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           type: TextInputType.visiblePassword,
                         ),
                       ),
-                      Padding(
+                      /* Padding(
                         padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
                         child: EditProfileScreenTextField(
                           controller: _age,
@@ -148,8 +148,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           adText: "Возраст",
                           type: TextInputType.number,
                         ),
-                      ),
-                      Align(
+                      ), */
+                      //GENDER
+                      /* Align(
                         alignment: Alignment.centerLeft,
                         child: Padding(
                             padding:
@@ -291,8 +292,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                 )*/
                               ],
                             )),
-                      ),
-                      Padding(
+                      ), */
+                      /* Padding(
                         padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
                         child: EditProfileScreenTextField(
                           controller: _address,
@@ -300,7 +301,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           adText: "Домашний адрес",
                           type: TextInputType.number,
                         ),
-                      ),
+                      ), */
                       SizedBox(
                         height: 20,
                       ),

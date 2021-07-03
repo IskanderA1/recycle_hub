@@ -16,23 +16,28 @@ class EcoMainScreen extends StatefulWidget {
 class _EcoMainScreenState extends State<EcoMainScreen> {
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<EcoGuideCubit, EcoGuideMenuItem>(
-      bloc: GetIt.I.get<EcoGuideCubit>(),
-      // ignore: missing_return
-      builder: (context, state) {
-        switch (state) {
-          case EcoGuideMenuItem.MENU:
-            return MainEcoGuideScreen();
-          case EcoGuideMenuItem.CONTAINER:
-            return ContainerScreen();
-          case EcoGuideMenuItem.REFERENCE:
-            return ReferenceBookScreen();
-          case EcoGuideMenuItem.ADVICE:
-            return AdviceScreen();
-          case EcoGuideMenuItem.TEST:
-            return TestScreen();
-        }
+    return WillPopScope(
+      onWillPop: () {
+        GetIt.I.get<EcoGuideCubit>().goBack();
       },
+      child: BlocBuilder<EcoGuideCubit, EcoGuideMenuItem>(
+        bloc: GetIt.I.get<EcoGuideCubit>(),
+        // ignore: missing_return
+        builder: (context, state) {
+          switch (state) {
+            case EcoGuideMenuItem.MENU:
+              return MainEcoGuideScreen();
+            case EcoGuideMenuItem.CONTAINER:
+              return ContainerScreen();
+            case EcoGuideMenuItem.REFERENCE:
+              return ReferenceBookScreen();
+            case EcoGuideMenuItem.ADVICE:
+              return AdviceScreen();
+            case EcoGuideMenuItem.TEST:
+              return TestScreen();
+          }
+        },
+      ),
     );
   }
 }

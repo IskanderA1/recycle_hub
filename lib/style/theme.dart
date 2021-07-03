@@ -18,7 +18,7 @@ const kLightGrey = const Color(0xFF8D8D8D80);
 
 ThemeData kAppThemeData() {
   return ThemeData(
-      fontFamily: "Gilroy",
+      fontFamily: 'Gilroy',
       appBarTheme: AppBarTheme(
         shadowColor: kColorWhite,
         iconTheme: IconThemeData(

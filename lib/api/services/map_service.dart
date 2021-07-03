@@ -38,16 +38,8 @@ class MapService {
     }
   }
 
-  Future<List<CustMarker>> loadMarkersFrom4Coords(
-      LatLng latLng, double zoom) async {
+  Future<List<CustMarker>> loadMarkersFrom4Coords(LatLng latLng) async {
     await _checkBox();
-    Coords x1, x2, x3, x4;
-    if (zoom > 10) {
-      x1 = Coords(lat: latLng.latitude - 0.5, lng: latLng.longitude + 0.5);
-      x2 = Coords(lat: latLng.latitude + 0.5, lng: latLng.longitude + 0.5);
-      x3 = Coords(lat: latLng.latitude + 0.5, lng: latLng.longitude - 0.5);
-      x4 = Coords(lat: latLng.latitude - 0.5, lng: latLng.longitude - 0.5);
-    }
     try {
       /*DateTime lastDownLoad =
           _box.get('lastTime', defaultValue: DateTime(2020, 12, 21));
@@ -65,9 +57,13 @@ class MapService {
       print("Запрос отправлен");
       var response = await CommonRequest.makeRequest('rec_points',
           method: CommonRequestMethod.get,
-          params: {
-            'coords':
-                '[${x1.lat}, ${x1.lng}],[${x2.lat}, ${x2.lng}],[${x3.lat}, ${x3.lng}],[${x4.lat}, ${x4.lng}]',
+          body: {
+            'position': "[" +
+                latLng.latitude.toString() +
+                ", " +
+                latLng.longitude.toString() +
+                "]",
+            'radius': '20'
           });
 
       List<dynamic> data = jsonDecode(response.body);
@@ -75,7 +71,7 @@ class MapService {
       if (data.isNotEmpty) {
         List<CustMarker> list = List<CustMarker>.from(
             data.map((marker) => CustMarker.fromMap(marker)));
-            list.add(list[0].copyWith(paybackType: 'partner', coords: [
+        list.add(list[0].copyWith(paybackType: 'partner', coords: [
           list[0].coords[0] + 0.00005,
           list[0].coords[1] + 0.00005
         ]));

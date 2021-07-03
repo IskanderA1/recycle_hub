@@ -58,9 +58,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           alignment: Alignment.topCenter,
           child: Stack(
             children: [
-              userState.user.image != null
-                  ? Image.network(userState.user.image)
-                  : Image.asset("svg/Mask Group.png"),
+              Image.asset("svg/Mask Group.png"),
               Container(
                 child: ListView(
                   padding: EdgeInsets.only(left: 17, right: 17, top: 10),
@@ -69,12 +67,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     SizedBox(
                       height: 17,
                     ),
-                    buildProfileAvatar(userState.user.name, "ЭКОЛОГ"),
+                    buildProfileAvatar(
+                        userState.user.name, "ЭКОЛОГ", userState.user.image),
                     SizedBox(
                       height: 24,
                     ),
-                    buildStatus(10, UserService().user.ecoCoins,
-                        UserService().garbageGiven),
+                    buildStatus(10, UserService().garbageGiven),
                     SizedBox(
                       height: 5,
                     ),
@@ -138,7 +136,7 @@ Widget buildAppBar() {
   );
 }
 
-Widget buildProfileAvatar(String name, String status) {
+Widget buildProfileAvatar(String name, String status, String image) {
   return Container(
     child: Row(
       mainAxisAlignment: MainAxisAlignment.start,
@@ -156,8 +154,23 @@ Widget buildProfileAvatar(String name, String status) {
                   ),
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(41),
-                    child: Image.network(
-                        "https://idsb.tmgrup.com.tr/ly/uploads/images/2020/04/30/33310.jpg"),
+                    child:
+                        /* image != null
+                        ? Container(
+                            width: 100.0,
+                            height: 100.0,
+                            decoration: new BoxDecoration(
+                              borderRadius: new BorderRadius.circular(3.0),
+                              color: const Color(0xff7c94b6),
+                              image: new DecorationImage(
+                                image: new NetworkImage(image),
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          )
+                        :  */
+                        Image.network(
+                            "https://idsb.tmgrup.com.tr/ly/uploads/images/2020/04/30/33310.jpg"),
                   )),
               Container(
                   padding: EdgeInsets.only(top: 50, left: 50),
@@ -204,7 +217,7 @@ Widget buildProfileAvatar(String name, String status) {
   );
 }
 
-Widget buildStatus(int place, int balance, double made) {
+Widget buildStatus(int place, double made) {
   return Container(
     decoration: BoxDecoration(
       color: kColorWhite,
@@ -219,7 +232,7 @@ Widget buildStatus(int place, int balance, double made) {
           children: [
             Text(
               "$place",
-              style: TextStyle(color: kColorBlack, fontSize: 36),
+              style: TextStyle(color: kColorBlack, fontSize: 28),
             ),
             Text(
               "Место",
@@ -230,9 +243,19 @@ Widget buildStatus(int place, int balance, double made) {
         Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Text(
-              "$balance",
-              style: TextStyle(color: kColorBlack, fontSize: 36),
+            RichText(
+              text: TextSpan(
+                  text: '${UserService().user.ecoCoins}',
+                  style: TextStyle(
+                      color: kColorGreen,
+                      fontSize: 28,
+                      fontFamily: 'GilroyMedium'),
+                  children: [
+                    TextSpan(text: '/', style: TextStyle(color: kColorBlack)),
+                    TextSpan(
+                        text: '${UserService().user.freezeEcoCoins}',
+                        style: TextStyle(color: kColorRed)),
+                  ]),
             ),
             Text(
               "Баланс",
@@ -245,7 +268,7 @@ Widget buildStatus(int place, int balance, double made) {
           children: [
             Text(
               "$made",
-              style: TextStyle(color: kColorBlack, fontSize: 36),
+              style: TextStyle(color: kColorBlack, fontSize: 28),
             ),
             Text(
               "Сдал(кг)",

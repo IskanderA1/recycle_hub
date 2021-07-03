@@ -43,7 +43,7 @@ class MapScreen extends StatefulWidget {
 
 class _MapScreenState extends State<MapScreen> {
   CameraPosition cameraPosition =
-      CameraPosition(target: LatLng(55.7985293, 49.1156465), zoom: 5);
+      CameraPosition(target: LatLng(55.7985293, 49.1156465), zoom: 12);
   final Completer<GoogleMapController> _controller = Completer();
   MapBloc mapBloc;
 
@@ -56,45 +56,50 @@ class _MapScreenState extends State<MapScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: mapScreenAppBar(),
-        body: BlocBuilder(
-          bloc: mapBloc,
-          buildWhen: (previous, current) {
-            if (previous is MapStateError) {
-              developer.log(
-                  "Got previous map screen error: ${previous.discription}",
-                  name: 'map.map_screen');
-              return false;
-            }
-            if (current is MapStateError) {
-              developer.log(
-                  "Got current map screen error: ${current.discription}",
-                  name: 'map.map_screen');
-              return false;
-            }
-
-            if (previous is MapStateLoaded && current is MapStateLoaded) {
-              if (previous.markers == null || current.markers == null) {
-                return true;
+    return WillPopScope(
+      onWillPop: () async {
+        return false;
+      },
+      child: Scaffold(
+          appBar: mapScreenAppBar(),
+          body: BlocBuilder(
+            bloc: mapBloc,
+            buildWhen: (previous, current) {
+              if (previous is MapStateError) {
+                developer.log(
+                    "Got previous map screen error: ${previous.discription}",
+                    name: 'map.map_screen');
+                return false;
               }
-              return previous.markers.length == current.markers.length;
-            }
-            return true;
-          },
-          builder: (context, state) {
-            developer.log("Map rebuilds with: ${state.runtimeType}",
-                name: 'screens.tabs.map.map_screen');
-            if (state is MapStateLoaded) {
-              return GoogleMapWidget(
-                  cameraPosition: cameraPosition,
-                  state: state,
-                  mapController: _controller);
-            } else {
-              return LoaderWidget();
-            }
-          },
-        ));
+              if (current is MapStateError) {
+                developer.log(
+                    "Got current map screen error: ${current.discription}",
+                    name: 'map.map_screen');
+                return false;
+              }
+
+              if (previous is MapStateLoaded && current is MapStateLoaded) {
+                if (previous.markers == null || current.markers == null) {
+                  return true;
+                }
+                return previous.markers.length == current.markers.length;
+              }
+              return true;
+            },
+            builder: (context, state) {
+              developer.log("Map rebuilds with: ${state.runtimeType}",
+                  name: 'screens.tabs.map.map_screen');
+              if (state is MapStateLoaded) {
+                return GoogleMapWidget(
+                    cameraPosition: cameraPosition,
+                    state: state,
+                    mapController: _controller);
+              } else {
+                return LoaderWidget();
+              }
+            },
+          )),
+    );
     /*return FutureBuilder<String>(
       future: getCurrentPosition(),
       builder: (context, snapshot) {
@@ -187,6 +192,8 @@ class _GoogleMapWidgetState extends State<GoogleMapWidget> {
   List<Widget> _list;
   ClusterManager<CustMarker> clusterManager;
   Iterable<ClusterItem> _items;
+  CameraPosition _cameraPosition =
+      CameraPosition(target: LatLng(55.4727, 49.0652));
 
   void _updateMarkers(Set<Marker> markers) {
     print('Updated ${markers.length} markers');
@@ -197,43 +204,45 @@ class _GoogleMapWidgetState extends State<GoogleMapWidget> {
 
   @override
   void initState() {
-    _list = widget.state.markers
-        .map((item) { 
-          double ddist = distanceInKm(UserService().location, Point(item.coords[0], item.coords[1]));
-          String dist = '';
-          if(ddist < 0){
-            dist = ddist.toStringAsFixed(3).split('.').last + ' м';
-          }else{
-            dist = ddist.toStringAsFixed(1).toString() + ' км';
-          }
-          return MarkerCardWidget(
-              index: item.hashCode,
-              marker: item,
-              distance: dist,
-              list: GridView.count(
-                crossAxisCount: 3,
-                crossAxisSpacing: 5,
-                childAspectRatio: 8 / 2,
-                physics: NeverScrollableScrollPhysics(),
-                children: item.acceptTypes
-                    .map((acceptsItem) => Container(
-                          height: 10,
-                          decoration: BoxDecoration(
-                              color: kColorWhite,
-                              borderRadius: BorderRadius.circular(5)),
-                          child: Center(
-                            child: AutoSizeText(
-                              "  $acceptsItem  ",
-                              style: TextStyle(
-                                  fontFamily: 'GilroyMedium', fontSize: 14),
-                              textAlign: TextAlign.center,
-                            ),
-                          ),
-                        ))
-                    .toList(),
-              ),
-            );})
-        .toList();
+    _list = widget.state.markers.map((item) {
+      double ddist = distanceInKm(
+          UserService().location, Point(item.coords[0], item.coords[1]));
+      String dist = '';
+      if (ddist < 0) {
+        dist = ddist.toStringAsFixed(3).split('.').last + ' м';
+      } else {
+        dist = ddist.toStringAsFixed(1).toString() + ' км';
+      }
+      return MarkerCardWidget(
+        index: item.hashCode,
+        marker: item,
+        distance: dist,
+        list: GridView.count(
+          crossAxisCount: 3,
+          crossAxisSpacing: 5,
+          mainAxisSpacing: 5,
+          childAspectRatio: 8 / 2,
+          shrinkWrap: true,
+          physics: NeverScrollableScrollPhysics(),
+          children: item.acceptTypes
+              .map((acceptsItem) => Container(
+                    height: 10,
+                    decoration: BoxDecoration(
+                        color: kColorWhite,
+                        borderRadius: BorderRadius.circular(5)),
+                    child: Center(
+                      child: AutoSizeText(
+                        "  $acceptsItem  ",
+                        style:
+                            TextStyle(fontFamily: 'GilroyMedium', fontSize: 14),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ))
+              .toList(),
+        ),
+      );
+    }).toList();
     _items = widget.state.markers
         .map((markItem) => ClusterItem(
             LatLng(markItem.coords[0], markItem.coords[1]),
@@ -244,10 +253,11 @@ class _GoogleMapWidgetState extends State<GoogleMapWidget> {
       _updateMarkers,
       markerBuilder: _markerBuilder,
       initialZoom: widget.cameraPosition.zoom,
-      stopClusteringZoom: 17.0,
-      levels: [4, 6, 8, 10, 12, 14, 15, 16],
+      stopClusteringZoom: 14,
+      levels: [4, 6, 8, 10, 12, 14],
       extraPercent: 0.2,
     );
+    clusterManager.onCameraMove(_cameraPosition);
     clusterManager.setItems(_items);
     super.initState();
   }
@@ -293,6 +303,7 @@ class _GoogleMapWidgetState extends State<GoogleMapWidget> {
                   widget.mapController.complete(controller);
                 }
                 clusterManager.setMapController(controller);
+                setState(() {});
               },
               myLocationButtonEnabled: false,
               myLocationEnabled: true,
@@ -808,11 +819,10 @@ class _GoogleMapWidgetState extends State<GoogleMapWidget> {
     GoogleMapController zController = await widget.mapController.future;
     var currentZoomLevel = await zController.getZoomLevel();
 
-    currentZoomLevel = currentZoomLevel;
     zController.animateCamera(
       CameraUpdate.newCameraPosition(
         CameraPosition(
-          target: widget.cameraPosition.target,
+          target: _cameraPosition.target,
           zoom: currentZoomLevel,
         ),
       ),

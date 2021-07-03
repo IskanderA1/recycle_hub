@@ -35,6 +35,8 @@ class EcoTestBloc extends Bloc<EcoTestEvent, EcoTestState> {
       yield* _mapAnswerToState(event);
     } else if (event is EcoTestEventNextQuestion) {
       yield* _mapNextQuestionToState(event);
+    } else if (event is EcoTestEventSelectAnswer) {
+      yield* _mapSelectAnswerToState(event);
     }
   }
 
@@ -119,5 +121,13 @@ class EcoTestBloc extends Bloc<EcoTestEvent, EcoTestState> {
         currentAttempt: currentAttempt,
         test: currentTest,
         currentQuestion: currentAttempt.questions[currentAnswerInd]);
+  }
+
+  Stream<EcoTestState> _mapSelectAnswerToState(
+      EcoTestEventSelectAnswer event) async* {
+    EcoTestState cstate = state;
+    if (cstate is EcoTestStateLoaded && event.answer != null) {
+      yield cstate.copyWith(selectedAnswer: event.answer);
+    }
   }
 }

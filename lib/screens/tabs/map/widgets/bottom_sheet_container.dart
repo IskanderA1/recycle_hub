@@ -276,7 +276,9 @@ class _NewWidgetState extends State<NewWidget> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     AutoSizeText(
-                      widget.marker.contacts[0],
+                      widget.marker.contacts[0] != null
+                          ? widget.marker.contacts[0]
+                          : '--',
                       style: TextStyle(
                           color: kColorGreen,
                           fontFamily: 'Gilroy',
@@ -297,7 +299,9 @@ class _NewWidgetState extends State<NewWidget> {
                       height: 15,
                     ),
                     AutoSizeText(
-                      widget.marker.contacts[0],
+                      widget.marker.contacts[0] != null
+                          ? widget.marker.contacts[0]
+                          : '--',
                       style: TextStyle(
                           color: kColorGreen,
                           fontFamily: 'Gilroy',
@@ -336,7 +340,7 @@ class _NewWidgetState extends State<NewWidget> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Text(
-                      "Казань, Большая Красная, 55", //widget.marker.address,
+                      widget.marker.address,
                       overflow: TextOverflow.clip,
                       style: TextStyle(
                           color: kColorBlack,
@@ -407,7 +411,7 @@ class _NewWidgetState extends State<NewWidget> {
                 ),
                 Container(
                   child: Text(
-                    widget.marker.description,
+                    widget.marker.description ?? '-',
                     style: TextStyle(
                         fontFamily: 'Gilroy',
                         fontSize: 16,

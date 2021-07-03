@@ -1,4 +1,6 @@
 import 'package:bloc/bloc.dart';
+import 'package:get_it/get_it.dart';
+import 'package:recycle_hub/bloc/nav_bar_cubit/nav_bar_cubit_cubit.dart';
 
 enum EcoCoinMenuItems {
   MENU,
@@ -13,7 +15,7 @@ enum EcoCoinMenuItems {
 class EcoCoinMenuCubit extends Cubit<EcoCoinMenuItems> {
   EcoCoinMenuCubit() : super(EcoCoinMenuItems.MENU);
 
-  EcoCoinMenuItems _last = EcoCoinMenuItems.MENU;
+  List<EcoCoinMenuItems> _lasts = [];
 
   void moveTo(EcoCoinMenuItems screen) {
     if (screen == null) {
@@ -21,10 +23,19 @@ class EcoCoinMenuCubit extends Cubit<EcoCoinMenuItems> {
       return;
     }
     emit(screen);
-    _last = screen;
+    _lasts.add(screen);
   }
 
   void goBack() {
-    emit(_last);
+    if(_lasts.isEmpty){
+      GetIt.I.get<NavBarCubit>().goBack();
+    }else{
+      _lasts.removeLast();
+      if(_lasts.isEmpty){
+        emit(EcoCoinMenuItems.MENU);
+      }else{
+        emit(_lasts.last);
+      }
+    }
   }
 }

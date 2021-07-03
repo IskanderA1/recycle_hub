@@ -38,7 +38,9 @@ class _TestScreenState extends State<TestScreen> {
             showMessage(context: context, message: state.toString());
           }
 
-          if (state is EcoTestStateCompleted || state is EcoTestStateInitial || state is EcoTestStateError) {
+          if (state is EcoTestStateCompleted ||
+              state is EcoTestStateInitial ||
+              state is EcoTestStateError) {
             event = EcoTestStartTestEvent();
             btnText = 'Начать';
           } else if (state is EcoTestStateLoaded) {

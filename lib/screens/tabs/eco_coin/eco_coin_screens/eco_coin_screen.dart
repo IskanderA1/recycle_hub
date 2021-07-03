@@ -16,135 +16,130 @@ class _EcoCoinScreenState extends State<EcoCoinScreen> {
   @override
   Widget build(BuildContext context) {
     size = MediaQuery.of(context).size;
-    return WillPopScope(
-      onWillPop: () async {
-        GetIt.I.get<EcoCoinMenuCubit>().moveTo(EcoCoinMenuItems.MENU);
-      },
-      child: Scaffold(
-        body: Container(
-          color: Color(0xFFF2F2F2),
-          child: Stack(
-            children: [
-              CustomPaint(
-                size: Size(size.width, size.height),
-                painter: EcoCoinCustomPainter(size: size),
-              ),
-              Positioned(
-                top: 35,
-                left: 5,
-                child: IconButton(
-                  icon: Icon(
-                    Icons.menu,
-                  ),
-                  onPressed: () {
-                    Scaffold.of(context).openDrawer();
-                  },
+    return Scaffold(
+      body: Container(
+        color: Color(0xFFF2F2F2),
+        child: Stack(
+          children: [
+            CustomPaint(
+              size: Size(size.width, size.height),
+              painter: EcoCoinCustomPainter(size: size),
+            ),
+            Positioned(
+              top: 35,
+              left: 5,
+              child: IconButton(
+                icon: Icon(
+                  Icons.menu,
                 ),
+                onPressed: () {
+                  Scaffold.of(context).openDrawer();
+                },
               ),
-              Positioned(
-                top: size.height * 0.12,
-                left: 20,
-                right: 20,
-                child: Column(
-                  children: [
-                    Container(
-                      height: 100,
+            ),
+            Positioned(
+              top: size.height * 0.12,
+              left: 20,
+              right: 20,
+              child: Column(
+                children: [
+                  Container(
+                    height: 100,
+                    width: size.width * 0.9,
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                        color: kColorWhite,
+                        borderRadius: BorderRadius.all(Radius.circular(25))),
+                    child: Padding(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 20, vertical: 20),
+                        child: RichText(
+                          overflow: TextOverflow.visible,
+                          text: TextSpan(
+                              children: [
+                                TextSpan(text: "  "),
+                                TextSpan(
+                                    text: kEcoCoinString,
+                                    children: [TextSpan(text: "  ")],
+                                    style: const TextStyle(
+                                        color: kColorBlack,
+                                        fontSize: 14,
+                                        fontFamily: 'GillRoyMedium')),
+                              ],
+                              style: const TextStyle(
+                                  color: kColorBlack,
+                                  fontSize: 14,
+                                  fontFamily: 'GillRoyMedium')),
+                        )),
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Container(
+                      height: size.height * 0.8,
                       width: size.width * 0.9,
-                      alignment: Alignment.center,
                       decoration: BoxDecoration(
                           color: kColorWhite,
-                          borderRadius: BorderRadius.all(Radius.circular(25))),
+                          borderRadius:
+                              BorderRadius.all(Radius.circular(25))),
                       child: Padding(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 20, vertical: 20),
-                          child: RichText(
-                            overflow: TextOverflow.visible,
-                            text: TextSpan(
-                                children: [
-                                  TextSpan(text: "  "),
-                                  TextSpan(
-                                      text: kEcoCoinString,
-                                      children: [TextSpan(text: "  ")],
-                                      style: const TextStyle(
-                                          color: kColorBlack,
-                                          fontSize: 14,
-                                          fontFamily: 'GillRoyMedium')),
-                                ],
-                                style: const TextStyle(
-                                    color: kColorBlack,
-                                    fontSize: 14,
-                                    fontFamily: 'GillRoyMedium')),
-                          )),
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    Container(
-                        height: size.height * 0.8,
-                        width: size.width * 0.9,
-                        decoration: BoxDecoration(
-                            color: kColorWhite,
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(25))),
-                        child: Padding(
-                          padding: EdgeInsets.all(25),
-                          child: Column(
-                            children: [
-                              MenuItemWidget(
-                                name: "Магазин",
-                                func: () => GetIt.I
-                                    .get<EcoCoinMenuCubit>()
-                                    .moveTo(EcoCoinMenuItems.STORE),
-                                iconData: EcoCoinIcons.shoppingcart,
-                              ),
-                              EcoCoinHorisontalDivider(),
-                              MenuItemWidget(
-                                name: "Сдать вторсырье",
-                                func: () => GetIt.I
-                                    .get<EcoCoinMenuCubit>()
-                                    .moveTo(EcoCoinMenuItems.GIVEGARBAGE),
-                                iconData: EcoCoinIcons.recyclebin,
-                              ),
-                              EcoCoinHorisontalDivider(),
-                              MenuItemWidget(
-                                name: "Добавить новый пункт приема",
-                                func: () => GetIt.I
-                                    .get<EcoCoinMenuCubit>()
-                                    .moveTo(EcoCoinMenuItems.OFFERNEWPOINT),
-                                iconData: EcoCoinIcons.addpointer,
-                              ),
-                              EcoCoinHorisontalDivider(),
-                              MenuItemWidget(
-                                name: "Ответить на вопросы из ЭкоГида",
-                                func: () => GetIt.I
-                                    .get<EcoCoinMenuCubit>()
-                                    .moveTo(EcoCoinMenuItems.ANSWERQUESTS),
-                                iconData: EcoCoinIcons.question,
-                              ),
-                              EcoCoinHorisontalDivider(),
-                              MenuItemWidget(
-                                name: "Порекомендуйте нас друзьям",
-                                func: () => GetIt.I
-                                    .get<EcoCoinMenuCubit>()
-                                    .moveTo(EcoCoinMenuItems.RECOMMEND),
-                                iconData: EcoCoinIcons.adduser,
-                              ),
-                              EcoCoinHorisontalDivider(),
-                              MenuItemWidget(
-                                name: "Оцените наше приложение\nв маркете",
-                                func: () => GetIt.I
-                                    .get<EcoCoinMenuCubit>()
-                                    .moveTo(EcoCoinMenuItems.FEEDBACK),
-                                iconData: EcoCoinIcons.reviews,
-                              )
-                            ],
-                          ),
-                        ))
-                  ],
-                ),
-              )
-            ],
-          ),
+                        padding: EdgeInsets.all(25),
+                        child: Column(
+                          children: [
+                            MenuItemWidget(
+                              name: "Магазин",
+                              func: () => GetIt.I
+                                  .get<EcoCoinMenuCubit>()
+                                  .moveTo(EcoCoinMenuItems.STORE),
+                              iconData: EcoCoinIcons.shoppingcart,
+                            ),
+                            EcoCoinHorisontalDivider(),
+                            MenuItemWidget(
+                              name: "Сдать вторсырье",
+                              func: () => GetIt.I
+                                  .get<EcoCoinMenuCubit>()
+                                  .moveTo(EcoCoinMenuItems.GIVEGARBAGE),
+                              iconData: EcoCoinIcons.recyclebin,
+                            ),
+                            EcoCoinHorisontalDivider(),
+                            MenuItemWidget(
+                              name: "Добавить новый пункт приема",
+                              func: () => GetIt.I
+                                  .get<EcoCoinMenuCubit>()
+                                  .moveTo(EcoCoinMenuItems.OFFERNEWPOINT),
+                              iconData: EcoCoinIcons.addpointer,
+                            ),
+                            EcoCoinHorisontalDivider(),
+                            MenuItemWidget(
+                              name: "Ответить на вопросы из ЭкоГида",
+                              func: () => GetIt.I
+                                  .get<EcoCoinMenuCubit>()
+                                  .moveTo(EcoCoinMenuItems.ANSWERQUESTS),
+                              iconData: EcoCoinIcons.question,
+                            ),
+                            EcoCoinHorisontalDivider(),
+                            MenuItemWidget(
+                              name: "Порекомендуйте нас друзьям",
+                              func: () => GetIt.I
+                                  .get<EcoCoinMenuCubit>()
+                                  .moveTo(EcoCoinMenuItems.RECOMMEND),
+                              iconData: EcoCoinIcons.adduser,
+                            ),
+                            EcoCoinHorisontalDivider(),
+                            MenuItemWidget(
+                              name: "Оцените наше приложение\nв маркете",
+                              func: () => GetIt.I
+                                  .get<EcoCoinMenuCubit>()
+                                  .moveTo(EcoCoinMenuItems.FEEDBACK),
+                              iconData: EcoCoinIcons.reviews,
+                            )
+                          ],
+                        ),
+                      ))
+                ],
+              ),
+            )
+          ],
         ),
       ),
     );

@@ -7,18 +7,23 @@ enum EcoGuideMenuItem { CONTAINER, REFERENCE, ADVICE, TEST, MENU }
 
 class EcoGuideCubit extends Cubit<EcoGuideMenuItem> {
   EcoGuideCubit() : super(EcoGuideMenuItem.MENU);
-  EcoGuideMenuItem _last = EcoGuideMenuItem.MENU;
+  List<EcoGuideMenuItem> _lasts = [];
 
   void moveTo(EcoGuideMenuItem screen) {
     emit(screen);
-    _last = screen;
+    _lasts.add(screen);
   }
 
   void goBack() {
-    if(_last == EcoGuideMenuItem.MENU){
+    if (_lasts.isEmpty || _lasts.last == EcoGuideMenuItem.MENU) {
       GetIt.I.get<NavBarCubit>().goBack();
       return;
     }
-    emit(_last);
+    _lasts.removeLast();
+    if (_lasts.isNotEmpty) {
+      emit(_lasts.last);
+    } else {
+      emit(EcoGuideMenuItem.MENU);
+    }
   }
 }

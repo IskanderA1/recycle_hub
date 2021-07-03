@@ -42,3 +42,11 @@ class EcoTestEventNextQuestion extends EcoTestEvent {
   @override
   List<Object> get props => [];
 }
+
+/// Добавление ответа на вопрос теста
+class EcoTestEventSelectAnswer extends EcoTestEvent {
+  final String answer;
+  EcoTestEventSelectAnswer(this.answer);
+  @override
+  List<Object> get props => [];
+}

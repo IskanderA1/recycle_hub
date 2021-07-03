@@ -45,7 +45,7 @@ class MapBloc extends Bloc<MapEvent, MapState> {
       var markers;
       try {
         markers = await mapService.loadMarkersFrom4Coords(
-            LatLng(point.latitude, point.longitude), 25);
+            LatLng(point.latitude, point.longitude));
         yield MapStateLoaded(markers);
       } catch (e) {
         yield MapStateLoaded(List<CustMarker>.empty());
