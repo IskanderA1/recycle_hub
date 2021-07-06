@@ -1,14 +1,8 @@
 import 'dart:ui';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:recycle_hub/bloc/auth/auth_bloc.dart';
-import 'package:recycle_hub/bloc/auth_user_bloc.dart';
-import 'package:recycle_hub/bloc/profile/profile_bloc.dart';
-import 'package:recycle_hub/bloc/qr_bloc.dart';
-import 'package:recycle_hub/screens/tabs/map/widgets/loader_widget.dart';
-import '../style/theme.dart';
-import 'tabs/map/widgets/loader_widget.dart';
+import 'package:recycle_hub/style/theme.dart';
 
 class QRCodeContainer extends StatelessWidget {
   const QRCodeContainer({Key key, this.userState}) : super(key: key);

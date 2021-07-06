@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get_it/get_it.dart';
-import 'package:recycle_hub/bloc/eco_coin_bloc.dart/eco_coin_menu_bloc.dart';
 import 'package:recycle_hub/bloc/eco_coin_menu/eco_coin_menu_cubit.dart';
 import 'package:recycle_hub/style/theme.dart';
 

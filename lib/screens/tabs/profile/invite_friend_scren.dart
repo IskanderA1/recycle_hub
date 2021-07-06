@@ -1,15 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:hive/hive.dart';
-import 'package:recycle_hub/bloc/profile_bloc/profile_bloc.dart';
+import 'package:get_it/get_it.dart';
+import 'package:recycle_hub/bloc/auth/auth_bloc.dart';
+import 'package:recycle_hub/bloc/cubit/profile_menu_cubit.dart';
+import 'package:recycle_hub/bloc/profile/profile_bloc.dart';
 import 'package:recycle_hub/helpers/clipboard_helper.dart';
 import 'package:recycle_hub/helpers/network_helper.dart';
-import 'package:recycle_hub/model/invite_model.dart';
-import 'package:recycle_hub/api/app_repo.dart';
-import 'package:recycle_hub/screens/tabs/map/widgets/loader_widget.dart';
 import 'package:recycle_hub/style/theme.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class InviteScreen extends StatefulWidget {
   @override
@@ -17,6 +14,17 @@ class InviteScreen extends StatefulWidget {
 }
 
 class _InviteScreenState extends State<InviteScreen> {
+  AuthStateLogedIn authState;
+
+  @override
+  void initState() {
+    AuthState state = GetIt.I.get<AuthBloc>().state;
+    if (state is AuthStateLogedIn) {
+      authState = state;
+    }
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,10 +32,10 @@ class _InviteScreenState extends State<InviteScreen> {
           leading: IconButton(
             icon: Icon(Icons.arrow_back, color: kColorWhite, size: 25),
             onPressed: () =>
-                profileMenuBloc.mapEventToState(ProfileMenuStates.MENU),
+                GetIt.I.get<ProfileMenuCubit>().moveTo(ProfileMenuStates.MENU),
           ),
           title: Text(
-            "Мои покупки",
+            "Пригласить друга",
             style: TextStyle(
                 color: kColorWhite,
                 fontSize: 18,
@@ -37,9 +45,13 @@ class _InviteScreenState extends State<InviteScreen> {
           centerTitle: true,
         ),
         backgroundColor: kColorGreyVeryLight,
-        body: InviteWidget(
-                code: 1324234234,
-              )/*FutureBuilder(
+        body: authState != null
+            ? InviteWidget(
+                code: authState.user.inviteCode,
+              )
+            : Container(
+                child: Center(child: Text('Авторизуйтесь')),
+              ) /*FutureBuilder(
           future: AppService().getInvite(Hive.box('user').get('user').id),
           builder: (context, snapshot) {
             /*if (snapshot.connectionState == ConnectionState.waiting) {
@@ -52,13 +64,14 @@ class _InviteScreenState extends State<InviteScreen> {
             }
             return LoaderWidget();*/
           },
-        )*/);
+        )*/
+        );
   }
 }
 
 class InviteWidget extends StatelessWidget {
   const InviteWidget({Key key, @required this.code}) : super(key: key);
-  final int code;
+  final String code;
 
   @override
   Widget build(BuildContext context) {
@@ -103,12 +116,17 @@ class InviteWidget extends StatelessWidget {
                   SizedBox(
                     width: 30,
                   ),
-                  Text(
-                    "$code",
-                    style: TextStyle(
-                        fontFamily: 'Gillroy',
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18),
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        "$code",
+                        style: TextStyle(
+                            fontFamily: 'Gillroy',
+                            fontWeight: FontWeight.bold,
+                            fontSize: 18),
+                      ),
+                    ),
                   ),
                   GestureDetector(
                     onTap: () {
@@ -186,7 +204,7 @@ class InviteWidget extends StatelessWidget {
                       )),
                       onTap: () {
                         try {
-                          openUrl('https://vk.com/feed',context);
+                          openUrl('https://vk.com/feed', context);
                         } catch (error) {
                           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                             content: Text("Не удалось открыть приложение VK"),
@@ -204,7 +222,8 @@ class InviteWidget extends StatelessWidget {
                       onTap: () {
                         try {
                           openUrl(
-                              'https://www.instagram.com/<INSTAGRAM_PROFILE>/',context);
+                              'https://www.instagram.com/<INSTAGRAM_PROFILE>/',
+                              context);
                         } catch (error) {
                           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                             content:
@@ -222,7 +241,7 @@ class InviteWidget extends StatelessWidget {
                       )),
                       onTap: () {
                         try {
-                          openUrl('https://www.facebook.com',context);
+                          openUrl('https://www.facebook.com', context);
                         } catch (error) {
                           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                             content:
@@ -241,5 +260,3 @@ class InviteWidget extends StatelessWidget {
     );
   }
 }
-
-

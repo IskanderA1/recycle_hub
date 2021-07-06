@@ -4,15 +4,16 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get_it/get_it.dart';
 import 'package:recycle_hub/bloc/eco_test_bloc/eco_test_bloc.dart';
 import 'package:recycle_hub/elements/answer_cell.dart';
+import 'package:recycle_hub/model/profile_models/eco_test_attempt_model.dart';
+import 'package:recycle_hub/model/profile_models/eco_test_question_model.dart';
+import 'package:recycle_hub/model/profile_models/eco_test_result_model.dart';
 import 'package:recycle_hub/screens/tabs/map/widgets/loader_widget.dart';
 import 'package:recycle_hub/style/theme.dart';
 
-class QuestionContainer extends StatelessWidget {
-  QuestionContainer({this.state}) {
-    String userAnswer = '';
+class QuestionContainerAnswered extends StatelessWidget {
+  QuestionContainerAnswered({this.question, this.result}) {
     int i = 0;
-    answerWidgets =
-        List<AnswerCell>.from(state.currentQuestion.answersVariants.map((e) {
+    answerWidgets = List<AnswerCell>.from(question.answersVariants.map((e) {
       String char;
       try {
         char = characters[i];
@@ -20,18 +21,28 @@ class QuestionContainer extends StatelessWidget {
         char = '__';
       }
       i++;
+
+      Color backColor = kColorWhite;
+      if (e == result.yourAnswer && result.answerStatus) {
+        backColor = kColorGreen;
+      } else if (e == result.yourAnswer && !result.answerStatus) {
+        backColor = kColorRed;
+      } else if (e == result.correctAnswer) {
+        backColor = kColorGreen;
+      }
       return AnswerCell(
         character: char,
-        backColor: e == state.selectedAnswer ? kColorGreen : kColorWhite,
+        backColor: backColor,
         answer: e,
         onTap: () {
-          GetIt.I.get<EcoTestBloc>().add(EcoTestEventSelectAnswer(e));
+          //GetIt.I.get<EcoTestBloc>().add(EcoTestEventSelectAnswer(e));
         },
       );
     }));
   }
 
-  final EcoTestStateLoaded state;
+  final AnswerResult result;
+  final Question question;
 
   List<AnswerCell> answerWidgets;
   final characters = [
@@ -64,10 +75,10 @@ class QuestionContainer extends StatelessWidget {
         SizedBox(
           height: 10,
         ),
-        state.currentQuestion.image != null
+        question.image != null
             ? CachedNetworkImage(
                 placeholder: (BuildContext context, url) => LoaderWidget(),
-                imageUrl: state.currentQuestion.image,
+                imageUrl: question.image,
                 errorWidget: (BuildContext context, url, error) =>
                     Icon(Icons.error),
               )
@@ -76,7 +87,7 @@ class QuestionContainer extends StatelessWidget {
           height: 10,
         ),
         Text(
-          state.currentQuestion.question,
+          question.question,
           style: TextStyle(
               color: kColorBlack, fontWeight: FontWeight.bold, fontSize: 18),
         ),
@@ -90,6 +101,16 @@ class QuestionContainer extends StatelessWidget {
               physics: ClampingScrollPhysics(),
               children: answerWidgets,
             )),
+        if (result.answerStatus)
+          Text(
+            'Ответ верный',
+            style: TextStyle(color: kColorGreen, fontSize: 16),
+          ),
+        if (!result.answerStatus)
+          Text(
+            'Ответ неверный ' + result.description,
+            style: TextStyle(color: kColorRed, fontSize: 16),
+          )
       ],
     );
   }

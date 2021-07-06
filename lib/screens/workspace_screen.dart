@@ -6,6 +6,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:mobx/mobx.dart';
 import 'package:provider/provider.dart';
+import 'package:recycle_hub/bloc/cubit/profile_menu_cubit.dart';
+import 'package:recycle_hub/bloc/eco_coin_menu/eco_coin_menu_cubit.dart';
+import 'package:recycle_hub/bloc/eco_guide_cubit/eco_guide_cubit_cubit.dart';
 import 'package:recycle_hub/bloc/map/map_bloc.dart';
 import 'package:recycle_hub/bloc/nav_bar_cubit/nav_bar_cubit_cubit.dart';
 import 'package:recycle_hub/bloc/navigation_bloc.dart';
@@ -120,27 +123,51 @@ class _WorkSpaceState extends State<WorkSpaceScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      drawer: CustomDrawer(),
-      body: Stack(children: [
-        IndexedStack(index: _currentInd, children: screenWidgets),
-        Align(
-          alignment: Alignment.bottomCenter,
-          child: Container(
-            height: 70,
-            child: BottomNavBarV2(
-              selectedIconThemeData:
-                  Theme.of(context).bottomNavigationBarTheme.selectedIconTheme,
-              unselectedIconThemeData: Theme.of(context)
-                  .bottomNavigationBarTheme
-                  .unselectedIconTheme,
-              backgraundColor: Theme.of(context).backgroundColor,
-              currentItem: GetIt.I.get<NavBarCubit>().state.index,
+    return WillPopScope(
+      onWillPop: () async {
+        var navState = GetIt.I.get<NavBarCubit>().state;
+        switch (navState) {
+          case NavBarItem.MAP:
+            return false;
+            break;
+          case NavBarItem.ECO_GIDE:
+            GetIt.I.get<EcoGuideCubit>().goBack();
+            break;
+          case NavBarItem.QRSCANNER:
+            return false;
+            break;
+          case NavBarItem.ECO_COIN:
+          GetIt.I.get<EcoCoinMenuCubit>().goBack();
+            break;
+          case NavBarItem.PROFILE:
+          GetIt.I.get<ProfileMenuCubit>().goBack();
+            break;
+        }
+        return false;
+      },
+      child: Scaffold(
+        resizeToAvoidBottomInset: false,
+        drawer: CustomDrawer(),
+        body: Stack(children: [
+          IndexedStack(index: _currentInd, children: screenWidgets),
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: Container(
+              height: 70,
+              child: BottomNavBarV2(
+                selectedIconThemeData: Theme.of(context)
+                    .bottomNavigationBarTheme
+                    .selectedIconTheme,
+                unselectedIconThemeData: Theme.of(context)
+                    .bottomNavigationBarTheme
+                    .unselectedIconTheme,
+                backgraundColor: Theme.of(context).backgroundColor,
+                currentItem: GetIt.I.get<NavBarCubit>().state.index,
+              ),
             ),
-          ),
-        )
-      ]),
+          )
+        ]),
+      ),
     );
   }
 }

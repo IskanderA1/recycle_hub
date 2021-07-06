@@ -1,19 +1,14 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:recycle_hub/bloc/auth/auth_bloc.dart';
-import 'package:recycle_hub/bloc/auth_user_bloc.dart';
 import 'package:recycle_hub/bloc/global_state_bloc.dart';
-import 'package:recycle_hub/bloc/map_screen_blocs/markers_collection_bloc.dart';
 import 'package:recycle_hub/bloc/nav_bar_cubit/nav_bar_cubit_cubit.dart';
-import 'package:recycle_hub/bloc/navigation_bloc.dart';
 import 'package:recycle_hub/elements/loader.dart';
 import 'package:recycle_hub/helpers/messager_helper.dart';
 import 'package:recycle_hub/screens/stepper/stepper.dart';
 import 'package:recycle_hub/screens/workspace_screen.dart';
-
 import 'authorisation_and_registration/authorisation_main_screen.dart';
 
 class MainScreen extends StatefulWidget {
@@ -29,11 +24,11 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   void initState() {
-    authBloc = AuthBloc();
+    authBloc = GetIt.I.get<AuthBloc>();
     _authSub = authBloc.stream.listen((state) {
-      if (state is AuthStateLogOuted) {
+      /* if (state is AuthStateGuestAcc) {
         globalStateBloc.pickItem(GLobalStates.AUTH);
-      } else if (state is AuthStateLogedIn) {
+      }  else*/ if (state is AuthStateLogedIn || state is AuthStateGuestAcc) {
         GetIt.I.get<NavBarCubit>().moveTo(NavBarItem.MAP);
         globalStateBloc.pickItem(GLobalStates.TABS);
       } else if (state is AuthStateFirstIn) {

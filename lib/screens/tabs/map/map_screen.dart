@@ -56,50 +56,45 @@ class _MapScreenState extends State<MapScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async {
-        return false;
-      },
-      child: Scaffold(
-          appBar: mapScreenAppBar(),
-          body: BlocBuilder(
-            bloc: mapBloc,
-            buildWhen: (previous, current) {
-              if (previous is MapStateError) {
-                developer.log(
-                    "Got previous map screen error: ${previous.discription}",
-                    name: 'map.map_screen');
-                return false;
-              }
-              if (current is MapStateError) {
-                developer.log(
-                    "Got current map screen error: ${current.discription}",
-                    name: 'map.map_screen');
-                return false;
-              }
+    return Scaffold(
+        appBar: mapScreenAppBar(),
+        body: BlocBuilder(
+          bloc: mapBloc,
+          buildWhen: (previous, current) {
+            if (previous is MapStateError) {
+              developer.log(
+                  "Got previous map screen error: ${previous.discription}",
+                  name: 'map.map_screen');
+              return false;
+            }
+            if (current is MapStateError) {
+              developer.log(
+                  "Got current map screen error: ${current.discription}",
+                  name: 'map.map_screen');
+              return false;
+            }
 
-              if (previous is MapStateLoaded && current is MapStateLoaded) {
-                if (previous.markers == null || current.markers == null) {
-                  return true;
-                }
-                return previous.markers.length == current.markers.length;
+            if (previous is MapStateLoaded && current is MapStateLoaded) {
+              if (previous.markers == null || current.markers == null) {
+                return true;
               }
-              return true;
-            },
-            builder: (context, state) {
-              developer.log("Map rebuilds with: ${state.runtimeType}",
-                  name: 'screens.tabs.map.map_screen');
-              if (state is MapStateLoaded) {
-                return GoogleMapWidget(
-                    cameraPosition: cameraPosition,
-                    state: state,
-                    mapController: _controller);
-              } else {
-                return LoaderWidget();
-              }
-            },
-          )),
-    );
+              return previous.markers.length == current.markers.length;
+            }
+            return true;
+          },
+          builder: (context, state) {
+            developer.log("Map rebuilds with: ${state.runtimeType}",
+                name: 'screens.tabs.map.map_screen');
+            if (state is MapStateLoaded) {
+              return GoogleMapWidget(
+                  cameraPosition: cameraPosition,
+                  state: state,
+                  mapController: _controller);
+            } else {
+              return LoaderWidget();
+            }
+          },
+        ));
     /*return FutureBuilder<String>(
       future: getCurrentPosition(),
       builder: (context, snapshot) {

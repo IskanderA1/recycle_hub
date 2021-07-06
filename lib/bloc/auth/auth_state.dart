@@ -3,6 +3,9 @@ part of 'auth_bloc.dart';
 abstract class AuthState extends Equatable {
   const AuthState();
 
+  UserModel get userModel => UserModel.guestAcc();
+  
+
   @override
   List<Object> get props => [];
 }
@@ -20,10 +23,6 @@ class AuthStateFirstIn extends AuthState {}
 
 class AuthStateLoading extends AuthState {}
 
-class AuthStateLogOuted extends AuthState {}
-
-class AuthStateNeedConfirm extends AuthState {}
-
 class AuthStateLogedIn extends AuthState {
   final UserModel user;
   final bool isAdmin;
@@ -31,19 +30,17 @@ class AuthStateLogedIn extends AuthState {
   AuthStateLogedIn({@required this.user, this.isAdmin = false});
 
   @override
+  UserModel get userModel => this.user;
+
+  @override
   List<Object> get props => [];
 }
 
-class AuthStateRecovery extends AuthState {
-  final bool wasSend;
-  final bool isCodeValid;
-  final bool passChanged;
+class AuthStateGuestAcc extends AuthState {
 
-  AuthStateRecovery(
-      {this.wasSend = false,
-      this.isCodeValid = false,
-      this.passChanged = false});
+  AuthStateGuestAcc();
 
   @override
-  List<Object> get props => [wasSend, isCodeValid, passChanged];
+  List<Object> get props => [];
 }
+

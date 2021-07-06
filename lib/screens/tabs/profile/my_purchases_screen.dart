@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:recycle_hub/api/services/store_service.dart';
 import 'package:recycle_hub/api/services/user_service.dart';
+import 'package:recycle_hub/bloc/cubit/profile_menu_cubit.dart';
 import 'package:recycle_hub/model/purchase.dart';
 import 'package:recycle_hub/screens/tabs/map/widgets/loader_widget.dart';
 import 'purchase_detail_screen.dart';
@@ -44,8 +46,7 @@ class _MyPurchasesScreenState extends State<MyPurchasesScreen> {
       appBar: AppBar(
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: kColorWhite, size: 25),
-          onPressed: () =>
-              profileMenuBloc.mapEventToState(ProfileMenuStates.MENU),
+          onPressed: () => GetIt.I.get<ProfileMenuCubit>().goBack(),
         ),
         title: Text(
           "Мои покупки",
@@ -76,7 +77,7 @@ class PurchaseCell extends StatelessWidget {
         borderRadius: BorderRadius.all(Radius.circular(15)),
       ),
       child: Container(
-        padding: EdgeInsets.all(8),
+        padding: EdgeInsets.fromLTRB(16, 8, 16, 8),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.all(Radius.circular(15)),
             color: kColorWhite),
@@ -96,11 +97,6 @@ class PurchaseCell extends StatelessWidget {
                             color: kColorGreyLight,
                             fontFamily: 'GillroyMedium'),
                       ),
-                      Text(
-                        "${purchase.amount}" + r'$',
-                        style: const TextStyle(
-                            color: kColorBlack, fontFamily: 'GillroyMedium'),
-                      )
                     ],
                   ),
                   Row(
@@ -112,11 +108,6 @@ class PurchaseCell extends StatelessWidget {
                             color: kColorGreyLight,
                             fontFamily: 'GillroyMedium'),
                       ),
-                      Text(
-                        "${purchase.daysRest}",
-                        style: const TextStyle(
-                            color: kColorBlack, fontFamily: 'GillroyMedium'),
-                      )
                     ],
                   ),
                   Row(
@@ -128,13 +119,31 @@ class PurchaseCell extends StatelessWidget {
                             color: kColorGreyLight,
                             fontFamily: 'GillroyMedium'),
                       ),
-                      Text(
-                        "${purchase.buyDate.day}.${purchase.buyDate.month}.${purchase.buyDate.year}",
-                        style: const TextStyle(
-                            color: kColorBlack, fontFamily: 'GillroyMedium'),
-                      )
                     ],
                   ),
+                ],
+              ),
+            ),
+            Expanded(
+              flex: 2,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "${purchase.amount}" + r'$',
+                    style: const TextStyle(
+                        color: kColorBlack, fontFamily: 'GillroyMedium'),
+                  ),
+                  Text(
+                    "${purchase.daysRest}",
+                    style: const TextStyle(
+                        color: kColorBlack, fontFamily: 'GillroyMedium'),
+                  ),
+                  Text(
+                    "${purchase.buyDate.day}.${purchase.buyDate.month}.${purchase.buyDate.year}",
+                    style: const TextStyle(
+                        color: kColorBlack, fontFamily: 'GillroyMedium'),
+                  )
                 ],
               ),
             ),

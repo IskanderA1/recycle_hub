@@ -41,18 +41,13 @@ class _AdminTransactionsPanelMainScreenState
           }
           if(state.errorMessage != null){
             return Scaffold(
-              body: WillPopScope(
-                onWillPop: (){
-                  state.toState(AdmStoreState.INIT);
-                },
-                child: Container(
-                  height: double.infinity,
-                  width: double.infinity,
-                  color: kColorWhite,
-                  child: Center(child: Text(
-                    state.errorMessage
-                  ),),
-                ),
+              body: Container(
+                height: double.infinity,
+                width: double.infinity,
+                color: kColorWhite,
+                child: Center(child: Text(
+                  state.errorMessage
+                ),),
               ),
             );;
           }
@@ -63,18 +58,13 @@ class _AdminTransactionsPanelMainScreenState
           }
           else if(state.state == AdmStoreState.CREATED){
             return Scaffold(
-              body: WillPopScope(
-                onWillPop: (){
-                  state.toState(AdmStoreState.INIT);
-                },
-                child: Container(
-                  height: double.infinity,
-                  width: double.infinity,
-                  color: kColorWhite,
-                  child: Center(child: Text(
-                    "Успешно отправлено"
-                  ),),
-                ),
+              body: Container(
+                height: double.infinity,
+                width: double.infinity,
+                color: kColorWhite,
+                child: Center(child: Text(
+                  "Успешно отправлено"
+                ),),
               ),
             );
           }

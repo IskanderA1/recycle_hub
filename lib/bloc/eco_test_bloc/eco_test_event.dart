@@ -27,13 +27,18 @@ class EcoTestStartTestEvent extends EcoTestEvent {
   List<Object> get props => [];
 }
 
+class EcoTestEventReset extends EcoTestEvent {
+  EcoTestEventReset();
+  @override
+  List<Object> get props => [];
+}
+
 /// Добавление ответа на вопрос теста
 class EcoTestAnswerToQuestionEvent extends EcoTestEvent {
-  final EcoTestAnswerModel answer;
 
-  EcoTestAnswerToQuestionEvent(this.answer);
+  EcoTestAnswerToQuestionEvent();
   @override
-  List<Object> get props => [answer];
+  List<Object> get props => [];
 }
 
 /// Добавление ответа на вопрос теста

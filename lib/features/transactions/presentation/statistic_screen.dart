@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:hive/hive.dart';
+import 'package:get_it/get_it.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import 'package:recycle_hub/bloc/profile_bloc/profile_bloc.dart';
+import 'package:recycle_hub/bloc/cubit/profile_menu_cubit.dart';
 import 'package:recycle_hub/features/transactions/domain/model/statistic_model.dart';
 import 'package:recycle_hub/features/transactions/domain/state/transactions_state.dart';
 import 'package:recycle_hub/features/transactions/presentation/components/drop_down_menu_button.dart';
@@ -65,7 +65,7 @@ class _StatisticScreenState extends State<StatisticScreen> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () {
-        profileMenuBloc.mapEventToState(ProfileMenuStates.MENU);
+        GetIt.I.get<ProfileMenuCubit>().goBack();
         return;
       },
       child: Scaffold(
@@ -78,7 +78,7 @@ class _StatisticScreenState extends State<StatisticScreen> {
           ),
           leading: GestureDetector(
             onTap: () {
-              profileMenuBloc.mapEventToState(ProfileMenuStates.MENU);
+              GetIt.I.get<ProfileMenuCubit>().goBack();
             },
             child: Icon(
               Icons.arrow_back,

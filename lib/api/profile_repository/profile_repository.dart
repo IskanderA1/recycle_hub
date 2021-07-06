@@ -137,7 +137,7 @@ class ProfileRepository {
           '$kTest/$testId/$kAttempt/$attemptId/answer',
           body: answer.toJson(),
           method: CommonRequestMethod.post);
-      if (response.statusCode == 201) {
+      if (response.statusCode == 200) {
         return AnswerResult.fromJson(response.body);
       } else {
         throw ApiError(

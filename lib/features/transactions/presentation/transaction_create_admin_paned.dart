@@ -3,9 +3,11 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get_it/get_it.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:menu_button/menu_button.dart';
 import 'package:provider/provider.dart';
+import 'package:recycle_hub/bloc/cubit/profile_menu_cubit.dart';
 import 'package:recycle_hub/bloc/profile_bloc/profile_bloc.dart';
 import 'package:recycle_hub/elements/input_style.dart';
 import 'package:recycle_hub/features/transactions/domain/state/transactions_admin_panel_state.dart/transactions_admin_panel_state.dart';
@@ -81,10 +83,8 @@ class _TransactionCreateAdminPanelScreenState
         child: Scaffold(
             appBar: AppBar(
               leading: IconButton(
-                icon: Icon(Icons.arrow_back, color: kColorWhite, size: 25),
-                onPressed: () =>
-                    profileMenuBloc.mapEventToState(ProfileMenuStates.MENU),
-              ),
+                  icon: Icon(Icons.arrow_back, color: kColorWhite, size: 25),
+                  onPressed: () => GetIt.I.get<ProfileMenuCubit>().goBack()),
               title: Text(
                 "Подтверждение приема",
                 style: TextStyle(

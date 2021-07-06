@@ -23,7 +23,8 @@ class EcoTestBloc extends Bloc<EcoTestEvent, EcoTestState> {
   Attempt currentAttempt;
   List<EcoTestAnswerModel> answers = [];
   List<AnswerResult> answerResults = [];
-  int currentAnswerInd = 0;
+  int _currentQuestionId = 0;
+  String _currentAnswer = '';
 
   @override
   Stream<EcoTestState> mapEventToState(
@@ -37,6 +38,8 @@ class EcoTestBloc extends Bloc<EcoTestEvent, EcoTestState> {
       yield* _mapNextQuestionToState(event);
     } else if (event is EcoTestEventSelectAnswer) {
       yield* _mapSelectAnswerToState(event);
+    } else if (event is EcoTestEventReset) {
+      yield* _mapResetToState();
     }
   }
 
@@ -66,7 +69,7 @@ class EcoTestBloc extends Bloc<EcoTestEvent, EcoTestState> {
     }
     currentAttempt = attempt;
     currentTest = tests.first;
-    currentAnswerInd = 0;
+    _currentQuestionId = 0;
 
     yield EcoTestStateLoaded(
         currentAttempt: currentAttempt,
@@ -81,53 +84,92 @@ class EcoTestBloc extends Bloc<EcoTestEvent, EcoTestState> {
       yield EcoTestStateError('Сперва следует создать попытку');
     }
     EcoTestState curState = state;
+
     if (curState is EcoTestStateLoaded) {
       yield curState.copyWith(isLoading: true);
     }
     AnswerResult result;
+    EcoTestAnswerModel answer = EcoTestAnswerModel(
+        answer: _currentAnswer,
+        questionId: currentAttempt.questions[_currentQuestionId].questionId);
     try {
       result = await _profileRepository.sendAnswer(
-          answer: event.answer,
+          answer: answer,
           testId: currentAttempt.testId,
           attemptId: currentAttempt.id);
     } catch (e) {
-      yield EcoTestStateError(e);
-      return;
-    }
-
-    ///is completed
-    ///TODO: CREATE EVENT TO CONTNUE THE TEST
-    if (result.isAttemptSuccess != null) {
-      yield EcoTestStateCompleted(
-          result: result,
-          gotPoints: result.isAttemptSuccess ? currentAttempt.points : 0);
-    } else {
+      print(e.toString());
       try {
-        yield EcoTestStateLoaded(
-            currentAttempt: currentAttempt,
-            test: currentTest,
-            currentQuestion: currentAttempt.questions[currentAnswerInd],
-            lastAnswerResult: result);
+        EcoTestAnswerModel answer = EcoTestAnswerModel(
+            answer: _currentAnswer,
+            questionId:
+                currentAttempt.questions[_currentQuestionId++].questionId);
+        result = await _profileRepository.sendAnswer(
+            answer: answer,
+            testId: currentAttempt.testId,
+            attemptId: currentAttempt.id);
       } catch (e) {
-        yield EcoTestStateError('Что-то пошло не так');
+        print(e.toString());
+        yield EcoTestStateError(e);
+        return;
       }
+    }
+    try {
+      yield EcoTestStateAnswered(
+          currentAttempt: currentAttempt,
+          test: currentTest,
+          currentQuestion: currentAttempt.questions[_currentQuestionId],
+          lastAnswerResult: result);
+    } catch (e) {
+      yield EcoTestStateError('Что-то пошло не так');
     }
   }
 
   Stream<EcoTestState> _mapNextQuestionToState(
       EcoTestEventNextQuestion event) async* {
-    currentAnswerInd++;
-    yield EcoTestStateLoaded(
-        currentAttempt: currentAttempt,
-        test: currentTest,
-        currentQuestion: currentAttempt.questions[currentAnswerInd]);
+    _currentQuestionId++;
+    EcoTestState cState = state;
+
+    if (cState is EcoTestStateAnswered) {
+      if (cState.lastAnswerResult.isAttemptSuccess != null) {
+        yield EcoTestStateCompleted(
+            result: cState.lastAnswerResult,
+            gotPoints: cState.lastAnswerResult.isAttemptSuccess
+                ? currentAttempt.points
+                : 0);
+        return;
+      }
+      try {
+        yield EcoTestStateLoaded(
+            currentAttempt: currentAttempt,
+            test: currentTest,
+            currentQuestion: currentAttempt.questions[_currentQuestionId]);
+      } catch (e) {
+        yield EcoTestStateCompleted(
+            result: cState.lastAnswerResult,
+            gotPoints: cState.lastAnswerResult.isAttemptSuccess
+                ? currentAttempt.points
+                : 0);
+      }
+    }
   }
 
   Stream<EcoTestState> _mapSelectAnswerToState(
       EcoTestEventSelectAnswer event) async* {
     EcoTestState cstate = state;
     if (cstate is EcoTestStateLoaded && event.answer != null) {
+      _currentAnswer = event.answer;
       yield cstate.copyWith(selectedAnswer: event.answer);
     }
+  }
+
+  Stream<EcoTestState> _mapResetToState() async* {
+    yield EcoTestStateInitial();
+    currentTest = null;
+    currentAttempt = null;
+    answers = [];
+    answerResults = [];
+    _currentQuestionId = 0;
+    _currentAnswer = '';
   }
 }

@@ -2,7 +2,11 @@ import 'dart:async';
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_it/get_it.dart';
 import 'package:recycle_hub/bloc/auth/auth_bloc.dart';
+import 'package:recycle_hub/bloc/recovery_bloc/recovery_bloc.dart';
+import 'package:recycle_hub/elements/loader.dart';
+import 'package:recycle_hub/helpers/messager_helper.dart';
 import 'package:recycle_hub/screens/authorisation_and_registration/forget_confirm_code_screen.dart';
 import 'package:recycle_hub/screens/authorisation_and_registration/password_recovery_screen.dart';
 import 'package:recycle_hub/screens/tabs/map/widgets/loader_widget.dart';
@@ -20,17 +24,19 @@ class _ChangePassScreenState extends State<ChangePassScreen> {
   String _isSimilarPasswords = "";
   final _tfKey = GlobalKey<FormState>();
 
-  AuthBloc bloc;
-  StreamSubscription<AuthState> _sub;
+  RecoveryBloc bloc;
+  StreamSubscription<RecoveryState> _sub;
 
   @override
   void initState() {
-    bloc = BlocProvider.of<AuthBloc>(context);
+    bloc = GetIt.I.get<RecoveryBloc>();
     _sub = bloc.stream.listen((state) {
-      if (state is AuthStateRecovery) {
+      if (state is RecoveryStateLoaded) {
         if (state.passChanged) {
           Navigator.pop(context);
         }
+      } else if (state is RecoveryStateError) {
+        showMessage(context: context, message: state.toString());
       }
     });
     super.initState();
@@ -45,12 +51,12 @@ class _ChangePassScreenState extends State<ChangePassScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: BlocBuilder<AuthBloc, AuthState>(
+      body: BlocBuilder<RecoveryBloc, RecoveryState>(
           bloc: bloc,
           builder: (context, state) {
-            if (state is AuthStateLoading) {
-              return LoaderWidget();
-            } else if (state is AuthStateRecovery) {
+            if (state is RecoveryStateLoading) {
+              return buildLoadingScaffold();
+            } else if (state is RecoveryStateLoaded) {
               if (state.wasSend && !state.isCodeValid) {
                 return ForgetConfirmCodeScreen();
               }
@@ -234,8 +240,9 @@ class _ChangePassScreenState extends State<ChangePassScreen> {
         elevation: 5.0,
         onPressed: () {
           if (_tfKey.currentState.validate()) {
-            BlocProvider.of<AuthBloc>(context)
-                .add(AuthEventRecoverySendCode(username: _email.text));
+            GetIt.I
+                .get<RecoveryBloc>()
+                .add(RecoveryEventSendCode(username: _email.text));
           }
         },
         padding: EdgeInsets.all(15.0),

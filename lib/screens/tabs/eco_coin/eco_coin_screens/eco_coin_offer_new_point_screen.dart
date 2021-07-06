@@ -1,15 +1,11 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get_it/get_it.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:recycle_hub/bloc/eco_coin_bloc.dart/eco_coin_menu_bloc.dart';
 import 'package:recycle_hub/bloc/eco_coin_menu/eco_coin_menu_cubit.dart';
-import 'package:recycle_hub/bloc/profile_bloc/profile_bloc.dart';
 import 'package:recycle_hub/model/map_models.dart/contact_model.dart';
 import 'package:recycle_hub/model/map_models.dart/coord.dart';
-import 'package:recycle_hub/api/app_repo.dart';
 import 'package:recycle_hub/style/style.dart';
 import 'package:recycle_hub/style/theme.dart';
 import 'package:recycle_hub/model/new_point_model.dart';

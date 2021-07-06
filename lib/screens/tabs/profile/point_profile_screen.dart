@@ -3,9 +3,10 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_star_rating/flutter_star_rating.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:recycle_hub/bloc/auth_user_bloc.dart';
-import '../../../style/theme.dart';
-import 'package:recycle_hub/bloc/profile_bloc/profile_bloc.dart';
+import 'package:get_it/get_it.dart';
+import 'package:recycle_hub/bloc/cubit/profile_menu_cubit.dart';
+import 'package:recycle_hub/style/theme.dart';
+
 
 List<Widget> svgIcons = [
   SvgPicture.asset(
@@ -49,66 +50,60 @@ class _PointProfileScreenState extends State<PointProfileScreen> {
   @override
   Widget build(BuildContext context) {
     Size _size = MediaQuery.of(context).size;
-    return WillPopScope(
-      onWillPop: () {
-        profileMenuBloc.mapEventToState(ProfileMenuStates.USER_PROFILE);
-        return;
-      },
-      child: Scaffold(
-        appBar: AppBar(
-          centerTitle: true,
-          elevation: 0,
-          backgroundColor: kColorGreen,
-          title: Text("Пункт приёма"),
-          leading: IconButton(
-            icon: Icon(
-              Icons.arrow_back_sharp,
-              color: kColorWhite,
-            ),
-            onPressed: () {
-              profileMenuBloc.mapEventToState(ProfileMenuStates.USER_PROFILE);
-            },
+    return Scaffold(
+      appBar: AppBar(
+        centerTitle: true,
+        elevation: 0,
+        backgroundColor: kColorGreen,
+        title: Text("Пункт приёма"),
+        leading: IconButton(
+          icon: Icon(
+            Icons.arrow_back_sharp,
+            color: kColorWhite,
           ),
+          onPressed: () {
+            GetIt.I.get<ProfileMenuCubit>().moveTo(ProfileMenuStates.USER_PROFILE);
+          },
         ),
-        body: Container(
-          height: _size.height,
-          width: _size.width,
-          alignment: Alignment.topCenter,
-          child: Stack(
-            children: [
-              Container(
+      ),
+      body: Container(
+        height: _size.height,
+        width: _size.width,
+        alignment: Alignment.topCenter,
+        child: Stack(
+          children: [
+            Container(
+              height: 240,
+              child: Image.asset(
+                "svg/trash.jpg",
+                fit: BoxFit.cover,
                 height: 240,
-                child: Image.asset(
-                  "svg/trash.jpg",
-                  fit: BoxFit.cover,
-                  height: 240,
-                  width: _size.width,
-                ),
+                width: _size.width,
               ),
-              Container(
-                height: 240,
-                color: Colors.black45,
+            ),
+            Container(
+              height: 240,
+              color: Colors.black45,
+            ),
+            Container(
+              child: ListView(
+                padding: EdgeInsets.only(
+                    left: 17, right: 17, top: 10, bottom: 100),
+                children: [
+                  buildPointProfile(
+                      "Пункт приёма Советский", "ООО НПП РИСАЛ", _size),
+                  SizedBox(
+                    height: _size.height * 0.08,
+                  ),
+                  buildStatus(10, 94),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  buildMenu(_size.height * 0.5)
+                ],
               ),
-              Container(
-                child: ListView(
-                  padding: EdgeInsets.only(
-                      left: 17, right: 17, top: 10, bottom: 100),
-                  children: [
-                    buildPointProfile(
-                        "Пункт приёма Советский", "ООО НПП РИСАЛ", _size),
-                    SizedBox(
-                      height: _size.height * 0.08,
-                    ),
-                    buildStatus(10, 94),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    buildMenu(_size.height * 0.5)
-                  ],
-                ),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

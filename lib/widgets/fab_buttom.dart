@@ -3,15 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:recycle_hub/bloc/auth/auth_bloc.dart';
-import 'package:recycle_hub/bloc/eco_coin_bloc.dart/eco_coin_menu_bloc.dart';
+import 'package:recycle_hub/bloc/cubit/profile_menu_cubit.dart';
 import 'package:recycle_hub/bloc/eco_coin_menu/eco_coin_menu_cubit.dart';
-import 'package:recycle_hub/bloc/eco_guide_blocs/eco_menu_bloc.dart';
 import 'package:recycle_hub/bloc/eco_guide_cubit/eco_guide_cubit_cubit.dart';
 import 'package:recycle_hub/bloc/nav_bar_cubit/nav_bar_cubit_cubit.dart';
-import 'package:recycle_hub/bloc/navigation_bloc.dart';
-import 'package:recycle_hub/bloc/profile_bloc/profile_bloc.dart';
-import 'package:recycle_hub/bloc/profile_bloc/transactions_model.dart';
-import 'package:recycle_hub/bloc/qr_bloc.dart';
 import 'package:recycle_hub/elements/custom_bottom_sheet.dart';
 import 'package:recycle_hub/icons/nav_bar_icons_icons.dart';
 import 'package:recycle_hub/screens/qr_scanner_screen.dart';
@@ -167,8 +162,7 @@ class _BottomNavBarV2State extends State<BottomNavBarV2> {
                         unselectedIconThemeData: widget.unselectedIconThemeData,
                         isActive: widget.currentItem == 3 ? true : false,
                         ontap: () {
-                          profileMenuBloc
-                              .mapEventToState(ProfileMenuStates.MENU);
+                          GetIt.I.get<ProfileMenuCubit>().moveTo(ProfileMenuStates.MENU);
                           GetIt.I.get<NavBarCubit>().moveTo(NavBarItem.PROFILE);
                         },
                       ),

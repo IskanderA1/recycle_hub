@@ -154,7 +154,7 @@ class _StoreScreenState extends State<StoreScreen> {
                                           bottomRight: Radius.circular(4))),
                                   child: Center(
                                     child: Text(
-                                      "Поесть",
+                                      "Еда и напитки",
                                       style: TextStyle(
                                         color: _selected == 1
                                             ? kColorWhite

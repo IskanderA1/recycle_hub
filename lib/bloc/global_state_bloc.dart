@@ -1,9 +1,6 @@
-import 'package:recycle_hub/api/request/session_manager.dart';
 import 'package:recycle_hub/api/services/user_service.dart';
-import 'package:recycle_hub/bloc/auth_user_bloc.dart';
 import 'package:recycle_hub/helpers/settings.dart';
 import 'package:rxdart/rxdart.dart';
-import 'package:recycle_hub/api/app_repo.dart';
 
 enum GLobalStates { FIRSTIN, AUTH, TABS }
 

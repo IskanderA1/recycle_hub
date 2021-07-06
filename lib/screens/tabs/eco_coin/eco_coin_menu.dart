@@ -18,41 +18,36 @@ class EcoCoinMainScreen extends StatefulWidget {
 class _EcoCoinMainScreenState extends State<EcoCoinMainScreen> {
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: (){
-        GetIt.I.get<EcoCoinMenuCubit>().goBack();
-      },
-          child: BlocBuilder<EcoCoinMenuCubit, EcoCoinMenuItems>(
-          bloc: GetIt.I.get<EcoCoinMenuCubit>(),
-          builder: (context, state) {
-            if (state == EcoCoinMenuItems.MENU) {
-              return EcoCoinScreen();
-            } else if (state == EcoCoinMenuItems.STORE) {
-              return StoreScreen(
-                onBackCall: () {
-                  GetIt.I.get<EcoCoinMenuCubit>().moveTo(EcoCoinMenuItems.MENU);
-                },
-              );
-            } else if (state == EcoCoinMenuItems.ANSWERQUESTS) {
-              GetIt.I.get<NavBarCubit>().moveTo(NavBarItem.ECO_GIDE);
-              GetIt.I.get<EcoGuideCubit>().moveTo(EcoGuideMenuItem.TEST);
-              return EcoCoinScreen();
-            } else if (state == EcoCoinMenuItems.FEEDBACK) {
-              openApp('https://pub.dev/packages/url_launcher');
-              return EcoCoinScreen();
-            } else if (state == EcoCoinMenuItems.GIVEGARBAGE) {
-              return GiveGarbageInstructionScreen();
-            } else if (state == EcoCoinMenuItems.OFFERNEWPOINT) {
-              return OfferNewPointScreen(
-                  onBack: () => GetIt.I
-                      .get<EcoCoinMenuCubit>()
-                      .moveTo(EcoCoinMenuItems.MENU));
-            } else if (state == EcoCoinMenuItems.RECOMMEND) {
-              return EcoCoinScreen();
-            }
-            return EcoCoinScreen();
-          }),
-    );
+    return BlocBuilder<EcoCoinMenuCubit, EcoCoinMenuItems>(
+    bloc: GetIt.I.get<EcoCoinMenuCubit>(),
+    builder: (context, state) {
+      if (state == EcoCoinMenuItems.MENU) {
+        return EcoCoinScreen();
+      } else if (state == EcoCoinMenuItems.STORE) {
+        return StoreScreen(
+          onBackCall: () {
+            GetIt.I.get<EcoCoinMenuCubit>().moveTo(EcoCoinMenuItems.MENU);
+          },
+        );
+      } else if (state == EcoCoinMenuItems.ANSWERQUESTS) {
+        GetIt.I.get<NavBarCubit>().moveTo(NavBarItem.ECO_GIDE);
+        GetIt.I.get<EcoGuideCubit>().moveTo(EcoGuideMenuItem.TEST);
+        return EcoCoinScreen();
+      } else if (state == EcoCoinMenuItems.FEEDBACK) {
+        openApp('https://pub.dev/packages/url_launcher');
+        return EcoCoinScreen();
+      } else if (state == EcoCoinMenuItems.GIVEGARBAGE) {
+        return GiveGarbageInstructionScreen();
+      } else if (state == EcoCoinMenuItems.OFFERNEWPOINT) {
+        return OfferNewPointScreen(
+            onBack: () => GetIt.I
+                .get<EcoCoinMenuCubit>()
+                .moveTo(EcoCoinMenuItems.MENU));
+      } else if (state == EcoCoinMenuItems.RECOMMEND) {
+        return EcoCoinScreen();
+      }
+      return EcoCoinScreen();
+    });
   }
 
   Future openApp(String url) async {

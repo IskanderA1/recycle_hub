@@ -4,6 +4,7 @@ import 'package:get_it/get_it.dart';
 import 'package:recycle_hub/bloc/eco_guide_cubit/eco_guide_cubit_cubit.dart';
 import 'package:recycle_hub/bloc/eco_test_bloc/eco_test_bloc.dart';
 import 'package:recycle_hub/elements/question_container.dart';
+import 'package:recycle_hub/elements/question_container_answered.dart';
 import 'package:recycle_hub/helpers/messager_helper.dart';
 import 'package:recycle_hub/model/profile_models/eco_test_answer_model.dart';
 
@@ -13,8 +14,6 @@ class TestScreen extends StatefulWidget {
 }
 
 class _TestScreenState extends State<TestScreen> {
-  EcoTestAnswerModel selectedAnswer =
-      EcoTestAnswerModel(answer: '', questionId: '');
   EcoTestEvent event = EcoTestStartTestEvent();
   String btnText = 'Начать';
 
@@ -38,12 +37,11 @@ class _TestScreenState extends State<TestScreen> {
             showMessage(context: context, message: state.toString());
           }
 
-          if (state is EcoTestStateCompleted ||
-              state is EcoTestStateInitial ||
-              state is EcoTestStateError) {
+          if (state is EcoTestStateInitial || state is EcoTestStateError) {
             event = EcoTestStartTestEvent();
             btnText = 'Начать';
-          } else if (state is EcoTestStateLoaded) {
+          }
+          /*  else if (state is EcoTestStateLoaded) {
             if (state.lastAnswerResult != null) {
               if (state.lastAnswerResult.isAttemptSuccess != null) {
                 event = EcoTestStartTestEvent();
@@ -53,13 +51,13 @@ class _TestScreenState extends State<TestScreen> {
                 btnText = 'Продолжить';
               }
             } else {
-              event = EcoTestAnswerToQuestionEvent(selectedAnswer);
+              event = EcoTestAnswerToQuestionEvent();
               btnText = 'Продолжить';
             }
           } else {
             event = EcoTestStartTestEvent();
             btnText = 'Продолжить';
-          }
+          } */
         },
         builder: (context, state) {
           if (state is EcoTestStateLoaded) {
@@ -68,14 +66,70 @@ class _TestScreenState extends State<TestScreen> {
                 state: state,
               ),
               EcoTestContinueButton(
-                btnText: btnText,
+                btnText: 'Ответить',
                 onTap: () {
-                  GetIt.I.get<EcoTestBloc>().add(event);
+                  GetIt.I
+                      .get<EcoTestBloc>()
+                      .add(EcoTestAnswerToQuestionEvent());
                 },
               ),
             ]);
+          } else if (state is EcoTestStateAnswered) {
+            return Column(children: [
+              QuestionContainerAnswered(
+                question: state.currentQuestion,
+                result: state.lastAnswerResult,
+              ),
+              EcoTestContinueButton(
+                btnText: 'Продолжить',
+                onTap: () {
+                  GetIt.I.get<EcoTestBloc>().add(EcoTestEventNextQuestion());
+                },
+              ),
+            ]);
+          } else if (state is EcoTestStateInitial) {
+            return Center(
+              child: EcoTestContinueButton(
+                btnText: 'Начать',
+                onTap: () {
+                  GetIt.I.get<EcoTestBloc>().add(EcoTestStartTestEvent());
+                },
+              ),
+            );
+          } else if (state is EcoTestStateError) {
+            return Center(
+              child: EcoTestContinueButton(
+                btnText: 'Выйти',
+                onTap: () {
+                  GetIt.I.get<EcoGuideCubit>().goBack();
+                  GetIt.I.get<EcoTestBloc>().add(EcoTestEventReset());
+                },
+              ),
+            );
+          } else if (state is EcoTestStateCompleted) {
+            String resultStr;
+            if (state.result.isAttemptSuccess != null &&
+                state.result.isAttemptSuccess) {
+              resultStr = 'Ура, вы прошли тест!';
+            } else {
+              resultStr =
+                  'Повторите попытку позже, вы получили ${state.gotPoints} из n';
+            }
+            return Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(resultStr),
+                EcoTestContinueButton(
+                  btnText: 'Выйти',
+                  onTap: () {
+                    GetIt.I.get<EcoGuideCubit>().goBack();
+                    GetIt.I.get<EcoTestBloc>().add(EcoTestEventReset());
+                  },
+                )
+              ],
+            );
           }
-          if (state is EcoTestStateInitial || state is EcoTestStateError) {
+          if (state is EcoTestStateInitial) {
             return Center(
               child: EcoTestContinueButton(
                 btnText: btnText,

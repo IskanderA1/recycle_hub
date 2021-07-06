@@ -73,6 +73,20 @@ class UserModel {
         image: image ?? this.image,
       );
 
+  factory UserModel.guestAcc() => UserModel(
+        id: '__',
+        username: "guest@gmail.com",
+        name: 'Гость',
+        confirmed: true,
+        ecoCoins: 0,
+        freezeEcoCoins: 0,
+        token: '__',
+        inviteCode: '__',
+        role: '__',
+        attachedRecPointId: '__',
+        image: null,
+      );
+
   factory UserModel.fromJson(String str) => UserModel.fromMap(json.decode(str));
 
   String toJson() => json.encode(toMap());

@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
+import 'package:recycle_hub/bloc/cubit/profile_menu_cubit.dart';
 import 'package:recycle_hub/bloc/profile_bloc/profile_bloc.dart';
 import 'package:recycle_hub/features/transactions/domain/state/transactions_state.dart';
 import 'package:recycle_hub/features/transactions/internal/transactions_module.dart';
@@ -24,12 +27,10 @@ class ProfileMenuScreen extends StatefulWidget {
 class _ProfileMenuScreenState extends State<ProfileMenuScreen> {
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder(
-        stream: profileMenuBloc.subject.stream,
-        initialData: profileMenuBloc.defaultState,
-        // ignore: missing_return
-        builder: (context, AsyncSnapshot<ProfileMenuStates> snapshot) {
-          switch (snapshot.data) {
+    return BlocBuilder<ProfileMenuCubit, ProfileMenuStates>(
+        bloc: GetIt.I.get<ProfileMenuCubit>(),
+        builder: (context, ProfileMenuStates state) {
+          switch (state) {
             case ProfileMenuStates.USER_PROFILE:
               return ProfileScreen();
               break;
@@ -49,8 +50,9 @@ class _ProfileMenuScreenState extends State<ProfileMenuScreen> {
               break;
             case ProfileMenuStates.OFFERNEWPOINT:
               return OfferNewPointScreen(
-                onBack: () =>
-                    profileMenuBloc.mapEventToState(ProfileMenuStates.MENU),
+                onBack: () => GetIt.I
+                    .get<ProfileMenuCubit>()
+                    .moveTo(ProfileMenuStates.MENU),
               );
               break;
             case ProfileMenuStates.PURSE:
@@ -58,8 +60,9 @@ class _ProfileMenuScreenState extends State<ProfileMenuScreen> {
               break;
             case ProfileMenuStates.STORE:
               return StoreScreen(
-                onBackCall: () =>
-                    profileMenuBloc.mapEventToState(ProfileMenuStates.MENU),
+                onBackCall: () => GetIt.I
+                    .get<ProfileMenuCubit>()
+                    .moveTo(ProfileMenuStates.MENU),
               );
               break;
             case ProfileMenuStates.EDITPROFILE:
@@ -76,6 +79,9 @@ class _ProfileMenuScreenState extends State<ProfileMenuScreen> {
             case ProfileMenuStates.INVITE:
               return InviteScreen();
               break;
+            default:
+              return ProfileScreen();
+              break; 
           }
         });
   }

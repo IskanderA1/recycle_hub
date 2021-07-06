@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
+import 'package:recycle_hub/bloc/cubit/profile_menu_cubit.dart';
 import 'package:recycle_hub/bloc/profile_bloc/profile_bloc.dart';
 import 'package:recycle_hub/features/transactions/domain/state/transactions_state.dart';
 import 'package:recycle_hub/icons/my_pyrchase_icons_icons.dart';
@@ -22,8 +24,7 @@ class _MyPurseScreenState extends State<MyPurseScreen> {
       appBar: AppBar(
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: kColorWhite, size: 25),
-          onPressed: () =>
-              profileMenuBloc.mapEventToState(ProfileMenuStates.MENU),
+          onPressed: () => GetIt.I.get<ProfileMenuCubit>().goBack(),
         ),
         title: Text(
           "Кошелек",
@@ -50,16 +51,18 @@ class _MyPurseScreenState extends State<MyPurseScreen> {
                   children: [
                     MenuItemWidget(
                       name: "Магазин",
-                      func: () => profileMenuBloc
-                          .mapEventToState(ProfileMenuStates.STORE),
+                      func: () => GetIt.I
+                          .get<ProfileMenuCubit>()
+                          .moveTo(ProfileMenuStates.STORE),
                       iconData: MyPyrchaseIcons.shopping_bags,
                     ),
                     EcoCoinHorisontalDivider(),
                     MenuItemWidget(
                       name: "Мои покупки",
                       func: () {
-                        profileMenuBloc
-                            .mapEventToState(ProfileMenuStates.MYPURCHASES);
+                        GetIt.I
+                            .get<ProfileMenuCubit>()
+                            .moveTo(ProfileMenuStates.MYPURCHASES);
                       },
                       iconData: MyPyrchaseIcons.exchange,
                     ),
@@ -67,8 +70,9 @@ class _MyPurseScreenState extends State<MyPurseScreen> {
                     MenuItemWidget(
                       name: "История пополнений",
                       func: () async {
-                        profileMenuBloc
-                            .mapEventToState(ProfileMenuStates.TOPUPSHISTORY);
+                        GetIt.I
+                            .get<ProfileMenuCubit>()
+                            .moveTo(ProfileMenuStates.TOPUPSHISTORY);
                       },
                       iconData: MyPyrchaseIcons.shopping_cart,
                     ),

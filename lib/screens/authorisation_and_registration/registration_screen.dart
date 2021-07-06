@@ -1,12 +1,10 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_it/get_it.dart';
 import 'package:recycle_hub/bloc/auth/auth_bloc.dart';
-import 'package:recycle_hub/bloc/auth_user_bloc.dart';
+import 'package:recycle_hub/bloc/registration/registration_bloc.dart';
 import 'package:recycle_hub/elements/loader.dart';
 import 'package:recycle_hub/helpers/messager_helper.dart';
-import 'package:recycle_hub/model/authorisation_models/user_response.dart';
 import 'package:recycle_hub/style/style.dart';
 import 'package:recycle_hub/style/theme.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -26,11 +24,11 @@ class _ReqistrationScreenState extends State<ReqistrationScreen> {
   TextEditingController _refCode = TextEditingController();
   bool _obscureText = true;
 
-  AuthBloc authBloc;
+  RegistrationBloc regBloc;
 
   @override
   void initState() {
-    authBloc = BlocProvider.of<AuthBloc>(context);
+    regBloc = GetIt.I.get<RegistrationBloc>();
     super.initState();
   }
 
@@ -42,21 +40,21 @@ class _ReqistrationScreenState extends State<ReqistrationScreen> {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer(
-      bloc: authBloc,
+      bloc: regBloc,
       builder: (context, state) {
-        if (state is AuthStateNeedConfirm) {
+        if (state is RegistrationStateNeedConfirm) {
           return ConfirmCodeScreen();
-        } else if (state is AuthStateLogOuted) {
+        } else if (state is RegistrationStateInitial) {
           return _buildRegistrationScreen();
-        } else if (state is AuthStateLoading) {
+        } else if (state is RegistrationStateLoading) {
           return buildLoadingScaffold();
         }
         return _buildRegistrationScreen();
       },
       listener: (context, state) {
-        if (state is AuthStateFail) {
-          showMessage(context: context, message: state.error);
-        } else if (state is AuthStateLogedIn) {
+        if (state is RegistrationStateError) {
+          showMessage(context: context, message: state.error.toString());
+        } else if (state is RegistrationStateConfirmed) {
           Navigator.pop(context);
         }
       },
@@ -421,7 +419,7 @@ class _ReqistrationScreenState extends State<ReqistrationScreen> {
       child: RaisedButton(
         elevation: 5.0,
         onPressed: () {
-          authBloc.add(AuthEventRegister(
+          regBloc.add(RegistrationEventRegister(
               username: _email.text,
               name: _name.text,
               surname: _surname.text,
@@ -499,7 +497,7 @@ class _ReqistrationScreenState extends State<ReqistrationScreen> {
                     context: context, message: 'Пожалуйста, введите логин');
                 return;
               }
-              authBloc.add(AuthEventHasCode(username: _email.text));
+              regBloc.add(RegistrationEventHasCode(username: _email.text));
             },
             child: Text(
               "Подтвердить",

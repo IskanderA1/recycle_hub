@@ -2,7 +2,9 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_it/get_it.dart';
 import 'package:recycle_hub/bloc/auth/auth_bloc.dart';
+import 'package:recycle_hub/bloc/registration/registration_bloc.dart';
 import 'package:recycle_hub/style/style.dart';
 import 'package:recycle_hub/style/theme.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -19,11 +21,11 @@ class _ConfirmCodeScreenState extends State<ConfirmCodeScreen> {
       mask: '######', filter: {"#": RegExp(r'[0-9]')});
   final _tfKey = GlobalKey<FormState>();
 
-  AuthBloc authBloc;
+  RegistrationBloc regBloc;
 
   @override
   void initState() {
-    authBloc = BlocProvider.of<AuthBloc>(context);
+    regBloc = GetIt.I.get<RegistrationBloc>();
     super.initState();
   }
 
@@ -182,7 +184,7 @@ class _ConfirmCodeScreenState extends State<ConfirmCodeScreen> {
         elevation: 5.0,
         onPressed: () {
           if (_tfKey.currentState.validate()) {
-            authBloc.add(AuthEventConfirm(code: _code.text));
+            regBloc.add(RegistrationEventConfirm(code: _code.text));
           }
         },
         padding: EdgeInsets.all(15.0),

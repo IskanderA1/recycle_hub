@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
+import 'package:recycle_hub/bloc/cubit/profile_menu_cubit.dart';
+import 'package:recycle_hub/bloc/eco_guide_cubit/eco_guide_cubit_cubit.dart';
+import 'package:recycle_hub/bloc/nav_bar_cubit/nav_bar_cubit_cubit.dart';
 import 'package:recycle_hub/bloc/profile_bloc/profile_bloc.dart';
 import 'package:recycle_hub/icons/how_to_get_coin_icons_icons.dart';
 import 'package:recycle_hub/style/style.dart';
@@ -20,7 +24,7 @@ class _HowToGetCoinScreenState extends State<HowToGetCoinScreen> {
       appBar: AppBar(
         leading: IconButton(
           icon: Icon(Icons.arrow_back,color: kColorWhite, size: 25),
-          onPressed: ()=>profileMenuBloc.mapEventToState(ProfileMenuStates.MENU),
+          onPressed: ()=>GetIt.I.get<ProfileMenuCubit>().goBack(),
         ),
         title: Text("Как заработать баллы?", style: TextStyle(
           color: kColorWhite,
@@ -45,13 +49,13 @@ class _HowToGetCoinScreenState extends State<HowToGetCoinScreen> {
                   children: [
                     MenuItemWidget(
                       name: "Предложить новый пункт приема",
-                      func: () =>profileMenuBloc.mapEventToState(ProfileMenuStates.OFFERNEWPOINT),
+                      func: () =>GetIt.I.get<ProfileMenuCubit>().moveTo(ProfileMenuStates.OFFERNEWPOINT),
                       iconData: HowToGetCoinIcons.add_pointer,
                     ),
                     EcoCoinHorisontalDivider(),
                     MenuItemWidget(
                       name: "Пригласить друга",
-                      func: () =>profileMenuBloc.mapEventToState(ProfileMenuStates.INVITE),
+                      func: () =>GetIt.I.get<ProfileMenuCubit>().moveTo(ProfileMenuStates.INVITE),
                       iconData: HowToGetCoinIcons.add_user,
                     ),
                     EcoCoinHorisontalDivider(),
@@ -60,12 +64,12 @@ class _HowToGetCoinScreenState extends State<HowToGetCoinScreen> {
                       func: () {},
                       iconData: HowToGetCoinIcons.edit,
                     ),
-                    EcoCoinHorisontalDivider(),
+                    /* EcoCoinHorisontalDivider(),
                     MenuItemWidget(
                       name: "Заполнить информацию о себе",
                       func: () {},
                       iconData: HowToGetCoinIcons.information,
-                    ),
+                    ), */
                     EcoCoinHorisontalDivider(),
                     MenuItemWidget(
                       name: "Написать отзыв в Play Market",
@@ -75,7 +79,10 @@ class _HowToGetCoinScreenState extends State<HowToGetCoinScreen> {
                     EcoCoinHorisontalDivider(),
                     MenuItemWidget(
                       name: "Пройти тест",
-                      func: () {},
+                      func: () {
+                        GetIt.I.get<NavBarCubit>().moveTo(NavBarItem.ECO_GIDE);
+                        GetIt.I.get<EcoGuideCubit>().moveTo(EcoGuideMenuItem.TEST);
+                      },
                       iconData: HowToGetCoinIcons.brain,
                     ),
                     EcoCoinHorisontalDivider(),

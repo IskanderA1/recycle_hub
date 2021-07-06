@@ -1,10 +1,6 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:recycle_hub/bloc/auth_user_bloc.dart';
-import 'package:recycle_hub/model/authorisation_models/user_response.dart';
-import 'package:recycle_hub/screens/authorisation_and_registration/change_pass_screen.dart';
-import 'package:recycle_hub/screens/authorisation_and_registration/password_recovery_screen.dart';
 import 'package:recycle_hub/style/style.dart';
 import 'package:recycle_hub/style/theme.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';

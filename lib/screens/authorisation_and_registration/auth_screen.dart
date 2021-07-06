@@ -4,7 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg_provider/flutter_svg_provider.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:recycle_hub/bloc/auth/auth_bloc.dart';
-import 'package:recycle_hub/bloc/auth_user_bloc.dart';
 import 'package:recycle_hub/model/authorisation_models/user_response.dart';
 import 'package:recycle_hub/screens/authorisation_and_registration/registration_screen.dart';
 import 'package:recycle_hub/style/style.dart';
@@ -18,6 +17,7 @@ class AuthScreen extends StatefulWidget {
 }
 
 class _AuthScreenState extends State<AuthScreen> {
+  //final loginController = TextEditingController()..text  = 'kitaj77068@genebag.com';
   final loginController = TextEditingController()..text  = 'kepeyey591@slowimo.com';
   final passController = TextEditingController()..text = '1234';
   bool _obscureText = true;

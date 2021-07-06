@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:get_it/get_it.dart';
 import 'package:hive/hive.dart';
 import 'package:mobx/mobx.dart';
 import 'package:provider/provider.dart';
 import 'package:recycle_hub/api/services/user_service.dart';
+import 'package:recycle_hub/bloc/cubit/profile_menu_cubit.dart';
 import 'package:recycle_hub/helpers/messager_helper.dart';
 import 'package:recycle_hub/model/transactions/transaction_model.dart';
 import 'package:recycle_hub/screens/tabs/map/widgets/loader_widget.dart';
@@ -51,7 +53,7 @@ class _TopUpHistoryScreenState extends State<TopUpHistoryScreen> {
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: kColorWhite, size: 25),
           onPressed: () =>
-              profileMenuBloc.mapEventToState(ProfileMenuStates.MENU),
+              GetIt.I.get<ProfileMenuCubit>().goBack()
         ),
         title: Text(
           "История пополнений",
@@ -129,7 +131,7 @@ class _TopUpCardsState extends State<TopUpCards> {
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
-                                    "Операция:",
+                                    "Вид пополнения:",
                                     style: const TextStyle(
                                         color: kColorGreyLight,
                                         fontFamily: 'GillroyMedium'),

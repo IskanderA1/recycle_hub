@@ -55,15 +55,17 @@ class MarkerCardWidget extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  AutoSizeText(
-                    marker.name,
-                    style: TextStyle(
-                        color: marker.paybackType == 'partner'
-                            ? kColorWhite
-                            : kColorBlack,
-                        fontFamily: "Gilroy",
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18),
+                  Expanded(
+                    child: AutoSizeText(
+                      marker.name,
+                      style: TextStyle(
+                          color: marker.paybackType == 'partner'
+                              ? kColorWhite
+                              : kColorBlack,
+                          fontFamily: "Gilroy",
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18),
+                    ),
                   ),
                   StarRating(
                       rating: 3.5,

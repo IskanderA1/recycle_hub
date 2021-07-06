@@ -275,10 +275,15 @@ class UserService {
         return UserModel.fromMap(data);
       } else {
         print(response.reasonPhrase);
-        throw RequestError(code: RequestErrorCode.userAlreadyExists);
+        throw RequestError(
+            code: RequestErrorCode.userAlreadyExists,
+            description: 'Пользователь с таким e-mail уже существует');
       }
     } catch (error, stacktrace) {
       print("Exception occured: $error stackTrace: $stacktrace");
+      if(error is RequestError){
+        rethrow;
+      }
       throw RequestError(code: RequestErrorCode.unknown);
     }
   }
@@ -312,11 +317,11 @@ class UserService {
       Map<String, dynamic> data = jsonDecode(response.body);
       print(data);
       if (response.statusCode == 200) {
-        final token = data['access_token'];
+        /* final token = data['access_token'];
         if (token == null) {
           return false;
         }
-        SessionManager().saveToken(token);
+        SessionManager().saveToken(token); */
         return true;
       } else {
         return false;

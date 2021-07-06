@@ -1,16 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:recycle_hub/bloc/auth/auth_bloc.dart';
-import 'package:recycle_hub/bloc/auth_user_bloc.dart';
-import 'package:recycle_hub/bloc/global_state_bloc.dart';
 import 'package:recycle_hub/elements/loader.dart';
-import 'package:recycle_hub/model/authorisation_models/user_response.dart';
-import 'package:recycle_hub/screens/authorisation_and_registration/reg_confirm_code_screen.dart';
-import 'package:recycle_hub/screens/stepper/stepper.dart';
-import 'package:recycle_hub/screens/tabs/map/widgets/loader_widget.dart';
-
 import 'auth_screen.dart';
-import 'registration_screen.dart';
 
 class AuthorisationMainScreen extends StatefulWidget {
   @override
@@ -49,7 +41,7 @@ class _AuthorisationMainScreenState extends State<AuthorisationMainScreen> {
           /* else if(state is AuthStateNeedConfirm){
             return ConfirmCodeScreen();
           } */
-          else if (state is AuthStateLogOuted) {
+          else if (state is AuthStateGuestAcc) {
             return AuthScreen();
           }
           /*else if (state is AuthStateFirstIn){

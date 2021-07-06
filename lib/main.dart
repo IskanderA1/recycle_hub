@@ -6,10 +6,14 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive/hive.dart';
 import 'package:recycle_hub/api/profile_repository/profile_repository.dart';
+import 'package:recycle_hub/bloc/auth/auth_bloc.dart';
+import 'package:recycle_hub/bloc/cubit/profile_menu_cubit.dart';
 import 'package:recycle_hub/bloc/eco_coin_menu/eco_coin_menu_cubit.dart';
 import 'package:recycle_hub/bloc/eco_guide_cubit/eco_guide_cubit_cubit.dart';
 import 'package:recycle_hub/bloc/eco_test_bloc/eco_test_bloc.dart';
 import 'package:recycle_hub/bloc/nav_bar_cubit/nav_bar_cubit_cubit.dart';
+import 'package:recycle_hub/bloc/recovery_bloc/recovery_bloc.dart';
+import 'package:recycle_hub/bloc/registration/registration_bloc.dart';
 import 'package:recycle_hub/screens/main_screen.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:recycle_hub/style/theme.dart';
@@ -21,7 +25,6 @@ import 'model/map_models.dart/marker.dart';
 import 'model/map_models.dart/work_day.dart';
 import 'model/map_models.dart/work_time.dart';
 import 'model/user_model.dart';
-import 'model/transactions/transaction_model.dart';
 import 'model/transactions/user_transaction_model.dart';
 
 Future<void> main() async {
@@ -46,6 +49,10 @@ Future<void> main() async {
   GetIt.I.registerSingleton<EcoCoinMenuCubit>(EcoCoinMenuCubit());
   GetIt.I.registerSingleton<EcoGuideCubit>(EcoGuideCubit());
   GetIt.I.registerSingleton<NavBarCubit>(NavBarCubit());
+  GetIt.I.registerSingleton<AuthBloc>(AuthBloc());
+  GetIt.I.registerSingleton<RegistrationBloc>(RegistrationBloc());
+  GetIt.I.registerSingleton<RecoveryBloc>(RecoveryBloc());
+  GetIt.I.registerSingleton<ProfileMenuCubit>(ProfileMenuCubit());
   GetIt.I.registerSingleton<EcoTestBloc>(EcoTestBloc(ProfileRepository()));
   runApp(
     MyApp(),
