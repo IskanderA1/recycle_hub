@@ -1,4 +1,4 @@
-import 'package:recycle_hub/api/services/user_service.dart';
+/* import 'package:recycle_hub/api/services/user_service.dart';
 import 'package:recycle_hub/helpers/settings.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -30,3 +30,4 @@ class GlobalStateBloc {
 }
 
 final globalStateBloc = GlobalStateBloc();
+ */

@@ -1,8 +1,11 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg_provider/flutter_svg_provider.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:get_it/get_it.dart';
 import 'package:recycle_hub/bloc/auth/auth_bloc.dart';
 import 'package:recycle_hub/model/authorisation_models/user_response.dart';
 import 'package:recycle_hub/screens/authorisation_and_registration/registration_screen.dart';
@@ -18,14 +21,21 @@ class AuthScreen extends StatefulWidget {
 
 class _AuthScreenState extends State<AuthScreen> {
   //final loginController = TextEditingController()..text  = 'kitaj77068@genebag.com';
-  final loginController = TextEditingController()..text  = 'kepeyey591@slowimo.com';
+  final loginController = TextEditingController()
+    ..text = 'kepeyey591@slowimo.com';
   final passController = TextEditingController()..text = '1234';
   bool _obscureText = true;
   AuthBloc authBloc;
+  StreamSubscription<AuthState> _authSub;
 
   @override
   void initState() {
-    authBloc = BlocProvider.of<AuthBloc>(context);
+    authBloc = GetIt.I.get<AuthBloc>();
+    _authSub = authBloc.stream.listen((state) {
+      if (state is AuthStateLogedIn) {
+        Navigator.of(context).popUntil(ModalRoute.withName('/'));
+      }
+    });
     super.initState();
   }
 
@@ -44,8 +54,9 @@ class _AuthScreenState extends State<AuthScreen> {
         FocusScope.of(context).unfocus();
       },
       child: WillPopScope(
-        onWillPop: () {
-          return null;
+        onWillPop: () async {
+          Navigator.of(context).popUntil(ModalRoute.withName('/'));
+          return true;
         },
         child: Scaffold(
             body: Container(
@@ -157,6 +168,7 @@ class _AuthScreenState extends State<AuthScreen> {
           Align(
               alignment: Alignment.centerLeft,
               child: BlocBuilder<AuthBloc, AuthState>(
+                bloc: GetIt.I.get<AuthBloc>(),
                 builder: (context, state) {
                   if (state is UserAuthFailed) {
                     return Text(
@@ -265,9 +277,9 @@ class _AuthScreenState extends State<AuthScreen> {
                       context,
                       MaterialPageRoute(
                           builder: (context) => BlocProvider<AuthBloc>.value(
-                            value: authBloc,
-                            child: ChangePassScreen(),
-                          )));
+                                value: authBloc,
+                                child: ChangePassScreen(),
+                              )));
                   //authBloc.pickState(UserToForgetScr());
                 },
                 child: Text(
@@ -293,7 +305,8 @@ class _AuthScreenState extends State<AuthScreen> {
       child: RaisedButton(
         elevation: 5.0,
         onPressed: () {
-          authBloc.add(AuthEventLogin(login: loginController.text, password: passController.text));
+          authBloc.add(AuthEventLogin(
+              login: loginController.text, password: passController.text));
         },
         padding: EdgeInsets.all(15.0),
         shape: RoundedRectangleBorder(
@@ -424,9 +437,9 @@ class _AuthScreenState extends State<AuthScreen> {
                   context,
                   MaterialPageRoute(
                       builder: (context) => BlocProvider<AuthBloc>.value(
-                        value: authBloc,
-                        child: ReqistrationScreen(),
-                      )));
+                            value: authBloc,
+                            child: ReqistrationScreen(),
+                          )));
             },
             child: Text(
               "Создать",

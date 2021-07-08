@@ -6,6 +6,7 @@ import 'package:recycle_hub/bloc/eco_coin_menu/eco_coin_menu_cubit.dart';
 import 'package:recycle_hub/bloc/global_state_bloc.dart';
 import 'package:recycle_hub/elements/common_cell.dart';
 import 'package:recycle_hub/icons/eco_coin_icons_icons.dart';
+import 'package:recycle_hub/screens/authorisation_and_registration/auth_screen.dart';
 import 'package:recycle_hub/style/style.dart';
 import 'package:recycle_hub/style/theme.dart';
 
@@ -94,9 +95,14 @@ class _EcoCoinScreenState extends State<EcoCoinScreen> {
                                 shrinkWrap: true,
                                 children: [
                                   CommonCell(
-                                    onTap: globalStateBloc
-                                        .pickItem(GLobalStates.AUTH),
-                                      text: 'Авторизоваться',
+                                    onTap: () {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  AuthScreen()));
+                                    },
+                                    text: 'Авторизоваться  ',
                                   )
                                 ],
                               );
@@ -104,7 +110,6 @@ class _EcoCoinScreenState extends State<EcoCoinScreen> {
                             return ListView(
                               shrinkWrap: true,
                               children: [
-                                CommonCell(),
                                 MenuItemWidget(
                                   name: "Магазин",
                                   func: () => GetIt.I

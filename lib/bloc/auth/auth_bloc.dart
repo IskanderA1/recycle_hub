@@ -17,7 +17,7 @@ part 'auth_state.dart';
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final UserService userService = UserService();
   SessionManager sessionManager = SessionManager();
-  AuthBloc() : super(AuthStateLoading());
+  AuthBloc() : super(AuthStateGuestAcc());
 
   @override
   Stream<AuthState> mapEventToState(

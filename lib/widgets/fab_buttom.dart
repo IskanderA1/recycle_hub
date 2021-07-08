@@ -33,7 +33,7 @@ class _BottomNavBarV2State extends State<BottomNavBarV2> {
 
   @override
   void initState() {
-    this.authBLoc = BlocProvider.of<AuthBloc>(context);
+    this.authBLoc = GetIt.I.get<AuthBloc>();
     super.initState();
   }
 

@@ -7,6 +7,7 @@ import 'package:recycle_hub/bloc/cubit/profile_menu_cubit.dart';
 import 'package:recycle_hub/bloc/global_state_bloc.dart';
 import 'package:recycle_hub/elements/common_cell.dart';
 import 'package:recycle_hub/icons/user_profile_icons_icons.dart';
+import 'package:recycle_hub/screens/authorisation_and_registration/auth_screen.dart';
 import 'package:recycle_hub/style/theme.dart';
 
 List<IconData> svgIcons = [
@@ -32,7 +33,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   void initState() {
     //userBox = Hive.box('user');
-    authBloc ??= BlocProvider.of<AuthBloc>(context);
+    authBloc = GetIt.I.get<AuthBloc>();
     userState = authBloc.state;
 
     authBloc.stream.listen((st) {
@@ -46,66 +47,75 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     Size _size = MediaQuery.of(context).size;
-    return Scaffold(
-      body: Container(
-        height: _size.height,
-        width: _size.width,
-        alignment: Alignment.topCenter,
-        child: Stack(
-          children: [
-            Image.asset("svg/Mask Group.png"),
-            Container(
-              child: ListView(
-                padding: EdgeInsets.only(left: 17, right: 17, top: 10),
-                children: [
-                  buildAppBar(),
-                  SizedBox(
-                    height: 17,
+    return BlocBuilder<AuthBloc, AuthState>(
+      bloc: GetIt.I.get<AuthBloc>(),
+      builder: (context, state) {
+        return Scaffold(
+          body: Container(
+            height: _size.height,
+            width: _size.width,
+            alignment: Alignment.topCenter,
+            child: Stack(
+              children: [
+                Image.asset("svg/Mask Group.png"),
+                Container(
+                  child: ListView(
+                    padding: EdgeInsets.only(left: 17, right: 17, top: 10),
+                    children: [
+                      buildAppBar(),
+                      SizedBox(
+                        height: 17,
+                      ),
+                      buildProfileAvatar(userState.userModel.name, "ЭКОЛОГ",
+                          userState.userModel.image),
+                      SizedBox(
+                        height: 24,
+                      ),
+                      buildStatus(10, UserService().garbageGiven),
+                      SizedBox(
+                        height: 5,
+                      ),
+                      Container(
+                        height: _size.height * 0.6,
+                        padding: EdgeInsets.only(
+                            top: 12, bottom: 12, right: 19, left: 19),
+                        decoration: BoxDecoration(
+                            color: kColorWhite,
+                            borderRadius: BorderRadius.circular(16)),
+                        child: ListView(
+                          padding: EdgeInsets.only(
+                              bottom: _size.height * 0.05, top: 5),
+                          children: [
+                            if (userState is AuthStateGuestAcc)
+                              CommonCell(
+                                text: 'Авторизоваться',
+                                onTap: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => AuthScreen()));
+                                },
+                              ),
+                            if (userState is AuthStateLogedIn)
+                              buildAchievments(
+                                  "Эколог", UserService().garbageGiven),
+                            if (userState is AuthStateLogedIn)
+                              SizedBox(
+                                height: 10,
+                              ),
+                            if (userState is AuthStateLogedIn)
+                              buildMenu(authBloc)
+                          ],
+                        ),
+                      ),
+                    ],
                   ),
-                  buildProfileAvatar(userState.userModel.name, "ЭКОЛОГ",
-                      userState.userModel.image),
-                  SizedBox(
-                    height: 24,
-                  ),
-                  buildStatus(10, UserService().garbageGiven),
-                  SizedBox(
-                    height: 5,
-                  ),
-                  Container(
-                    height: _size.height * 0.6,
-                    padding: EdgeInsets.only(top: 12, bottom: 12, right: 19, left: 19),
-                    decoration: BoxDecoration(
-                      color: kColorWhite,
-                      borderRadius: BorderRadius.circular(16)
-                    ),
-                    child: ListView(
-                      padding: EdgeInsets.only(
-                          bottom: _size.height * 0.05, top: 5),
-                      children: [
-                        if (userState is AuthStateGuestAcc)
-                          CommonCell(
-                            text: 'Авторизоваться',
-                            onTap: () {
-                              globalStateBloc.pickItem(GLobalStates.AUTH);
-                            },
-                          ),
-                        if (userState is AuthStateLogedIn)
-                          buildAchievments(
-                              "Эколог", UserService().garbageGiven),
-                        if (userState is AuthStateLogedIn)
-                          SizedBox(
-                            height: 10,
-                          ),
-                        if (userState is AuthStateLogedIn) buildMenu(authBloc)
-                      ],
-                    ),
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 
@@ -484,8 +494,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
           if (authBloc != null) {
             authBloc.add(AuthEventLogout());
           }
-        } else if (index == 6) {
-          globalStateBloc.pickItem(GLobalStates.AUTH);
         }
       },
       child: Container(

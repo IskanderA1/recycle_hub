@@ -14,10 +14,13 @@ import 'package:recycle_hub/bloc/eco_test_bloc/eco_test_bloc.dart';
 import 'package:recycle_hub/bloc/nav_bar_cubit/nav_bar_cubit_cubit.dart';
 import 'package:recycle_hub/bloc/recovery_bloc/recovery_bloc.dart';
 import 'package:recycle_hub/bloc/registration/registration_bloc.dart';
+import 'package:recycle_hub/screens/authorisation_and_registration/auth_screen.dart';
 import 'package:recycle_hub/screens/main_screen.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:recycle_hub/screens/workspace_screen.dart';
 import 'package:recycle_hub/style/theme.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:recycle_hub/screens/error_screen.dart';
 import 'model/map_models.dart/accept_types.dart';
 import 'model/map_models.dart/contact_model.dart';
 import 'model/map_models.dart/coord.dart';
@@ -49,7 +52,7 @@ Future<void> main() async {
   GetIt.I.registerSingleton<EcoCoinMenuCubit>(EcoCoinMenuCubit());
   GetIt.I.registerSingleton<EcoGuideCubit>(EcoGuideCubit());
   GetIt.I.registerSingleton<NavBarCubit>(NavBarCubit());
-  GetIt.I.registerSingleton<AuthBloc>(AuthBloc());
+  GetIt.I.registerSingleton<AuthBloc>(AuthBloc()..add(AuthEventInit()));
   GetIt.I.registerSingleton<RegistrationBloc>(RegistrationBloc());
   GetIt.I.registerSingleton<RecoveryBloc>(RecoveryBloc());
   GetIt.I.registerSingleton<ProfileMenuCubit>(ProfileMenuCubit());
@@ -75,7 +78,12 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: 'RecycleHub',
         theme: kAppThemeData(),
-        home: MainScreen(),
+        initialRoute: '/',
+        routes: {
+          '/': (context) => WorkSpaceScreen(),
+          '/auth': (context) => AuthScreen(),
+          '/error': (context) => ErrorScreen()
+        },
       ),
     );
   }

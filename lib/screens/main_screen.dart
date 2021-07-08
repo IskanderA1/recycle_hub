@@ -29,7 +29,7 @@ class _MainScreenState extends State<MainScreen> {
       /* if (state is AuthStateGuestAcc) {
         globalStateBloc.pickItem(GLobalStates.AUTH);
       }  else*/
-      if (state is AuthStateLogedIn || state is AuthStateGuestAcc) {
+      /* if (state is AuthStateLogedIn || state is AuthStateGuestAcc) {
         GetIt.I.get<NavBarCubit>().moveTo(NavBarItem.MAP);
         globalStateBloc.pickItem(GLobalStates.TABS);
       } else if (state is AuthStateFirstIn) {
@@ -41,7 +41,7 @@ class _MainScreenState extends State<MainScreen> {
       }
       if (state is AuthStateFail) {
         showMessage(context: context, message: state.error);
-      }
+      } */
     });
     authBloc.add(AuthEventInit());
     super.initState();
@@ -56,7 +56,8 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<AuthBloc>.value(
+    return WorkSpaceScreen();
+    /* BlocProvider<AuthBloc>.value(
       value: authBloc,
       child: StreamBuilder(
           stream: globalStateBloc.subject,
@@ -88,6 +89,6 @@ class _MainScreenState extends State<MainScreen> {
               return buildLoadingWidget();
             }
           }),
-    );
+    ); */
   }
 }

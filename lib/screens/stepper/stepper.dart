@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:recycle_hub/bloc/global_state_bloc.dart';
+import 'package:recycle_hub/screens/authorisation_and_registration/auth_screen.dart';
 import 'package:recycle_hub/screens/stepper/page3.dart';
 import 'package:recycle_hub/screens/stepper/page4.dart';
 import 'package:recycle_hub/screens/stepper/page_1.dart';
 import 'package:recycle_hub/screens/stepper/page_2.dart';
+import 'package:recycle_hub/screens/workspace_screen.dart';
 import 'package:recycle_hub/style/theme.dart';
 import 'indicators.dart';
 import 'image_painter.dart';
@@ -138,7 +140,10 @@ class _WellcomePageStepperState extends State<WellcomePageStepper> {
                     } else {
                       /*Navigator.push(context,
                       MaterialPageRoute(builder: (context) => AuthScreen()));*/
-                      globalStateBloc.pickItem(GLobalStates.AUTH);
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => WorkSpaceScreen()));
                     }
                   },
                 )),

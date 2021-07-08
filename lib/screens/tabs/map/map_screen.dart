@@ -65,7 +65,7 @@ class _MapScreenState extends State<MapScreen> {
               developer.log(
                   "Got previous map screen error: ${previous.discription}",
                   name: 'map.map_screen');
-              return false;
+              return true;
             }
             if (current is MapStateError) {
               developer.log(

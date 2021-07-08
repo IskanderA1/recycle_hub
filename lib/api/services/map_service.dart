@@ -57,6 +57,7 @@ class MapService {
       print("Запрос отправлен");
       var response = await CommonRequest.makeRequest('rec_points',
           method: CommonRequestMethod.get,
+          needAuthorization: false,
           body: {
             'position': "[" +
                 latLng.latitude.toString() +
@@ -171,7 +172,8 @@ class MapService {
   Future<AcceptTypesCollectionResponse> getAcceptTypes() async {
     try {
       developer.log("Do GetAcceptTypes Request", name: _devLog);
-      var response = await CommonRequest.makeRequest('filters');
+      var response = await CommonRequest.makeRequest('filters',
+      needAuthorization: false);
       var data = jsonDecode(response.body);
       print(data);
       if (data.isNotEmpty) {
