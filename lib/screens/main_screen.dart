@@ -28,11 +28,14 @@ class _MainScreenState extends State<MainScreen> {
     _authSub = authBloc.stream.listen((state) {
       /* if (state is AuthStateGuestAcc) {
         globalStateBloc.pickItem(GLobalStates.AUTH);
-      }  else*/ if (state is AuthStateLogedIn || state is AuthStateGuestAcc) {
+      }  else*/
+      if (state is AuthStateLogedIn || state is AuthStateGuestAcc) {
         GetIt.I.get<NavBarCubit>().moveTo(NavBarItem.MAP);
         globalStateBloc.pickItem(GLobalStates.TABS);
       } else if (state is AuthStateFirstIn) {
         globalStateBloc.pickItem(GLobalStates.FIRSTIN);
+      } else if (state is AuthStateLoggedOut) {
+        globalStateBloc.pickItem(GLobalStates.TABS);
       } else {
         globalStateBloc.pickItem(GLobalStates.AUTH);
       }

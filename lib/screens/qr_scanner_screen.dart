@@ -12,69 +12,70 @@ class QRCodeContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: MediaQuery.of(context).size.height - 80,
-      padding: EdgeInsets.only(bottom: 16, left: 16, right: 16),
-      decoration: BoxDecoration(
-          color: kColorWhite,
-          borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(25), topRight: Radius.circular(25))),
-      child: Column(
-        children: [
-          Container(
-            child: InkWell(
-              onTap: () {},
-              child: Container(
-                width: double.infinity,
-                alignment: Alignment.topCenter,
-                child: Icon(
-                  Icons.expand_more_sharp,
-                  color: kColorGreyDark,
-                  size: 50,
-                ),
-              ),
-            ),
-            color: Colors.transparent,
-          ),
-          Container(
-            alignment: Alignment.center,
-            child: Wrap(
-              children: [
-                Text(
-                  "Покажите этот qr код сотруднику пункта приёма и зарабатывайте баллы",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(fontWeight: FontWeight.w600, fontSize: 15),
-                ),
-              ],
+        height: MediaQuery.of(context).size.height - 80,
+        padding: EdgeInsets.only(bottom: 16, left: 16, right: 16),
+        decoration: BoxDecoration(
+      color: kColorWhite,
+      borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(25), topRight: Radius.circular(25))),
+        child: Column(
+    children: [
+      Container(
+        child: InkWell(
+          onTap: () {},
+          child: Container(
+            width: double.infinity,
+            alignment: Alignment.topCenter,
+            child: Icon(
+              Icons.expand_more_sharp,
+              color: kColorGreyDark,
+              size: 50,
             ),
           ),
-          SizedBox(
-            height: 30,
-          ),
-          Container(
-            color: kColorWhite,
-            height: 310,
-            child: Center(
-              child: QrImage(
-                data: userState.user.token,
-                version: QrVersions.auto,
-              ),
-            ),
-          ),
-          SizedBox(
-            height: 20,
-          ),
-          Container(
-            child: Text(
-              "Мой QR-код",
-              style: TextStyle(
-                  color: kColorBlack,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 17),
-            ),
-          )
-        ],
+        ),
+        color: Colors.transparent,
       ),
-    );
+      Container(
+        alignment: Alignment.center,
+        child: Wrap(
+          children: [
+            Text(
+              "Покажите этот qr код сотруднику пункта приёма и зарабатывайте баллы",
+              textAlign: TextAlign.center,
+              style: TextStyle(fontWeight: FontWeight.w600, fontSize: 15),
+            ),
+          ],
+        ),
+      ),
+      SizedBox(
+        height: 30,
+      ),
+      Container(
+        color: kColorWhite,
+        height: 310,
+        child: Center(
+          child: QrImage(
+            data: userState.user.token,
+            version: QrVersions.auto,
+            dataModuleStyle: QrDataModuleStyle(dataModuleShape: QrDataModuleShape.square, color: kColorGreyLight),
+          ),
+        ),
+      ),
+      SizedBox(
+        height: 20,
+      ),
+      Container(
+        child: Text(
+          "Мой QR-код",
+          style: TextStyle(
+              color: kColorBlack,
+              fontWeight: FontWeight.bold,
+              fontSize: 17),
+        ),
+      )
+    ],
+        ),
+      );
   }
 }
 

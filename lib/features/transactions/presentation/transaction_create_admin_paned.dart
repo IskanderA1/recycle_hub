@@ -17,7 +17,7 @@ import 'package:recycle_hub/model/map_models.dart/accept_types.dart';
 import 'package:recycle_hub/style/theme.dart';
 import './components/drop_down_menu_button.dart';
 import '../../../helpers/messager_helper.dart';
-import '../../../elements/common_button.dart';
+import '../../../elements/common_text_button.dart';
 import '../../../model/garbage.dart';
 
 class TransactionCreateAdminPanelScreen extends StatefulWidget {
@@ -84,7 +84,7 @@ class _TransactionCreateAdminPanelScreenState
             appBar: AppBar(
               leading: IconButton(
                   icon: Icon(Icons.arrow_back, color: kColorWhite, size: 25),
-                  onPressed: () => GetIt.I.get<ProfileMenuCubit>().goBack()),
+                  onPressed: () => state.toState(AdmStoreState.INIT)),
               title: Text(
                 "Подтверждение приема",
                 style: TextStyle(
@@ -183,7 +183,7 @@ class _TransactionCreateAdminPanelScreenState
                                     ),
                                     Padding(
                                       padding: const EdgeInsets.all(8.0),
-                                      child: CommonButton(
+                                      child: CommonTextButton(
                                         text: "Добавить вторсырье",
                                         backGroundColor: kColorGreyVeryLight,
                                         ontap: () {
@@ -327,7 +327,7 @@ class _TransactionCreateAdminPanelScreenState
                                         mainAxisAlignment:
                                             MainAxisAlignment.center,
                                         children: [
-                                          CommonButton(
+                                          CommonTextButton(
                                               height: 45,
                                               width: 150,
                                               text: "Из устройства",
@@ -338,7 +338,7 @@ class _TransactionCreateAdminPanelScreenState
                                           SizedBox(
                                             width: 20,
                                           ),
-                                          CommonButton(
+                                          CommonTextButton(
                                               height: 45,
                                               width: 150,
                                               backGroundColor:
@@ -352,7 +352,7 @@ class _TransactionCreateAdminPanelScreenState
                                     ),
                                     Padding(
                                       padding: const EdgeInsets.only(top: 16),
-                                      child: CommonButton(
+                                      child: CommonTextButton(
                                           text: "Подтвердить прием",
                                           textColor: kColorWhite,
                                           ontap: () {

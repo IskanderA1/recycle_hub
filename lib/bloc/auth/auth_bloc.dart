@@ -119,6 +119,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
   Stream<AuthState> _mapLogoutToState() async* {
     try {
+      yield AuthStateLoading();
       await userService.userLogOut();
       SessionManager().clearSession();
       StaticData.user = null;

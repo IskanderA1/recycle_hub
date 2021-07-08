@@ -73,29 +73,31 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                   Container(
                     height: _size.height * 0.6,
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(16),
-                      child: ListView(
-                        padding: EdgeInsets.only(
-                            bottom: _size.height * 0.05, top: 5),
-                        children: [
-                          if (userState is AuthStateGuestAcc)
-                            CommonCell(
-                              text: 'Авторизоваться',
-                              onTap: () {
-                                globalStateBloc.pickItem(GLobalStates.AUTH);
-                              },
-                            ),
-                          if (userState is AuthStateLogedIn)
-                            buildAchievments(
-                                "Эколог", UserService().garbageGiven),
-                          if (userState is AuthStateLogedIn)
-                            SizedBox(
-                              height: 10,
-                            ),
-                          if (userState is AuthStateLogedIn) buildMenu(authBloc)
-                        ],
-                      ),
+                    padding: EdgeInsets.only(top: 12, bottom: 12, right: 19, left: 19),
+                    decoration: BoxDecoration(
+                      color: kColorWhite,
+                      borderRadius: BorderRadius.circular(16)
+                    ),
+                    child: ListView(
+                      padding: EdgeInsets.only(
+                          bottom: _size.height * 0.05, top: 5),
+                      children: [
+                        if (userState is AuthStateGuestAcc)
+                          CommonCell(
+                            text: 'Авторизоваться',
+                            onTap: () {
+                              globalStateBloc.pickItem(GLobalStates.AUTH);
+                            },
+                          ),
+                        if (userState is AuthStateLogedIn)
+                          buildAchievments(
+                              "Эколог", UserService().garbageGiven),
+                        if (userState is AuthStateLogedIn)
+                          SizedBox(
+                            height: 10,
+                          ),
+                        if (userState is AuthStateLogedIn) buildMenu(authBloc)
+                      ],
                     ),
                   ),
                 ],
@@ -288,85 +290,78 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   Widget buildAchievments(String status, double made) {
-    return Container(
-      decoration: BoxDecoration(
-        color: kColorWhite,
-        borderRadius: BorderRadius.circular(16),
-      ),
-      padding: EdgeInsets.only(top: 12, bottom: 12, right: 19, left: 19),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Container(
-                  height: 30,
-                  width: 30,
-                  child: Icon(
-                    svgIcons[6],
-                    color: kColorGreyDark,
-                  )),
-              SizedBox(
-                width: 15,
-              ),
-              Text("Достижения",
-                  style: TextStyle(color: kColorBlack, fontSize: 14))
-            ],
-          ),
-          Container(
-              child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text("Статус:",
-                      style: TextStyle(
-                        color: kColorBlack,
-                        fontSize: 14,
-                      )),
-                  SizedBox(width: 14),
-                  Text(
-                    status,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Container(
+                height: 30,
+                width: 30,
+                child: Icon(
+                  svgIcons[6],
+                  color: kColorGreyDark,
+                )),
+            SizedBox(
+              width: 15,
+            ),
+            Text("Достижения",
+                style: TextStyle(color: kColorBlack, fontSize: 14))
+          ],
+        ),
+        Container(
+            child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text("Статус:",
                     style: TextStyle(
-                        color: kColorGreen,
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold),
-                  )
-                ],
-              ),
-            ],
-          )),
-          SizedBox(
-            height: 7,
-          ),
-          _buildProgressIndicator(2),
-          SizedBox(
-            height: 8,
-          ),
-          Row(
-            children: [
-              Text(
-                "Всего сдано: ",
-                style: TextStyle(fontSize: 14, color: kColorBlack),
-              ),
-              Text(
-                "$made",
-                style: TextStyle(
-                    color: kColorBlack,
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold),
-              ),
-              Text("кг",
+                      color: kColorBlack,
+                      fontSize: 14,
+                    )),
+                SizedBox(width: 14),
+                Text(
+                  status,
                   style: TextStyle(
-                    color: kColorBlack,
-                    fontSize: 14,
-                  ))
-            ],
-          )
-        ],
-      ),
+                      color: kColorGreen,
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold),
+                )
+              ],
+            ),
+          ],
+        )),
+        SizedBox(
+          height: 7,
+        ),
+        _buildProgressIndicator(2),
+        SizedBox(
+          height: 8,
+        ),
+        Row(
+          children: [
+            Text(
+              "Всего сдано: ",
+              style: TextStyle(fontSize: 14, color: kColorBlack),
+            ),
+            Text(
+              "$made",
+              style: TextStyle(
+                  color: kColorBlack,
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold),
+            ),
+            Text("кг",
+                style: TextStyle(
+                  color: kColorBlack,
+                  fontSize: 14,
+                ))
+          ],
+        )
+      ],
     );
   }
 

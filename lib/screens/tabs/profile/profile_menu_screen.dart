@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
+import 'package:recycle_hub/bloc/auth/auth_bloc.dart';
 import 'package:recycle_hub/bloc/cubit/profile_menu_cubit.dart';
 import 'package:recycle_hub/bloc/profile_bloc/profile_bloc.dart';
 import 'package:recycle_hub/features/transactions/domain/state/transactions_state.dart';
@@ -27,62 +28,66 @@ class ProfileMenuScreen extends StatefulWidget {
 class _ProfileMenuScreenState extends State<ProfileMenuScreen> {
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ProfileMenuCubit, ProfileMenuStates>(
-        bloc: GetIt.I.get<ProfileMenuCubit>(),
-        builder: (context, ProfileMenuStates state) {
-          switch (state) {
-            case ProfileMenuStates.USER_PROFILE:
-              return ProfileScreen();
-              break;
-            case ProfileMenuStates.POINT_PROFILE:
-              return PointProfileScreen();
-              break;
-            case ProfileMenuStates.STATISTIC:
-              return Provider<TransactionsState>(
-                  create: (_) => TransactionsModule.getModule(),
-                  child: StatisticScreen());
-              break;
-            case ProfileMenuStates.HOWGETCOIN:
-              return HowToGetCoinScreen();
-              break;
-            case ProfileMenuStates.MENU:
-              return ProfileScreen();
-              break;
-            case ProfileMenuStates.OFFERNEWPOINT:
-              return OfferNewPointScreen(
-                onBack: () => GetIt.I
-                    .get<ProfileMenuCubit>()
-                    .moveTo(ProfileMenuStates.MENU),
-              );
-              break;
-            case ProfileMenuStates.PURSE:
-              return MyPurseScreen();
-              break;
-            case ProfileMenuStates.STORE:
-              return StoreScreen(
-                onBackCall: () => GetIt.I
-                    .get<ProfileMenuCubit>()
-                    .moveTo(ProfileMenuStates.MENU),
-              );
-              break;
-            case ProfileMenuStates.EDITPROFILE:
-              return EditProfileScreen();
-              break;
-            case ProfileMenuStates.MYPURCHASES:
-              return MyPurchasesScreen();
-              break;
-            case ProfileMenuStates.TOPUPSHISTORY:
-              return Provider<TransactionsState>(
-                  create: (_) => TransactionsModule.getModule(),
-                  child: TopUpHistoryScreen());
-              break;
-            case ProfileMenuStates.INVITE:
-              return InviteScreen();
-              break;
-            default:
-              return ProfileScreen();
-              break; 
-          }
+    return BlocBuilder<AuthBloc, AuthState>(
+        bloc: GetIt.I.get<AuthBloc>(),
+        builder: (BuildContext context, state) {
+          return BlocBuilder<ProfileMenuCubit, ProfileMenuStates>(
+              bloc: GetIt.I.get<ProfileMenuCubit>(),
+              builder: (context, ProfileMenuStates state) {
+                switch (state) {
+                  case ProfileMenuStates.USER_PROFILE:
+                    return ProfileScreen();
+                    break;
+                  case ProfileMenuStates.POINT_PROFILE:
+                    return PointProfileScreen();
+                    break;
+                  case ProfileMenuStates.STATISTIC:
+                    return Provider<TransactionsState>(
+                        create: (_) => TransactionsModule.getModule(),
+                        child: StatisticScreen());
+                    break;
+                  case ProfileMenuStates.HOWGETCOIN:
+                    return HowToGetCoinScreen();
+                    break;
+                  case ProfileMenuStates.MENU:
+                    return ProfileScreen();
+                    break;
+                  case ProfileMenuStates.OFFERNEWPOINT:
+                    return OfferNewPointScreen(
+                      onBack: () => GetIt.I
+                          .get<ProfileMenuCubit>()
+                          .moveTo(ProfileMenuStates.MENU),
+                    );
+                    break;
+                  case ProfileMenuStates.PURSE:
+                    return MyPurseScreen();
+                    break;
+                  case ProfileMenuStates.STORE:
+                    return StoreScreen(
+                      onBackCall: () => GetIt.I
+                          .get<ProfileMenuCubit>()
+                          .moveTo(ProfileMenuStates.MENU),
+                    );
+                    break;
+                  case ProfileMenuStates.EDITPROFILE:
+                    return EditProfileScreen();
+                    break;
+                  case ProfileMenuStates.MYPURCHASES:
+                    return MyPurchasesScreen();
+                    break;
+                  case ProfileMenuStates.TOPUPSHISTORY:
+                    return Provider<TransactionsState>(
+                        create: (_) => TransactionsModule.getModule(),
+                        child: TopUpHistoryScreen());
+                    break;
+                  case ProfileMenuStates.INVITE:
+                    return InviteScreen();
+                    break;
+                  default:
+                    return ProfileScreen();
+                    break;
+                }
+              });
         });
   }
 }

@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
+import 'package:recycle_hub/bloc/auth/auth_bloc.dart';
 import 'package:recycle_hub/bloc/eco_coin_menu/eco_coin_menu_cubit.dart';
+import 'package:recycle_hub/bloc/global_state_bloc.dart';
+import 'package:recycle_hub/elements/common_cell.dart';
 import 'package:recycle_hub/icons/eco_coin_icons_icons.dart';
 import 'package:recycle_hub/style/style.dart';
 import 'package:recycle_hub/style/theme.dart';
@@ -50,8 +54,8 @@ class _EcoCoinScreenState extends State<EcoCoinScreen> {
                         color: kColorWhite,
                         borderRadius: BorderRadius.all(Radius.circular(25))),
                     child: Padding(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: 20, vertical: 20),
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 20, vertical: 20),
                         child: RichText(
                           overflow: TextOverflow.visible,
                           text: TextSpan(
@@ -79,60 +83,78 @@ class _EcoCoinScreenState extends State<EcoCoinScreen> {
                       width: size.width * 0.9,
                       decoration: BoxDecoration(
                           color: kColorWhite,
-                          borderRadius:
-                              BorderRadius.all(Radius.circular(25))),
+                          borderRadius: BorderRadius.all(Radius.circular(25))),
                       child: Padding(
                         padding: EdgeInsets.all(25),
-                        child: Column(
-                          children: [
-                            MenuItemWidget(
-                              name: "Магазин",
-                              func: () => GetIt.I
-                                  .get<EcoCoinMenuCubit>()
-                                  .moveTo(EcoCoinMenuItems.STORE),
-                              iconData: EcoCoinIcons.shoppingcart,
-                            ),
-                            EcoCoinHorisontalDivider(),
-                            MenuItemWidget(
-                              name: "Сдать вторсырье",
-                              func: () => GetIt.I
-                                  .get<EcoCoinMenuCubit>()
-                                  .moveTo(EcoCoinMenuItems.GIVEGARBAGE),
-                              iconData: EcoCoinIcons.recyclebin,
-                            ),
-                            EcoCoinHorisontalDivider(),
-                            MenuItemWidget(
-                              name: "Добавить новый пункт приема",
-                              func: () => GetIt.I
-                                  .get<EcoCoinMenuCubit>()
-                                  .moveTo(EcoCoinMenuItems.OFFERNEWPOINT),
-                              iconData: EcoCoinIcons.addpointer,
-                            ),
-                            EcoCoinHorisontalDivider(),
-                            MenuItemWidget(
-                              name: "Ответить на вопросы из ЭкоГида",
-                              func: () => GetIt.I
-                                  .get<EcoCoinMenuCubit>()
-                                  .moveTo(EcoCoinMenuItems.ANSWERQUESTS),
-                              iconData: EcoCoinIcons.question,
-                            ),
-                            EcoCoinHorisontalDivider(),
-                            MenuItemWidget(
-                              name: "Порекомендуйте нас друзьям",
-                              func: () => GetIt.I
-                                  .get<EcoCoinMenuCubit>()
-                                  .moveTo(EcoCoinMenuItems.RECOMMEND),
-                              iconData: EcoCoinIcons.adduser,
-                            ),
-                            EcoCoinHorisontalDivider(),
-                            MenuItemWidget(
-                              name: "Оцените наше приложение\nв маркете",
-                              func: () => GetIt.I
-                                  .get<EcoCoinMenuCubit>()
-                                  .moveTo(EcoCoinMenuItems.FEEDBACK),
-                              iconData: EcoCoinIcons.reviews,
-                            )
-                          ],
+                        child: BlocBuilder<AuthBloc, AuthState>(
+                          bloc: GetIt.I.get<AuthBloc>(),
+                          builder: (context, state) {
+                            if (state is AuthStateGuestAcc) {
+                              return ListView(
+                                shrinkWrap: true,
+                                children: [
+                                  CommonCell(
+                                    onTap: globalStateBloc
+                                        .pickItem(GLobalStates.AUTH),
+                                      text: 'Авторизоваться',
+                                  )
+                                ],
+                              );
+                            }
+                            return ListView(
+                              shrinkWrap: true,
+                              children: [
+                                CommonCell(),
+                                MenuItemWidget(
+                                  name: "Магазин",
+                                  func: () => GetIt.I
+                                      .get<EcoCoinMenuCubit>()
+                                      .moveTo(EcoCoinMenuItems.STORE),
+                                  iconData: EcoCoinIcons.shoppingcart,
+                                ),
+                                EcoCoinHorisontalDivider(),
+                                MenuItemWidget(
+                                  name: "Сдать вторсырье",
+                                  func: () => GetIt.I
+                                      .get<EcoCoinMenuCubit>()
+                                      .moveTo(EcoCoinMenuItems.GIVEGARBAGE),
+                                  iconData: EcoCoinIcons.recyclebin,
+                                ),
+                                EcoCoinHorisontalDivider(),
+                                MenuItemWidget(
+                                  name: "Добавить новый пункт приема",
+                                  func: () => GetIt.I
+                                      .get<EcoCoinMenuCubit>()
+                                      .moveTo(EcoCoinMenuItems.OFFERNEWPOINT),
+                                  iconData: EcoCoinIcons.addpointer,
+                                ),
+                                EcoCoinHorisontalDivider(),
+                                MenuItemWidget(
+                                  name: "Ответить на вопросы из ЭкоГида",
+                                  func: () => GetIt.I
+                                      .get<EcoCoinMenuCubit>()
+                                      .moveTo(EcoCoinMenuItems.ANSWERQUESTS),
+                                  iconData: EcoCoinIcons.question,
+                                ),
+                                EcoCoinHorisontalDivider(),
+                                MenuItemWidget(
+                                  name: "Порекомендуйте нас друзьям",
+                                  func: () => GetIt.I
+                                      .get<EcoCoinMenuCubit>()
+                                      .moveTo(EcoCoinMenuItems.RECOMMEND),
+                                  iconData: EcoCoinIcons.adduser,
+                                ),
+                                EcoCoinHorisontalDivider(),
+                                MenuItemWidget(
+                                  name: "Оцените наше приложение\nв маркете",
+                                  func: () => GetIt.I
+                                      .get<EcoCoinMenuCubit>()
+                                      .moveTo(EcoCoinMenuItems.FEEDBACK),
+                                  iconData: EcoCoinIcons.reviews,
+                                )
+                              ],
+                            );
+                          },
                         ),
                       ))
                 ],

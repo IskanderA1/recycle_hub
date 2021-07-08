@@ -2,10 +2,15 @@ import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:recycle_hub/bloc/auth/auth_bloc.dart';
+import 'package:recycle_hub/bloc/nav_bar_cubit/nav_bar_cubit_cubit.dart';
+import 'package:recycle_hub/elements/common_button.dart';
+import 'package:recycle_hub/elements/common_text_button.dart';
 import 'package:recycle_hub/features/transactions/domain/state/transactions_admin_panel_state.dart/transactions_admin_panel_state.dart';
+import 'package:recycle_hub/style/theme.dart';
 
 class AdminScannerScreen extends StatefulWidget {
   const AdminScannerScreen({Key key}) : super(key: key);
@@ -26,7 +31,7 @@ class _AdminScannerScreenState extends State<AdminScannerScreen> {
   void reassemble() {
     super.reassemble();
     if (Platform.isAndroid) {
-      controller.pauseCamera();
+      controller.resumeCamera();
     } else if (Platform.isIOS) {
       controller.resumeCamera();
     }
@@ -35,30 +40,81 @@ class _AdminScannerScreenState extends State<AdminScannerScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
+      appBar: AppBar(
+        leading: IconButton(
+            icon: Icon(Icons.arrow_back, color: kColorWhite, size: 25),
+            onPressed: () => GetIt.I.get<NavBarCubit>().goBack()),
+        title: Text(
+          "QR Сканнер",
+          style: TextStyle(
+              color: kColorWhite,
+              fontSize: 18,
+              fontFamily: 'GillroyMedium',
+              fontWeight: FontWeight.bold),
+        ),
+        centerTitle: true,
+      ),
+      body: Stack(
         children: <Widget>[
-          Expanded(
-            flex: 5,
-            child: QRView(
-              key: qrKey,
-              onQRViewCreated: _onQRViewCreated,
-            ),
+          QRView(
+            key: qrKey,
+            onQRViewCreated: _onQRViewCreated,
+            overlay: QrScannerOverlayShape(
+                borderColor: kColorGreen, borderWidth: 4, cutOutSize: 300),
           ),
-          Expanded(
-            flex: 1,
-            child: InkWell(
-              onTap: () {
-                controller.resumeCamera();
-              },
-              child: Center(
-                child: (result != null)
-                    ? Text(
-                        'Barcode Type: ${describeEnum(result.format)}   Data: ${result.code}')
-                    : Text('Scan a code'),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              Text(
+                'Наведите камеру на QR код',
+                style: TextStyle(color: kColorWhite, fontSize: 18),
               ),
-            ),
+              Padding(
+                padding: const EdgeInsets.only(top: 16),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    CommonButton(
+                      width: 50,
+                      height: 50,
+                      padding: EdgeInsets.all(8),
+                      shape: BoxShape.circle,
+                      borderRadius: null,
+                      backGroundColor: kColorGreen,
+                      child: Icon(
+                        Icons.lightbulb_outline,
+                        color: kColorWhite,
+                        size: 32,
+                      ),
+                      ontap: (){
+                        controller.toggleFlash();
+                      },
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(left:16),
+                      child: CommonButton(
+                        width: 50,
+                        height: 50,
+                        padding: EdgeInsets.all(8),
+                        shape: BoxShape.circle,
+                        borderRadius: null,
+                        backGroundColor: kColorGreen,
+                        child: Icon(
+                          Icons.repeat,
+                          color: kColorWhite,
+                          size: 32,
+                        ),
+                        ontap: (){
+                          reassemble();
+                        },
+                      ),
+                    )
+                  ],
+                ),
+              ),
+              SizedBox(height: 120),
+            ],
           ),
-          SizedBox(height: 150),
         ],
       ),
     );

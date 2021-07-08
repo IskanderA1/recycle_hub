@@ -23,6 +23,8 @@ class AuthStateFirstIn extends AuthState {}
 
 class AuthStateLoading extends AuthState {}
 
+class AuthStateLoggedOut extends AuthState {}
+
 class AuthStateLogedIn extends AuthState {
   final UserModel user;
   final bool isAdmin;
