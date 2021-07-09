@@ -17,7 +17,7 @@ import 'package:recycle_hub/screens/tabs/profile/point_profile_screen.dart';
 import 'package:recycle_hub/screens/tabs/profile/profile_screen.dart';
 import 'package:recycle_hub/screens/tabs/profile/store_screen.dart';
 import 'package:recycle_hub/features/transactions/presentation/top_up_history_screen.dart';
-
+import 'package:recycle_hub/screens/tabs/profile/edit_point_profile_screen.dart';
 import '../../../features/transactions/presentation/statistic_screen.dart';
 
 class ProfileMenuScreen extends StatefulWidget {
@@ -82,6 +82,9 @@ class _ProfileMenuScreenState extends State<ProfileMenuScreen> {
                     break;
                   case ProfileMenuStates.INVITE:
                     return InviteScreen();
+                    break;
+                  case ProfileMenuStates.PointEdit:
+                    return EditPointProfileScreen();
                     break;
                   default:
                     return ProfileScreen();

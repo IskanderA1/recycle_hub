@@ -23,13 +23,14 @@ class FilterTypeAdapter extends TypeAdapter<FilterType> {
       keyWords: (fields[3] as List)?.cast<String>(),
       badWords: (fields[4] as List)?.cast<String>(),
       coinsPerUnit: fields[5] as double,
+      image: fields[6] as String,
     );
   }
 
   @override
   void write(BinaryWriter writer, FilterType obj) {
     writer
-      ..writeByte(6)
+      ..writeByte(7)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -41,7 +42,9 @@ class FilterTypeAdapter extends TypeAdapter<FilterType> {
       ..writeByte(4)
       ..write(obj.badWords)
       ..writeByte(5)
-      ..write(obj.coinsPerUnit);
+      ..write(obj.coinsPerUnit)
+      ..writeByte(6)
+      ..write(obj.image);
   }
 
   @override

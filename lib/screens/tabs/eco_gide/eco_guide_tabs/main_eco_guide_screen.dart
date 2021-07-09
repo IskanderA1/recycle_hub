@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get_it/get_it.dart';
+import 'package:recycle_hub/bloc/auth/auth_bloc.dart';
 import 'package:recycle_hub/bloc/eco_guide_blocs/eco_menu_bloc.dart';
 import 'package:recycle_hub/bloc/eco_guide_cubit/eco_guide_cubit_cubit.dart';
 import 'package:recycle_hub/icons/eco_guide_icons_icons.dart';
@@ -50,49 +52,57 @@ class _MainEcoGuideScreenState extends State<MainEcoGuideScreen> {
           centerTitle: true,
           iconTheme: IconThemeData(size: 1),
         ),
-        body: Container(
-          height: _size.height - 26,
-          width: _size.width,
-          margin: EdgeInsets.only(left: 20, right: 20, top: 20),
-          decoration: BoxDecoration(
-              color: kColorWhite, borderRadius: BorderRadius.circular(16)),
-          padding: EdgeInsets.all(16),
-          child: Column(
-            children: [
-              Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(12),
-                  color: kColorGreyVeryLight,
-                ),
-                child: TextField(
-                  decoration: InputDecoration(
-                      border: InputBorder.none,
-                      focusedBorder: InputBorder.none,
-                      enabledBorder: InputBorder.none,
-                      errorBorder: InputBorder.none,
-                      disabledBorder: InputBorder.none,
-                      suffixIcon: Icon(
-                        Icons.search_outlined,
-                        color: kColorBlack,
-                      ),
-                      hintText: "Что вы хотите сдать",
-                      contentPadding: EdgeInsets.only(left: 16, top: 14)),
-                  controller: widget._searchController,
-                ),
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              Column(
+        body: BlocConsumer<AuthBloc, AuthState>(
+          bloc: GetIt.I.get<AuthBloc>(),
+          listener: (context, state) {
+            // TODO: implement listener
+          },
+          builder: (context, state) {
+            return Container(
+              height: _size.height - 26,
+              width: _size.width,
+              margin: EdgeInsets.only(left: 20, right: 20, top: 20),
+              decoration: BoxDecoration(
+                  color: kColorWhite, borderRadius: BorderRadius.circular(16)),
+              padding: EdgeInsets.all(16),
+              child: Column(
                 children: [
-                  buildBtn("Виды отходов", 0),
-                  buildBtn("Справочник маркировок", 1),
-                  buildBtn("Советы для экономии", 2),
-                  buildBtn("Пройти тест", 3)
+                  Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(12),
+                      color: kColorGreyVeryLight,
+                    ),
+                    child: TextField(
+                      decoration: InputDecoration(
+                          border: InputBorder.none,
+                          focusedBorder: InputBorder.none,
+                          enabledBorder: InputBorder.none,
+                          errorBorder: InputBorder.none,
+                          disabledBorder: InputBorder.none,
+                          suffixIcon: Icon(
+                            Icons.search_outlined,
+                            color: kColorBlack,
+                          ),
+                          hintText: "Что вы хотите сдать",
+                          contentPadding: EdgeInsets.only(left: 16, top: 14)),
+                      controller: widget._searchController,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Column(
+                    children: [
+                      buildBtn("Виды отходов", 0),
+                      buildBtn("Справочник маркировок", 1),
+                      buildBtn("Советы для экономии", 2),
+                      if (state is AuthStateLogedIn) buildBtn("Пройти тест", 3)
+                    ],
+                  )
                 ],
-              )
-            ],
-          ),
+              ),
+            );
+          },
         ),
       ),
     );

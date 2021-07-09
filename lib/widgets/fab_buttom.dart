@@ -9,6 +9,7 @@ import 'package:recycle_hub/bloc/eco_guide_cubit/eco_guide_cubit_cubit.dart';
 import 'package:recycle_hub/bloc/nav_bar_cubit/nav_bar_cubit_cubit.dart';
 import 'package:recycle_hub/elements/custom_bottom_sheet.dart';
 import 'package:recycle_hub/icons/nav_bar_icons_icons.dart';
+import 'package:recycle_hub/model/user_model.dart';
 import 'package:recycle_hub/screens/qr_scanner_screen.dart';
 import 'package:recycle_hub/style/theme.dart';
 import 'package:auto_size_text/auto_size_text.dart';
@@ -67,8 +68,10 @@ class _BottomNavBarV2State extends State<BottomNavBarV2> {
                       onPressed: () {
                         AuthState state = authBLoc.state;
                         if (state is AuthStateLogedIn) {
-                          if (state.isAdmin) {
-                            GetIt.I.get<NavBarCubit>().moveTo(NavBarItem.QRSCANNER);
+                          if (state.user.userType == UserTypes.admin) {
+                            GetIt.I
+                                .get<NavBarCubit>()
+                                .moveTo(NavBarItem.QRSCANNER);
                             return;
                           }
                         }
@@ -129,8 +132,12 @@ class _BottomNavBarV2State extends State<BottomNavBarV2> {
                         unselectedIconThemeData: widget.unselectedIconThemeData,
                         isActive: widget.currentItem == 1 ? true : false,
                         ontap: () {
-                          GetIt.I.get<NavBarCubit>().moveTo(NavBarItem.ECO_GIDE);
-                          GetIt.I.get<EcoGuideCubit>().moveTo(EcoGuideMenuItem.MENU);
+                          GetIt.I
+                              .get<NavBarCubit>()
+                              .moveTo(NavBarItem.ECO_GIDE);
+                          GetIt.I
+                              .get<EcoGuideCubit>()
+                              .moveTo(EcoGuideMenuItem.MENU);
                         },
                       ),
                       SizedBox(
@@ -147,8 +154,12 @@ class _BottomNavBarV2State extends State<BottomNavBarV2> {
                         unselectedIconThemeData: widget.unselectedIconThemeData,
                         isActive: widget.currentItem == 2 ? true : false,
                         ontap: () {
-                          GetIt.I.get<EcoCoinMenuCubit>().moveTo(EcoCoinMenuItems.MENU);
-                          GetIt.I.get<NavBarCubit>().moveTo(NavBarItem.ECO_COIN);
+                          GetIt.I
+                              .get<EcoCoinMenuCubit>()
+                              .moveTo(EcoCoinMenuItems.MENU);
+                          GetIt.I
+                              .get<NavBarCubit>()
+                              .moveTo(NavBarItem.ECO_COIN);
                         },
                       ),
                       IconButtonV2(
@@ -162,7 +173,9 @@ class _BottomNavBarV2State extends State<BottomNavBarV2> {
                         unselectedIconThemeData: widget.unselectedIconThemeData,
                         isActive: widget.currentItem == 3 ? true : false,
                         ontap: () {
-                          GetIt.I.get<ProfileMenuCubit>().moveTo(ProfileMenuStates.MENU);
+                          GetIt.I
+                              .get<ProfileMenuCubit>()
+                              .moveTo(ProfileMenuStates.MENU);
                           GetIt.I.get<NavBarCubit>().moveTo(NavBarItem.PROFILE);
                         },
                       ),

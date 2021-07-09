@@ -7,7 +7,9 @@ import 'package:recycle_hub/bloc/cubit/profile_menu_cubit.dart';
 import 'package:recycle_hub/bloc/global_state_bloc.dart';
 import 'package:recycle_hub/elements/common_cell.dart';
 import 'package:recycle_hub/icons/user_profile_icons_icons.dart';
+import 'package:recycle_hub/model/user_model.dart';
 import 'package:recycle_hub/screens/authorisation_and_registration/auth_screen.dart';
+import 'package:recycle_hub/screens/tabs/profile/point_profile_screen.dart';
 import 'package:recycle_hub/style/theme.dart';
 
 List<IconData> svgIcons = [
@@ -50,6 +52,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return BlocBuilder<AuthBloc, AuthState>(
       bloc: GetIt.I.get<AuthBloc>(),
       builder: (context, state) {
+        if(state is AuthStateLogedIn && state.user.userType == UserTypes.admin){
+          return PointProfileScreen();
+        }
         return Scaffold(
           body: Container(
             height: _size.height,
@@ -66,8 +71,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       SizedBox(
                         height: 17,
                       ),
-                      buildProfileAvatar(userState.userModel.name, "ЭКОЛОГ",
-                          userState.userModel.image),
+                      buildProfileAvatar(state.userModel.name, "ЭКОЛОГ",
+                          state.userModel.image),
                       SizedBox(
                         height: 24,
                       ),
@@ -86,7 +91,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           padding: EdgeInsets.only(
                               bottom: _size.height * 0.05, top: 5),
                           children: [
-                            if (userState is AuthStateGuestAcc)
+                            if (state is AuthStateGuestAcc)
                               CommonCell(
                                 text: 'Авторизоваться',
                                 onTap: () {
@@ -96,14 +101,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                           builder: (context) => AuthScreen()));
                                 },
                               ),
-                            if (userState is AuthStateLogedIn)
+                            if (state is AuthStateLogedIn)
                               buildAchievments(
                                   "Эколог", UserService().garbageGiven),
-                            if (userState is AuthStateLogedIn)
+                            if (state is AuthStateLogedIn)
                               SizedBox(
                                 height: 10,
                               ),
-                            if (userState is AuthStateLogedIn)
+                            if (state is AuthStateLogedIn)
                               buildMenu(authBloc)
                           ],
                         ),

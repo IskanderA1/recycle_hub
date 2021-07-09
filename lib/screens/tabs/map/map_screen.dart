@@ -10,6 +10,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_star_rating/flutter_star_rating.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:get_it/get_it.dart';
 import 'package:google_maps_cluster_manager/google_maps_cluster_manager.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
@@ -50,7 +51,7 @@ class _MapScreenState extends State<MapScreen> {
   @override
   void initState() {
     getCurrentPosition();
-    mapBloc = BlocProvider.of<MapBloc>(context);
+    mapBloc = GetIt.I.get<MapBloc>();
     super.initState();
   }
 
@@ -75,10 +76,11 @@ class _MapScreenState extends State<MapScreen> {
             }
 
             if (previous is MapStateLoaded && current is MapStateLoaded) {
-              if (previous.markers == null || current.markers == null) {
+              /* if (previous.markers == null || current.markers == null) {
                 return true;
               }
-              return previous.markers.length == current.markers.length;
+              return previous.markers.length != current.markers.length; */
+              return true;
             }
             return true;
           },
@@ -189,6 +191,7 @@ class _GoogleMapWidgetState extends State<GoogleMapWidget> {
   Iterable<ClusterItem> _items;
   CameraPosition _cameraPosition =
       CameraPosition(target: LatLng(55.4727, 49.0652));
+  StreamSubscription<MapState> _mapSub;
 
   void _updateMarkers(Set<Marker> markers) {
     print('Updated ${markers.length} markers');
@@ -254,6 +257,18 @@ class _GoogleMapWidgetState extends State<GoogleMapWidget> {
     );
     clusterManager.onCameraMove(_cameraPosition);
     clusterManager.setItems(_items);
+    _mapSub = GetIt.I.get<MapBloc>().stream.listen((state) {
+      if (state is MapStateLoaded) {
+        setState(() {
+          _items = state.markers
+              .map((markItem) => ClusterItem(
+                  LatLng(markItem.coords[0], markItem.coords[1]),
+                  item: markItem))
+              .toList();
+        });
+        clusterManager.setItems(_items);
+      }
+    });
     super.initState();
   }
 

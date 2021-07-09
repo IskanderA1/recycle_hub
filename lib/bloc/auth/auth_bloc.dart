@@ -27,9 +27,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         name: 'bloc.auth_bloc.bloc');
     if (event is AuthEventInit) {
       yield* _mapInitToState();
-    } /* else if (event is AuthEventSwitchFirstIn) {
+    } else if (event is AuthEventSwitchFirstIn) {
       yield* _mapSwitchFirstToState();
-    }  */
+    } 
     else if (event is AuthEventLogin) {
       yield* _mapLoginToState(event);
     } else if (event is AuthEventLogout) {
@@ -54,7 +54,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         if (user != null) {
           StaticData.user.value = user;
           if (userService.isAdmin) {
-            yield AuthStateLogedIn(user: user, isAdmin: true);
+            yield AuthStateLogedIn(user: user);
           } else {
             yield AuthStateLogedIn(user: user);
           }
@@ -101,7 +101,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         if (user != null) {
           Settings().isFirstLaunch = false;
           if (userService.isAdmin) {
-            yield AuthStateLogedIn(user: user, isAdmin: true);
+            yield AuthStateLogedIn(user: user);
           } else {
             yield AuthStateLogedIn(user: user);
           }

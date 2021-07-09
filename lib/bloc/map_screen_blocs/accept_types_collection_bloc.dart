@@ -1,10 +1,10 @@
-import 'package:recycle_hub/api/services/map_service.dart';
+import 'package:recycle_hub/api/services/points_service.dart';
 import 'package:recycle_hub/model/map_responses/accept_types_collection_response.dart';
 import 'package:recycle_hub/api/google_map_repo.dart';
 import 'package:rxdart/rxdart.dart';
 
 class AcceptTypesCollectionBloc {
-  MapService _service = MapService();
+  PointsService _service = PointsService();
   BehaviorSubject<AcceptTypesCollectionResponse> _behaviorSubject =
       BehaviorSubject<AcceptTypesCollectionResponse>();
 

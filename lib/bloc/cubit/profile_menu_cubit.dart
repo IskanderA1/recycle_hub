@@ -1,7 +1,9 @@
 import 'package:bloc/bloc.dart';
 import 'package:get_it/get_it.dart';
+import 'package:recycle_hub/bloc/auth/auth_bloc.dart';
 import 'package:recycle_hub/bloc/eco_coin_menu/eco_coin_menu_cubit.dart';
 import 'package:recycle_hub/bloc/nav_bar_cubit/nav_bar_cubit_cubit.dart';
+import 'package:recycle_hub/model/user_model.dart';
 
 enum ProfileMenuStates {
   MENU,
@@ -15,7 +17,12 @@ enum ProfileMenuStates {
   EDITPROFILE,
   MYPURCHASES,
   TOPUPSHISTORY,
-  INVITE
+  INVITE,
+
+  PointEdit,
+  PointWriteNews,
+  PointStatistic,
+  PointAchievments,
 }
 
 class ProfileMenuCubit extends Cubit<ProfileMenuStates> {
@@ -24,8 +31,12 @@ class ProfileMenuCubit extends Cubit<ProfileMenuStates> {
   List<ProfileMenuStates> _lasts = [];
 
   void moveTo(ProfileMenuStates screen) {
-    if (screen == null) {
-      emit(ProfileMenuStates.MENU);
+    if (screen == null &&
+        GetIt.I.get<AuthBloc>().state.userModel.userType == UserTypes.admin) {
+      emit(ProfileMenuStates.POINT_PROFILE);
+      return;
+    } else if (screen == null) {
+      emit(ProfileMenuStates.POINT_PROFILE);
       return;
     }
     emit(screen);
@@ -37,7 +48,10 @@ class ProfileMenuCubit extends Cubit<ProfileMenuStates> {
       GetIt.I.get<NavBarCubit>().goBack();
     } else {
       _lasts.removeLast();
-      if (_lasts.isEmpty) {
+      if (_lasts.isEmpty &&
+          GetIt.I.get<AuthBloc>().state.userModel.userType == UserTypes.admin) {
+        emit(ProfileMenuStates.POINT_PROFILE);
+      } else if (_lasts.isEmpty) {
         emit(ProfileMenuStates.MENU);
       } else {
         emit(_lasts.last);

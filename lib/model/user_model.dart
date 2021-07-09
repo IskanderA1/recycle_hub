@@ -6,45 +6,38 @@ import 'dart:convert';
 
 import 'package:hive/hive.dart';
 
-part 'user_model.g.dart';
+//part 'user_model.g.dart';
 
-@HiveType(typeId: 0)
+//@HiveType(typeId: 0)
+
+enum UserTypes { user, admin, moder, guest }
+
 class UserModel {
-  UserModel({
-    this.id,
-    this.username,
-    this.name,
-    this.confirmed,
-    this.ecoCoins,
-    this.freezeEcoCoins,
-    this.token,
-    this.inviteCode,
-    this.role,
-    this.attachedRecPointId,
-    this.image,
-  });
-  @HiveField(0)
+  UserModel(
+      {this.id,
+      this.username,
+      this.name,
+      this.confirmed,
+      this.ecoCoins,
+      this.freezeEcoCoins,
+      this.token,
+      this.inviteCode,
+      this.role,
+      this.attachedRecPointId,
+      this.image,
+      this.userType});
   String id;
-  @HiveField(1)
   String username;
-  @HiveField(2)
   String name;
-  @HiveField(3)
   bool confirmed;
-  @HiveField(4)
   int ecoCoins;
-  @HiveField(5)
   int freezeEcoCoins;
-  @HiveField(6)
   String token;
-  @HiveField(7)
   String inviteCode;
-  @HiveField(8)
   String role;
-  @HiveField(9)
   String attachedRecPointId;
-  @HiveField(10)
   String image;
+  UserTypes userType;
 
   UserModel copyWith({
     String id,
@@ -85,6 +78,7 @@ class UserModel {
         role: '__',
         attachedRecPointId: '__',
         image: null,
+        userType: UserTypes.guest
       );
 
   factory UserModel.fromJson(String str) => UserModel.fromMap(json.decode(str));
@@ -92,21 +86,27 @@ class UserModel {
   String toJson() => json.encode(toMap());
 
   factory UserModel.fromMap(Map<String, dynamic> json) => UserModel(
-        id: json["id"] == null ? null : json["id"],
-        username: json["username"] == null ? null : json["username"],
-        name: json["name"] == null ? null : json["name"],
-        confirmed: json["confirmed"] == null ? null : json["confirmed"],
-        ecoCoins: json["eco_coins"] == null ? null : json["eco_coins"],
-        freezeEcoCoins:
-            json["freeze_eco_coins"] == null ? null : json["freeze_eco_coins"],
-        token: json["token"] == null ? null : json["token"],
-        inviteCode: json["invite_code"] == null ? null : json["invite_code"],
-        role: json["role"] == null ? null : json["role"],
-        attachedRecPointId: json["attached_rec_point_id"] == null
-            ? null
-            : json["attached_rec_point_id"],
-        image: json["image"] == null ? null : json["image"],
-      );
+      id: json["id"] == null ? null : json["id"],
+      username: json["username"] == null ? null : json["username"],
+      name: json["name"] == null ? null : json["name"],
+      confirmed: json["confirmed"] == null ? null : json["confirmed"],
+      ecoCoins: json["eco_coins"] == null ? null : json["eco_coins"],
+      freezeEcoCoins:
+          json["freeze_eco_coins"] == null ? null : json["freeze_eco_coins"],
+      token: json["token"] == null ? null : json["token"],
+      inviteCode: json["invite_code"] == null ? null : json["invite_code"],
+      role: json["role"] == null ? null : json["role"],
+      attachedRecPointId: json["attached_rec_point_id"] == null
+          ? null
+          : json["attached_rec_point_id"],
+      image: json["image"] == null ? null : json["image"],
+      userType: json["role"] == null
+          ? UserTypes.user
+          : json["role"] == 'admin_pp'
+              ? UserTypes.admin
+              : json["role"] == 'user'
+                  ? UserTypes.user
+                  : UserTypes.moder);
 
   Map<String, dynamic> toMap() => {
         "id": id == null ? null : id,

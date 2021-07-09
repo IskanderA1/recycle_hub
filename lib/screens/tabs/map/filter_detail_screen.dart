@@ -3,12 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
+import 'package:get_it/get_it.dart';
 
 import 'package:recycle_hub/bloc/garb_collection_type_bloc.dart';
 import 'package:recycle_hub/bloc/map/map_bloc.dart';
 import 'package:recycle_hub/bloc/map_screen_blocs/accept_types_collection_bloc.dart';
 import 'package:recycle_hub/bloc/map_screen_blocs/markers_collection_bloc.dart';
 import 'package:recycle_hub/bloc/marker_work_mode_bloc.dart';
+import 'package:recycle_hub/model/map_models.dart/accept_types.dart';
 import 'package:recycle_hub/model/map_models.dart/accept_types_collection_model.dart';
 import 'package:recycle_hub/model/map_models.dart/filter_model.dart';
 import 'package:recycle_hub/model/map_responses/accept_types_collection_response.dart';
@@ -38,7 +40,7 @@ class _MapFilterDetailScreenState extends State<MapFilterDetailScreen> {
 
   @override
   void initState() {
-    mapBloc = BlocProvider.of<MapBloc>(context);
+    mapBloc = GetIt.I.get<MapBloc>();
     acceptTypesCollectionBloc.loadAcceptTypes();
     super.initState();
   }
@@ -94,8 +96,7 @@ class _MapFilterDetailScreenState extends State<MapFilterDetailScreen> {
                       onSuggestionSelected: (String suggestion) {
                         selectCardByVarName(acceptTypesCollection
                             .getVarNameByKeyWord(suggestion));
-                        currentFilterModel.filters.add(acceptTypesCollection
-                            .getVarNameByKeyWord(suggestion));
+                        currentFilterModel.filters.add(acceptTypesCollection.acceptTypes.firstWhere((element) => element.varName == suggestion));
                       },
                     ),
                   ),
@@ -184,7 +185,7 @@ class _MapFilterDetailScreenState extends State<MapFilterDetailScreen> {
                     alignment: Alignment.bottomCenter,
                     child: GestureDetector(
                       onTap: () {
-                        //markersCollectionBloc.filterMarkers(currentFilterModel);
+                        mapBloc.add(MapEventFilter(filter: currentFilterModel));
                         Navigator.pop(context);
                       },
                       child: ConstrainedBox(
@@ -225,12 +226,12 @@ class _MapFilterDetailScreenState extends State<MapFilterDetailScreen> {
     }
   }
 
-  injectNewVarName(String suggestion) {
-    this.currentFilterModel.filters.add(suggestion);
+  injectNewVarName(FilterType type) {
+    this.currentFilterModel.filters.add(type);
   }
 
-  rejectVarName(String suggestion) {
-    this.currentFilterModel.filters.remove(suggestion);
+  rejectVarName(FilterType type) {
+    this.currentFilterModel.filters.remove(type);
   }
 
   void acceptFilters() {

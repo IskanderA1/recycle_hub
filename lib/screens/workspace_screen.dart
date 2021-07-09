@@ -44,7 +44,7 @@ class _WorkSpaceState extends State<WorkSpaceScreen> {
   @override
   void initState() {
     FilterTypesService().getFilters();
-    mapBloc = MapBloc()..add(MapEventInit());
+    mapBloc = GetIt.I.get<MapBloc>()..add(MapEventInit());
     _currentInd = 0;
     storeBloc ??= StoreBloc()..add(StoreEventInit());
     screenWidgets = [
@@ -57,15 +57,15 @@ class _WorkSpaceState extends State<WorkSpaceScreen> {
       Container(),
       Container(),
     ];
-    streamSubscription = GetIt.I.get<NavBarCubit>().stream.listen((event) {
+    streamSubscription = GetIt.I.get<NavBarCubit>().stream.listen((state) {
       setState(() {
-        if (event == NavBarItem.MAP) {
+        if (state == NavBarItem.MAP) {
           _currentInd = 0;
-        } else if (event == NavBarItem.ECO_GIDE) {
+        } else if (state == NavBarItem.ECO_GIDE) {
           _currentInd = 1;
-        } else if (event == NavBarItem.ECO_COIN) {
+        } else if (state == NavBarItem.ECO_COIN) {
           _currentInd = 2;
-        } else if (event == NavBarItem.QRSCANNER) {
+        } else if (state == NavBarItem.QRSCANNER) {
           _currentInd = 4;
         } else {
           _currentInd = 3;
@@ -75,6 +75,7 @@ class _WorkSpaceState extends State<WorkSpaceScreen> {
         }
       });
     });
+    GetIt.I.get<NavBarCubit>().moveTo(NavBarItem.MAP);
     super.initState();
   }
 
@@ -137,10 +138,10 @@ class _WorkSpaceState extends State<WorkSpaceScreen> {
             return false;
             break;
           case NavBarItem.ECO_COIN:
-          GetIt.I.get<EcoCoinMenuCubit>().goBack();
+            GetIt.I.get<EcoCoinMenuCubit>().goBack();
             break;
           case NavBarItem.PROFILE:
-          GetIt.I.get<ProfileMenuCubit>().goBack();
+            GetIt.I.get<ProfileMenuCubit>().goBack();
             break;
         }
         return false;

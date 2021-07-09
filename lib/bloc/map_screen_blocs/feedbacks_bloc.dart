@@ -1,10 +1,10 @@
-import 'package:recycle_hub/api/services/map_service.dart';
+import 'package:recycle_hub/api/services/points_service.dart';
 import 'package:recycle_hub/model/map_responses/feedbacks_collection_response.dart';
 import 'package:recycle_hub/api/google_map_repo.dart';
 import 'package:rxdart/rxdart.dart';
 
 class FeedBacksBloc {
-  MapService _repo = MapService();
+  PointsService _repo = PointsService();
   BehaviorSubject<FeedBackCollectionResponse> _behaviorSubject =
       BehaviorSubject<FeedBackCollectionResponse>();
 

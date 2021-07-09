@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:dio/dio.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:hive/hive.dart';
 import 'package:recycle_hub/api/request/request.dart';
@@ -12,19 +13,19 @@ import 'package:recycle_hub/model/map_responses/feedbacks_collection_response.da
 import 'package:recycle_hub/model/map_responses/markers_response.dart';
 import 'dart:developer' as developer;
 
-class MapService {
-  static MapService _instance = MapService._();
+class PointsService {
+  static PointsService _instance = PointsService._();
   static const _boxTimeKey = 'map.markers.lastTime';
   static const _boxListKey = 'map.markers.list';
   static const _boxKey = 'map.markers';
   static const _devLog = 'api.services.map_service';
   Box _box;
 
-  MapService._() {
+  PointsService._() {
     openBox();
   }
 
-  factory MapService() {
+  factory PointsService() {
     return _instance;
   }
 
@@ -41,8 +42,8 @@ class MapService {
   Future<List<CustMarker>> loadMarkersFrom4Coords(LatLng latLng) async {
     await _checkBox();
     try {
-      /*DateTime lastDownLoad =
-          _box.get('lastTime', defaultValue: DateTime(2020, 12, 21));
+      DateTime lastDownLoad =
+          _box.get(_boxTimeKey, defaultValue: DateTime(2020, 12, 21));
       Duration dur = DateTime.now().difference(lastDownLoad);
       if (dur < Duration(minutes: 1)) {
         List<CustMarker> localList = List<CustMarker>.from(
@@ -52,7 +53,7 @@ class MapService {
               name: _devLog);
           return localList;
         }
-      }*/
+      }
 
       print("Запрос отправлен");
       var response = await CommonRequest.makeRequest('rec_points',
@@ -77,7 +78,7 @@ class MapService {
           list[0].coords[1] + 0.00005
         ]));
         _box.put(_boxListKey, list);
-        _box.put('lastTime', DateTime.now());
+        _box.put(_boxTimeKey, DateTime.now());
         return list;
       } else {
         throw Exception("Список пуст");
@@ -93,7 +94,6 @@ class MapService {
     _checkBox();
     try {
       Hive.openBox(_boxKey);
-      Hive.openBox(_boxKey);
       DateTime lastDownLoad =
           _box.get(_boxTimeKey, defaultValue: DateTime(2020, 12, 21));
       Duration dur = DateTime.now().difference(lastDownLoad);
@@ -108,10 +108,10 @@ class MapService {
               .toList();
         }
         if (model.filters.isNotEmpty) {
-          for (String filter in model.filters) {
+          for (FilterType filter in model.filters) {
             localList = localList.where((element) {
               for (String item in element.acceptTypes) {
-                if (item == filter) return true;
+                if (item == filter.id) return true;
               }
               return false;
             }).toList();
@@ -172,8 +172,8 @@ class MapService {
   Future<AcceptTypesCollectionResponse> getAcceptTypes() async {
     try {
       developer.log("Do GetAcceptTypes Request", name: _devLog);
-      var response = await CommonRequest.makeRequest('filters',
-      needAuthorization: false);
+      var response =
+          await CommonRequest.makeRequest('filters', needAuthorization: false);
       var data = jsonDecode(response.body);
       print(data);
       if (data.isNotEmpty) {
@@ -238,5 +238,31 @@ class MapService {
     //var data = json.encode(source);
     return Future.delayed(Duration(milliseconds: 300),
         () => FeedBackCollectionResponseOk(source));
+  }
+
+  Future<CustMarker> getPoint(String id) async {
+    try {
+      var response = await CommonRequest.makeRequest('rec_points/$id');
+      var data = jsonDecode(response.body);
+      print(data);
+      if (response.statusCode == 200) {
+        return CustMarker.fromMap(data);
+      } else
+        return null;
+    } catch (e) {
+      print(e.toString());
+      return null;
+    }
+  }
+
+  Future<void> sendPointInfo(CustMarker point) async {
+    try {
+      final response = await CommonRequest.makeRequest('rec_offer/${point.id}',
+          method: CommonRequestMethod.post, body: point.toJson());
+      var data = jsonDecode(response.body);
+      print(data);
+    } catch (e) {
+      rethrow;
+    }
   }
 }

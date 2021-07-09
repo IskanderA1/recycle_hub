@@ -4,42 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_star_rating/flutter_star_rating.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get_it/get_it.dart';
+import 'package:recycle_hub/bloc/auth/auth_bloc.dart';
 import 'package:recycle_hub/bloc/cubit/profile_menu_cubit.dart';
+import 'package:recycle_hub/elements/common_cell.dart';
+import 'package:recycle_hub/icons/user_profile_icons_icons.dart';
 import 'package:recycle_hub/style/theme.dart';
 
-
-List<Widget> svgIcons = [
-  SvgPicture.asset(
-    "svg/profile_2.svg",
-    height: 30,
-    width: 30,
-    color: kColorGreyDark,
-  ),
-  SvgPicture.asset(
-    "svg/profile_4.svg",
-    height: 30,
-    width: 30,
-    color: kColorGreyDark,
-  ),
-  SvgPicture.asset(
-    "svg/profile_5.svg",
-    height: 30,
-    width: 30,
-    color: kColorGreyDark,
-  ),
-  SvgPicture.asset(
-    "svg/profile_6.svg",
-    height: 30,
-    width: 30,
-    color: kColorGreyDark,
-  ),
-  SvgPicture.asset(
-    "svg/profile_7.svg",
-    height: 30,
-    width: 30,
-    color: kColorGreyDark,
-  ),
-];
+List<Widget> svgIcons = [];
 
 class PointProfileScreen extends StatefulWidget {
   @override
@@ -62,7 +33,9 @@ class _PointProfileScreenState extends State<PointProfileScreen> {
             color: kColorWhite,
           ),
           onPressed: () {
-            GetIt.I.get<ProfileMenuCubit>().moveTo(ProfileMenuStates.USER_PROFILE);
+            GetIt.I
+                .get<ProfileMenuCubit>()
+                .moveTo(ProfileMenuStates.USER_PROFILE);
           },
         ),
       ),
@@ -87,8 +60,8 @@ class _PointProfileScreenState extends State<PointProfileScreen> {
             ),
             Container(
               child: ListView(
-                padding: EdgeInsets.only(
-                    left: 17, right: 17, top: 10, bottom: 100),
+                padding:
+                    EdgeInsets.only(left: 17, right: 17, top: 10, bottom: 100),
                 children: [
                   buildPointProfile(
                       "Пункт приёма Советский", "ООО НПП РИСАЛ", _size),
@@ -99,7 +72,70 @@ class _PointProfileScreenState extends State<PointProfileScreen> {
                   SizedBox(
                     height: 10,
                   ),
-                  buildMenu(_size.height * 0.5)
+                  Container(
+                    padding: EdgeInsets.only(right: 17, left: 17, bottom: 10),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(16),
+                        color: kColorWhite),
+                    child: ListView(
+                      shrinkWrap: true,
+                      children: [
+                        CommonCell(
+                          onTap: () {
+                            GetIt.I
+                                .get<ProfileMenuCubit>()
+                                .moveTo(ProfileMenuStates.PointEdit);
+                          },
+                          prefixIcon: Icon(
+                            UserProfileIcons.user,
+                            color: kColorGreyDark,
+                          ),
+                          text: 'Редактировать профиль',
+                          arrowColor: kColorGreyDark,
+                        ),
+                        CommonCell(
+                          onTap: () {
+                            
+                          },
+                          prefixIcon: Icon(
+                            UserProfileIcons.user,
+                            color: kColorGreyDark,
+                          ),
+                          text: 'Написать новости',
+                          arrowColor: kColorGreyDark,
+                        ),
+                        CommonCell(
+                          onTap: () {},
+                          prefixIcon: Icon(
+                            UserProfileIcons.pie_chart,
+                            color: kColorGreyDark,
+                          ),
+                          text: 'Статистика',
+                          arrowColor: kColorGreyDark,
+                        ),
+                        CommonCell(
+                          onTap: () {},
+                          prefixIcon: Icon(
+                            UserProfileIcons.achievement,
+                            color: kColorGreyDark,
+                          ),
+                          text: 'Достижения',
+                          arrowColor: kColorGreyDark,
+                        ),
+                        CommonCell(
+                          onTap: () {
+                            GetIt.I.get<AuthBloc>().add(AuthEventLogout());
+                          },
+                          prefixIcon: Icon(
+                            UserProfileIcons.log_out,
+                            color: kColorGreyDark,
+                          ),
+                          text: 'Выйти',
+                          arrowColor: kColorGreyDark,
+                        )
+                      ],
+                    ),
+                  ),
                 ],
               ),
             ),

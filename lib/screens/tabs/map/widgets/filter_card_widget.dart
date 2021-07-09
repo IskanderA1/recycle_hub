@@ -9,8 +9,8 @@ import 'dialog_container.dart';
 
 class FilterCardWidget extends StatefulWidget {
   final FilterType acceptType;
-  final Function onpressed;
-  final Function onUp;
+  final Function(FilterType type) onpressed;
+  final Function(FilterType type) onUp;
   final bool tapable;
   bool isSelected;
   FilterCardWidget(
@@ -36,7 +36,7 @@ class FilterCardWidgetState extends State<FilterCardWidget> {
       onTap: () {
         if (widget.tapable) {
           if (widget.isSelected) {
-            widget.onUp(widget.acceptType.varName);
+            widget.onUp(widget.acceptType);
             setState(() {
               widget.isSelected = false;
             });
@@ -108,7 +108,7 @@ class FilterCardWidgetState extends State<FilterCardWidget> {
   }
 
   void pressFunc() {
-    widget.onpressed(widget.acceptType.varName);
+    widget.onpressed(widget.acceptType);
     setState(() {
       widget.isSelected = true;
     });

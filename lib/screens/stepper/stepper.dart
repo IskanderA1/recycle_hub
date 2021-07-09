@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get_it/get_it.dart';
+import 'package:recycle_hub/bloc/auth/auth_bloc.dart';
 import 'package:recycle_hub/bloc/global_state_bloc.dart';
 import 'package:recycle_hub/screens/authorisation_and_registration/auth_screen.dart';
 import 'package:recycle_hub/screens/stepper/page3.dart';
@@ -140,10 +142,11 @@ class _WellcomePageStepperState extends State<WellcomePageStepper> {
                     } else {
                       /*Navigator.push(context,
                       MaterialPageRoute(builder: (context) => AuthScreen()));*/
-                      Navigator.push(
+                      /* Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => WorkSpaceScreen()));
+                              builder: (context) => WorkSpaceScreen())); */
+                      GetIt.I.get<AuthBloc>().add(AuthEventSwitchFirstIn());
                     }
                   },
                 )),

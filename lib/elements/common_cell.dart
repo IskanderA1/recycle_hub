@@ -4,7 +4,7 @@ import 'package:recycle_hub/style/theme.dart';
 class CommonCell extends StatelessWidget {
   CommonCell(
       {this.onTap,
-      this.iconData,
+      this.prefixIcon,
       this.text,
       this.arrowColor = kColorBlack,
       this.textColor = kColorBlack,
@@ -14,7 +14,7 @@ class CommonCell extends StatelessWidget {
       this.padding = const EdgeInsets.all(0)});
 
   final Function onTap;
-  final IconData iconData;
+  final Widget prefixIcon;
   final String text;
   final Color arrowColor;
   final Color textColor;
@@ -38,13 +38,7 @@ class CommonCell extends StatelessWidget {
             mainAxisAlignment: mainAxisAlignment,
             crossAxisAlignment: crossAxisAlignment,
             children: [
-              Container(
-                  height: 30,
-                  width: 30,
-                  child: Icon(
-                    iconData,
-                    color: kColorGreyDark,
-                  )),
+              Container(height: 30, width: 30, child: prefixIcon),
               SizedBox(
                 width: 5,
               ),

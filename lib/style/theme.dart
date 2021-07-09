@@ -25,7 +25,20 @@ ThemeData kAppThemeData() {
           color: Color(0xFFF2F2F2),
           //size: 20
         ),
+        centerTitle: true,
+        titleTextStyle: TextStyle(
+            color: kColorWhite,
+            fontSize: 18,
+            fontFamily: 'GillroyMedium',
+            fontWeight: FontWeight.bold),
         color: kColorGreen,
+      ),
+      textTheme: TextTheme(
+        headline6: TextStyle(
+          color: kColorGreyDark,
+          fontSize: 14,
+          fontFamily: 'GilroyMedium'
+        )
       ),
       bottomNavigationBarTheme: BottomNavigationBarThemeData(
         selectedIconTheme: IconThemeData(color: kColorGreen, size: 23),

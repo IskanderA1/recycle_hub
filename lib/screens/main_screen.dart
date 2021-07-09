@@ -8,6 +8,7 @@ import 'package:recycle_hub/bloc/nav_bar_cubit/nav_bar_cubit_cubit.dart';
 import 'package:recycle_hub/elements/loader.dart';
 import 'package:recycle_hub/helpers/messager_helper.dart';
 import 'package:recycle_hub/screens/stepper/stepper.dart';
+import 'package:recycle_hub/screens/tabs/map/widgets/loader_widget.dart';
 import 'package:recycle_hub/screens/workspace_screen.dart';
 import 'authorisation_and_registration/authorisation_main_screen.dart';
 
@@ -56,39 +57,15 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return WorkSpaceScreen();
-    /* BlocProvider<AuthBloc>.value(
-      value: authBloc,
-      child: StreamBuilder(
-          stream: globalStateBloc.subject,
-          // ignore: missing_return
-          builder: (context, AsyncSnapshot<GLobalStates> snapshot) {
-            if (snapshot.hasData) {
-              /*if (snapshot.data.error != null &&
-                  snapshot.data.error.length > 0) {
-                if (snapshot.data.error == "Loading") {
-                  return buildLoadingWidget();
-                }
-                if (snapshot.data.error == "Авторизуйтесь") {
-                  //TODO: Заменить на AuthScreen после того как сделаем
-                  return WorkSpaceScreen();
-                }
-                //TODO: Заменить на AuthScreen после того как сделаем
-                return WorkSpaceScreen();
-              }*/
-              if (snapshot.data == GLobalStates.FIRSTIN) {
-                return WellcomePageStepper();
-              } else if (snapshot.data == GLobalStates.AUTH) {
-                return AuthorisationMainScreen();
-              } else if (snapshot.data == GLobalStates.TABS) {
-                return WorkSpaceScreen();
-              }
-            } else if (snapshot.hasError) {
-              return buildLoadingWidget();
-            } else {
-              return buildLoadingWidget();
-            }
-          }),
-    ); */
+    return BlocBuilder(
+        bloc: authBloc,
+        builder: (context, state) {
+          if (state is AuthStateFirstIn) {
+            return WellcomePageStepper();
+          } else if (state is AuthStateLoading) {
+            return LoaderWidget();
+          } else
+            return WorkSpaceScreen();
+        });
   }
 }

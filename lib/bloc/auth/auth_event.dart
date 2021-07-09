@@ -9,6 +9,8 @@ abstract class AuthEvent extends Equatable {
 
 class AuthEventInit extends AuthEvent {}
 
+class AuthEventSwitchFirstIn extends AuthEvent {}
+
 /* class AuthEventRegister extends AuthEvent {
   final String name;
   final String surname;

@@ -11,6 +11,7 @@ import 'package:recycle_hub/bloc/cubit/profile_menu_cubit.dart';
 import 'package:recycle_hub/bloc/eco_coin_menu/eco_coin_menu_cubit.dart';
 import 'package:recycle_hub/bloc/eco_guide_cubit/eco_guide_cubit_cubit.dart';
 import 'package:recycle_hub/bloc/eco_test_bloc/eco_test_bloc.dart';
+import 'package:recycle_hub/bloc/map/map_bloc.dart';
 import 'package:recycle_hub/bloc/nav_bar_cubit/nav_bar_cubit_cubit.dart';
 import 'package:recycle_hub/bloc/recovery_bloc/recovery_bloc.dart';
 import 'package:recycle_hub/bloc/registration/registration_bloc.dart';
@@ -38,7 +39,7 @@ Future<void> main() async {
   ///flutter packages pub run build_runner build --delete-conflicting-outputs
   Directory directory = await getApplicationDocumentsDirectory();
   Hive.init(directory.path);
-  Hive.registerAdapter(UserModelAdapter());
+  //Hive.registerAdapter(UserModelAdapter());
   Hive.registerAdapter(CustMarkerAdapter());
   Hive.registerAdapter(WorkDayAdapter());
   Hive.registerAdapter(WorkingTimeAdapter());
@@ -55,6 +56,7 @@ Future<void> main() async {
   GetIt.I.registerSingleton<AuthBloc>(AuthBloc()..add(AuthEventInit()));
   GetIt.I.registerSingleton<RegistrationBloc>(RegistrationBloc());
   GetIt.I.registerSingleton<RecoveryBloc>(RecoveryBloc());
+  GetIt.I.registerSingleton<MapBloc>(MapBloc());
   GetIt.I.registerSingleton<ProfileMenuCubit>(ProfileMenuCubit());
   GetIt.I.registerSingleton<EcoTestBloc>(EcoTestBloc(ProfileRepository()));
   runApp(
@@ -80,7 +82,7 @@ class MyApp extends StatelessWidget {
         theme: kAppThemeData(),
         initialRoute: '/',
         routes: {
-          '/': (context) => WorkSpaceScreen(),
+          '/': (context) => MainScreen(),
           '/auth': (context) => AuthScreen(),
           '/error': (context) => ErrorScreen()
         },

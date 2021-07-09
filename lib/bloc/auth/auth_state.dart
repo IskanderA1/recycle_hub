@@ -27,9 +27,8 @@ class AuthStateLoggedOut extends AuthState {}
 
 class AuthStateLogedIn extends AuthState {
   final UserModel user;
-  final bool isAdmin;
 
-  AuthStateLogedIn({@required this.user, this.isAdmin = false});
+  AuthStateLogedIn({@required this.user});
 
   @override
   UserModel get userModel => this.user;
