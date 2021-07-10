@@ -1,13 +1,13 @@
-import 'package:recycle_hub/model/eco_guide_models/filter_model.dart';
+import 'package:recycle_hub/model/map_models.dart/accept_types.dart';
 
 class FilterResponse {
-  final List<FilterModel> filterModels;
+  final List<FilterType> filterModels;
   final String error;
 
   FilterResponse(this.filterModels, this.error);
 
   FilterResponse.fromJson(var json)
-      : filterModels = json.map((element) => new FilterModel.fromJson(element)),
+      : filterModels = json.map((element) => new FilterType.fromJson(element)),
         error = "";
   FilterResponse.withError(String errorValue)
       : filterModels = List(),

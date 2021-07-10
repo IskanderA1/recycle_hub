@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get_it/get_it.dart';
-import 'package:recycle_hub/bloc/eco_guide_blocs/eco_menu_bloc.dart';
+import 'package:recycle_hub/api/services/news_service.dart';
 import 'package:recycle_hub/bloc/eco_guide_cubit/eco_guide_cubit_cubit.dart';
-import 'advice_details.dart';
-import '../../../../style/theme.dart';
+import 'package:recycle_hub/model/news.dart';
+import 'package:recycle_hub/elements/news_container.dart';
 
 class AdviceScreen extends StatefulWidget {
   @override
@@ -12,6 +11,15 @@ class AdviceScreen extends StatefulWidget {
 }
 
 class _AdviceScreenState extends State<AdviceScreen> {
+  List<News> newsList;
+  ScrollController _scrollController = ScrollController();
+
+  @override
+  void initState() {
+    newsList = NewsService().news;
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,208 +33,98 @@ class _AdviceScreenState extends State<AdviceScreen> {
           },
         ),
       ),
-      body: Container(
-        height: MediaQuery.of(context).size.height-150,
-        child: ListView(
-          children: [
-            Container(
-              padding: EdgeInsets.only(left: 10, right: 10, top: 5),
-              margin: EdgeInsets.only(bottom: 5),
-              child: Column(
-                children: [
-                  Container(
-                    child: Wrap(
-                      spacing: 5,
-                      children: [
-                        Container(
-                          child: RaisedButton(
-                            elevation: 0,
-                            color: Colors.grey[300],
-                            textColor: Colors.black,
-                            disabledTextColor: Colors.white,
-                            highlightColor: Color(0xFF249507),
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10)),
-                            onPressed: () {},
-                            child: Text("Все"),
-                          ),
+      body: ListView(
+        shrinkWrap: true,
+        controller: _scrollController,
+        children: [
+          Container(
+            padding: EdgeInsets.only(left: 10, right: 10, top: 5),
+            margin: EdgeInsets.only(bottom: 5),
+            child: Column(
+              children: [
+                Container(
+                  child: Wrap(
+                    spacing: 5,
+                    children: [
+                      Container(
+                        child: RaisedButton(
+                          elevation: 0,
+                          color: Colors.grey[300],
+                          textColor: Colors.black,
+                          disabledTextColor: Colors.white,
+                          highlightColor: Color(0xFF249507),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10)),
+                          onPressed: () {},
+                          child: Text("Все"),
                         ),
-                        Container(
-                          child: RaisedButton(
-                            elevation: 0,
-                            color: Colors.grey[300],
-                            highlightColor: Color(0xFF249507),
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10)),
-                            onPressed: () {},
-                            child: Text("Утилизация"),
-                          ),
+                      ),
+                      Container(
+                        child: RaisedButton(
+                          elevation: 0,
+                          color: Colors.grey[300],
+                          highlightColor: Color(0xFF249507),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10)),
+                          onPressed: () {},
+                          child: Text("Утилизация"),
                         ),
-                        Container(
-                          child: RaisedButton(
-                            elevation: 0,
-                            color: Colors.grey[300],
-                            highlightColor: Color(0xFF249507),
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10)),
-                            onPressed: () {},
-                            child: Text("Экономика"),
-                          ),
+                      ),
+                      Container(
+                        child: RaisedButton(
+                          elevation: 0,
+                          color: Colors.grey[300],
+                          highlightColor: Color(0xFF249507),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10)),
+                          onPressed: () {},
+                          child: Text("Экономика"),
                         ),
-                        Container(
-                          child: RaisedButton(
-                            elevation: 0,
-                            color: Colors.grey[300],
-                            highlightColor: Color(0xFF249507),
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10)),
-                            onPressed: () {},
-                            child: Text("Электричество"),
-                          ),
+                      ),
+                      Container(
+                        child: RaisedButton(
+                          elevation: 0,
+                          color: Colors.grey[300],
+                          highlightColor: Color(0xFF249507),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10)),
+                          onPressed: () {},
+                          child: Text("Электричество"),
                         ),
-                        Container(
-                          child: RaisedButton(
-                            elevation: 0,
-                            color: Colors.grey[300],
-                            highlightColor: Color(0xFF249507),
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10)),
-                            onPressed: () {},
-                            child: Text("Экономика"),
-                          ),
+                      ),
+                      Container(
+                        child: RaisedButton(
+                          elevation: 0,
+                          color: Colors.grey[300],
+                          highlightColor: Color(0xFF249507),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10)),
+                          onPressed: () {},
+                          child: Text("Экономика"),
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.push(context, MaterialPageRoute(
-                        builder: (context) {
-                          return AdviceDetails();
-                        },
-                      ));
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(
+                    bottom: 80
+                  ),
+                  child: ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: newsList.length,
+                    controller: _scrollController,
+                    itemBuilder: (context, i) {
+                      return NewsContainer(
+                        news: newsList[i],
+                      );
                     },
-                    child: Container(
-                      margin: EdgeInsets.only(bottom: 10),
-                      height: 400,
-                      child: Card(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10)),
-                        child: Column(
-                          children: [
-                            Expanded(
-                                child: Hero(
-                              tag: "first_image",
-                              child: Image.network(
-                                  "https://www.accenture.com/t20200128T032529Z__w__/lu-en/_acnmedia/Accenture/Redesign-Assets/DotCom/Images/Global/Thumbnail400x400/8/Accenture-australian-water-utility-blue-400x400.jpg",
-                                  ),
-                              
-                            )),
-                            Expanded(
-                                child: Container(
-                              padding: EdgeInsets.all(10),
-                              child: Column(
-                                children: [
-                                  Text(
-                                    "Как и зачем экономить воду?",
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 20),
-                                  ),
-                                  SizedBox(
-                                    height: 5,
-                                  ),
-                                  Wrap(children: [
-                                    Text(
-                                        "  Вода – незаменимый источник существования каждого человека. Однако неэкономное использованиеэтого незаменимого и важного ресурса, в большинстве странах, может привести к нарушению стабильности в экосистемах...")
-                                  ]),
-                                  SizedBox(
-                                    height: 10,
-                                  ),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(
-                                        "19.01.2021",
-                                        style:
-                                            TextStyle(color: kColorGreyLight),
-                                      ),
-                                      Text(
-                                        "Поподробнее",
-                                        style:
-                                            TextStyle(color: kColorGreyLight),
-                                      )
-                                    ],
-                                  )
-                                ],
-                              ),
-                            ))
-                          ],
-                        ),
-                      ),
-                    ),
                   ),
-                  Container(
-                    margin: EdgeInsets.only(bottom: 10),
-                    height: 400,
-                    child: Card(
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10)),
-                      child: Column(
-                        children: [
-                          Expanded(
-                              child: Image.network(
-                                  "https://www.accenture.com/t20200128T032529Z__w__/lu-en/_acnmedia/Accenture/Redesign-Assets/DotCom/Images/Global/Thumbnail400x400/8/Accenture-australian-water-utility-blue-400x400.jpg")),
-                          Expanded(
-                              child: Container(
-                            padding: EdgeInsets.all(10),
-                            child: Column(
-                              children: [
-                                Text(
-                                  "Как и зачем экономить воду?",
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 20),
-                                ),
-                                SizedBox(
-                                  height: 5,
-                                ),
-                                Wrap(children: [
-                                  Text(
-                                      "  Вода – незаменимый источник существования каждого человека. Однако неэкономное использованиеэтого незаменимого и важного ресурса, в большинстве странах, может привести к нарушению стабильности в экосистемах...")
-                                ]),
-                                SizedBox(
-                                  height: 10,
-                                ),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      "19.01.2021",
-                                      style:
-                                          TextStyle(color: kColorGreyLight),
-                                    ),
-                                    Text(
-                                      "Поподробнее",
-                                      style:
-                                          TextStyle(color: kColorGreyLight),
-                                    )
-                                  ],
-                                )
-                              ],
-                            ),
-                          ))
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+                )
+              ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

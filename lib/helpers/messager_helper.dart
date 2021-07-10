@@ -2,11 +2,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:recycle_hub/style/theme.dart';
 
-void showMessage({BuildContext context, String message}) {
+void showMessage({BuildContext context, String message, Color backColor = kColorRed}) {
   var snackBar = SnackBar(
     shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.all(Radius.circular(25))),
-    backgroundColor: kColorRed,
+    backgroundColor: backColor,
     elevation: 3.0,
     margin: EdgeInsets.fromLTRB(30, 0, 30, 30),
     behavior: SnackBarBehavior.floating,

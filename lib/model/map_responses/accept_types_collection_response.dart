@@ -1,4 +1,4 @@
-import 'dart:convert';
+/* import 'dart:convert';
 import 'package:recycle_hub/model/map_models.dart/accept_types_collection_model.dart';
 
 class AcceptTypesCollectionResponse {
@@ -37,3 +37,4 @@ class AcceptTypesCollectionResponseOk extends AcceptTypesCollectionResponse {
   AcceptTypesCollectionResponseOk(String sourse)
       : super.fromMap(json.decode(sourse));
 }
+ */

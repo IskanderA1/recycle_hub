@@ -13,6 +13,7 @@ import 'package:recycle_hub/screens/offer_new_point.dart';
 import 'package:recycle_hub/screens/tabs/profile/invite_friend_scren.dart';
 import 'package:recycle_hub/screens/tabs/profile/my_purchases_screen.dart';
 import 'package:recycle_hub/screens/tabs/profile/my_purse_screen.dart';
+import 'package:recycle_hub/screens/tabs/profile/offer_news_screen.dart';
 import 'package:recycle_hub/screens/tabs/profile/point_profile_screen.dart';
 import 'package:recycle_hub/screens/tabs/profile/profile_screen.dart';
 import 'package:recycle_hub/screens/tabs/profile/store_screen.dart';
@@ -85,6 +86,9 @@ class _ProfileMenuScreenState extends State<ProfileMenuScreen> {
                     break;
                   case ProfileMenuStates.PointEdit:
                     return EditPointProfileScreen();
+                    break;
+                  case ProfileMenuStates.PointWriteNews:
+                    return OfferNewsScreen();
                     break;
                   default:
                     return ProfileScreen();

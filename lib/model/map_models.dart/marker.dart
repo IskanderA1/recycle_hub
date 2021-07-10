@@ -136,9 +136,9 @@ class CustMarker {
         "coords":
             coords == null ? null : List<dynamic>.from(coords.map((x) => x)),
         "description": description == null ? null : description,
-        "getBonus": getBonus == null ? null : getBonus,
+        "getBonus": getBonus == null ? null : getBonus,/* 
         "images":
-            images == null ? null : List<dynamic>.from(images.map((x) => x)),
+            images == null ? null : List<dynamic>.from(images.map((x) => x)), */
       };
 }
 

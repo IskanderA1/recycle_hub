@@ -6,8 +6,8 @@ import 'package:recycle_hub/bloc/eco_guide_blocs/eco_menu_bloc.dart';
 import 'package:recycle_hub/bloc/eco_guide_blocs/trash_details_bloc.dart';
 import 'package:recycle_hub/bloc/eco_guide_cubit/eco_guide_cubit_cubit.dart';
 import 'package:recycle_hub/elements/loader.dart';
-import 'package:recycle_hub/model/eco_guide_models/filter_model.dart';
 import 'package:recycle_hub/model/eco_guide_models/filter_response.dart';
+import 'package:recycle_hub/model/map_models.dart/accept_types.dart';
 import '../../../../bloc/eco_guide_blocs/trash_details_bloc.dart';
 import '../../../../style/theme.dart';
 
@@ -125,7 +125,7 @@ class _buildContainerView extends StatelessWidget {
 }
 
 Widget _buildContainerList(FilterResponse filterResponse, int screenIndex) {
-  List<FilterModel> filterModels = filterResponse.filterModels;
+  List<FilterType> filterModels = filterResponse.filterModels;
   print(filterModels[0].name);
   return StreamBuilder(
       stream: switchButtonBloc.switchButtonController.stream,
@@ -340,11 +340,11 @@ Widget _buildContainerList(FilterResponse filterResponse, int screenIndex) {
 }
 
 class _buildContainerListView extends StatelessWidget {
-  List<FilterModel> filterModels;
+  List<FilterType> filterModels;
   StateButtons stateButtons;
   int screenIndex;
   Widget properties;
-  _buildContainerListView(List<FilterModel> filterModels,
+  _buildContainerListView(List<FilterType> filterModels,
       StateButtons stateButtons, int screenIndex) {
     this.filterModels = filterModels;
     this.stateButtons = stateButtons;

@@ -28,7 +28,7 @@ import 'model/map_models.dart/coord.dart';
 import 'model/map_models.dart/marker.dart';
 import 'model/map_models.dart/work_day.dart';
 import 'model/map_models.dart/work_time.dart';
-import 'model/user_model.dart';
+import 'package:recycle_hub/bloc/filter_type_cubit.dart';
 import 'model/transactions/user_transaction_model.dart';
 
 Future<void> main() async {
@@ -57,6 +57,8 @@ Future<void> main() async {
   GetIt.I.registerSingleton<RegistrationBloc>(RegistrationBloc());
   GetIt.I.registerSingleton<RecoveryBloc>(RecoveryBloc());
   GetIt.I.registerSingleton<MapBloc>(MapBloc());
+  GetIt.I
+      .registerSingleton<FilterTypeCubit>(FilterTypeCubit()..loadFilterTypes());
   GetIt.I.registerSingleton<ProfileMenuCubit>(ProfileMenuCubit());
   GetIt.I.registerSingleton<EcoTestBloc>(EcoTestBloc(ProfileRepository()));
   runApp(

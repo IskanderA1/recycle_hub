@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:get_it/get_it.dart';
-import 'package:recycle_hub/bloc/eco_guide_cubit/eco_guide_cubit_cubit.dart';
+import 'package:recycle_hub/model/news.dart';
 
-class AdviceDetails extends StatefulWidget {
-  @override
-  _AdviceDetailsState createState() => _AdviceDetailsState();
-}
+class AdviceDetails extends StatelessWidget {
+  final News news;
+  AdviceDetails({@required this.news});
 
-class _AdviceDetailsState extends State<AdviceDetails> {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -42,7 +39,7 @@ class _AdviceDetailsState extends State<AdviceDetails> {
                       height: 10,
                     ),
                     Text(
-                      "Как и зачем экономить воду?",
+                      news.title,
                       style:
                           TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
                     ),
@@ -50,8 +47,7 @@ class _AdviceDetailsState extends State<AdviceDetails> {
                       height: 10,
                     ),
                     Wrap(children: [
-                      Text(
-                          "Вода – незаменимый источник существования каждого человека. Однако неэкономное использование этого незаменимого и важного ресурса, в большинстве странах, может привести к нарушению стабильности в экосистемах. Установка счетчиков на воду может решить проблему с беспечной растратой столь важного ресурса. Плохой уровень экологической обстановки, неразумная эксплуатация рек и озер, чрезмерное расходование воды приводит к уменьшению количества воды и значительно ухудшает ее качество. Сегодня общий расход воды намного превышает темпы прироста человечества. Специалисты уже подсчитали, что если ситуация останется такой же, то через пару десятков лет около двух третей населения нашей планеты начнут испытывать нехватку воды. Как бы невероятно это не звучало, но установка счетчиков воды может существенно изменить ситуацию, так как каждый собственник жилья сможет лично контролировать расход воды. Когда человек видит, сколько он тратит и сколько он платит за потраченную воду впустую, то начинает проявлять бережное отношение к столь важным."),
+                      Text(news.text),
                     ])
                   ],
                 ),

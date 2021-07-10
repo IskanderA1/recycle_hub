@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:mobx/mobx.dart';
 import 'package:provider/provider.dart';
+import 'package:recycle_hub/api/services/news_service.dart';
 import 'package:recycle_hub/bloc/cubit/profile_menu_cubit.dart';
 import 'package:recycle_hub/bloc/eco_coin_menu/eco_coin_menu_cubit.dart';
 import 'package:recycle_hub/bloc/eco_guide_cubit/eco_guide_cubit_cubit.dart';
@@ -43,6 +44,7 @@ class _WorkSpaceState extends State<WorkSpaceScreen> {
   List<Widget> screenWidgets;
   @override
   void initState() {
+    NewsService().loadNews();
     FilterTypesService().getFilters();
     mapBloc = GetIt.I.get<MapBloc>()..add(MapEventInit());
     _currentInd = 0;

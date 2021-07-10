@@ -95,7 +95,9 @@ class _PointProfileScreenState extends State<PointProfileScreen> {
                         ),
                         CommonCell(
                           onTap: () {
-                            
+                            GetIt.I
+                                .get<ProfileMenuCubit>()
+                                .moveTo(ProfileMenuStates.PointWriteNews);
                           },
                           prefixIcon: Icon(
                             UserProfileIcons.user,

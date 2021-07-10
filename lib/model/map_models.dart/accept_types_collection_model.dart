@@ -4,13 +4,19 @@ import 'package:flutter/foundation.dart';
 
 import 'package:recycle_hub/model/map_models.dart/accept_types.dart';
 
-class AcceptTypesCollection {
+class FilterTypesCollection {
   List<FilterType> acceptTypes;
   List<String> acceptTypesStrings;
-  AcceptTypesCollection({
+  FilterTypesCollection({
     this.acceptTypes,
     this.acceptTypesStrings,
   });
+
+  factory FilterTypesCollection.fromFilterTypes(List<FilterType> acceptTypes) {
+    final list = List<String>.from(acceptTypes.map((e) => e.name));
+    return FilterTypesCollection(
+        acceptTypes: acceptTypes, acceptTypesStrings: list);
+  }
 
   List<String> getPatterns(String pattern) {
     List<String> patterns = List<String>();
@@ -39,11 +45,11 @@ class AcceptTypesCollection {
     }
   }
 
-  AcceptTypesCollection copyWith({
+  FilterTypesCollection copyWith({
     List<FilterType> acceptTypes,
     List<String> acceptTypesStrings,
   }) {
-    return AcceptTypesCollection(
+    return FilterTypesCollection(
       acceptTypes: acceptTypes ?? this.acceptTypes,
       acceptTypesStrings: acceptTypesStrings ?? this.acceptTypesStrings,
     );
@@ -56,25 +62,25 @@ class AcceptTypesCollection {
     };
   }
 
-  AcceptTypesCollection.fromMap(List<dynamic> map)
-      : this.acceptTypes = List<FilterType>.from(
-            map?.map((x) => FilterType.fromMap(x))),
+  FilterTypesCollection.fromMap(List<dynamic> map)
+      : this.acceptTypes =
+            List<FilterType>.from(map?.map((x) => FilterType.fromMap(x))),
         this.acceptTypesStrings = List<String>.from(map?.map((x) => "$x"));
 
   String toJson() => json.encode(toMap());
 
-  factory AcceptTypesCollection.fromJson(String source) =>
-      AcceptTypesCollection.fromMap(json.decode(source));
+  factory FilterTypesCollection.fromJson(String source) =>
+      FilterTypesCollection.fromMap(json.decode(source));
 
   @override
   String toString() =>
-      'AcceptTypesCollection(acceptTypes: $acceptTypes, acceptTypesStrings: $acceptTypesStrings)';
+      'FilterTypesCollection(acceptTypes: $acceptTypes, acceptTypesStrings: $acceptTypesStrings)';
 
   @override
   bool operator ==(Object o) {
     if (identical(this, o)) return true;
 
-    return o is AcceptTypesCollection &&
+    return o is FilterTypesCollection &&
         listEquals(o.acceptTypes, acceptTypes) &&
         listEquals(o.acceptTypesStrings, acceptTypesStrings);
   }

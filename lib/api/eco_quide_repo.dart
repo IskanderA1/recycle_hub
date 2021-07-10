@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
-import 'package:recycle_hub/model/eco_guide_models/filter_model.dart';
 import 'package:recycle_hub/model/eco_guide_models/filter_response.dart';
+import 'package:recycle_hub/model/map_models.dart/accept_types.dart';
 
 class EcoGuideRepository {
   String containerMainUrl = "eco.loliallen.com/";
@@ -82,9 +82,9 @@ class EcoGuideRepository {
           "bad_words": []
         },
       ];
-      List<FilterModel> filterModel = [];
+      List<FilterType> filterModel = [];
       for (int i = 0; i < response.length; i++) {
-        filterModel.add(FilterModel.fromJson(response[i]));
+        filterModel.add(FilterType.fromJson(response[i]));
       }
       return FilterResponse(filterModel,"");
     } catch (error, stack) {

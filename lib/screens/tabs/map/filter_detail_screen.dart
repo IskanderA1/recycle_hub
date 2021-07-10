@@ -4,16 +4,13 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:get_it/get_it.dart';
-
 import 'package:recycle_hub/bloc/garb_collection_type_bloc.dart';
 import 'package:recycle_hub/bloc/map/map_bloc.dart';
-import 'package:recycle_hub/bloc/map_screen_blocs/accept_types_collection_bloc.dart';
-import 'package:recycle_hub/bloc/map_screen_blocs/markers_collection_bloc.dart';
+import 'package:recycle_hub/bloc/filter_type_cubit.dart';
 import 'package:recycle_hub/bloc/marker_work_mode_bloc.dart';
 import 'package:recycle_hub/model/map_models.dart/accept_types.dart';
 import 'package:recycle_hub/model/map_models.dart/accept_types_collection_model.dart';
 import 'package:recycle_hub/model/map_models.dart/filter_model.dart';
-import 'package:recycle_hub/model/map_responses/accept_types_collection_response.dart';
 import 'package:recycle_hub/screens/tabs/map/widgets/filter_card_widget.dart';
 import 'package:recycle_hub/screens/tabs/map/widgets/loader_widget.dart';
 import 'package:recycle_hub/style/theme.dart';
@@ -30,7 +27,7 @@ class _MapFilterDetailScreenState extends State<MapFilterDetailScreen> {
   final TextEditingController _searchController = TextEditingController();
   Size size;
   MapFilterModel currentFilterModel = MapFilterModel();
-  AcceptTypesCollection acceptTypesCollection;
+  FilterTypesCollection filterTypesCollection;
   List<FilterCardWidget> filterCards;
   GarbageCollectionTypeBloc garbageCollBloc = GarbageCollectionTypeBloc();
   MarkerWorkModeBloc markerWorkModeBloc = MarkerWorkModeBloc();
@@ -41,7 +38,8 @@ class _MapFilterDetailScreenState extends State<MapFilterDetailScreen> {
   @override
   void initState() {
     mapBloc = GetIt.I.get<MapBloc>();
-    acceptTypesCollectionBloc.loadAcceptTypes();
+    filterTypesCollection = FilterTypesCollection.fromFilterTypes(
+        GetIt.I.get<FilterTypeCubit>().state);
     super.initState();
   }
 
@@ -86,7 +84,7 @@ class _MapFilterDetailScreenState extends State<MapFilterDetailScreen> {
                         cursorColor: kColorBlack,
                       ),
                       suggestionsCallback: (str) {
-                        return acceptTypesCollection.getPatterns(str);
+                        return filterTypesCollection.getPatterns(str);
                       },
                       itemBuilder: (BuildContext context, suggestion) {
                         return ListTile(
@@ -94,9 +92,11 @@ class _MapFilterDetailScreenState extends State<MapFilterDetailScreen> {
                         );
                       },
                       onSuggestionSelected: (String suggestion) {
-                        selectCardByVarName(acceptTypesCollection
+                        selectCardByVarName(filterTypesCollection
                             .getVarNameByKeyWord(suggestion));
-                        currentFilterModel.filters.add(acceptTypesCollection.acceptTypes.firstWhere((element) => element.varName == suggestion));
+                        currentFilterModel.filters.add(
+                            filterTypesCollection.acceptTypes.firstWhere(
+                                (element) => element.varName == suggestion));
                       },
                     ),
                   ),
@@ -111,70 +111,44 @@ class _MapFilterDetailScreenState extends State<MapFilterDetailScreen> {
                 ),
                 Expanded(
                   child: Container(
-                    child: StreamBuilder(
-                      stream: acceptTypesCollectionBloc.stream,
-                      //future: acceptTypesCollectionBloc.loadAcceptTypes(),
-                      initialData: acceptTypesCollectionBloc.defaultItem,
-                      builder: (BuildContext context,
-                          AsyncSnapshot<AcceptTypesCollectionResponse>
-                              snapshot) {
-                        if (snapshot.hasData) {
-                          if (snapshot.data
-                              is AcceptTypesCollectionResponseLoading) {
-                            return LoaderWidget();
-                          } else if (snapshot.data
-                              is AcceptTypesCollectionResponseWithError) {
-                            return Align(
-                              alignment: Alignment.center,
-                              child: Text(snapshot.data.error),
-                            );
-                          } else if (snapshot.data
-                              is AcceptTypesCollectionResponseOk) {
-                            double _size = MediaQuery.of(context).size.width;
-                            filterCards = List<FilterCardWidget>.from(snapshot
-                                .data.acceptTypes.acceptTypes
-                                .map((x) => FilterCardWidget(
-                                      //key: _key,
-                                      isSelected: false,
-                                      acceptType: x,
-                                      size: _size,
-                                      onUp: rejectVarName,
-                                      onpressed: injectNewVarName,
-                                      tapable: true,
-                                    )));
-                            if (acceptTypesCollection == null) {
-                              acceptTypesCollection = snapshot.data.acceptTypes;
-                            }
-                            return GridView.count(
-                              /*gridDelegate:
-                                  SliverGridDelegateWithFixedCrossAxisCount(
-                                      crossAxisSpacing: 5,
-                                      mainAxisSpacing: 5,
-                                      childAspectRatio: 5 / 4,
-                                      crossAxisCount: 2),
-                              itemCount:
-                                  snapshot.data.acceptTypes.acceptTypes.length,*/
-                              crossAxisCount: 2,
-                              childAspectRatio: 5 / 4,
-                              children: filterCards,
-                              /*itemBuilder: (context, index) {
-                                return FilterCardWidget(
-                                  acceptType: snapshot
-                                      .data.acceptTypes.acceptTypes[index],
+                    child: BlocBuilder<FilterTypeCubit, List<FilterType>>(
+                      bloc: GetIt.I.get<FilterTypeCubit>(),
+                      builder: (context, List<FilterType> state) {
+                        double _size = MediaQuery.of(context).size.width;
+                        filterCards = List<FilterCardWidget>.from(
+                            state.map((x) => FilterCardWidget(
+                                  //key: _key,
+                                  isSelected: false,
+                                  acceptType: x,
                                   size: _size,
-                                  onpressed: injectNewVarName,
                                   onUp: rejectVarName,
+                                  onpressed: injectNewVarName,
                                   tapable: true,
-                                );
-                              },*/
-                            );
-                          }
-                        } else {
-                          return Center(
-                            child: Text(snapshot.error),
-                          );
-                        }
-                        return Container();
+                                )));
+
+                        return GridView.count(
+                          /*gridDelegate:
+                                                      SliverGridDelegateWithFixedCrossAxisCount(
+                                                          crossAxisSpacing: 5,
+                                                          mainAxisSpacing: 5,
+                                                          childAspectRatio: 5 / 4,
+                                                          crossAxisCount: 2),
+                                                  itemCount:
+                                                      snapshot.data.acceptTypes.acceptTypes.length,*/
+                          crossAxisCount: 2,
+                          childAspectRatio: 5 / 4,
+                          children: filterCards,
+                          /*itemBuilder: (context, index) {
+                                                    return FilterCardWidget(
+                                                      acceptType: snapshot
+                                                          .data.acceptTypes.acceptTypes[index],
+                                                      size: _size,
+                                                      onpressed: injectNewVarName,
+                                                      onUp: rejectVarName,
+                                                      tapable: true,
+                                                    );
+                                                  },*/
+                        );
                       },
                     ),
                   ),

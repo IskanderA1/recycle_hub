@@ -1,21 +1,19 @@
 import 'dart:convert';
-
-import 'package:dio/dio.dart';
+import 'dart:io';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:hive/hive.dart';
 import 'package:recycle_hub/api/request/request.dart';
 import 'package:recycle_hub/model/map_models.dart/accept_types.dart';
-import 'package:recycle_hub/model/map_models.dart/coord.dart';
 import 'package:recycle_hub/model/map_models.dart/filter_model.dart';
 import 'package:recycle_hub/model/map_models.dart/marker.dart';
-import 'package:recycle_hub/model/map_responses/accept_types_collection_response.dart';
 import 'package:recycle_hub/model/map_responses/feedbacks_collection_response.dart';
-import 'package:recycle_hub/model/map_responses/markers_response.dart';
 import 'dart:developer' as developer;
 
 class PointsService {
   static PointsService _instance = PointsService._();
   static const _boxTimeKey = 'map.markers.lastTime';
+  static const _boxTimeFiltersKey = 'map.markers.filtersLastTime';
+  static const _boxFiltersListKey = 'map.markers.filtersList';
   static const _boxListKey = 'map.markers.list';
   static const _boxKey = 'map.markers';
   static const _devLog = 'api.services.map_service';
@@ -91,9 +89,8 @@ class PointsService {
   }
 
   Future<List<CustMarker>> getMarkersByFilter(MapFilterModel model) async {
-    _checkBox();
+    await _checkBox();
     try {
-      Hive.openBox(_boxKey);
       DateTime lastDownLoad =
           _box.get(_boxTimeKey, defaultValue: DateTime(2020, 12, 21));
       Duration dur = DateTime.now().difference(lastDownLoad);
@@ -169,22 +166,29 @@ class PointsService {
     }
   }
 
-  Future<AcceptTypesCollectionResponse> getAcceptTypes() async {
+  Future<List<FilterType>> getAcceptTypes() async {
+    await _checkBox();
     try {
       developer.log("Do GetAcceptTypes Request", name: _devLog);
+      /*  DateTime lastLoadTime
+      List<FilterType> localFilters = _box.get(_boxFiltersListKey); */
       var response =
           await CommonRequest.makeRequest('filters', needAuthorization: false);
       var data = jsonDecode(response.body);
       print(data);
       if (data.isNotEmpty) {
-        return AcceptTypesCollectionResponseOk(response.body);
+        final filters =
+            List<FilterType>.from(data.map((e) => FilterType.fromMap(e)));
+        /* _box.put(_boxFiltersListKey, filters); */
+
+        return filters;
       } else {
-        return AcceptTypesCollectionResponseWithError("Список пуст");
+        return [];
       }
     } catch (error, stacktrace) {
       developer.log("Exception occured: $error stackTrace: $stacktrace",
           name: _devLog);
-      return AcceptTypesCollectionResponseOk(error.toString());
+      return [];
     }
   }
 
@@ -255,14 +259,22 @@ class PointsService {
     }
   }
 
-  Future<void> sendPointInfo(CustMarker point) async {
+  Future<void> sendPointInfo(CustMarker point, List<File> images) async {
     try {
       final response = await CommonRequest.makeRequest('rec_offer/${point.id}',
-          method: CommonRequestMethod.post, body: point.toJson());
+          method: CommonRequestMethod.put, body: point.toJson());
       var data = jsonDecode(response.body);
       print(data);
+      if (response.statusCode == 200) {
+        /* final imagesResponse = await CommonRequest.makeRequest('rec_offer/${point.id}/images',
+        body: ); */
+      } else {
+        throw Exception('Не удалось сохранить изменения');
+      }
     } catch (e) {
       rethrow;
     }
   }
+
+  Future<void> sendImage(File image, String uri) async {}
 }
