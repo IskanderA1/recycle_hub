@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive/hive.dart';
+import 'package:intl/intl.dart';
 import 'package:mobx/mobx.dart';
 import 'package:provider/provider.dart';
 import 'package:recycle_hub/api/services/user_service.dart';
@@ -51,10 +52,8 @@ class _TopUpHistoryScreenState extends State<TopUpHistoryScreen> {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: kColorWhite, size: 25),
-          onPressed: () =>
-              GetIt.I.get<ProfileMenuCubit>().goBack()
-        ),
+            icon: Icon(Icons.arrow_back, color: kColorWhite, size: 25),
+            onPressed: () => GetIt.I.get<ProfileMenuCubit>().goBack()),
         title: Text(
           "История пополнений",
           style: TextStyle(
@@ -102,6 +101,7 @@ class TopUpCards extends StatefulWidget {
 }
 
 class _TopUpCardsState extends State<TopUpCards> {
+  DateFormat format = DateFormat('dd.MM.yyyy');
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -131,13 +131,19 @@ class _TopUpCardsState extends State<TopUpCards> {
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
-                                    "Вид пополнения:",
+                                    "Источник:",
                                     style: const TextStyle(
                                         color: kColorGreyLight,
                                         fontFamily: 'GillroyMedium'),
                                   ),
                                   Text(
-                                    "Пополнения",
+                                    widget.transactions[i].actionType ==
+                                            'recycle'
+                                        ? "Сдача вторсырья"
+                                        : widget.transactions[i].actionType ==
+                                                'invite'
+                                            ? 'Приглошение друга'
+                                            : '__',
                                     style: const TextStyle(
                                         color: kColorBlack,
                                         fontFamily: 'GillroyMedium'),
@@ -171,7 +177,7 @@ class _TopUpCardsState extends State<TopUpCards> {
                             crossAxisAlignment: CrossAxisAlignment.end,
                             children: [
                               Text(
-                                "Дата:\n${2021}" + ".${4}" + ".${6}",
+                                "Дата:\n${format.format(widget.transactions[i].date)}",
                                 style: TextStyle(
                                     color: kColorGreyLight,
                                     fontFamily: 'GillroyMedium'),
@@ -196,27 +202,42 @@ class _TopUpCardsState extends State<TopUpCards> {
                           child: StepsIndicator(
                             lineLength: 100,
                             selectedStep:
-                                widget.transactions[i].status == 'c' ? 2 : 1,
+                                widget.transactions[i].status == 'confirmed'
+                                    ? 2
+                                    : widget.transactions[i].status == 'idle'
+                                        ? 1
+                                        : 0,
                             nbSteps: 3,
                             doneStepSize: 15,
-                            doneStepColor: widget.transactions[i].status == 'c'
-                                ? kColorGreen
-                                : kColorRed,
-                            doneLineColor: widget.transactions[i].status == 'c'
-                                ? kColorGreen
-                                : kColorRed,
+                            doneStepColor:
+                                widget.transactions[i].status == 'confirmed'
+                                    ? kColorGreen
+                                    : widget.transactions[i].status == 'idle'
+                                        ? kColorRed
+                                        : kColorGreyDark,
+                            doneLineColor:
+                                widget.transactions[i].status == 'confirmed'
+                                    ? kColorGreen
+                                    : widget.transactions[i].status == 'idle'
+                                        ? kColorRed
+                                        : kColorGreyDark,
                             doneLineThickness: 2.5,
                             undoneLineColor: kColorGreyLight,
                             unselectedStepColorIn: kColorGreyLight,
                             unselectedStepColorOut: kColorGreyLight,
                             selectedStepColorOut:
-                                widget.transactions[i].status == 'c'
+                                widget.transactions[i].status == 'confirmed'
                                     ? kColorGreen
-                                    : kColorRed,
+                                    : widget.transactions[i].status == 'idle'
+                                        ? kColorRed
+                                        : kColorGreyDark,
                             selectedStepBorderSize: 0,
-                            selectedStepColorIn: widget.transactions[i].status == 'c'
-                                ? kColorGreen
-                                : kColorRed,
+                            selectedStepColorIn:
+                                widget.transactions[i].status == 'confirmed'
+                                    ? kColorGreen
+                                    : widget.transactions[i].status == 'idle'
+                                        ? kColorRed
+                                        : kColorGreyDark,
                             unselectedStepSize: 15,
                             undoneLineThickness: 2.5,
                           ),
@@ -224,14 +245,14 @@ class _TopUpCardsState extends State<TopUpCards> {
                       ],
                     ),
                     Align(
-                      alignment: widget.transactions[i].status == 'c'
+                      alignment: widget.transactions[i].status == 'confirmed'
                           ? Alignment.centerRight
                           : Alignment.center,
                       child: Padding(
-                        padding: widget.transactions[i].status == 'c'
+                        padding: widget.transactions[i].status == 'confirmed'
                             ? const EdgeInsets.only(right: 15)
                             : EdgeInsets.zero,
-                        child: widget.transactions[i].status == 'c'
+                        child: widget.transactions[i].status == 'confirmed'
                             ? Text(
                                 "Завершено",
                                 style: const TextStyle(
@@ -240,14 +261,23 @@ class _TopUpCardsState extends State<TopUpCards> {
                                     fontSize: 12,
                                     color: kColorGreen),
                               )
-                            : Text(
-                                "В ожидании",
-                                style: const TextStyle(
-                                    fontFamily: 'Gillroy',
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 12,
-                                    color: kColorRed),
-                              ),
+                            : widget.transactions[i].status == 'idle'
+                                ? Text(
+                                    "В ожидании",
+                                    style: const TextStyle(
+                                        fontFamily: 'Gillroy',
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 12,
+                                        color: kColorRed),
+                                  )
+                                : Text(
+                                    "Отклонено",
+                                    style: const TextStyle(
+                                        fontFamily: 'Gillroy',
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 12,
+                                        color: kColorGreyDark),
+                                  ),
                       ),
                     )
                   ],

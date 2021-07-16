@@ -26,18 +26,21 @@ class CustMarkerAdapter extends TypeAdapter<CustMarker> {
       workTime: fields[6] as WorkingTime,
       address: fields[7] as String,
       contacts: (fields[8] as List)?.cast<String>(),
-      acceptTypes: (fields[9] as List)?.cast<String>(),
-      coords: (fields[10] as List)?.cast<double>(),
-      description: fields[11] as String,
-      getBonus: fields[12] as bool,
-      images: (fields[13] as List)?.cast<String>(),
+      acceptTypesNames: (fields[9] as List)?.cast<String>(),
+      acceptTypes: (fields[10] as List)?.cast<String>(),
+      coords: (fields[11] as List)?.cast<double>(),
+      description: fields[12] as String,
+      getBonus: fields[13] as bool,
+      images: (fields[14] as List)?.cast<dynamic>(),
+      externalImages: (fields[15] as List)?.cast<String>(),
+      approveStatus: fields[16] as String,
     );
   }
 
   @override
   void write(BinaryWriter writer, CustMarker obj) {
     writer
-      ..writeByte(14)
+      ..writeByte(17)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -57,15 +60,21 @@ class CustMarkerAdapter extends TypeAdapter<CustMarker> {
       ..writeByte(8)
       ..write(obj.contacts)
       ..writeByte(9)
-      ..write(obj.acceptTypes)
+      ..write(obj.acceptTypesNames)
       ..writeByte(10)
-      ..write(obj.coords)
+      ..write(obj.acceptTypes)
       ..writeByte(11)
-      ..write(obj.description)
+      ..write(obj.coords)
       ..writeByte(12)
-      ..write(obj.getBonus)
+      ..write(obj.description)
       ..writeByte(13)
-      ..write(obj.images);
+      ..write(obj.getBonus)
+      ..writeByte(14)
+      ..write(obj.images)
+      ..writeByte(15)
+      ..write(obj.externalImages)
+      ..writeByte(16)
+      ..write(obj.approveStatus);
   }
 
   @override

@@ -19,11 +19,15 @@ class EcoGuideCubit extends Cubit<EcoGuideMenuItem> {
       GetIt.I.get<NavBarCubit>().goBack();
       return;
     }
-    _lasts.removeLast();
-    if (_lasts.isNotEmpty) {
-      emit(_lasts.last);
+    var last = _lasts.removeLast();
+    if (last == EcoGuideMenuItem.MENU) {
+      GetIt.I.get<NavBarCubit>().goBack();
     } else {
-      emit(EcoGuideMenuItem.MENU);
+      if (_lasts.isNotEmpty) {
+        emit(_lasts.last);
+      } else {
+        emit(EcoGuideMenuItem.MENU);
+      }
     }
   }
 }

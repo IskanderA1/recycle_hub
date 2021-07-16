@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:recycle_hub/api/services/user_service.dart';
 import 'package:recycle_hub/bloc/cubit/profile_menu_cubit.dart';
 import 'package:recycle_hub/bloc/profile_bloc/profile_bloc.dart';
+import 'package:recycle_hub/screens/tabs/map/widgets/loader_widget.dart';
 import 'package:recycle_hub/style/style.dart';
 import 'package:recycle_hub/style/theme.dart';
 
@@ -21,6 +23,19 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   TextEditingController _address = TextEditingController();
   Gender _gender = Gender.MAN;
   bool _isMan = true;
+  bool _isLoading = false;
+
+  Future<void> _saveUser() async {
+    setState(() {
+      _isLoading = true;
+    });
+
+    await Future.delayed(Duration(milliseconds: 500));
+
+    setState(() {
+      _isLoading = false;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,83 +58,87 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           ),
         ),
       ),
-      body: SingleChildScrollView(
-        child: InkWell(
-          onTap: () => FocusScope.of(context).unfocus(),
-          child: Container(
-            width: double.infinity,
-            color: Color(0xFFF2F2F2),
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(15, 25, 15, 0),
-              child: Container(
-                decoration: BoxDecoration(
-                    color: kColorWhite,
-                    borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(25),
-                        topRight: Radius.circular(25))),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.only(top: 30, bottom: 15),
-                      child: Container(
-                        height: 100,
-                        width: 100,
-                        child: Stack(
-                          children: [
-                            Container(
-                                height: 100,
-                                width: 100,
-                                child: CircleAvatar(
-                                  backgroundImage: NetworkImage(
-                                      "https://idsb.tmgrup.com.tr/ly/uploads/images/2020/04/30/33310.jpg"),
-                                )),
-                            Align(
-                              alignment: Alignment.bottomRight,
-                              child: Padding(
-                                padding:
-                                    const EdgeInsets.only(right: 5, bottom: 5),
-                                child: GestureDetector(
-                                  child: Container(
-                                    width: 30,
-                                    height: 30,
-                                    decoration: BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        color: Color(0xFFF2F2F2)),
-                                    child: Center(
-                                      child: Icon(
-                                        Icons.edit,
-                                        color: kColorGreen,
-                                        size: 20,
+      body: _isLoading
+          ? Center(
+              child: LoaderWidget(),
+            )
+          : SingleChildScrollView(
+              child: InkWell(
+                onTap: () => FocusScope.of(context).unfocus(),
+                child: Container(
+                  width: double.infinity,
+                  color: Color(0xFFF2F2F2),
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(15, 25, 15, 0),
+                    child: Container(
+                      decoration: BoxDecoration(
+                          color: kColorWhite,
+                          borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(25),
+                              topRight: Radius.circular(25))),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.only(top: 30, bottom: 15),
+                            child: Container(
+                              height: 100,
+                              width: 100,
+                              child: Stack(
+                                children: [
+                                  Container(
+                                      height: 100,
+                                      width: 100,
+                                      child: CircleAvatar(
+                                        backgroundImage: NetworkImage(
+                                            "https://idsb.tmgrup.com.tr/ly/uploads/images/2020/04/30/33310.jpg"),
+                                      )),
+                                  Align(
+                                    alignment: Alignment.bottomRight,
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(
+                                          right: 5, bottom: 5),
+                                      child: GestureDetector(
+                                        child: Container(
+                                          width: 30,
+                                          height: 30,
+                                          decoration: BoxDecoration(
+                                              shape: BoxShape.circle,
+                                              color: Color(0xFFF2F2F2)),
+                                          child: Center(
+                                            child: Icon(
+                                              Icons.edit,
+                                              color: kColorGreen,
+                                              size: 20,
+                                            ),
+                                          ),
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                ),
+                                  )
+                                ],
                               ),
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-                      child: EditProfileScreenTextField(
-                        controller: _name,
-                        hintText: "Имя",
-                        adText: "Имя",
-                        type: TextInputType.name,
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-                      child: EditProfileScreenTextField(
-                        controller: _surname,
-                        hintText: "Фамилия",
-                        adText: "Фамилия",
-                        type: TextInputType.name,
-                      ),
-                    ),
-                    Padding(
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+                            child: EditProfileScreenTextField(
+                              controller: _name,
+                              hintText: "Имя",
+                              adText: "Имя",
+                              type: TextInputType.name,
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+                            child: EditProfileScreenTextField(
+                              controller: _surname,
+                              hintText: "Фамилия",
+                              adText: "Фамилия",
+                              type: TextInputType.name,
+                            ),
+                          ),
+                          /* Padding(
                       padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
                       child: EditProfileScreenTextField(
                         controller: _email,
@@ -127,17 +146,17 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         adText: "E-mail",
                         type: TextInputType.emailAddress,
                       ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-                      child: EditProfileScreenTextField(
-                        controller: _password,
-                        hintText: "Пароль",
-                        adText: "Пароль",
-                        type: TextInputType.visiblePassword,
-                      ),
-                    ),
-                    /* Padding(
+                    ), */
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+                            child: EditProfileScreenTextField(
+                              controller: _password,
+                              hintText: "Пароль",
+                              adText: "Пароль",
+                              type: TextInputType.visiblePassword,
+                            ),
+                          ),
+                          /* Padding(
                       padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
                       child: EditProfileScreenTextField(
                         controller: _age,
@@ -146,8 +165,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         type: TextInputType.number,
                       ),
                     ), */
-                    //GENDER
-                    /* Align(
+                          //GENDER
+                          /* Align(
                       alignment: Alignment.centerLeft,
                       child: Padding(
                           padding:
@@ -290,7 +309,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                             ],
                           )),
                     ), */
-                    /* Padding(
+                          /* Padding(
                       padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
                       child: EditProfileScreenTextField(
                         controller: _address,
@@ -299,39 +318,41 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         type: TextInputType.number,
                       ),
                     ), */
-                    SizedBox(
-                      height: 20,
-                    ),
-                    GestureDetector(
-                      onTap: () {},
-                      child: Container(
-                        width: 300,
-                        height: 50,
-                        decoration: BoxDecoration(
-                            color: kColorGreen,
-                            boxShadow: [BoxShadow(color: kColorGreyDark)],
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(15))),
-                        child: Center(
-                          child: Text("Сохранить изменения",
-                              style: TextStyle(
-                                  fontSize: 18,
-                                  color: kColorWhite,
-                                  fontWeight: FontWeight.bold,
-                                  fontFamily: 'GillroyMedium')),
-                        ),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              _saveUser();
+                            },
+                            child: Container(
+                              width: 300,
+                              height: 50,
+                              decoration: BoxDecoration(
+                                  color: kColorGreen,
+                                  boxShadow: [BoxShadow(color: kColorGreyDark)],
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(15))),
+                              child: Center(
+                                child: Text("Сохранить изменения",
+                                    style: TextStyle(
+                                        fontSize: 18,
+                                        color: kColorWhite,
+                                        fontWeight: FontWeight.bold,
+                                        fontFamily: 'GillroyMedium')),
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 100,
+                          ),
+                        ],
                       ),
                     ),
-                    SizedBox(
-                      height: 100,
-                    ),
-                  ],
+                  ),
                 ),
               ),
             ),
-          ),
-        ),
-      ),
     );
   }
 }

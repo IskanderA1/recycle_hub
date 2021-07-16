@@ -7,7 +7,7 @@ class FilterTypeCubit extends Cubit<List<FilterType>> {
 
   loadFilterTypes() async {
     try {
-      final list = await PointsService().getAcceptTypes();
+      final list = await PointsService().loadAcceptTypes();
       emit(list);
     } catch (e) {
       print(e.toString());

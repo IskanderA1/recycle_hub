@@ -12,7 +12,6 @@ import 'package:recycle_hub/model/map_models.dart/accept_types.dart';
 import 'package:recycle_hub/model/map_models.dart/accept_types_collection_model.dart';
 import 'package:recycle_hub/model/map_models.dart/filter_model.dart';
 import 'package:recycle_hub/screens/tabs/map/widgets/filter_card_widget.dart';
-import 'package:recycle_hub/screens/tabs/map/widgets/loader_widget.dart';
 import 'package:recycle_hub/style/theme.dart';
 
 class MapFilterDetailScreen extends StatefulWidget {
@@ -226,7 +225,7 @@ class _MapFilterDetailScreenState extends State<MapFilterDetailScreen> {
               height: 60,
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(2),
-                  border: Border.all(color: Color(0xFF62C848), width: 1.5)),
+                  border: Border.all(color: kColorGreyLight, width: 1.5)),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -238,7 +237,7 @@ class _MapFilterDetailScreenState extends State<MapFilterDetailScreen> {
                       },
                       child: Container(
                         color: snapshot.data == MODE.PAID
-                            ? Color(0xFF62C848)
+                            ? kColorGreyLight
                             : Color(0xFFFFFFFF),
                         padding: EdgeInsets.zero,
                         alignment: Alignment.center,
@@ -248,13 +247,13 @@ class _MapFilterDetailScreenState extends State<MapFilterDetailScreen> {
                             style: TextStyle(
                                 color: snapshot.data == MODE.PAID
                                     ? Color(0xFFFFFFFF)
-                                    : Color(0xFF62C848))),
+                                    : kColorGreyLight)),
                       ),
                     ),
                   ),
                   VerticalDivider(
                     width: 1,
-                    color: Color(0xFFFF62C848),
+                    color: kColorGreyLight,
                   ),
                   Expanded(
                     child: GestureDetector(
@@ -264,7 +263,7 @@ class _MapFilterDetailScreenState extends State<MapFilterDetailScreen> {
                       },
                       child: Container(
                         color: snapshot.data == MODE.FREE
-                            ? Color(0xFF62C848)
+                            ? kColorGreyLight
                             : Color(0xFFFFFFFF),
                         //alignment: Alignment.center,
                         padding: EdgeInsets.zero,
@@ -276,14 +275,14 @@ class _MapFilterDetailScreenState extends State<MapFilterDetailScreen> {
                               style: TextStyle(
                                   color: snapshot.data == MODE.FREE
                                       ? Color(0xFFFFFFFF)
-                                      : Color(0xFF62C848))),
+                                      : kColorGreyLight)),
                         ),
                       ),
                     ),
                   ),
                   VerticalDivider(
                     width: 1,
-                    color: Color(0xFFFF62C848),
+                    color: kColorGreyLight,
                   ),
                   /*Expanded(
                     child: GestureDetector(
@@ -314,7 +313,7 @@ class _MapFilterDetailScreenState extends State<MapFilterDetailScreen> {
                       },
                       child: Container(
                         color: snapshot.data == MODE.PARTNERS
-                            ? Color(0xFF62C848)
+                            ? kColorGreyLight
                             : Color(0xFFFFFFFF),
                         alignment: Alignment.center,
                         child: AutoSizeText("Партнёры",
@@ -323,7 +322,7 @@ class _MapFilterDetailScreenState extends State<MapFilterDetailScreen> {
                             style: TextStyle(
                                 color: snapshot.data == MODE.PARTNERS
                                     ? Color(0xFFFFFFFF)
-                                    : Color(0xFF62C848))),
+                                    : kColorGreyLight)),
                       ),
                     ),
                   )
@@ -341,7 +340,7 @@ class _MapFilterDetailScreenState extends State<MapFilterDetailScreen> {
           height: 40,
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(3),
-              border: Border.all(color: Color(0xFF62C848), width: 1.5)),
+              border: Border.all(color: kColorGreyLight, width: 1.5)),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
@@ -353,7 +352,7 @@ class _MapFilterDetailScreenState extends State<MapFilterDetailScreen> {
                   },
                   child: Container(
                       color: snapshot.data == GCOLLTYPE.RECYCLING
-                          ? Color(0xFF62C848)
+                          ? kColorGreyLight
                           : Color(0xFFFFFFFF),
                       padding: EdgeInsets.zero,
                       alignment: Alignment.center,
@@ -362,14 +361,14 @@ class _MapFilterDetailScreenState extends State<MapFilterDetailScreen> {
                         style: TextStyle(
                           color: snapshot.data == GCOLLTYPE.RECYCLING
                               ? Color(0xFFFFFFFF)
-                              : Color(0xFF62C848),
+                              : kColorGreyLight,
                         ),
                       )),
                 ),
               ),
               VerticalDivider(
                 width: 1,
-                color: Color(0xFFFF62C848),
+                color: kColorGreyLight,
               ),
               Expanded(
                 child: GestureDetector(
@@ -379,7 +378,7 @@ class _MapFilterDetailScreenState extends State<MapFilterDetailScreen> {
                   },
                   child: Container(
                       color: snapshot.data == GCOLLTYPE.UTILISATION
-                          ? Color(0xFF62C848)
+                          ? kColorGreyLight
                           : Color(0xFFFFFFFF),
                       padding: EdgeInsets.zero,
                       alignment: Alignment.center,
@@ -388,14 +387,14 @@ class _MapFilterDetailScreenState extends State<MapFilterDetailScreen> {
                         style: TextStyle(
                           color: snapshot.data == GCOLLTYPE.UTILISATION
                               ? Color(0xFFFFFFFF)
-                              : Color(0xFF62C848),
+                              : kColorGreyLight,
                         ),
                       )),
                 ),
               ),
               VerticalDivider(
                 width: 1,
-                color: Color(0xFFFF62C848),
+                color: kColorGreyLight,
               ),
               Expanded(
                 child: GestureDetector(
@@ -405,7 +404,7 @@ class _MapFilterDetailScreenState extends State<MapFilterDetailScreen> {
                   },
                   child: Container(
                       color: snapshot.data == GCOLLTYPE.BENEFIT
-                          ? Color(0xFF62C848)
+                          ? kColorGreyLight
                           : Color(0xFFFFFFFF),
                       padding: EdgeInsets.zero,
                       alignment: Alignment.center,
@@ -414,7 +413,7 @@ class _MapFilterDetailScreenState extends State<MapFilterDetailScreen> {
                         style: TextStyle(
                           color: snapshot.data == GCOLLTYPE.BENEFIT
                               ? Color(0xFFFFFFFF)
-                              : Color(0xFF62C848),
+                              : kColorGreyLight,
                         ),
                       )),
                 ),

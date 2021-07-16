@@ -1,5 +1,7 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:intl/intl.dart';
 import 'package:recycle_hub/api/services/store_service.dart';
 import 'package:recycle_hub/api/services/user_service.dart';
 import 'package:recycle_hub/bloc/cubit/profile_menu_cubit.dart';
@@ -26,7 +28,7 @@ class _MyPurchasesScreenState extends State<MyPurchasesScreen> {
     cardsList = ListView.builder(
         shrinkWrap: true,
         itemCount: list.length,
-        padding: EdgeInsets.all(20),
+        padding: EdgeInsets.all(16),
         itemBuilder: (BuildContext context, int i) {
           return GestureDetector(
               onTap: () => Navigator.push(
@@ -67,9 +69,9 @@ class _MyPurchasesScreenState extends State<MyPurchasesScreen> {
 enum PurchaseStatus { DECLINED, INPROGRESS, COMPLETED }
 
 class PurchaseCell extends StatelessWidget {
-  const PurchaseCell({this.purchase});
+  PurchaseCell({this.purchase});
   final Purchase purchase;
-
+  final DateFormat dateFormat = DateFormat('dd.MM.yyyy');
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -97,8 +99,15 @@ class PurchaseCell extends StatelessWidget {
                             color: kColorGreyLight,
                             fontFamily: 'GillroyMedium'),
                       ),
+                      Spacer(),
+                      Text(
+                        "${purchase.amount}",
+                        style: const TextStyle(
+                            color: kColorBlack, fontFamily: 'GillroyMedium'),
+                      ),
                     ],
                   ),
+                  Divider(),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -108,8 +117,22 @@ class PurchaseCell extends StatelessWidget {
                             color: kColorGreyLight,
                             fontFamily: 'GillroyMedium'),
                       ),
+                      Spacer(),
+                      Flexible(
+                        child: AutoSizeText(
+                          purchase.daysRest < 0
+                              ? 'Просрочено ' +
+                                  dateFormat.format(purchase.dateTo)
+                              : "${purchase.daysRest}",
+                          maxLines: 1,
+                          overflow: TextOverflow.visible,
+                          style: const TextStyle(
+                              color: kColorBlack, fontFamily: 'GillroyMedium'),
+                        ),
+                      ),
                     ],
                   ),
+                  Divider(),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -119,34 +142,24 @@ class PurchaseCell extends StatelessWidget {
                             color: kColorGreyLight,
                             fontFamily: 'GillroyMedium'),
                       ),
+                      Spacer(),
+                      Text(
+                        "${purchase.buyDate.day}.${purchase.buyDate.month}.${purchase.buyDate.year}",
+                        style: const TextStyle(
+                            color: kColorBlack, fontFamily: 'GillroyMedium'),
+                      )
                     ],
                   ),
                 ],
               ),
             ),
-            Expanded(
+            /* Expanded(
               flex: 2,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "${purchase.amount}" + r'$',
-                    style: const TextStyle(
-                        color: kColorBlack, fontFamily: 'GillroyMedium'),
-                  ),
-                  Text(
-                    "${purchase.daysRest}",
-                    style: const TextStyle(
-                        color: kColorBlack, fontFamily: 'GillroyMedium'),
-                  ),
-                  Text(
-                    "${purchase.buyDate.day}.${purchase.buyDate.month}.${purchase.buyDate.year}",
-                    style: const TextStyle(
-                        color: kColorBlack, fontFamily: 'GillroyMedium'),
-                  )
-                ],
+                children: [],
               ),
-            ),
+            ), */
             Expanded(
               child: Image.network(
                 'https://cdn2.zp.ru/job/attaches/2020/07/be/76/be764d2d5dd2a062333610f7ba880d56.jpg',

@@ -1,7 +1,7 @@
 import 'dart:convert';
+
 import 'package:hive/hive.dart';
 import 'package:recycle_hub/model/map_models.dart/work_time.dart';
-
 part 'marker.g.dart';
 
 @HiveType(typeId: 1)
@@ -16,11 +16,14 @@ class CustMarker {
     this.workTime,
     this.address,
     this.contacts,
+    this.acceptTypesNames,
     this.acceptTypes,
     this.coords,
     this.description,
     this.getBonus,
     this.images,
+    this.externalImages,
+    this.approveStatus,
   });
 
   @HiveField(0)
@@ -42,15 +45,21 @@ class CustMarker {
   @HiveField(8)
   List<String> contacts;
   @HiveField(9)
-  List<String> acceptTypes;
+  List<String> acceptTypesNames;
   @HiveField(10)
-  List<double> coords;
+  List<String> acceptTypes;
   @HiveField(11)
-  String description;
+  List<double> coords;
   @HiveField(12)
-  bool getBonus;
+  String description;
   @HiveField(13)
-  List<String> images;
+  bool getBonus;
+  @HiveField(14)
+  List<dynamic> images;
+  @HiveField(15)
+  List<String> externalImages;
+  @HiveField(16)
+  String approveStatus;
 
   CustMarker copyWith({
     String id,
@@ -62,11 +71,14 @@ class CustMarker {
     WorkingTime workTime,
     String address,
     List<String> contacts,
+    List<String> acceptTypesNames,
     List<String> acceptTypes,
     List<double> coords,
     String description,
     bool getBonus,
-    List<String> images,
+    List<dynamic> images,
+    List<String> externalImages,
+    String approveStatus,
   }) =>
       CustMarker(
         id: id ?? this.id,
@@ -78,11 +90,14 @@ class CustMarker {
         workTime: workTime ?? this.workTime,
         address: address ?? this.address,
         contacts: contacts ?? this.contacts,
+        acceptTypesNames: acceptTypesNames ?? this.acceptTypesNames,
         acceptTypes: acceptTypes ?? this.acceptTypes,
         coords: coords ?? this.coords,
         description: description ?? this.description,
         getBonus: getBonus ?? this.getBonus,
         images: images ?? this.images,
+        externalImages: externalImages ?? this.externalImages,
+        approveStatus: approveStatus ?? this.approveStatus,
       );
 
   factory CustMarker.fromJson(String str) =>
@@ -105,6 +120,9 @@ class CustMarker {
         contacts: json["contacts"] == null
             ? null
             : List<String>.from(json["contacts"].map((x) => x)),
+        acceptTypesNames: json["accept_types_names"] == null
+            ? null
+            : List<String>.from(json["accept_types_names"].map((x) => x)),
         acceptTypes: json["accept_types"] == null
             ? null
             : List<String>.from(json["accept_types"].map((x) => x)),
@@ -115,7 +133,12 @@ class CustMarker {
         getBonus: json["getBonus"] == null ? null : json["getBonus"],
         images: json["images"] == null
             ? null
-            : List<String>.from(json["images"].map((x) => x)),
+            : List<dynamic>.from(json["images"].map((x) => x)),
+        externalImages: json["external_images"] == null
+            ? null
+            : List<String>.from(json["external_images"].map((x) => x)),
+        approveStatus:
+            json["approve_status"] == null ? null : json["approve_status"],
       );
 
   Map<String, dynamic> toMap() => {
@@ -130,161 +153,21 @@ class CustMarker {
         "contacts": contacts == null
             ? null
             : List<dynamic>.from(contacts.map((x) => x)),
+        "accept_types_names": acceptTypesNames == null
+            ? null
+            : List<dynamic>.from(acceptTypesNames.map((x) => x)),
         "accept_types": acceptTypes == null
             ? null
             : List<dynamic>.from(acceptTypes.map((x) => x)),
         "coords":
             coords == null ? null : List<dynamic>.from(coords.map((x) => x)),
         "description": description == null ? null : description,
-        "getBonus": getBonus == null ? null : getBonus,/* 
+        "getBonus": getBonus == null ? null : getBonus,
         "images":
-            images == null ? null : List<dynamic>.from(images.map((x) => x)), */
+            images == null ? null : List<dynamic>.from(images.map((x) => x)),
+        "external_images": externalImages == null
+            ? null
+            : List<dynamic>.from(externalImages.map((x) => x)),
+        "approve_status": approveStatus == null ? null : approveStatus,
       };
 }
-
-/*@HiveType(typeId: 1)
-class CustMarker {
-  @HiveField(0)
-  String id;
-  @HiveField(1)
-  List<AcceptType> acceptTypes;
-  @HiveField(2)
-  String address;
-  @HiveField(3)
-  List<Contact> contacts;
-  @HiveField(4)
-  Coords coords;
-  @HiveField(5)
-  String description;
-  @HiveField(6)
-  List<String> images;
-  @HiveField(7)
-  String name;
-  @HiveField(8)
-  String paybackType;
-  @HiveField(9)
-  String receptionType;
-  @HiveField(10)
-  WorkingTime workTime;
-  CustMarker({
-    this.id,
-    this.acceptTypes,
-    this.address,
-    this.contacts,
-    this.coords,
-    this.description,
-    this.images,
-    this.name,
-    this.paybackType,
-    this.receptionType,
-    this.workTime,
-  });
-
-  CustMarker copyWith({
-    String id,
-    List<AcceptType> acceptTypes,
-    String address,
-    List<Contact> contacts,
-    Coords coords,
-    String description,
-    List<String> images,
-    String name,
-    String paybackType,
-    String receptionType,
-    WorkingTime workTime,
-  }) {
-    return CustMarker(
-      id: id ?? this.id,
-      acceptTypes: acceptTypes ?? this.acceptTypes,
-      address: address ?? this.address,
-      contacts: contacts ?? this.contacts,
-      coords: coords ?? this.coords,
-      description: description ?? this.description,
-      images: images ?? this.images,
-      name: name ?? this.name,
-      paybackType: paybackType ?? this.paybackType,
-      receptionType: receptionType ?? this.receptionType,
-      workTime: workTime ?? this.workTime,
-    );
-  }
-
-  Map<String, dynamic> toMap() {
-    return {
-      'id': id,
-      'acceptTypes': acceptTypes?.map((x) => x?.toMap())?.toList(),
-      'address': address,
-      'contacts': contacts?.map((x) => x?.toMap())?.toList(),
-      'coords': coords?.toMap(),
-      'description': description,
-      'images': images,
-      'name': name,
-      'paybackType': paybackType,
-      'receptionType': receptionType,
-      'workTime': workTime?.toMap(),
-    };
-  }
-
-  factory CustMarker.fromMap(Map<String, dynamic> map) {
-    if (map == null) return null;
-
-    return CustMarker(
-      id: map['_id'],
-      acceptTypes: List<AcceptType>.from(
-          map['accept_types']?.map((x) => AcceptType.fromMap(x))),
-      address: map['address'],
-      contacts:
-          List<Contact>.from(map['contacts']?.map((x) => Contact.fromMap(x))),
-      coords: Coords.fromMap(map['coords']),
-      description: map['description'],
-      images: List<String>.from(map['images']),
-      name: map['name'],
-      paybackType: map['payback_type'],
-      receptionType: map['reception_type'],
-      workTime: map['work_time'] != null ? WorkingTime.fromMap(map['work_time']) : null,
-    );
-  }
-
-  String toJson() => json.encode(toMap());
-
-  factory CustMarker.fromJson(String source) =>
-      CustMarker.fromMap(json.decode(source));
-
-  @override
-  String toString() {
-    return 'CustMarker(id: $id, acceptTypes: $acceptTypes, address: $address, contacts: $contacts, coords: $coords, description: $description, images: $images, name: $name, paybackType: $paybackType, receptionType: $receptionType, workTime: $workTime)';
-  }
-
-  @override
-  bool operator ==(Object o) {
-    if (identical(this, o)) return true;
-
-    return o is CustMarker &&
-        o.id == id &&
-        listEquals(o.acceptTypes, acceptTypes) &&
-        o.address == address &&
-        listEquals(o.contacts, contacts) &&
-        o.coords == coords &&
-        o.description == description &&
-        listEquals(o.images, images) &&
-        o.name == name &&
-        o.paybackType == paybackType &&
-        o.receptionType == receptionType &&
-        o.workTime == workTime;
-  }
-
-  @override
-  int get hashCode {
-    return id.hashCode ^
-        acceptTypes.hashCode ^
-        address.hashCode ^
-        contacts.hashCode ^
-        coords.hashCode ^
-        description.hashCode ^
-        images.hashCode ^
-        name.hashCode ^
-        paybackType.hashCode ^
-        receptionType.hashCode ^
-        workTime.hashCode;
-  }
-}
-*/

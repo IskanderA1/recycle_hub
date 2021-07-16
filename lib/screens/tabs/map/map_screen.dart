@@ -2,39 +2,29 @@ import 'dart:async';
 import 'dart:math';
 import 'dart:ui';
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:bottom_sheet/bottom_sheet.dart';
-import 'package:draggable_bottom_sheet/draggable_bottom_sheet.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_star_rating/flutter_star_rating.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_maps_cluster_manager/google_maps_cluster_manager.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:recycle_hub/api/services/points_service.dart';
 import 'package:recycle_hub/api/services/user_service.dart';
 import 'package:recycle_hub/bloc/map/map_bloc.dart';
 import 'package:recycle_hub/bloc/map_screen_blocs/marker_info_bloc.dart';
-import 'package:recycle_hub/bloc/map_screen_blocs/markers_collection_bloc.dart';
 import 'package:recycle_hub/custom_icons.dart';
-import 'package:recycle_hub/elements/custom_bottom_sheet.dart';
 import 'package:recycle_hub/helpers/distance_helper.dart';
+import 'package:recycle_hub/model/map_models.dart/accept_types.dart';
 import 'package:recycle_hub/model/map_models.dart/marker.dart';
-import 'package:recycle_hub/model/map_responses/markers_response.dart';
 import 'package:recycle_hub/screens/tabs/map/filter_detail_screen.dart';
 import 'package:recycle_hub/screens/tabs/map/widgets/bottom_sheet_container.dart';
 import 'package:recycle_hub/screens/tabs/map/widgets/loader_widget.dart';
 import 'package:recycle_hub/screens/tabs/map/widgets/markers_list_widget.dart';
+import 'package:recycle_hub/elements/bottom_sheet.dart';
 import 'package:recycle_hub/style/theme.dart';
-import '../../../bloc/map_screen_blocs/markers_collection_bloc.dart';
-import '../../../model/map_models.dart/marker.dart';
-import '../../../style/theme.dart';
 import 'methods/header_builder.dart';
 import 'methods/pre_information_container.dart';
-import 'widgets/working_days_widget.dart';
 import 'dart:developer' as developer;
 
 class MapScreen extends StatefulWidget {
@@ -44,7 +34,7 @@ class MapScreen extends StatefulWidget {
 
 class _MapScreenState extends State<MapScreen> {
   CameraPosition cameraPosition =
-      CameraPosition(target: LatLng(55.7985293, 49.1156465), zoom: 12);
+      CameraPosition(target: LatLng(55.7985293, 49.1156465), zoom: 12.1);
   final Completer<GoogleMapController> _controller = Completer();
   MapBloc mapBloc;
 
@@ -154,7 +144,7 @@ class _MapScreenState extends State<MapScreen> {
     }
     cameraPosition = CameraPosition(
       target: LatLng(currentLocation.latitude, currentLocation.longitude),
-      zoom: 12,
+      zoom: 12.1,
     );
     developer.log("User location: ${currentLocation.toString()}",
         name: 'screens.tabs.map.map_screen');
@@ -183,6 +173,7 @@ class _GoogleMapWidgetState extends State<GoogleMapWidget> {
   final MapType _currentMapType = MapType.normal;
 
   Set<Marker> markers = Set<Marker>();
+  List<FilterType> filters = PointsService().filters;
 
   MapBloc mapBloc;
 
@@ -192,6 +183,7 @@ class _GoogleMapWidgetState extends State<GoogleMapWidget> {
   CameraPosition _cameraPosition =
       CameraPosition(target: LatLng(55.4727, 49.0652));
   StreamSubscription<MapState> _mapSub;
+  LatLng _userLocation;
 
   void _updateMarkers(Set<Marker> markers) {
     print('Updated ${markers.length} markers');
@@ -202,45 +194,9 @@ class _GoogleMapWidgetState extends State<GoogleMapWidget> {
 
   @override
   void initState() {
-    _list = widget.state.markers.map((item) {
-      double ddist = distanceInKm(
-          UserService().location, Point(item.coords[0], item.coords[1]));
-      String dist = '';
-      if (ddist < 0) {
-        dist = ddist.toStringAsFixed(3).split('.').last + ' м';
-      } else {
-        dist = ddist.toStringAsFixed(1).toString() + ' км';
-      }
-      return MarkerCardWidget(
-        index: item.hashCode,
-        marker: item,
-        distance: dist,
-        list: GridView.count(
-          crossAxisCount: 3,
-          crossAxisSpacing: 5,
-          mainAxisSpacing: 5,
-          childAspectRatio: 8 / 2,
-          shrinkWrap: true,
-          physics: NeverScrollableScrollPhysics(),
-          children: item.acceptTypes
-              .map((acceptsItem) => Container(
-                    height: 10,
-                    decoration: BoxDecoration(
-                        color: kColorWhite,
-                        borderRadius: BorderRadius.circular(5)),
-                    child: Center(
-                      child: AutoSizeText(
-                        "  $acceptsItem  ",
-                        style:
-                            TextStyle(fontFamily: 'GilroyMedium', fontSize: 14),
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                  ))
-              .toList(),
-        ),
-      );
-    }).toList();
+    _userLocation = LatLng(widget.cameraPosition.target.latitude,
+        widget.cameraPosition.target.longitude);
+
     _items = widget.state.markers
         .map((markItem) => ClusterItem(
             LatLng(markItem.coords[0], markItem.coords[1]),
@@ -251,14 +207,14 @@ class _GoogleMapWidgetState extends State<GoogleMapWidget> {
       _updateMarkers,
       markerBuilder: _markerBuilder,
       initialZoom: widget.cameraPosition.zoom,
-      stopClusteringZoom: 14,
-      levels: [4, 6, 8, 10, 12, 14],
-      extraPercent: 0.2,
+      stopClusteringZoom: 12,
+      levels: [4, 6, 8, 10, 12],
+      extraPercent: 0.8,
     );
     clusterManager.onCameraMove(_cameraPosition);
     clusterManager.setItems(_items);
     _mapSub = GetIt.I.get<MapBloc>().stream.listen((state) {
-      if (state is MapStateLoaded) {
+      if (state is MapStateLoaded && mounted) {
         setState(() {
           _items = state.markers
               .map((markItem) => ClusterItem(
@@ -268,6 +224,30 @@ class _GoogleMapWidgetState extends State<GoogleMapWidget> {
         });
         clusterManager.setItems(_items);
       }
+    });
+    PointsService().loadAcceptTypes().then((value) {
+      setState(() {
+        filters = value;
+      });
+      _list = widget.state.markers.map((item) {
+        double ddist = distanceInKm(
+            UserService().location, Point(item.coords[0], item.coords[1]));
+        String dist = '';
+        if (ddist < 0) {
+          dist = ddist.toStringAsFixed(3).split('.').last + ' м';
+        } else {
+          dist = ddist.toStringAsFixed(1).toString() + ' км';
+        }
+        return MarkerCardWidget(
+            index: item.hashCode,
+            marker: item,
+            distance: dist,
+            filters: filters.isNotEmpty
+                ? filters
+                    .where((element) => item.acceptTypes.contains(element.id))
+                    .toList()
+                : []);
+      }).toList();
     });
     super.initState();
   }
@@ -281,22 +261,30 @@ class _GoogleMapWidgetState extends State<GoogleMapWidget> {
   ];
 
   void _currentLocation() async {
-    LocationData currentLocation;
+    LocationData locationData;
     GoogleMapController controller;
     var location = new Location();
     try {
-      currentLocation = await location.getLocation();
-    } on Exception {
-      currentLocation = null;
+      locationData = await location.getLocation();
+    } catch (e) {
+      locationData = null;
     }
-    controller = await widget.mapController.future;
-    controller.animateCamera(CameraUpdate.newCameraPosition(
-      CameraPosition(
-        bearing: 0,
-        target: LatLng(currentLocation.latitude, currentLocation.longitude),
-        zoom: 17.0,
-      ),
-    ));
+    if (_userLocation != null) {
+      _userLocation = LatLng(locationData.latitude, locationData.longitude);
+      controller = await widget.mapController.future;
+      controller.animateCamera(CameraUpdate.newCameraPosition(
+        CameraPosition(
+          bearing: 0,
+          target: LatLng(_userLocation.latitude, _userLocation.longitude),
+          zoom: 15.0,
+        ),
+      ));
+    }
+  }
+
+  void _onCameraMove(CameraPosition position) {
+    clusterManager.onCameraMove(position);
+    _cameraPosition = position;
   }
 
   @override
@@ -304,26 +292,27 @@ class _GoogleMapWidgetState extends State<GoogleMapWidget> {
     return Stack(children: [
       Container(
           child: GoogleMap(
-              mapType: _currentMapType,
-              initialCameraPosition: widget.cameraPosition,
-              onCameraMove: clusterManager.onCameraMove,
-              onCameraIdle: clusterManager.updateMap,
-              onMapCreated: (GoogleMapController controller) {
-                if (!widget.mapController.isCompleted) {
-                  widget.mapController.complete(controller);
-                }
-                clusterManager.setMapController(controller);
-                setState(() {});
-              },
-              myLocationButtonEnabled: false,
-              myLocationEnabled: true,
-              zoomControlsEnabled: false,
-              compassEnabled: false,
-              markers: markers)),
+        mapType: _currentMapType,
+        initialCameraPosition: widget.cameraPosition,
+        onCameraMove: _onCameraMove,
+        onCameraIdle: clusterManager.updateMap,
+        onMapCreated: (GoogleMapController controller) {
+          if (!widget.mapController.isCompleted) {
+            widget.mapController.complete(controller);
+          }
+          clusterManager.setMapController(controller);
+          setState(() {});
+        },
+        myLocationButtonEnabled: false,
+        myLocationEnabled: true,
+        zoomControlsEnabled: false,
+        compassEnabled: false,
+        markers: markers,
+      )),
 
       ///Кнопка определения местоположения
       Positioned(
-        top: (MediaQuery.of(context).size.height) / 2,
+        top: (MediaQuery.of(context).size.height) / 2 - 55,
         right: 20,
         child: Container(
           height: 40,
@@ -364,7 +353,7 @@ class _GoogleMapWidgetState extends State<GoogleMapWidget> {
         ),
       ),
 
-      ///Зум +
+      /*  ///Зум +
       Positioned(
         top: 15,
         right: 20,
@@ -406,7 +395,7 @@ class _GoogleMapWidgetState extends State<GoogleMapWidget> {
             ),
           ),
         ),
-      ),
+      ), */
 
       ///Маркеры списком
       Positioned(
@@ -496,19 +485,172 @@ class _GoogleMapWidgetState extends State<GoogleMapWidget> {
             type = PTYPE.free;
           }
         }
-
         return Marker(
             markerId: MarkerId(cluster.getId()),
             position: cluster.location,
             onTap: () {
               if (cluster.items.length == 1) {
                 markerInfoFeedBloc.pickEvent(Mode.INFO);
-                /* showBarModalBottomSheet(
+                showStickyFlexibleBottomSheet(
+                    initHeight: 0.2,
+                    minHeight: 0.2,
+                    maxHeight: 0.85,
+                    context: context,
+                    headerHeight: 40,
+                    isExpand: false,
+                    decoration: const ShapeDecoration(
+                      color: kColorWhite,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(40),
+                          topRight: Radius.circular(40),
+                        ),
+                      ),
+                    ),
+                    headerBuilder: (context, bottomSheetOffset) {
+                      return AnimatedHeader(
+                          bottomSheetOffset: bottomSheetOffset);
+                    },
+                    builder: (context, offset) {
+                      return SliverChildListDelegate(
+                        <Widget>[
+                          AnimatedPreInformationContainer(
+                            offset: offset,
+                            marker: cluster.items.first,
+                            filters: filters.isNotEmpty
+                                ? filters
+                                    .where((element) => cluster
+                                        .items.first.acceptTypes
+                                        .contains(element.id))
+                                    .toList()
+                                : [],
+                            userPoint: Point(_userLocation.latitude,
+                                _userLocation.longitude),
+                          ),
+                          BuildBody(
+                            marker: cluster.items.first,
+                            filters: filters.isNotEmpty
+                                ? filters
+                                    .where((element) => cluster
+                                        .items.first.acceptTypes
+                                        .contains(element.id))
+                                    .toList()
+                                : [],
+                          ),
+                        ],
+                      );
+                    },
+                    anchors: [0.0, 0.2, 0.85]);
+              }
+            },
+            icon: await _getMarkerBitmap(cluster.isMultiple ? 125 : 75,
+                text: cluster.isMultiple ? cluster.count.toString() : null,
+                type: type));
+      };
+
+  Future<BitmapDescriptor> _getMarkerBitmap(int size,
+      {String text, @required PTYPE type}) async {
+    if (kIsWeb) size = (size / 2).floor();
+
+    final PictureRecorder pictureRecorder = PictureRecorder();
+    final Canvas canvas = Canvas(pictureRecorder);
+    Paint paint1 = Paint();
+    Paint paint2 = Paint();
+    Paint paint3 = Paint();
+
+    if (type == PTYPE.free) {
+      paint1.color = kColorPink;
+      paint2.color = Colors.white;
+      paint3.color = kColorPink;
+    } else if (type == PTYPE.partner) {
+      paint1.color = kColorGreen;
+      paint2.color = Colors.white;
+      paint3.color = kColorGreen;
+    } else {
+      paint1.color = kColorPink;
+      paint2.color = Colors.white;
+      paint3.color = kColorGreen;
+    }
+
+    canvas.drawCircle(Offset(size / 2, size / 2), size / 2.0, paint1);
+    canvas.drawCircle(Offset(size / 2, size / 2), size / 2.2, paint2);
+    canvas.drawCircle(Offset(size / 2, size / 2), size / 2.8, paint3);
+
+    if (text != null) {
+      TextPainter painter = TextPainter(textDirection: TextDirection.ltr);
+      painter.text = TextSpan(
+        text: text,
+        style: TextStyle(
+            fontSize: size / 3,
+            color: Colors.white,
+            fontWeight: FontWeight.normal),
+      );
+      painter.layout();
+      painter.paint(
+        canvas,
+        Offset(size / 2 - painter.width / 2, size / 2 - painter.height / 2),
+      );
+    }
+
+    final img = await pictureRecorder.endRecording().toImage(size, size);
+    final data = await img.toByteData(format: ImageByteFormat.png);
+
+    return BitmapDescriptor.fromBytes(data.buffer.asUint8List());
+  }
+
+  void northSouth() async {
+    GoogleMapController zController = await widget.mapController.future;
+    var currentZoomLevel = await zController.getZoomLevel();
+
+    zController.animateCamera(
+      CameraUpdate.newCameraPosition(
+        CameraPosition(
+          target: _cameraPosition.target,
+          zoom: currentZoomLevel,
+        ),
+      ),
+    );
+  }
+
+  void zoomIncrement() async {
+    GoogleMapController zController = await widget.mapController.future;
+    var currentZoomLevel = await zController.getZoomLevel();
+
+    currentZoomLevel = currentZoomLevel + 2;
+    zController.animateCamera(
+      CameraUpdate.newCameraPosition(
+        CameraPosition(
+          target: widget.cameraPosition.target,
+          zoom: currentZoomLevel,
+        ),
+      ),
+    );
+  }
+
+  void zoomDecrement() async {
+    GoogleMapController zController = await widget.mapController.future;
+    var currentZoomLevel = await zController.getZoomLevel();
+
+    currentZoomLevel = currentZoomLevel - 2;
+    zController.animateCamera(
+      CameraUpdate.newCameraPosition(
+        CameraPosition(
+          target: widget.cameraPosition.target,
+          zoom: currentZoomLevel,
+        ),
+      ),
+    );
+  }
+}
+
+enum PTYPE { free, partner, multi }
+
+/* showBarModalBottomSheet(
                 context: context,
                 builder: (context) {
                   
                 },); */
-                /*Navigator.push(
+/*Navigator.push(
                   context,
                   MaterialPageRoute(
                       builder: (context) => Material(
@@ -628,7 +770,7 @@ class _GoogleMapWidgetState extends State<GoogleMapWidget> {
                             ),
                           )));*/
 
-                /*Material(
+/*Material(
                       color: Colors.white.withOpacity(0),
                       child: DraggableBottomSheet(
                         previewChild: Container(
@@ -738,136 +880,3 @@ class _GoogleMapWidgetState extends State<GoogleMapWidget> {
                         blurBackground: true,
                       ),
                     )*/
-
-                showStickyFlexibleBottomSheet(
-                    initHeight: 0.45,
-                    minHeight: 0.45,
-                    maxHeight: 0.85,
-                    context: context,
-                    headerHeight: 60,
-                    isExpand: false,
-                    decoration: const ShapeDecoration(
-                      color: kColorWhite,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(40),
-                          topRight: Radius.circular(40),
-                        ),
-                      ),
-                    ),
-                    headerBuilder: (context, bottomSheetOffset) {
-                      return buildHeader(context, bottomSheetOffset);
-                    },
-                    builder: (context, offset) {
-                      return SliverChildListDelegate(
-                        <Widget>[
-                          AnimatedPreInformationContainer(
-                              offset: offset, marker: cluster.items.first),
-                          BuildBody(marker: cluster.items.first),
-                        ],
-                      );
-                    },
-                    anchors: [0.0, 0.45, 0.85]);
-              }
-            },
-            icon: await _getMarkerBitmap(cluster.isMultiple ? 125 : 75,
-                text: cluster.isMultiple ? cluster.count.toString() : null,
-                type: type));
-      };
-
-  Future<BitmapDescriptor> _getMarkerBitmap(int size,
-      {String text, @required PTYPE type}) async {
-    if (kIsWeb) size = (size / 2).floor();
-
-    final PictureRecorder pictureRecorder = PictureRecorder();
-    final Canvas canvas = Canvas(pictureRecorder);
-    Paint paint1 = Paint();
-    Paint paint2 = Paint();
-    Paint paint3 = Paint();
-
-    if (type == PTYPE.free) {
-      paint1.color = kColorPink;
-      paint2.color = Colors.white;
-      paint3.color = kColorPink;
-    } else if (type == PTYPE.partner) {
-      paint1.color = kColorGreen;
-      paint2.color = Colors.white;
-      paint3.color = kColorGreen;
-    } else {
-      paint1.color = kColorPink;
-      paint2.color = Colors.white;
-      paint3.color = kColorGreen;
-    }
-
-    canvas.drawCircle(Offset(size / 2, size / 2), size / 2.0, paint1);
-    canvas.drawCircle(Offset(size / 2, size / 2), size / 2.2, paint2);
-    canvas.drawCircle(Offset(size / 2, size / 2), size / 2.8, paint3);
-
-    if (text != null) {
-      TextPainter painter = TextPainter(textDirection: TextDirection.ltr);
-      painter.text = TextSpan(
-        text: text,
-        style: TextStyle(
-            fontSize: size / 3,
-            color: Colors.white,
-            fontWeight: FontWeight.normal),
-      );
-      painter.layout();
-      painter.paint(
-        canvas,
-        Offset(size / 2 - painter.width / 2, size / 2 - painter.height / 2),
-      );
-    }
-
-    final img = await pictureRecorder.endRecording().toImage(size, size);
-    final data = await img.toByteData(format: ImageByteFormat.png) as ByteData;
-
-    return BitmapDescriptor.fromBytes(data.buffer.asUint8List());
-  }
-
-  void northSouth() async {
-    GoogleMapController zController = await widget.mapController.future;
-    var currentZoomLevel = await zController.getZoomLevel();
-
-    zController.animateCamera(
-      CameraUpdate.newCameraPosition(
-        CameraPosition(
-          target: _cameraPosition.target,
-          zoom: currentZoomLevel,
-        ),
-      ),
-    );
-  }
-
-  void zoomIncrement() async {
-    GoogleMapController zController = await widget.mapController.future;
-    var currentZoomLevel = await zController.getZoomLevel();
-
-    currentZoomLevel = currentZoomLevel + 2;
-    zController.animateCamera(
-      CameraUpdate.newCameraPosition(
-        CameraPosition(
-          target: widget.cameraPosition.target,
-          zoom: currentZoomLevel,
-        ),
-      ),
-    );
-  }
-
-  void zoomDecrement() async {
-    GoogleMapController zController = await widget.mapController.future;
-    var currentZoomLevel = await zController.getZoomLevel();
-
-    currentZoomLevel = currentZoomLevel - 2;
-    zController.animateCamera(
-      CameraUpdate.newCameraPosition(
-        CameraPosition(
-          target: widget.cameraPosition.target,
-          zoom: currentZoomLevel,
-        ),
-      ),
-    );
-  }
-}
-
-enum PTYPE { free, partner, multi }

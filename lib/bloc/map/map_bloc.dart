@@ -26,39 +26,36 @@ class MapBloc extends Bloc<MapEvent, MapState> {
     developer.log("Got ${event.runtimeType}", name: 'map.map_bloc');
     if (event is MapEventInit) {
       yield* _mapInitToState();
-    }
-    else if(event is MapEventFilter){
+    } else if (event is MapEventFilter) {
       yield* _mapFilterToState(event);
     }
   }
 
   Stream<MapState> _mapInitToState() async* {
-    LocationData point;
+    LocationData locationData;
+    LatLng point;
     try {
-      point = await location.getLocation();
+      locationData = await location.getLocation().timeout(Duration(seconds: 1));
+      point = LatLng(locationData.latitude, locationData.longitude);
     } catch (e) {
-      point = null;
+      point = LatLng(55.796127, 49.106414);
     }
 
-    if (point == null) {
-    } else {
-      var markers;
-      try {
-        markers = await mapService.loadMarkersFrom4Coords(
-            LatLng(point.latitude, point.longitude));
-        yield MapStateLoaded(markers);
-      } catch (e) {
-        yield MapStateLoaded(List<CustMarker>.empty());
-      }
+    var markers;
+    try {
+      markers = await mapService.loadMarkersFrom4Coords(point);
+      yield MapStateLoaded(markers);
+    } catch (e) {
+      developer.log(e.toString(), name: 'map.map_bloc');
+      yield MapStateLoaded(List<CustMarker>.empty());
     }
   }
 
   Stream<MapState> _mapFilterToState(MapEventFilter event) async* {
-    
-    try{
+    try {
       var markers = await mapService.getMarkersByFilter(event.filter);
       yield MapStateLoaded(markers);
-    }catch(e){
+    } catch (e) {
       yield MapStateError(discription: '${e.toString()}');
     }
   }

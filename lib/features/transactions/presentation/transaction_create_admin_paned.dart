@@ -361,13 +361,7 @@ class _TransactionCreateAdminPanelScreenState
                                               return;
                                             }
                                             state
-                                                .createGarbageCollection()
-                                                .then((v) {
-                                              showMessage(
-                                                  context: context,
-                                                  message:
-                                                      "Успешно отправлено");
-                                            });
+                                                .createGarbageCollection();
                                           }),
                                     ),
                                     SizedBox(

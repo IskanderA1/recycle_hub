@@ -6,6 +6,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive/hive.dart';
 import 'package:recycle_hub/api/profile_repository/profile_repository.dart';
+import 'package:recycle_hub/api/services/points_service.dart';
 import 'package:recycle_hub/bloc/auth/auth_bloc.dart';
 import 'package:recycle_hub/bloc/cubit/profile_menu_cubit.dart';
 import 'package:recycle_hub/bloc/eco_coin_menu/eco_coin_menu_cubit.dart';
@@ -18,7 +19,6 @@ import 'package:recycle_hub/bloc/registration/registration_bloc.dart';
 import 'package:recycle_hub/screens/authorisation_and_registration/auth_screen.dart';
 import 'package:recycle_hub/screens/main_screen.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:recycle_hub/screens/workspace_screen.dart';
 import 'package:recycle_hub/style/theme.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:recycle_hub/screens/error_screen.dart';
@@ -31,8 +31,18 @@ import 'model/map_models.dart/work_time.dart';
 import 'package:recycle_hub/bloc/filter_type_cubit.dart';
 import 'model/transactions/user_transaction_model.dart';
 
+class MyHttpOverrides extends HttpOverrides {
+  @override
+  HttpClient createHttpClient(SecurityContext context) {
+    return super.createHttpClient(context)
+      ..badCertificateCallback =
+          (X509Certificate cert, String host, int port) => true;
+  }
+}
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  HttpOverrides.global = new MyHttpOverrides();
 
   ///total hive types next free number = 17
   ///to build models type in console
@@ -61,6 +71,7 @@ Future<void> main() async {
       .registerSingleton<FilterTypeCubit>(FilterTypeCubit()..loadFilterTypes());
   GetIt.I.registerSingleton<ProfileMenuCubit>(ProfileMenuCubit());
   GetIt.I.registerSingleton<EcoTestBloc>(EcoTestBloc(ProfileRepository()));
+  PointsService().loadAcceptTypes();
   runApp(
     MyApp(),
   );
@@ -87,7 +98,7 @@ class MyApp extends StatelessWidget {
           '/': (context) => MainScreen(),
           '/auth': (context) => AuthScreen(),
           '/error': (context) => ErrorScreen()
-        },
+        },        
       ),
     );
   }

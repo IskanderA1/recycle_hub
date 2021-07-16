@@ -29,7 +29,7 @@ class _EcoCoinScreenState extends State<EcoCoinScreen> {
               size: Size(size.width, size.height),
               painter: EcoCoinCustomPainter(size: size),
             ),
-            Positioned(
+            /* Positioned(
               top: 35,
               left: 5,
               child: IconButton(
@@ -40,7 +40,7 @@ class _EcoCoinScreenState extends State<EcoCoinScreen> {
                   Scaffold.of(context).openDrawer();
                 },
               ),
-            ),
+            ), */
             Positioned(
               top: size.height * 0.12,
               left: 20,

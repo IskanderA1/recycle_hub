@@ -1,7 +1,9 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_star_rating/flutter_star_rating.dart';
+import 'package:recycle_hub/model/map_models.dart/accept_types.dart';
 import 'package:recycle_hub/model/map_models.dart/marker.dart';
+import 'package:recycle_hub/screens/tabs/map/methods/pre_information_container.dart';
 import 'package:recycle_hub/screens/tabs/map/widgets/working_days_widget.dart';
 import 'package:recycle_hub/style/theme.dart';
 
@@ -24,17 +26,17 @@ class _MarkersListWidgetState extends State<MarkersListWidget> {
 }
 
 class MarkerCardWidget extends StatelessWidget {
-  final GridView list;
   final int index;
   final CustMarker marker;
   final String distance;
+  final List<FilterType> filters;
 
   const MarkerCardWidget(
       {Key key,
       @required this.index,
       @required this.marker,
-      @required this.list,
-      @required this.distance})
+      @required this.distance,
+      @required this.filters})
       : super(key: key);
 
   @override
@@ -67,7 +69,7 @@ class MarkerCardWidget extends StatelessWidget {
                           fontSize: 18),
                     ),
                   ),
-                  StarRating(
+                  /* StarRating(
                       rating: 3.5,
                       spaceBetween: 1,
                       starConfig: StarConfig(
@@ -81,7 +83,7 @@ class MarkerCardWidget extends StatelessWidget {
                         strokeColor: marker.paybackType == 'partner'
                             ? kColorWhite
                             : kColorBlack,
-                      ))
+                      )) */
                 ],
               ),
             ),
@@ -156,7 +158,11 @@ class MarkerCardWidget extends StatelessWidget {
                     ]),
               ),
             ),
-            Container(padding: EdgeInsets.fromLTRB(16, 2, 16, 18), child: list)
+            if (filters.isNotEmpty)
+              Container(
+                  padding: EdgeInsets.fromLTRB(16, 2, 16, 18),
+                  height: 50,
+                  child: FilterTypesContainer(filters: filters, gridSize: 20)),
           ],
         ),
       ),

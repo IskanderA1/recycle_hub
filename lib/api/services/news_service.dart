@@ -1,4 +1,3 @@
-
 import 'dart:convert';
 import 'dart:developer' as d;
 
@@ -19,7 +18,8 @@ class NewsService {
 
   Future<List<News>> loadNews() async {
     try {
-      final response = await CommonRequest.makeRequest('news');
+      final response =
+          await CommonRequest.makeRequest('news', needAuthorization: false);
       List data = jsonDecode(response.body);
       d.log(data.toString(), name: 'services.news_service');
       if (response.statusCode == 200) {

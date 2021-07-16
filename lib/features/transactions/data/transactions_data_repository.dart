@@ -1,12 +1,11 @@
 import 'dart:convert';
-
 import 'package:recycle_hub/api/request/request.dart';
 import 'package:recycle_hub/features/transactions/data/api/api_util.dart';
-import 'package:recycle_hub/features/transactions/domain/model/transaction/transactions_model.dart';
 import 'package:recycle_hub/features/transactions/domain/repository/repository.dart';
+import 'package:recycle_hub/model/garbage.dart';
 import 'package:recycle_hub/model/transactions/transaction_model.dart';
 import 'local/service/local_service.dart';
-import '../../../model/transactions/user_transaction_model.dart';
+import 'package:recycle_hub/model/transactions/user_transaction_model.dart';
 
 class TransactionsDataRepository extends TransactionsRepository {
   final ApiUtil apiUtil;
@@ -42,14 +41,18 @@ class TransactionsDataRepository extends TransactionsRepository {
 
   @override
   Future<void> createGarbageCollect(
-      String userToken, String filterTypeId, double ammount) async {
+      String userToken, List<GarbageTupple> items) async {
     try {
       var response = await CommonRequest.makeRequest("recycle",
           method: CommonRequestMethod.post,
           body: {
             "user_token": userToken,
-            "filter_type": filterTypeId,
-            "amount": ammount.toInt()
+            "items": items
+                .map((e) => {
+                      "filter_type": e.filterType.id,
+                      "amount": e.ammount.toInt()
+                    })
+                .toList()
           });
       if (response.statusCode != 200) {
         print(jsonDecode(response.body));
@@ -78,9 +81,8 @@ class TransactionsDataRepository extends TransactionsRepository {
   @override
   Future<Transaction> getTransactionById(String recycleId) async {
     try {
-      var response = await CommonRequest.makeRequest('recycle', params: {
-        "recycle_id": recycleId
-      });
+      var response = await CommonRequest.makeRequest('recycle',
+          params: {"recycle_id": recycleId});
       if (response.statusCode == 200) {
         var data = jsonDecode(response.body);
         return Transaction.fromMap(data);

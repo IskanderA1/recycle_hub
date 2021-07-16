@@ -27,14 +27,18 @@ class EcoCoinMenuCubit extends Cubit<EcoCoinMenuItems> {
   }
 
   void goBack() {
-    if(_lasts.isEmpty){
+    if (_lasts.isEmpty) {
       GetIt.I.get<NavBarCubit>().goBack();
-    }else{
-      _lasts.removeLast();
-      if(_lasts.isEmpty){
-        emit(EcoCoinMenuItems.MENU);
-      }else{
-        emit(_lasts.last);
+    } else {
+      var last = _lasts.removeLast();
+      if (last == EcoCoinMenuItems.MENU) {
+        GetIt.I.get<NavBarCubit>().goBack();
+      } else {
+        if (_lasts.isEmpty) {
+          emit(EcoCoinMenuItems.MENU);
+        } else {
+          emit(_lasts.last);
+        }
       }
     }
   }

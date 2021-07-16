@@ -47,14 +47,19 @@ class ProfileMenuCubit extends Cubit<ProfileMenuStates> {
     if (_lasts.isEmpty) {
       GetIt.I.get<NavBarCubit>().goBack();
     } else {
-      _lasts.removeLast();
-      if (_lasts.isEmpty &&
-          GetIt.I.get<AuthBloc>().state.userModel.userType == UserTypes.admin) {
-        emit(ProfileMenuStates.POINT_PROFILE);
-      } else if (_lasts.isEmpty) {
-        emit(ProfileMenuStates.MENU);
+      var last = _lasts.removeLast();
+      if (last == ProfileMenuStates.MENU) {
+        GetIt.I.get<NavBarCubit>().goBack();
       } else {
-        emit(_lasts.last);
+        if (_lasts.isEmpty &&
+            GetIt.I.get<AuthBloc>().state.userModel.userType ==
+                UserTypes.admin) {
+          emit(ProfileMenuStates.POINT_PROFILE);
+        } else if (_lasts.isEmpty) {
+          emit(ProfileMenuStates.MENU);
+        } else {
+          emit(_lasts.last);
+        }
       }
     }
   }

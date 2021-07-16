@@ -52,7 +52,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return BlocBuilder<AuthBloc, AuthState>(
       bloc: GetIt.I.get<AuthBloc>(),
       builder: (context, state) {
-        if(state is AuthStateLogedIn && state.user.userType == UserTypes.admin){
+        if (state is AuthStateLogedIn &&
+            state.user.userType == UserTypes.admin) {
           return PointProfileScreen();
         }
         return Scaffold(
@@ -108,8 +109,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               SizedBox(
                                 height: 10,
                               ),
-                            if (state is AuthStateLogedIn)
-                              buildMenu(authBloc)
+                            if (state is AuthStateLogedIn) buildMenu(authBloc)
                           ],
                         ),
                       ),
@@ -127,7 +127,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget buildAppBar() {
     return Stack(
       children: [
-        Container(
+        Padding(
+          padding: const EdgeInsets.only(top: 16),
+          child: IconButton(
+            icon: Icon(Icons.menu),
+            onPressed: () {
+              Scaffold.of(context).openDrawer();
+            },
+          ),
+        ),
+        /* Container(
           padding: EdgeInsets.only(top: 8),
           child: Align(
             alignment: Alignment.centerLeft,
@@ -144,7 +153,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
             ),
           ),
-        ),
+        ), */
         Container(
             alignment: Alignment.center,
             padding: EdgeInsets.only(top: 30),
@@ -273,12 +282,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         color: kColorGreen,
                         fontSize: 28,
                         fontFamily: 'GilroyMedium'),
-                    children: [
+                    /* children: [
                       TextSpan(text: '/', style: TextStyle(color: kColorBlack)),
                       TextSpan(
                           text: '${userState.userModel.freezeEcoCoins}',
                           style: TextStyle(color: kColorRed)),
-                    ]),
+                    ] */),
               ),
               Text(
                 "Баланс",

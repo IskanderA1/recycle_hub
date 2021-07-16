@@ -77,7 +77,11 @@ class _PurchaseDetailScreenState extends State<PurchaseDetailScreen> {
                   ),
                   Row(
                     children: [
-                      Expanded(child: SizedBox()),
+                      Expanded(
+                          child: SizedBox(
+                        height: 25,
+                        width: 25,
+                      )),
                       Expanded(
                           flex: 3,
                           child: TextField(
@@ -88,6 +92,7 @@ class _PurchaseDetailScreenState extends State<PurchaseDetailScreen> {
                               enabledBorder: InputBorder.none,
                               disabledBorder: InputBorder.none,
                             ),
+                            textAlign: TextAlign.center,
                             style: TextStyle(
                                 color: kColorBlack,
                                 fontSize: 16,
@@ -101,61 +106,74 @@ class _PurchaseDetailScreenState extends State<PurchaseDetailScreen> {
                         child: Icon(
                           Icons.copy_sharp,
                           color: kColorGreyLight,
+                          size: 25,
                         ),
                       ))
                     ],
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        "ID купона:",
-                        style: titleTextStyle,
-                      ),
-                      Text(
-                        "${widget.purchase.id}",
-                        style: valueTextStyle,
-                      ),
-                    ],
+                  Padding(
+                    padding: const EdgeInsets.only(top: 16),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          "ID купона:",
+                          style: titleTextStyle,
+                        ),
+                        Text(
+                          "${widget.purchase.id}",
+                          style: valueTextStyle,
+                        ),
+                      ],
+                    ),
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        "Срок действия до:",
-                        style: titleTextStyle,
-                      ),
-                      Text(
-                        "${format.format(widget.purchase.dateTo)}",
-                        style: valueTextStyle,
-                      ),
-                    ],
+                  Padding(
+                    padding: const EdgeInsets.only(top: 16),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          "Срок действия до:",
+                          style: titleTextStyle,
+                        ),
+                        Text(
+                          "${format.format(widget.purchase.dateTo)}",
+                          style: valueTextStyle,
+                        ),
+                      ],
+                    ),
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        "Сумма покупки:",
-                        style: titleTextStyle,
-                      ),
-                      Text(
-                        "${widget.purchase.amount} ЭкоКоинов",
-                        style: valueTextStyle,
-                      ),
-                    ],
+                  Padding(
+                    padding: const EdgeInsets.only(top: 16),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          "Сумма покупки:",
+                          style: titleTextStyle,
+                        ),
+                        Text(
+                          "${widget.purchase.amount} ЭкоКоинов",
+                          style: valueTextStyle,
+                        ),
+                      ],
+                    ),
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        "Дата покупки:",
-                        style: titleTextStyle,
-                      ),
-                      Text(
-                        "${format.format(widget.purchase.buyDate)}",
-                        style: valueTextStyle,
-                      ),
-                    ],
+                  Padding(
+                    padding: const EdgeInsets.only(top: 16),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          "Дата покупки:",
+                          style: titleTextStyle,
+                        ),
+                        Text(
+                          "${format.format(widget.purchase.buyDate)}",
+                          style: valueTextStyle,
+                        ),
+                      ],
+                    ),
                   )
                 ],
               ),

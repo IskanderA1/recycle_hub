@@ -6,4 +6,9 @@ class GarbageTupple {
   final double ammount;
 
   GarbageTupple({@required this.filterType, @required this.ammount});
+
+  Map<String, dynamic> toMap() => {
+        "filter_type": filterType == null ? null : filterType.id,
+        "amount": ammount == null ? null : ammount,
+    };
 }

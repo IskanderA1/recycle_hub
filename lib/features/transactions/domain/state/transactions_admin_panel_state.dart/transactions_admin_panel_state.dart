@@ -26,6 +26,9 @@ abstract class TransactionsStateB with Store {
   String errorMessage;
 
   @observable
+  String message;
+
+  @observable
   bool loading = false;
 
   @observable
@@ -89,18 +92,16 @@ abstract class TransactionsStateB with Store {
     loading = true;
     try {
       errorMessage = null;
-      this.garbages.forEach((element) async {
-        try {
-          await _registrationRepository.createGarbageCollect(
-              userToken, element.filterType.id, element.ammount);
-        } catch (e) {
-          print(errorMessage = e.toString());
-          errorMessage = e.toString();
-          loading = false;
-        }
-      });
+      try {
+        await _registrationRepository.createGarbageCollect(userToken, garbages);
+      } catch (e) {
+        print(errorMessage = e.toString());
+        errorMessage = e.toString();
+        loading = false;
+      }
       if (errorMessage == null) {
         this.state = AdmStoreState.CREATED;
+        message = 'Успешно отправлено';
       }
     } catch (error) {
       errorMessage = error.toString();

@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:hive/hive.dart';
 import 'package:recycle_hub/api/request/request.dart';
+import 'package:recycle_hub/helpers/file_uploader.dart';
 import 'package:recycle_hub/model/map_models.dart/accept_types.dart';
 import 'package:recycle_hub/model/map_models.dart/filter_model.dart';
 import 'package:recycle_hub/model/map_models.dart/marker.dart';
@@ -18,6 +19,8 @@ class PointsService {
   static const _boxKey = 'map.markers';
   static const _devLog = 'api.services.map_service';
   Box _box;
+
+  List<FilterType> filters = [];
 
   PointsService._() {
     openBox();
@@ -43,7 +46,7 @@ class PointsService {
       DateTime lastDownLoad =
           _box.get(_boxTimeKey, defaultValue: DateTime(2020, 12, 21));
       Duration dur = DateTime.now().difference(lastDownLoad);
-      if (dur < Duration(minutes: 1)) {
+      if (dur < Duration(minutes: 120)) {
         List<CustMarker> localList = List<CustMarker>.from(
             _box.get(_boxListKey, defaultValue: List<CustMarker>.empty()));
         if (localList.isNotEmpty) {
@@ -166,7 +169,7 @@ class PointsService {
     }
   }
 
-  Future<List<FilterType>> getAcceptTypes() async {
+  Future<List<FilterType>> loadAcceptTypes() async {
     await _checkBox();
     try {
       developer.log("Do GetAcceptTypes Request", name: _devLog);
@@ -177,8 +180,7 @@ class PointsService {
       var data = jsonDecode(response.body);
       print(data);
       if (data.isNotEmpty) {
-        final filters =
-            List<FilterType>.from(data.map((e) => FilterType.fromMap(e)));
+        filters = List<FilterType>.from(data.map((e) => FilterType.fromMap(e)));
         /* _box.put(_boxFiltersListKey, filters); */
 
         return filters;
@@ -268,10 +270,12 @@ class PointsService {
       if (response.statusCode == 200) {
         /* final imagesResponse = await CommonRequest.makeRequest('rec_offer/${point.id}/images',
         body: ); */
+        FileUpLoader.sendPhotos(images, 'rec_offer/${point.id}/images');
       } else {
         throw Exception('Не удалось сохранить изменения');
       }
     } catch (e) {
+      developer.log(e.toString(), name: _devLog);
       rethrow;
     }
   }

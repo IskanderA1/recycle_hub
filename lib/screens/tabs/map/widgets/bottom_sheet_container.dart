@@ -5,9 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:recycle_hub/bloc/map_screen_blocs/feedbacks_bloc.dart';
 import 'package:recycle_hub/bloc/map_screen_blocs/marker_info_bloc.dart';
+import 'package:recycle_hub/model/map_models.dart/accept_types.dart';
 import 'package:recycle_hub/model/map_models.dart/feedbacker_model.dart';
 import 'package:recycle_hub/model/map_models.dart/marker.dart';
 import 'package:recycle_hub/model/map_responses/feedbacks_collection_response.dart';
+import 'package:recycle_hub/screens/tabs/map/methods/pre_information_container.dart';
 import 'package:recycle_hub/screens/tabs/map/widgets/loader_widget.dart';
 import 'package:recycle_hub/style/theme.dart';
 import 'package:flutter_star_rating/flutter_star_rating.dart';
@@ -18,7 +20,8 @@ import 'working_days_widget.dart';
 class BuildBody extends StatefulWidget {
   final double offset;
   final CustMarker marker;
-  BuildBody({this.marker, this.offset});
+  final List<FilterType> filters;
+  BuildBody({this.marker, this.offset, @required this.filters});
   @override
   _BuildBodyState createState() => _BuildBodyState();
 }
@@ -44,7 +47,7 @@ class _BuildBodyState extends State<BuildBody> {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,
           children: [
-            Align(
+            /* Align(
               alignment: Alignment.centerLeft,
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(15, 10, 15, 5),
@@ -53,11 +56,11 @@ class _BuildBodyState extends State<BuildBody> {
                   style: TextStyle(color: kColorGreen),
                 ),
               ),
-            ),
-            Align(
+            ), */
+            /*  Align(
                 alignment: Alignment.centerLeft,
                 child: Padding(
-                  padding: const EdgeInsets.fromLTRB(15, 5, 15, 10),
+                  padding: const EdgeInsets.fromLTRB(16, 5, 16, 10),
                   child: Text(
                     widget.marker.name,
                     style: TextStyle(
@@ -66,16 +69,18 @@ class _BuildBodyState extends State<BuildBody> {
                         fontWeight: FontWeight.bold,
                         fontSize: 18),
                   ),
-                )),
-            buildTabBar(),
-            streamBuilderMethod(_size)
+                )), */
+            /* buildTabBar(), */
+            //streamBuilderMethod(_size)
+            NewWidget(
+                marker: widget.marker, size: _size, filters: widget.filters)
           ],
         ),
       ),
     );
   }
 
-  Container buildTabBar() {
+  /* Container buildTabBar() {
     return Container(
       alignment: Alignment.bottomCenter,
       padding: EdgeInsets.all(0),
@@ -138,9 +143,9 @@ class _BuildBodyState extends State<BuildBody> {
         ],
       ),
     );
-  }
+  } */
 
-  StreamBuilder<Mode> streamBuilderMethod(Size size) {
+  /* StreamBuilder<Mode> streamBuilderMethod(Size size) {
     return StreamBuilder(
       stream: markerInfoFeedBloc.stream,
       initialData: markerInfoFeedBloc.defaultItem,
@@ -155,18 +160,20 @@ class _BuildBodyState extends State<BuildBody> {
         }
       },
     );
-  }
+  } */
 }
 
 class NewWidget extends StatefulWidget {
-  const NewWidget({
-    Key key,
-    @required this.marker,
-    @required this.size,
-  }) : super(key: key);
+  const NewWidget(
+      {Key key,
+      @required this.marker,
+      @required this.size,
+      @required this.filters})
+      : super(key: key);
 
   final CustMarker marker;
   final Size size;
+  final List<FilterType> filters;
 
   @override
   _NewWidgetState createState() => _NewWidgetState();
@@ -174,19 +181,11 @@ class NewWidget extends StatefulWidget {
 
 class _NewWidgetState extends State<NewWidget> {
   //https://i04.fotocdn.net/s126/e69aeb6043a52824/public_pin_l/2868756737.jpg
-
+  List<Widget> _pictureList;
+  Size _size;
   @override
-  Widget build(BuildContext context) {
-    /*List<Widget> _list = widget.marker.acceptTypes
-        .map((card) => FilterCardWidget(
-            isSelected: false,
-            acceptType: card,
-            tapable: false,
-            onUp: () {},
-            onpressed: () {},
-            size: widget.size.width * 0.7))
-        .toList();*/
-    List<Widget> _pictureList = widget.marker.images
+  void initState() {
+    _pictureList = widget.marker.externalImages
         .map((img) => CachedNetworkImage(
               placeholder: (BuildContext context, url) => LoaderWidget(),
               imageUrl: "$img",
@@ -194,37 +193,31 @@ class _NewWidgetState extends State<NewWidget> {
                   Icon(Icons.error),
             ))
         .toList();
-    Size _size = MediaQuery.of(context).size;
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    _size = MediaQuery.of(context).size;
     return Column(
       children: [
         myDivider(),
         Padding(
-            padding: const EdgeInsets.fromLTRB(25, 5, 25, 5),
-            child: Row(
-              children: [
-                Icon(
-                  Icons.copyright,
-                  size: 30,
-                  color: Color(0xFF8D8D8D),
-                ),
-                SizedBox(
-                  width: 15,
-                ),
-                AutoSizeText(
-                  widget.marker.paybackType == "partner"
-                      ? "Выдает ЭкоКоины"
-                      : "Не выдает ЭкоКоинов",
-                  style: TextStyle(
-                      color: kColorBlack,
-                      fontFamily: 'GilroyMedium',
-                      fontSize: 18),
-                )
-              ],
-            )),
+          padding: const EdgeInsets.fromLTRB(25, 5, 25, 5),
+          child: WorkingDaysWidget(
+            workingTime: widget.marker.workTime,
+            wColor: kColorBlack,
+            backColor: kColorWhite,
+            hasSelection: true,
+            fontSize: 14,
+            size: Size(_size.width - 50, _size.height / 6.5),
+          ),
+        ),
+
         myDivider(),
 
         ///Карты того, что принимают
-        Padding(
+        /* Padding(
           padding: const EdgeInsets.fromLTRB(25, 5, 25, 5),
           child: Column(
             children: [
@@ -257,7 +250,63 @@ class _NewWidgetState extends State<NewWidget> {
               )*/
             ],
           ),
+        ), */
+        Padding(
+          padding: const EdgeInsets.only(left: 24, right: 24, top: 8),
+          child: Row(
+            children: [
+              FaIcon(
+                FontAwesomeIcons.recycle,
+                size: 30,
+                color: Color(0xFF8D8D8D),
+              ),
+              SizedBox(
+                width: 15,
+              ),
+              Expanded(
+                child: Text(
+                  "Принимают на переработку:",
+                  style: TextStyle(
+                      color: kColorBlack,
+                      fontWeight: FontWeight.w400,
+                      fontFamily: 'GilroyMedium',
+                      fontSize: 16),
+                ),
+              ),
+            ],
+          ),
         ),
+        Padding(
+          padding: const EdgeInsets.only(top: 8),
+          child: FilterTypesContainer(
+            filters: widget.filters,
+            gridSize: 30,
+          ),
+        ),
+        myDivider(),
+        Padding(
+            padding: const EdgeInsets.fromLTRB(25, 5, 25, 5),
+            child: Row(
+              children: [
+                Icon(
+                  Icons.copyright,
+                  size: 30,
+                  color: Color(0xFF8D8D8D),
+                ),
+                SizedBox(
+                  width: 15,
+                ),
+                AutoSizeText(
+                  widget.marker.paybackType == "partner"
+                      ? "Выдает ЭкоКоины"
+                      : "Не выдает ЭкоКоинов",
+                  style: TextStyle(
+                      color: kColorBlack,
+                      fontFamily: 'GilroyMedium',
+                      fontSize: 18),
+                )
+              ],
+            )),
         myDivider(),
         Padding(
           padding: const EdgeInsets.fromLTRB(25, 5, 25, 5),
@@ -366,18 +415,7 @@ class _NewWidgetState extends State<NewWidget> {
             ],
           ),
         ),
-        myDivider(),
-        Padding(
-          padding: const EdgeInsets.fromLTRB(25, 5, 25, 5),
-          child: WorkingDaysWidget(
-            workingTime: widget.marker.workTime,
-            wColor: kColorBlack,
-            backColor: kColorWhite,
-            hasSelection: true,
-            fontSize: 14,
-            size: Size(_size.width - 50, _size.height / 6.5),
-          ),
-        ),
+
         myDivider(),
         Padding(
           padding: EdgeInsets.fromLTRB(25, 5, 25, 5),

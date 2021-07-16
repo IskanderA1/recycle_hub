@@ -33,11 +33,29 @@ class _WellcomePageStepperState extends State<WellcomePageStepper> {
   ui.Image uimage;
   SequenceAnimation sequenceAnimation;
   GlobalKey<AnimatedBackGroundState> key = GlobalKey<AnimatedBackGroundState>();
+  List<Widget> pages;
 
   @override
   void initState() {
+    pages = [
+      Page1(),
+      Page2(),
+      Page3(),
+      Page4(
+        val: isConfirmed,
+        onChaned: (bool value) {
+          setState(() {
+            isConfirmed = value;
+          });
+        },
+      ),
+    ];
+    getImage().then((value) {
+      setState(() {
+        uimage = value;
+      });
+    });
     super.initState();
-    getImage().then((value) => uimage = value);
   }
 
   Future<ui.Image> getImage() async {
@@ -61,19 +79,7 @@ class _WellcomePageStepperState extends State<WellcomePageStepper> {
           PageView(
             controller: _pageController,
             clipBehavior: Clip.antiAlias,
-            children: [
-              Page1(),
-              Page2(),
-              Page3(),
-              Page4(
-                val: isConfirmed,
-                onChaned: (bool value) {
-                  setState(() {
-                    isConfirmed = value;
-                  });
-                },
-              ),
-            ],
+            children: pages,
             onPageChanged: (ind) {
               if (activeStepInd < ind) {
                 switch (activeStepInd) {

@@ -54,6 +54,21 @@ mixin _$AdminTransactionsState on TransactionsStateB, Store {
     });
   }
 
+  final _$messageAtom = Atom(name: 'TransactionsStateB.message');
+
+  @override
+  String get message {
+    _$messageAtom.reportRead();
+    return super.message;
+  }
+
+  @override
+  set message(String value) {
+    _$messageAtom.reportWrite(value, super.message, () {
+      super.message = value;
+    });
+  }
+
   final _$loadingAtom = Atom(name: 'TransactionsStateB.loading');
 
   @override
@@ -194,6 +209,7 @@ mixin _$AdminTransactionsState on TransactionsStateB, Store {
 userToken: ${userToken},
 garbages: ${garbages},
 errorMessage: ${errorMessage},
+message: ${message},
 loading: ${loading},
 images: ${images},
 state: ${state}
