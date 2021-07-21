@@ -84,7 +84,7 @@ class EcoGuideRepository {
       ];
       List<FilterType> filterModel = [];
       for (int i = 0; i < response.length; i++) {
-        filterModel.add(FilterType.fromJson(response[i]));
+        filterModel.add(FilterType.fromMap(response[i]));
       }
       return FilterResponse(filterModel,"");
     } catch (error, stack) {

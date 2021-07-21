@@ -1,10 +1,11 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:get_it/get_it.dart';
 import 'package:recycle_hub/api/services/user_service.dart';
 import 'package:recycle_hub/bloc/auth/auth_bloc.dart';
 import 'package:recycle_hub/bloc/cubit/profile_menu_cubit.dart';
-import 'package:recycle_hub/bloc/global_state_bloc.dart';
 import 'package:recycle_hub/elements/common_cell.dart';
 import 'package:recycle_hub/icons/user_profile_icons_icons.dart';
 import 'package:recycle_hub/model/user_model.dart';
@@ -29,21 +30,34 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
   AuthBloc authBloc;
-  AuthState userState;
+  UserModel userState;
+  ScrollController controller = ScrollController();
 
   //Box<UserModel> userBox;
   @override
   void initState() {
     //userBox = Hive.box('user');
     authBloc = GetIt.I.get<AuthBloc>();
-    userState = authBloc.state;
+    userState = authBloc.state.userModel;
 
     authBloc.stream.listen((st) {
-      if (authBloc.state is AuthStateLogedIn) {
-        userState = authBloc.state;
-      }
+      userState = authBloc.state.userModel;
     });
     super.initState();
+  }
+
+  Future<void> _refresh() async {
+    //GetIt.I.get<AuthBloc>().add(AuthEventRefresh());
+    UserModel newUser;
+    try {
+      newUser = await UserService().userInfo();
+      if (newUser != null) {
+        userState = newUser;
+      }
+    } catch (e) {
+      print(e.toString());
+    }
+    setState(() {});
   }
 
   @override
@@ -61,62 +75,71 @@ class _ProfileScreenState extends State<ProfileScreen> {
             height: _size.height,
             width: _size.width,
             alignment: Alignment.topCenter,
-            child: Stack(
-              children: [
-                Image.asset("svg/Mask Group.png"),
-                Container(
-                  child: ListView(
-                    padding: EdgeInsets.only(left: 17, right: 17, top: 10),
-                    children: [
-                      buildAppBar(),
-                      SizedBox(
-                        height: 17,
-                      ),
-                      buildProfileAvatar(state.userModel.name, "ЭКОЛОГ",
-                          state.userModel.image),
-                      SizedBox(
-                        height: 24,
-                      ),
-                      buildStatus(10, UserService().garbageGiven),
-                      SizedBox(
-                        height: 5,
-                      ),
-                      Container(
-                        height: _size.height * 0.6,
-                        padding: EdgeInsets.only(
-                            top: 12, bottom: 12, right: 19, left: 19),
-                        decoration: BoxDecoration(
-                            color: kColorWhite,
-                            borderRadius: BorderRadius.circular(16)),
-                        child: ListView(
-                          padding: EdgeInsets.only(
-                              bottom: _size.height * 0.05, top: 5),
-                          children: [
-                            if (state is AuthStateGuestAcc)
-                              CommonCell(
-                                text: 'Авторизоваться',
-                                onTap: () {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => AuthScreen()));
-                                },
-                              ),
-                            if (state is AuthStateLogedIn)
-                              buildAchievments(
-                                  "Эколог", UserService().garbageGiven),
-                            if (state is AuthStateLogedIn)
-                              SizedBox(
-                                height: 10,
-                              ),
-                            if (state is AuthStateLogedIn) buildMenu(authBloc)
-                          ],
+            child: EasyRefresh(
+              onRefresh: _refresh,
+              footer: ClassicalFooter(),
+              header: ClassicalHeader(),
+              scrollController: controller,
+              child: Stack(
+                children: [
+                  Image.asset("svg/Mask Group.png"),
+                  Container(
+                    child: ListView(
+                      controller: controller,
+                      shrinkWrap: true,
+                      padding: EdgeInsets.only(left: 17, right: 17, top: 10),
+                      children: [
+                        buildAppBar(),
+                        SizedBox(
+                          height: 17,
                         ),
-                      ),
-                    ],
+                        buildProfileAvatar(state.userModel.name, "ЭКОЛОГ",
+                            state.userModel.image),
+                        SizedBox(
+                          height: 24,
+                        ),
+                        buildStatus(10, UserService().garbageGiven),
+                        SizedBox(
+                          height: 5,
+                        ),
+                        Container(
+                          height: _size.height * 0.6,
+                          padding: EdgeInsets.only(
+                              top: 12, bottom: 12, right: 19, left: 19),
+                          decoration: BoxDecoration(
+                              color: kColorWhite,
+                              borderRadius: BorderRadius.circular(16)),
+                          child: ListView(
+                            padding: EdgeInsets.only(
+                                bottom: _size.height * 0.05, top: 5),
+                            children: [
+                              if (state is AuthStateGuestAcc)
+                                CommonCell(
+                                  text: 'Авторизоваться',
+                                  onTap: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                AuthScreen()));
+                                  },
+                                ),
+                              if (state is AuthStateLogedIn)
+                                buildAchievments(
+                                    "Эколог", UserService().garbageGiven),
+                              if (state is AuthStateLogedIn)
+                                SizedBox(
+                                  height: 10,
+                                ),
+                              if (state is AuthStateLogedIn) buildMenu(authBloc)
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         );
@@ -277,17 +300,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
             children: [
               RichText(
                 text: TextSpan(
-                    text: '${userState.userModel.ecoCoins}',
-                    style: TextStyle(
-                        color: kColorGreen,
-                        fontSize: 28,
-                        fontFamily: 'GilroyMedium'),
-                    /* children: [
+                  text: '${userState.ecoCoins}',
+                  style: TextStyle(
+                      color: kColorGreen,
+                      fontSize: 28,
+                      fontFamily: 'GilroyMedium'),
+                  /* children: [
                       TextSpan(text: '/', style: TextStyle(color: kColorBlack)),
                       TextSpan(
                           text: '${userState.userModel.freezeEcoCoins}',
                           style: TextStyle(color: kColorRed)),
-                    ] */),
+                    ] */
+                ),
               ),
               Text(
                 "Баланс",

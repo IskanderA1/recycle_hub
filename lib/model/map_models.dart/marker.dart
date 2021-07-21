@@ -55,7 +55,7 @@ class CustMarker {
   @HiveField(13)
   bool getBonus;
   @HiveField(14)
-  List<dynamic> images;
+  List<String> images;
   @HiveField(15)
   List<String> externalImages;
   @HiveField(16)
@@ -133,7 +133,7 @@ class CustMarker {
         getBonus: json["getBonus"] == null ? null : json["getBonus"],
         images: json["images"] == null
             ? null
-            : List<dynamic>.from(json["images"].map((x) => x)),
+            : List<String>.from(json["images"].map((x) => x)),
         externalImages: json["external_images"] == null
             ? null
             : List<String>.from(json["external_images"].map((x) => x)),
@@ -152,22 +152,22 @@ class CustMarker {
         "address": address == null ? null : address,
         "contacts": contacts == null
             ? null
-            : List<dynamic>.from(contacts.map((x) => x)),
+            : List<String>.from(contacts.map((x) => x)),
         "accept_types_names": acceptTypesNames == null
             ? null
-            : List<dynamic>.from(acceptTypesNames.map((x) => x)),
+            : List<String>.from(acceptTypesNames.map((x) => x)),
         "accept_types": acceptTypes == null
             ? null
-            : List<dynamic>.from(acceptTypes.map((x) => x)),
+            : List<String>.from(acceptTypes.map((x) => x)),
         "coords":
             coords == null ? null : List<dynamic>.from(coords.map((x) => x)),
         "description": description == null ? null : description,
         "getBonus": getBonus == null ? null : getBonus,
         "images":
-            images == null ? null : List<dynamic>.from(images.map((x) => x)),
+            images == null ? null : List<String>.from(images.map((x) => x)),
         "external_images": externalImages == null
             ? null
-            : List<dynamic>.from(externalImages.map((x) => x)),
+            : List<String>.from(externalImages.map((x) => x)),
         "approve_status": approveStatus == null ? null : approveStatus,
       };
 }

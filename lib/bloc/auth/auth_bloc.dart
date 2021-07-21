@@ -29,11 +29,12 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       yield* _mapInitToState();
     } else if (event is AuthEventSwitchFirstIn) {
       yield* _mapSwitchFirstToState();
-    } 
-    else if (event is AuthEventLogin) {
+    } else if (event is AuthEventLogin) {
       yield* _mapLoginToState(event);
     } else if (event is AuthEventLogout) {
       yield* _mapLogoutToState();
+    } else if (event is AuthEventRefresh) {
+      yield* _mapRefreshToState();
     }
   }
 
@@ -132,5 +133,31 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   Stream<AuthState> _mapSwitchFirstToState() async* {
     Settings().isFirstLaunch = false;
     yield AuthStateGuestAcc();
+  }
+
+  Stream<AuthState> _mapRefreshToState() async* {
+    AuthState cState = state;
+
+    if (cState is AuthStateLogedIn) {
+      yield AuthStateLoading();
+      String token = await SessionManager().getAuthorizationToken();
+      if (token == null) {
+        await SessionManager().relogin();
+        token = await SessionManager().getAuthorizationToken();
+      }
+      if (token != null) {
+        try {
+          UserModel user = await userService.userInfo();
+          if (user != null) {
+            StaticData.user.value = user;
+            yield AuthStateLogedIn(user: user);
+          } else {
+            yield cState;
+          }
+        } catch (e) {
+          yield cState;
+        }
+      }
+    }
   }
 }

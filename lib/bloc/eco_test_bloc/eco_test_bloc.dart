@@ -136,7 +136,8 @@ class EcoTestBloc extends Bloc<EcoTestEvent, EcoTestState> {
             result: cState.lastAnswerResult,
             gotPoints: cState.lastAnswerResult.isAttemptSuccess
                 ? currentAttempt.points
-                : 0);
+                : 0,
+            currentAttempt: currentAttempt);
         return;
       }
       try {

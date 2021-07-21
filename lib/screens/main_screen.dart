@@ -59,6 +59,12 @@ class _MainScreenState extends State<MainScreen> {
   Widget build(BuildContext context) {
     return BlocBuilder(
         bloc: authBloc,
+        buildWhen: (previous, current) {
+          if (current is AuthStateLoading) {
+            return false;
+          }
+          return true;
+        },
         builder: (context, state) {
           if (state is AuthStateFirstIn) {
             return WellcomePageStepper();

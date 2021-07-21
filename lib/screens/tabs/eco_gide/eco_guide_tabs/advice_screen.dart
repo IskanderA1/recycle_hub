@@ -42,7 +42,7 @@ class _AdviceScreenState extends State<AdviceScreen> {
             margin: EdgeInsets.only(bottom: 5),
             child: Column(
               children: [
-                Container(
+                /* Container(
                   child: Wrap(
                     spacing: 5,
                     children: [
@@ -105,7 +105,7 @@ class _AdviceScreenState extends State<AdviceScreen> {
                       ),
                     ],
                   ),
-                ),
+                ), */
                 Padding(
                   padding: const EdgeInsets.only(
                     bottom: 80

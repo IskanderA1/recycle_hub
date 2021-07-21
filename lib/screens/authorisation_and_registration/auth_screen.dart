@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -7,8 +8,10 @@ import 'package:flutter_svg_provider/flutter_svg_provider.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get_it/get_it.dart';
 import 'package:recycle_hub/bloc/auth/auth_bloc.dart';
+import 'package:recycle_hub/helpers/messager_helper.dart';
 import 'package:recycle_hub/model/authorisation_models/user_response.dart';
 import 'package:recycle_hub/screens/authorisation_and_registration/registration_screen.dart';
+import 'package:recycle_hub/screens/tabs/map/widgets/loader_widget.dart';
 import 'package:recycle_hub/style/style.dart';
 import 'package:recycle_hub/style/theme.dart';
 
@@ -34,7 +37,27 @@ class _AuthScreenState extends State<AuthScreen> {
     _authSub = authBloc.stream.listen((state) {
       if (state is AuthStateLogedIn) {
         Navigator.of(context).popUntil(ModalRoute.withName('/'));
+      } else if (state is AuthStateFail) {
+        showMessage(context: context, message: state.error.toString());
       }
+      /* if (state is AuthStateLoading) {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => Scaffold(
+                      body: Container(
+                        height: double.infinity,
+                        width: double.infinity,
+                        child: BackdropFilter(
+                            filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+                            child: Center(
+                              child: LoaderWidget(),
+                            )),
+                      ),
+                    )));
+      } else {
+        Navigator.of(context).popUntil(ModalRoute.withName('/auth'));
+      } */
     });
     super.initState();
   }
@@ -49,84 +72,101 @@ class _AuthScreenState extends State<AuthScreen> {
   @override
   Widget build(BuildContext context) {
     Size _size = MediaQuery.of(context).size;
-    return GestureDetector(
-      onTap: () {
-        FocusScope.of(context).unfocus();
-      },
-      child: WillPopScope(
-        onWillPop: () async {
-          Navigator.of(context).popUntil(ModalRoute.withName('/'));
-          return true;
-        },
-        child: Scaffold(
-            body: Container(
-          color: kColorWhite,
-          height: _size.height,
-          width: _size.width,
-          child: SingleChildScrollView(
-            child: Column(
-              //crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Stack(
-                  alignment: Alignment.bottomCenter,
+    return BlocBuilder<AuthBloc, AuthState>(
+      bloc: GetIt.I.get<AuthBloc>(),
+      builder: (context, state) {
+        if (state is AuthStateLoading) {
+          return Scaffold(
+              body: Container(
+            height: double.infinity,
+            width: double.infinity,
+            child: BackdropFilter(
+                filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+                child: Center(
+                  child: LoaderWidget(),
+                )),
+          ));
+        }
+        return GestureDetector(
+          onTap: () {
+            FocusScope.of(context).unfocus();
+          },
+          child: WillPopScope(
+            onWillPop: () async {
+              Navigator.of(context).popUntil(ModalRoute.withName('/'));
+              return true;
+            },
+            child: Scaffold(
+                body: Container(
+              color: kColorWhite,
+              height: _size.height,
+              width: _size.width,
+              child: SingleChildScrollView(
+                child: Column(
+                  //crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Container(
-                      alignment: Alignment.topCenter,
-                      child: Image(
-                        width: _size.width,
-                        height: _size.height * 0.40,
-                        color: Color(0xFFDBCCB6),
-                        image: Svg('assets/icons/onboarding_1/Clouds.svg'),
-                      ),
-                    ),
-                    Column(
+                    Stack(
+                      alignment: Alignment.bottomCenter,
                       children: [
                         Container(
-                          alignment: Alignment.center,
+                          alignment: Alignment.topCenter,
                           child: Image(
-                            image: Svg('assets/icons/reg/reg_logo.svg'),
+                            width: _size.width,
+                            height: _size.height * 0.40,
+                            color: Color(0xFFDBCCB6),
+                            image: Svg('assets/icons/onboarding_1/Clouds.svg'),
                           ),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.only(top: 30),
-                          child: Text(
-                            'Добро пожаловать в',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              color: kColorBlack,
-                              fontFamily: 'Gilroy',
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
+                        Column(
+                          children: [
+                            Container(
+                              alignment: Alignment.center,
+                              child: Image(
+                                image: Svg('assets/icons/reg/reg_logo.svg'),
+                              ),
                             ),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(
-                            'RecycleHub',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              color: Color(0xFF249507),
-                              fontFamily: 'Gilroy',
-                              fontSize: 28,
-                              fontWeight: FontWeight.w700,
+                            Padding(
+                              padding: const EdgeInsets.only(top: 30),
+                              child: Text(
+                                'Добро пожаловать в',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  color: kColorBlack,
+                                  fontFamily: 'Gilroy',
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
                             ),
-                          ),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
+                                'RecycleHub',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  color: Color(0xFF249507),
+                                  fontFamily: 'Gilroy',
+                                  fontSize: 28,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ],
                     ),
+                    _buildEmailTF(),
+                    _buildPasswordTF(),
+                    _buildLoginBtn(),
+                    _regFromGoogleVkButtons(),
+                    _toCreateAcc(),
                   ],
                 ),
-                _buildEmailTF(),
-                _buildPasswordTF(),
-                _buildLoginBtn(),
-                _regFromGoogleVkButtons(),
-                _toCreateAcc(),
-              ],
-            ),
+              ),
+            )),
           ),
-        )),
-      ),
+        );
+      },
     );
   }
 

@@ -45,7 +45,7 @@ class _AnimatedPreInformationContainerState
   Widget build(BuildContext context) {
     size = MediaQuery.of(context).size;
     widgetNotVisable = Container(
-      height: 130,
+      height: 50,
       padding: EdgeInsets.only(bottom: 8),
       child: ListView(
         physics: NeverScrollableScrollPhysics(),
@@ -103,53 +103,6 @@ class _AnimatedPreInformationContainerState
               ),
             ],
           ),
-          /* Expanded(
-            flex: 6,
-            child: WorkingDaysWidget(
-              workingTime: widget.marker.workTime,
-              backColor: kColorWhite,
-              wColor: kColorBlack,
-              hasSelection: false,
-              size: Size(size.width - 90, size.height * 0.14),
-              fontSize: 11,
-            ),
-          ), */
-          Padding(
-            padding: const EdgeInsets.only(left: 24, right: 24, top: 8),
-            child: Row(
-              children: [
-                FaIcon(
-                  FontAwesomeIcons.recycle,
-                  size: 30,
-                  color: Color(0xFF8D8D8D),
-                ),
-                SizedBox(
-                  width: 15,
-                ),
-                Expanded(
-                  child: Text(
-                    "Принимают на переработку:",
-                    style: TextStyle(
-                        color: kColorBlack,
-                        fontWeight: FontWeight.w400,
-                        fontFamily: 'GilroyMedium',
-                        fontSize: 16),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(top: 8),
-            child: FilterTypesContainer(
-              filters: widget.filters,
-              gridSize: 30,
-            ),
-          ),
-          if (widget.offset == 0.2)
-            SizedBox(
-              height: 200,
-            )
         ],
       ),
     );

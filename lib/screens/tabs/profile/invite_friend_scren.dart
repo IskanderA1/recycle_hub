@@ -3,7 +3,6 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get_it/get_it.dart';
 import 'package:recycle_hub/bloc/auth/auth_bloc.dart';
 import 'package:recycle_hub/bloc/cubit/profile_menu_cubit.dart';
-import 'package:recycle_hub/bloc/profile/profile_bloc.dart';
 import 'package:recycle_hub/helpers/clipboard_helper.dart';
 import 'package:recycle_hub/helpers/network_helper.dart';
 import 'package:recycle_hub/style/theme.dart';

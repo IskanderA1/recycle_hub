@@ -31,7 +31,7 @@ class CustMarkerAdapter extends TypeAdapter<CustMarker> {
       coords: (fields[11] as List)?.cast<double>(),
       description: fields[12] as String,
       getBonus: fields[13] as bool,
-      images: (fields[14] as List)?.cast<dynamic>(),
+      images: (fields[14] as List)?.cast<String>(),
       externalImages: (fields[15] as List)?.cast<String>(),
       approveStatus: fields[16] as String,
     );

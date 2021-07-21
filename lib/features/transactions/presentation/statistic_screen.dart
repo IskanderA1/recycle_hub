@@ -260,7 +260,8 @@ class _StatisticScreenState extends State<StatisticScreen> {
                                         }
                                         if (_transactionsState.state ==
                                             StoreState.LOADED) {
-                                          return Text("${_transactionsState.totalKG} кг",
+                                          return Text(
+                                              "${_transactionsState.totalKG} кг",
                                               style: TextStyle(
                                                   color:
                                                       const Color(0xFF484848),
@@ -305,7 +306,7 @@ class _StatisticScreenState extends State<StatisticScreen> {
                                         borderRadius: BorderRadius.all(
                                             Radius.circular(10))),
                                     child: Icon(
-                                      Icons.attach_money,
+                                      Icons.copyright,
                                       color: const Color(0xFFC8BB42),
                                       size: 25,
                                     ),
@@ -336,8 +337,7 @@ class _StatisticScreenState extends State<StatisticScreen> {
                                         if (_transactionsState.state ==
                                             StoreState.LOADED) {
                                           return Text(
-                                              r'$' +
-                                                  " ${_transactionsState.summ}",
+                                              " ${_transactionsState.summ}",
                                               style: TextStyle(
                                                   color:
                                                       const Color(0xFF484848),
@@ -379,7 +379,7 @@ class StatisticWidget extends StatelessWidget {
       shrinkWrap: true,
       itemCount: statisticModel.length,
       itemBuilder: (context, index) {
-        if(statisticModel[index] == null){
+        if (statisticModel[index] == null) {
           return Container();
         }
         return StatisticListElement(

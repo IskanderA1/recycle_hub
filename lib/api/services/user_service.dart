@@ -135,6 +135,7 @@ class UserService {
       if (response.statusCode == 200) {
         var data = json.decode(response.body);
         print(data);
+
         if (data.isNotEmpty) {
           _userTransactions = List<UserTransaction>.from(data.map((e) {
             return UserTransaction.fromMap(e);
@@ -171,7 +172,7 @@ class UserService {
           name: 'api.services.user_service');
       _transactions = [];
     }
-
+    _garbagesGiven = 0;
     if (_transactions.isNotEmpty) {
       _transactions.forEach((element) {
         var localSumm = 0.0;
@@ -281,7 +282,7 @@ class UserService {
       }
     } catch (error, stacktrace) {
       print("Exception occured: $error stackTrace: $stacktrace");
-      if(error is RequestError){
+      if (error is RequestError) {
         rethrow;
       }
       throw RequestError(code: RequestErrorCode.unknown);

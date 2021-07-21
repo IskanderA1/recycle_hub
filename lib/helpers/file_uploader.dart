@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:ui';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:recycle_hub/api/request/session_manager.dart';
 import 'package:recycle_hub/helpers/messager_helper.dart';
 import 'package:recycle_hub/screens/tabs/map/widgets/loader_widget.dart';
 import 'package:recycle_hub/style/theme.dart';
@@ -61,10 +62,14 @@ class FileUpLoader {
     }
 
     try {
-      files.forEach((element) {
-        _sendPhoto(element, endpoint);
+      files.forEach((element) async {
+        try {
+          await _sendPhoto(element, endpoint);
+        } catch (e) {
+          print(e.toString());
+        }
       });
-    } on Exception catch (e) {
+    } catch (e) {
       d.log(e.toString(), name: 'helpers.file_uploader');
       if (context != null) {
         showMessage(context: context, message: 'Не удалось отправить фото');
@@ -79,8 +84,21 @@ class FileUpLoader {
   static Future<void> _sendPhoto(File file, String endpoint) async {
     try {
       Dio dio = Dio();
-      FormData image = FormData.fromMap({'file': file});
-      final response = await dio.post(devURL + '/' + endpoint, data: image);
+      String token = await SessionManager().getAuthorizationToken();
+      if (token == null) {
+        await SessionManager().relogin();
+        token = await SessionManager().getAuthorizationToken();
+      }
+      if (token == null) {
+        throw Exception('Пользователь не авторизован');
+      }
+      String fileName = file.path.split('/').last;
+      FormData image = FormData.fromMap({
+        'file': [await MultipartFile.fromFile(file.path, filename:fileName)]
+      });
+      final response = await dio.post(devURL + '/' + endpoint,
+          data: image,
+          options: Options(headers: {"Authorization": 'Bearer $token'}));
       if (response.statusCode != 200) {}
     } catch (e) {
       rethrow;

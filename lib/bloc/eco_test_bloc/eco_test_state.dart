@@ -126,8 +126,9 @@ class EcoTestStateAnswered extends EcoTestState {
 class EcoTestStateCompleted extends EcoTestState {
   final AnswerResult result;
   final int gotPoints;
+  final Attempt currentAttempt;
 
-  EcoTestStateCompleted({this.result, this.gotPoints});
+  EcoTestStateCompleted({this.result, this.gotPoints, this.currentAttempt});
 
   @override
   List<Object> get props => [];

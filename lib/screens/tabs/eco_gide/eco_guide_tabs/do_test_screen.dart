@@ -113,12 +113,15 @@ class _TestScreenState extends State<TestScreen> {
               resultStr = 'Ура, вы прошли тест!';
             } else {
               resultStr =
-                  'Повторите попытку позже, вы получили ${state.gotPoints} из n';
+                  'Повторите попытку позже, вы получили ${state.gotPoints} из ${state.currentAttempt.points}';
             }
             return Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(resultStr),
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Text(resultStr),
+                ),
                 EcoTestContinueButton(
                   btnText: 'Выйти',
                   onTap: () {
