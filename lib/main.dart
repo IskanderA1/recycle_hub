@@ -13,6 +13,7 @@ import 'package:recycle_hub/bloc/eco_coin_menu/eco_coin_menu_cubit.dart';
 import 'package:recycle_hub/bloc/eco_guide_cubit/eco_guide_cubit_cubit.dart';
 import 'package:recycle_hub/bloc/eco_test_bloc/eco_test_bloc.dart';
 import 'package:recycle_hub/bloc/map/map_bloc.dart';
+import 'package:recycle_hub/bloc/marker_edit_cubit/marker_edit_cubit.dart';
 import 'package:recycle_hub/bloc/nav_bar_cubit/nav_bar_cubit_cubit.dart';
 import 'package:recycle_hub/bloc/recovery_bloc/recovery_bloc.dart';
 import 'package:recycle_hub/bloc/registration/registration_bloc.dart';
@@ -40,6 +41,7 @@ class MyHttpOverrides extends HttpOverrides {
   }
 }
 
+GetIt locator = GetIt.instance;
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   HttpOverrides.global = new MyHttpOverrides();
@@ -67,10 +69,13 @@ Future<void> main() async {
   GetIt.I.registerSingleton<RegistrationBloc>(RegistrationBloc());
   GetIt.I.registerSingleton<RecoveryBloc>(RecoveryBloc());
   GetIt.I.registerSingleton<MapBloc>(MapBloc());
-  GetIt.I
-      .registerSingleton<FilterTypeCubit>(FilterTypeCubit()..loadFilterTypes());
+  GetIt.I.registerSingleton<FilterTypeCubit>(
+    FilterTypeCubit()..loadFilterTypes(),
+  );
   GetIt.I.registerSingleton<ProfileMenuCubit>(ProfileMenuCubit());
   GetIt.I.registerSingleton<EcoTestBloc>(EcoTestBloc(ProfileRepository()));
+  locator.registerFactory<MarkerEditCubit>(() => MarkerEditCubit());
+
   PointsService().loadAcceptTypes();
   runApp(
     MyApp(),
@@ -98,7 +103,7 @@ class MyApp extends StatelessWidget {
           '/': (context) => MainScreen(),
           '/auth': (context) => AuthScreen(),
           '/error': (context) => ErrorScreen()
-        },        
+        },
       ),
     );
   }
