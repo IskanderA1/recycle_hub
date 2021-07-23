@@ -6,7 +6,10 @@ import 'package:get_it/get_it.dart';
 import 'package:recycle_hub/api/services/user_service.dart';
 import 'package:recycle_hub/bloc/auth/auth_bloc.dart';
 import 'package:recycle_hub/bloc/cubit/profile_menu_cubit.dart';
+import 'package:recycle_hub/elements/ball.dart';
 import 'package:recycle_hub/elements/common_cell.dart';
+import 'package:recycle_hub/helpers/network_helper.dart';
+import 'package:recycle_hub/helpers/alert_helper.dart';
 import 'package:recycle_hub/icons/user_profile_icons_icons.dart';
 import 'package:recycle_hub/model/user_model.dart';
 import 'package:recycle_hub/screens/authorisation_and_registration/auth_screen.dart';
@@ -110,6 +113,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               color: kColorWhite,
                               borderRadius: BorderRadius.circular(16)),
                           child: ListView(
+                            controller: controller,
                             padding: EdgeInsets.only(
                                 bottom: _size.height * 0.05, top: 5),
                             children: [
@@ -298,19 +302,70 @@ class _ProfileScreenState extends State<ProfileScreen> {
           Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              RichText(
-                text: TextSpan(
-                  text: '${userState.ecoCoins}',
-                  style: TextStyle(
-                      color: kColorGreen,
-                      fontSize: 28,
-                      fontFamily: 'GilroyMedium'),
-                  /* children: [
-                      TextSpan(text: '/', style: TextStyle(color: kColorBlack)),
-                      TextSpan(
-                          text: '${userState.userModel.freezeEcoCoins}',
-                          style: TextStyle(color: kColorRed)),
-                    ] */
+              InkWell(
+                onTap: () {
+                  AlertHelper.showErrorAlert(
+                      context,
+                      "Информация о балансе",
+                      Container(
+                        height: 250,
+                        decoration: BoxDecoration(
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(25))),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Row(
+                              children: [
+                                BallGreen(
+                                  color: kColorRed,
+                                ),
+                                SizedBox(
+                                  width: 32,
+                                ),
+                                Expanded(
+                                  child: Text(
+                                    'Красным цветом выделена информация о количестве заблокированных экокоинов.',
+                                    overflow: TextOverflow.visible,
+                                  ),
+                                )
+                              ],
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 16),
+                              child: Row(
+                                children: [
+                                  BallGreen(),
+                                  SizedBox(
+                                    width: 32,
+                                  ),
+                                  Expanded(
+                                    child: Text(
+                                      'Зеленым цветом выделена информация о количестве разблокированных экокоинов.',
+                                      overflow: TextOverflow.visible,
+                                    ),
+                                  )
+                                ],
+                              ),
+                            )
+                          ],
+                        ),
+                      ));
+                },
+                child: RichText(
+                  text: TextSpan(
+                      text: '${userState.ecoCoins}',
+                      style: TextStyle(
+                          color: kColorGreen,
+                          fontSize: 28,
+                          fontFamily: 'GilroyMedium'),
+                      children: [
+                        TextSpan(
+                            text: '/', style: TextStyle(color: kColorBlack)),
+                        TextSpan(
+                            text: '${userState.freezeEcoCoins}',
+                            style: TextStyle(color: kColorRed)),
+                      ]),
                 ),
               ),
               Text(
@@ -532,6 +587,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
           if (authBloc != null) {
             authBloc.add(AuthEventLogout());
           }
+        } else if (index == 4) {
+          NetworkHelper.openUrl('http://vk.com/id0', context);
         }
       },
       child: Container(

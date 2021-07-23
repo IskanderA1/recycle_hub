@@ -5,7 +5,10 @@ import 'package:recycle_hub/model/news.dart';
 
 class NewsList extends StatefulWidget {
   final bool onlyAdvices;
-  NewsList({this.onlyAdvices});
+  final EdgeInsetsGeometry padding;
+  NewsList(
+      {this.onlyAdvices = false,
+      this.padding = const EdgeInsets.fromLTRB(16, 16, 16, 80)});
   @override
   _NewsListState createState() => _NewsListState();
 }
@@ -17,13 +20,16 @@ class _NewsListState extends State<NewsList> {
   @override
   void initState() {
     newsList = NewsService().news;
+    if (widget.onlyAdvices) {
+      newsList = newsList.where((e) => e.isAdvice).toList();
+    }
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 16, 16, 80),
+      padding: widget.padding,
       child: ListView.builder(
         shrinkWrap: true,
         itemCount: newsList.length,

@@ -1,7 +1,6 @@
-import 'package:day_night_switcher/day_night_switcher.dart';
+import 'package:recycle_hub/screens/news_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import '../style/theme.dart';
 
 class CustomDrawer extends StatefulWidget {
   @override
@@ -51,7 +50,10 @@ class _CustomDrawerState extends State<CustomDrawer> {
               child: ListTile(
                 contentPadding: EdgeInsets.all(0),
                 title: Text('Новости', style: TextStyle(fontSize: 16)),
-                onTap: () {},
+                onTap: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => NewsScreen()));
+                },
               ),
             ),
           ),

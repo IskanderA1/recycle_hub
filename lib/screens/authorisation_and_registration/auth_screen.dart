@@ -37,6 +37,7 @@ class _AuthScreenState extends State<AuthScreen> {
     _authSub = authBloc.stream.listen((state) {
       if (state is AuthStateLogedIn) {
         Navigator.of(context).popUntil(ModalRoute.withName('/'));
+        
       } else if (state is AuthStateFail) {
         showMessage(context: context, message: state.error.toString());
       }

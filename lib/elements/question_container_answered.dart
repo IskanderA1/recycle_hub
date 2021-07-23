@@ -108,7 +108,7 @@ class QuestionContainerAnswered extends StatelessWidget {
           ),
         if (!result.answerStatus)
           Text(
-            'Ответ неверный ' + result.description,
+            'Ответ неверный, ' + result.description,
             style: TextStyle(color: kColorRed, fontSize: 16),
           )
       ],

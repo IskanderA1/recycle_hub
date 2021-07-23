@@ -2,8 +2,10 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
+import 'package:get_it/get_it.dart';
 import 'package:recycle_hub/api/request/api_error.dart';
 import 'package:recycle_hub/api/request/session_manager.dart';
+import 'package:recycle_hub/api/services/news_service.dart';
 import 'package:recycle_hub/api/services/user_service.dart';
 import 'package:recycle_hub/helpers/settings.dart';
 import 'package:recycle_hub/helpers/static_data.dart';
@@ -54,11 +56,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         UserModel user = await userService.userInfo();
         if (user != null) {
           StaticData.user.value = user;
-          if (userService.isAdmin) {
-            yield AuthStateLogedIn(user: user);
-          } else {
-            yield AuthStateLogedIn(user: user);
-          }
+          NewsService().loadNews();
+          yield AuthStateLogedIn(user: user);
 
           Settings().isFirstLaunch = false;
         } else {
@@ -73,6 +72,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
             UserModel user = await UserService().userInfo();
             if (user != null) {
               StaticData.user.value = user;
+              //NewsService().loadNews();
               yield AuthStateLogedIn(user: user);
               Settings().isFirstLaunch = false;
             } else {
@@ -101,11 +101,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         final user = await userService.userInfo();
         if (user != null) {
           Settings().isFirstLaunch = false;
-          if (userService.isAdmin) {
-            yield AuthStateLogedIn(user: user);
-          } else {
-            yield AuthStateLogedIn(user: user);
-          }
+          NewsService().loadNews();
+          yield AuthStateLogedIn(user: user);
         } else {
           yield AuthStateGuestAcc();
         }

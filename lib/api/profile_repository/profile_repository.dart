@@ -7,8 +7,7 @@ import 'package:recycle_hub/model/profile_models/eco_test_item_model.dart';
 import 'package:recycle_hub/model/profile_models/eco_test_result_model.dart';
 
 const String kTest = 'tests';
-const String kTestAttempts = 'attempts';
-const String kAttempt = 'attempts';
+const String kAttempt = 'test_attempts';
 
 class ProfileRepository {
   ProfileRepository();
@@ -78,10 +77,10 @@ class ProfileRepository {
     }
   } */
 
-  Future<Attempt> getAttempt(String testId) async {
+  Future<Attempt> getAttempt() async {
     try {
       var response = await CommonRequest.makeRequest(
-        '$kTest/$testId/$kAttempt',
+        '$kAttempt',
         method: CommonRequestMethod.post,
       );
       var data = jsonDecode(response.body);
@@ -115,7 +114,7 @@ class ProfileRepository {
     }
   }
 
-  Future<List<TestItem>> getTests() async {
+  /* Future<List<TestItem>> getTests() async {
     try {
       final response = await CommonRequest.makeRequest(kTest);
       if (response.statusCode == 200) {
@@ -128,13 +127,13 @@ class ProfileRepository {
     } catch (e) {
       rethrow;
     }
-  }
+  } */
 
   Future<AnswerResult> sendAnswer(
       {EcoTestAnswerModel answer, String testId, String attemptId}) async {
     try {
       final response = await CommonRequest.makeRequest(
-          '$kTest/$testId/$kAttempt/$attemptId/answer',
+          '$kAttempt/$attemptId/answer',
           body: answer.toJson(),
           method: CommonRequestMethod.post);
       if (response.statusCode == 200) {

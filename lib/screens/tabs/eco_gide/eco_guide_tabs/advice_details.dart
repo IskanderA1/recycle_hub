@@ -1,3 +1,5 @@
+import 'package:blur/blur.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:recycle_hub/model/news.dart';
 
@@ -20,18 +22,42 @@ class AdviceDetails extends StatelessWidget {
           height: MediaQuery.of(context).size.height - 50,
           child: ListView(
             children: [
-              Container(
-                child: ClipRRect(
-                  borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(20),
-                      topRight: Radius.circular(20)),
-                  child: Hero(
-                    tag: "first_image",
-                    child: Image.network(
-                        "https://www.accenture.com/t20200128T032529Z__w__/lu-en/_acnmedia/Accenture/Redesign-Assets/DotCom/Images/Global/Thumbnail400x400/8/Accenture-australian-water-utility-blue-400x400.jpg"),
-                  ),
-                ),
-              ),
+              Hero(
+                  tag: news.id,
+                  child: Container(
+                    height: 200,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.all(Radius.circular(16)),
+                      child: CachedNetworkImage(
+                        imageUrl: news.image ??
+                            "https://www.accenture.com/t20200128T032529Z__w__/lu-en/_acnmedia/Accenture/Redesign-Assets/DotCom/Images/Global/Thumbnail400x400/8/Accenture-australian-water-utility-blue-400x400.jpg",
+                        imageBuilder: (context, imageProvider) {
+                          return Blur(
+                            blur: 5.0,
+                            colorOpacity: 0.0,
+                            child: Container(
+                                decoration: BoxDecoration(
+                              image: DecorationImage(
+                                  image: imageProvider, fit: BoxFit.cover),
+                            )),
+                            overlay: Center(
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  image: DecorationImage(
+                                    image: imageProvider,
+                                    fit: BoxFit.contain,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          );
+                        },
+                        placeholder: (context, url) =>
+                            Center(child: CircularProgressIndicator()),
+                        errorWidget: (context, url, error) => Icon(Icons.error),
+                      ),
+                    ),
+                  )),
               Container(
                 child: Column(
                   children: [
