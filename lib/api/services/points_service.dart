@@ -61,6 +61,8 @@ class PointsService {
           method: CommonRequestMethod.get,
           needAuthorization: false,
           body: {
+            'size': '10',
+            'page': '1',
             'position': "[" +
                 latLng.latitude.toString() +
                 ", " +
@@ -69,7 +71,7 @@ class PointsService {
             'radius': '20'
           });
 
-      List<dynamic> data = jsonDecode(response.body);
+      List<dynamic> data = jsonDecode(response.body)['data'];
       print(data);
       if (data.isNotEmpty) {
         List<CustMarker> list = List<CustMarker>.from(
