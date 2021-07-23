@@ -40,13 +40,11 @@ class EcoTestStateError extends EcoTestState {
 class EcoTestStateLoaded extends EcoTestState {
   final Attempt currentAttempt;
   final Question currentQuestion;
-  final TestItem test;
   final bool isLoading;
   final String selectedAnswer;
 
   EcoTestStateLoaded(
       {this.currentAttempt,
-      this.test,
       this.currentQuestion,
       this.isLoading = false,
       this.selectedAnswer = ''});
@@ -54,7 +52,6 @@ class EcoTestStateLoaded extends EcoTestState {
   @override
   List<Object> get props => [
         this.currentAttempt,
-        this.test,
         this.isLoading,
         this.currentQuestion,
         this.selectedAnswer
@@ -69,7 +66,6 @@ class EcoTestStateLoaded extends EcoTestState {
   }) {
     return EcoTestStateLoaded(
         currentAttempt: currentAttempt ?? this.currentAttempt,
-        test: test ?? this.test,
         isLoading: isLoading ?? this.isLoading,
         currentQuestion: question ?? this.currentQuestion,
         selectedAnswer: selectedAnswer ?? this.selectedAnswer);
@@ -79,13 +75,11 @@ class EcoTestStateLoaded extends EcoTestState {
 class EcoTestStateAnswered extends EcoTestState {
   final Attempt currentAttempt;
   final Question currentQuestion;
-  final TestItem test;
   final String selectedAnswer;
   final AnswerResult lastAnswerResult;
 
   EcoTestStateAnswered(
       {this.currentAttempt,
-      this.test,
       this.currentQuestion,
       this.selectedAnswer = '',
       this.lastAnswerResult});
@@ -93,7 +87,6 @@ class EcoTestStateAnswered extends EcoTestState {
   EcoTestStateAnswered.fromLoaded(
       EcoTestStateLoaded loaded, AnswerResult result)
       : this.currentAttempt = loaded.currentAttempt,
-        this.test = loaded.test,
         this.currentQuestion = loaded.currentQuestion,
         this.selectedAnswer = loaded.selectedAnswer,
         this.lastAnswerResult = result;
@@ -101,7 +94,6 @@ class EcoTestStateAnswered extends EcoTestState {
   @override
   List<Object> get props => [
         this.currentAttempt,
-        this.test,
         this.currentQuestion,
         this.selectedAnswer,
         this.lastAnswerResult
@@ -109,14 +101,12 @@ class EcoTestStateAnswered extends EcoTestState {
 
   EcoTestStateAnswered copyWith(
       {Attempt currentAttempt,
-      TestItem test,
       bool isLoading,
       Question question,
       String selectedAnswer,
       AnswerResult lastAnswerResult}) {
     return EcoTestStateAnswered(
         currentAttempt: currentAttempt ?? this.currentAttempt,
-        test: test ?? this.test,
         currentQuestion: question ?? this.currentQuestion,
         selectedAnswer: selectedAnswer ?? this.selectedAnswer,
         lastAnswerResult: lastAnswerResult ?? this.lastAnswerResult);

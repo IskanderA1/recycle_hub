@@ -19,8 +19,8 @@ class NewsService {
   Future<List<News>> loadNews() async {
     try {
       final response =
-          await CommonRequest.makeRequest('news', needAuthorization: false);
-      List data = jsonDecode(response.body);
+          await CommonRequest.makeRequest('news', needAuthorization: true);
+      var data = jsonDecode(response.body);
       d.log(data.toString(), name: 'services.news_service');
       if (response.statusCode == 200) {
         news = List<News>.from(data.map((e) => News.fromMap(e)));

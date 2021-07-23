@@ -19,7 +19,7 @@ class EcoTestBloc extends Bloc<EcoTestEvent, EcoTestState> {
 
   EcoTestBloc(this._profileRepository) : super(EcoTestStateInitial());
 
-  TestItem currentTest;
+  //TestItem currentTest;
   Attempt currentAttempt;
   List<EcoTestAnswerModel> answers = [];
   List<AnswerResult> answerResults = [];
@@ -45,20 +45,20 @@ class EcoTestBloc extends Bloc<EcoTestEvent, EcoTestState> {
 
   Stream<EcoTestState> _mapStartToState(EcoTestStartTestEvent event) async* {
     yield EcoTestStateLoading();
-    List<TestItem> tests;
+    /* TestItem test;
     try {
-      tests = await _profileRepository.getTests();
+      test = await _profileRepository.getTests();
     } catch (e) {
       yield EcoTestStateError(e);
       return;
     }
 
-    if (tests == null || tests.isEmpty) {
+     if (tests == null || tests.isEmpty) {
       yield EcoTestStateError('Список тестов пуст');
-    }
+    } */
     Attempt attempt;
     try {
-      attempt = await _profileRepository.getAttempt(tests.first.id);
+      attempt = await _profileRepository.getAttempt();
     } catch (e) {
       if (e is ApiError) {
         yield EcoTestStateError(e.errorDescription);
@@ -68,19 +68,19 @@ class EcoTestBloc extends Bloc<EcoTestEvent, EcoTestState> {
       return;
     }
     currentAttempt = attempt;
-    currentTest = tests.first;
+    //currentTest = tests.first;
     _currentQuestionId = 0;
 
     yield EcoTestStateLoaded(
         currentAttempt: currentAttempt,
-        test: tests.first,
+        //test: tests.first,
         currentQuestion: currentAttempt.questions.first);
   }
 
   Stream<EcoTestState> _mapAnswerToState(
       EcoTestAnswerToQuestionEvent event) async* {
     yield EcoTestStateLoading();
-    if (currentAttempt == null || currentTest == null) {
+    if (currentAttempt == null /* || currentTest == null */) {
       yield EcoTestStateError('Сперва следует создать попытку');
     }
     EcoTestState curState = state;
@@ -117,7 +117,7 @@ class EcoTestBloc extends Bloc<EcoTestEvent, EcoTestState> {
     try {
       yield EcoTestStateAnswered(
           currentAttempt: currentAttempt,
-          test: currentTest,
+          //test: currentTest,
           currentQuestion: currentAttempt.questions[_currentQuestionId],
           lastAnswerResult: result);
     } catch (e) {
@@ -143,7 +143,7 @@ class EcoTestBloc extends Bloc<EcoTestEvent, EcoTestState> {
       try {
         yield EcoTestStateLoaded(
             currentAttempt: currentAttempt,
-            test: currentTest,
+            //test: currentTest,
             currentQuestion: currentAttempt.questions[_currentQuestionId]);
       } catch (e) {
         yield EcoTestStateCompleted(
@@ -166,7 +166,7 @@ class EcoTestBloc extends Bloc<EcoTestEvent, EcoTestState> {
 
   Stream<EcoTestState> _mapResetToState() async* {
     yield EcoTestStateInitial();
-    currentTest = null;
+    //currentTest = null;
     currentAttempt = null;
     answers = [];
     answerResults = [];

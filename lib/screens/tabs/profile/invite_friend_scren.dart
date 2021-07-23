@@ -203,7 +203,7 @@ class InviteWidget extends StatelessWidget {
                       )),
                       onTap: () {
                         try {
-                          openUrl('https://vk.com/feed', context);
+                          NetworkHelper.openUrl('https://vk.com/feed', context);
                         } catch (error) {
                           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                             content: Text("Не удалось открыть приложение VK"),
@@ -220,7 +220,7 @@ class InviteWidget extends StatelessWidget {
                       )),
                       onTap: () {
                         try {
-                          openUrl(
+                          NetworkHelper.openUrl(
                               'https://www.instagram.com/<INSTAGRAM_PROFILE>/',
                               context);
                         } catch (error) {
@@ -240,7 +240,7 @@ class InviteWidget extends StatelessWidget {
                       )),
                       onTap: () {
                         try {
-                          openUrl('https://www.facebook.com', context);
+                          NetworkHelper.openUrl('https://www.facebook.com', context);
                         } catch (error) {
                           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                             content:

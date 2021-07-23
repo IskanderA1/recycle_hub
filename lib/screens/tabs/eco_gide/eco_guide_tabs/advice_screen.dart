@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:recycle_hub/api/services/news_service.dart';
 import 'package:recycle_hub/bloc/eco_guide_cubit/eco_guide_cubit_cubit.dart';
+import 'package:recycle_hub/elements/news_list.dart';
 import 'package:recycle_hub/model/news.dart';
 import 'package:recycle_hub/elements/news_container.dart';
 
@@ -23,17 +24,20 @@ class _AdviceScreenState extends State<AdviceScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Советы для экономии"),
-        centerTitle: true,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back_sharp),
-          onPressed: () {
-            GetIt.I.get<EcoGuideCubit>().goBack();
-          },
+        appBar: AppBar(
+          title: Text("Советы для экономии"),
+          centerTitle: true,
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back_sharp),
+            onPressed: () {
+              GetIt.I.get<EcoGuideCubit>().goBack();
+            },
+          ),
         ),
-      ),
-      body: ListView(
+        body: NewsList(
+          onlyAdvices: true,
+        )
+        /* ListView(
         shrinkWrap: true,
         controller: _scrollController,
         children: [
@@ -107,9 +111,7 @@ class _AdviceScreenState extends State<AdviceScreen> {
                   ),
                 ), */
                 Padding(
-                  padding: const EdgeInsets.only(
-                    bottom: 80
-                  ),
+                  padding: const EdgeInsets.only(bottom: 80),
                   child: ListView.builder(
                     shrinkWrap: true,
                     itemCount: newsList.length,
@@ -125,7 +127,7 @@ class _AdviceScreenState extends State<AdviceScreen> {
             ),
           ),
         ],
-      ),
-    );
+      ), */
+        );
   }
 }

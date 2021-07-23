@@ -19,15 +19,15 @@ class NetworkHelper {
     }
     return false;
   }
-}
 
-void openUrl(String url, BuildContext context) async {
-  if (await canLaunch(url)) {
-    await launch(
-      url,
-      universalLinksOnly: true,
-    );
-  } else {
-    showMessage(context: context, message: "Ошибка при попытке открыть файл");
+  static void openUrl(String url, BuildContext context) async {
+    if (await canLaunch(url)) {
+      await launch(
+        url,
+        universalLinksOnly: true,
+      );
+    } else {
+      showMessage(context: context, message: "Ошибка при попытке открыть ссылку");
+    }
   }
 }
