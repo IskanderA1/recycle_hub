@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:recycle_hub/style/theme.dart';
 
 class DropDownMenuChildButton extends StatelessWidget {
+  final double width;
   const DropDownMenuChildButton({
     Key key,
     @required String selectedItem,
+    this.width = 120,
   })  : _selectedItem = selectedItem,
         super(key: key);
 
@@ -15,7 +17,7 @@ class DropDownMenuChildButton extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
           color: kColorWhite, borderRadius: BorderRadius.circular(10)),
-      width: 120,
+      width: width,
       height: 30,
       child: Padding(
         padding: const EdgeInsets.only(left: 20, right: 20),

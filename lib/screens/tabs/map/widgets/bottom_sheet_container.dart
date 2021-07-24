@@ -4,16 +4,15 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:recycle_hub/bloc/map_screen_blocs/feedbacks_bloc.dart';
-import 'package:recycle_hub/bloc/map_screen_blocs/marker_info_bloc.dart';
 import 'package:recycle_hub/model/map_models.dart/accept_types.dart';
 import 'package:recycle_hub/model/map_models.dart/feedbacker_model.dart';
 import 'package:recycle_hub/model/map_models.dart/marker.dart';
 import 'package:recycle_hub/model/map_responses/feedbacks_collection_response.dart';
 import 'package:recycle_hub/screens/tabs/map/methods/pre_information_container.dart';
 import 'package:recycle_hub/screens/tabs/map/widgets/loader_widget.dart';
+import 'package:recycle_hub/screens/tabs/map/widgets/report_button.dart';
 import 'package:recycle_hub/style/theme.dart';
 import 'package:flutter_star_rating/flutter_star_rating.dart';
-import 'filter_card_widget.dart';
 import 'working_days_widget.dart';
 
 ///Отрисовка body в bottomsheet
@@ -210,7 +209,7 @@ class _NewWidgetState extends State<NewWidget> {
             backColor: kColorWhite,
             hasSelection: true,
             fontSize: 14,
-            size: Size(_size.width - 50, _size.height / 6.5),
+            size: Size(_size.width - 50, _size.height / 5.5),
           ),
         ),
 
@@ -468,7 +467,8 @@ class _NewWidgetState extends State<NewWidget> {
           children: _pictureList,
           shrinkWrap: true,
           controller: ScrollController(keepScrollOffset: false),
-        )
+        ),
+        ReportButtonWidget(widget.marker.id),
       ],
     );
   }

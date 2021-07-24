@@ -1,9 +1,9 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_star_rating/flutter_star_rating.dart';
 import 'package:recycle_hub/model/map_models.dart/accept_types.dart';
 import 'package:recycle_hub/model/map_models.dart/marker.dart';
 import 'package:recycle_hub/screens/tabs/map/methods/pre_information_container.dart';
+import 'package:recycle_hub/screens/tabs/map/widgets/report_button.dart';
 import 'package:recycle_hub/screens/tabs/map/widgets/working_days_widget.dart';
 import 'package:recycle_hub/style/theme.dart';
 
@@ -160,9 +160,11 @@ class MarkerCardWidget extends StatelessWidget {
             ),
             if (filters.isNotEmpty)
               Container(
-                  padding: EdgeInsets.fromLTRB(16, 2, 16, 18),
-                  height: 50,
-                  child: FilterTypesContainer(filters: filters, gridSize: 20)),
+                padding: EdgeInsets.fromLTRB(16, 2, 16, 18),
+                height: 50,
+                child: FilterTypesContainer(filters: filters, gridSize: 20),
+              ),
+            ReportButtonWidget(marker.id),
           ],
         ),
       ),

@@ -1,24 +1,28 @@
 import 'dart:convert';
+import 'package:flutter/material.dart';
 import 'package:recycle_hub/api/request/request.dart';
 import 'package:recycle_hub/model/api_error.dart';
-import 'package:recycle_hub/model/map_models.dart/marker.dart';
 
 class MapRepository {
-  Future<CustMarker> updateMarker(CustMarker updated) async {
+  Future<bool> updateMarker({
+    @required String markerId,
+    @required String reportText,
+    @required String reportType,
+  }) async {
+    Map<String, dynamic> body = {
+      'report_text': '$reportText',
+      'report_type': '$reportType',
+    };
     try {
       var response = await CommonRequest.makeRequest(
-        '/api/rec_offer/${updated.id}',
+        '/api/rec_offer/$markerId',
         method: CommonRequestMethod.put,
-        body: jsonEncode(updated.toJson()),
+        body: jsonEncode(body),
       );
       var data = jsonDecode(response.body);
       print(data);
       if (response.statusCode == 200) {
-        if (data != null) {
-          return CustMarker.fromMap(data);
-        } else {
-          throw Exception("Данных нет");
-        }
+        return true;
       } else if (response.statusCode == 400) {
         if (data['error'] != null) {
           throw ApiError(

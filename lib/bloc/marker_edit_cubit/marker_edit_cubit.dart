@@ -1,30 +1,33 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:recycle_hub/api/map_repository/map_repository.dart';
 import 'package:recycle_hub/model/api_error.dart';
-import 'package:recycle_hub/model/map_models.dart/marker.dart';
 
 part 'marker_edit_state.dart';
 
 class MarkerEditCubit extends Cubit<MarkerEditState> {
   MarkerEditCubit() : super(MarkerEditState());
   final MapRepository _mapRepository = MapRepository();
-  Future<void> updateMarker(CustMarker updatedMarker) async {
-    CustMarker marker;
+  Future<void> updateMarker({
+    @required String markerId,
+    @required String reportText,
+    @required String reportType,
+  }) async {
     try {
       emit(MarkerEditState(isLoading: true));
-      marker = await _mapRepository.updateMarker(marker);
-      emit(MarkerEditState(isSuccess: true));
+      await _mapRepository.updateMarker(
+        markerId: markerId,
+        reportText: reportText,
+        reportType: reportType,
+      );
+      emit(MarkerEditState());
     } catch (e) {
       if (e is ApiError) {
-        emit(MarkerEditState(isLoading: true, error: e.errorDescription));
+        emit(MarkerEditState(error: e.errorDescription));
       } else {
-        emit(MarkerEditState(isLoading: true, error: e.toString()));
+        emit(MarkerEditState(error: e.toString()));
       }
     }
-  }
-
-  Future<void> editMarker(bool isEdit) async {
-    emit(MarkerEditState(isEditing: isEdit));
   }
 }
