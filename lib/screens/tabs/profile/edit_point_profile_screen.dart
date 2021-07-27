@@ -115,7 +115,7 @@ class _EditPointProfileScreenState extends State<EditPointProfileScreen> {
             icon: Icon(Icons.arrow_back, color: kColorWhite, size: 25),
             onPressed: () => GetIt.I.get<ProfileMenuCubit>().goBack()),
         title: Text(
-          "QR Сканнер",
+          "Редактировать профиль",
           style: TextStyle(
               color: kColorWhite,
               fontSize: 18,

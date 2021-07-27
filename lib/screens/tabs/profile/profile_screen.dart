@@ -10,6 +10,7 @@ import 'package:recycle_hub/elements/ball.dart';
 import 'package:recycle_hub/elements/common_cell.dart';
 import 'package:recycle_hub/helpers/network_helper.dart';
 import 'package:recycle_hub/helpers/alert_helper.dart';
+import 'package:recycle_hub/elements/user_image_picker.dart';
 import 'package:recycle_hub/icons/user_profile_icons_icons.dart';
 import 'package:recycle_hub/model/user_model.dart';
 import 'package:recycle_hub/screens/authorisation_and_registration/auth_screen.dart';
@@ -101,7 +102,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         SizedBox(
                           height: 24,
                         ),
-                        buildStatus(10, UserService().garbageGiven),
+                        buildStatus(
+                            UserService().statistic != null
+                                ? UserService().statistic.place
+                                : 0,
+                            UserService().statistic != null
+                                ? UserService().statistic.total
+                                : 0),
                         SizedBox(
                           height: 5,
                         ),
@@ -130,7 +137,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 ),
                               if (state is AuthStateLogedIn)
                                 buildAchievments(
-                                    "Эколог", UserService().garbageGiven),
+                                    "Эколог", UserService().statistic.total),
                               if (state is AuthStateLogedIn)
                                 SizedBox(
                                   height: 10,
@@ -201,55 +208,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Container(
-            child: Stack(
-              children: [
-                Container(
-                    height: 82,
-                    width: 82,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: kColorPink,
-                    ),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(41),
-                      child:
-                          /* image != null
-                        ? Container(
-                            width: 100.0,
-                            height: 100.0,
-                            decoration: new BoxDecoration(
-                              borderRadius: new BorderRadius.circular(3.0),
-                              color: const Color(0xff7c94b6),
-                              image: new DecorationImage(
-                                image: new NetworkImage(image),
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                          )
-                        :  */
-                          Image.network(
-                              "https://idsb.tmgrup.com.tr/ly/uploads/images/2020/04/30/33310.jpg"),
-                    )),
-                Container(
-                    padding: EdgeInsets.only(top: 50, left: 50),
-                    child: InkWell(
-                      onTap: () {},
-                      child: Container(
-                        alignment: Alignment.center,
-                        height: 31,
-                        width: 31,
-                        decoration: BoxDecoration(
-                            shape: BoxShape.circle, color: kColorWhite),
-                        child: Icon(
-                          Icons.camera_alt_outlined,
-                          color: kColorGreen,
-                          size: 21,
-                        ),
-                      ),
-                    ))
-              ],
-            ),
+          UserImagePicker(
+            image: image,
           ),
           SizedBox(
             width: 12,

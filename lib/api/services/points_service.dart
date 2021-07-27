@@ -265,7 +265,7 @@ class PointsService {
 
   Future<void> sendPointInfo(CustMarker point, List<File> images) async {
     try {
-      final response = await CommonRequest.makeRequest('rec_offer/${point.id}',
+      final response = await CommonRequest.makeRequest('rec_points/${point.id}',
           method: CommonRequestMethod.put, body: point.toJson());
       var data = jsonDecode(response.body);
       print(data);

@@ -39,7 +39,7 @@ class _TransactionCreateAdminPanelScreenState
 
   Future _getImage() async {
     try {
-      final img = await getImage();
+      final img = await FilePicker.getImage();
       setState(() {
         image = img;
       });
@@ -48,7 +48,7 @@ class _TransactionCreateAdminPanelScreenState
 
   Future _getImageFromStorage() async {
     try {
-      final img = await getImageFromStorage();
+      final img = await FilePicker.getImageFromStorage();
       setState(() {
         image = img;
       });

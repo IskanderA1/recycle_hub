@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:recycle_hub/api/services/user_service.dart';
 import 'package:recycle_hub/bloc/cubit/profile_menu_cubit.dart';
-import 'package:recycle_hub/bloc/profile_bloc/profile_bloc.dart';
+import 'package:recycle_hub/elements/user_image_picker.dart';
+import 'package:recycle_hub/helpers/messager_helper.dart';
+import 'package:recycle_hub/model/user_model.dart';
 import 'package:recycle_hub/screens/tabs/map/widgets/loader_widget.dart';
 import 'package:recycle_hub/style/style.dart';
 import 'package:recycle_hub/style/theme.dart';
@@ -10,6 +12,8 @@ import 'package:recycle_hub/style/theme.dart';
 enum Gender { MAN, WOMAN }
 
 class EditProfileScreen extends StatefulWidget {
+  UserModel user;
+  EditProfileScreen({this.user});
   @override
   _EditProfileScreenState createState() => _EditProfileScreenState();
 }
@@ -25,12 +29,28 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   bool _isMan = true;
   bool _isLoading = false;
 
+  @override
+  initState() {
+    _name.text = widget.user != null ? widget.user.name : '';
+    super.initState();
+  }
+
   Future<void> _saveUser() async {
     setState(() {
       _isLoading = true;
     });
 
-    await Future.delayed(Duration(milliseconds: 500));
+    if (_name.text.isNotEmpty) {
+      try {
+        await UserService().saveUserInfo(name: _name.text);
+        GetIt.I.get<ProfileMenuCubit>().goBack();
+      } on Exception catch (e) {
+        showMessage(
+          context: context,
+          message: e.toString(),
+        );
+      }
+    }
 
     setState(() {
       _isLoading = false;
@@ -81,6 +101,14 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         children: [
                           Padding(
                             padding: EdgeInsets.only(top: 30, bottom: 15),
+                            child: UserImagePicker(
+                              image: widget.user != null
+                                  ? widget.user.image
+                                  : null,
+                            ),
+                          ),
+                          /* Padding(
+                            padding: EdgeInsets.only(top: 30, bottom: 15),
                             child: Container(
                               height: 100,
                               width: 100,
@@ -119,7 +147,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                 ],
                               ),
                             ),
-                          ),
+                          ), */
                           Padding(
                             padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
                             child: EditProfileScreenTextField(
@@ -129,7 +157,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                               type: TextInputType.name,
                             ),
                           ),
-                          Padding(
+                          /* Padding(
                             padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
                             child: EditProfileScreenTextField(
                               controller: _surname,
@@ -137,7 +165,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                               adText: "Фамилия",
                               type: TextInputType.name,
                             ),
-                          ),
+                          ), */
                           /* Padding(
                       padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
                       child: EditProfileScreenTextField(
@@ -147,7 +175,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         type: TextInputType.emailAddress,
                       ),
                     ), */
-                          Padding(
+                          /*  Padding(
                             padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
                             child: EditProfileScreenTextField(
                               controller: _password,
@@ -155,7 +183,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                               adText: "Пароль",
                               type: TextInputType.visiblePassword,
                             ),
-                          ),
+                          ), */
                           /* Padding(
                       padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
                       child: EditProfileScreenTextField(

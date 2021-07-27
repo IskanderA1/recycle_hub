@@ -8,7 +8,7 @@ import 'package:recycle_hub/api/services/store_service.dart';
 import 'package:recycle_hub/helpers/jwt_parser.dart';
 import 'package:recycle_hub/model/api_error.dart';
 import 'package:recycle_hub/model/authorisation_models/user_response.dart';
-import 'package:recycle_hub/model/invite_model.dart';
+import 'package:recycle_hub/model/user_statistic.dart';
 import 'package:recycle_hub/model/new_point_model.dart';
 import 'package:recycle_hub/model/transactions/transaction_model.dart';
 import 'package:recycle_hub/model/user_model.dart';
@@ -32,10 +32,13 @@ class UserService {
 
   Point _location;
 
+  UserStatistic _userStatistic;
+
   List<UserTransaction> get userTransactions => _userTransactions;
   List<Transaction> get transactions => _transactions;
   double get garbageGiven => _garbagesGiven;
   UserModel get user => _user;
+  UserStatistic get statistic => _userStatistic;
   Point get location {
     if (_location == null) {
       return Point(55.796127, 49.106414);
@@ -120,9 +123,28 @@ class UserService {
       var user = UserModel.fromMap(data);
       _user = user;
       await loadUserStatistic();
+      if (_user.role == 'user') {
+        await userStatistic();
+      }
       await StoreService().loadProducts();
       await StoreService().loadPurchases();
       return user;
+    } else {
+      return null;
+    }
+  }
+
+  Future<UserStatistic> userStatistic() async {
+    var response = await CommonRequest.makeRequest('stats',
+        method: CommonRequestMethod.get, needAuthorization: true);
+    if (response.statusCode == 200) {
+      Map<String, dynamic> data = jsonDecode(response.body);
+      var stat = UserStatistic.fromMap(data);
+      _userStatistic = stat;
+      await loadUserStatistic();
+      await StoreService().loadProducts();
+      await StoreService().loadPurchases();
+      return stat;
     } else {
       return null;
     }
@@ -232,6 +254,22 @@ class UserService {
             name: 'api.services.user_service');
       } else {
         throw RequestError(code: RequestErrorCode.recoverCodeInvalid);
+      }
+    } catch (e) {
+      throw RequestError(code: RequestErrorCode.unknown);
+    }
+  }
+
+  Future<void> saveUserInfo({String name}) async {
+    try {
+      final response = await CommonRequest.makeRequest("user_info",
+          method: CommonRequestMethod.put, body: jsonEncode({"name": '$name'}));
+      if (response.statusCode == 200) {
+        developer.log('User successfully changed',
+            name: 'api.services.user_service.save_user_info');
+      } else {
+        throw RequestError(
+            code: RequestErrorCode.unknown, description: "Что-то пошло не так");
       }
     } catch (e) {
       throw RequestError(code: RequestErrorCode.unknown);
@@ -379,6 +417,9 @@ class UserService {
 
   Future<UserResponse> userLogOut() async {
     _preferences.remove('isadmin');
+    _garbagesGiven = 0;
+    _transactions.clear();
+    _userTransactions.clear();
     return UserUnlogged();
   }
 

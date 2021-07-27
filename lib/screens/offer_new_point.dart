@@ -27,7 +27,7 @@ class _OfferNewPointScreenState extends State<OfferNewPointScreen> {
 
   Future _getImage() async {
     try {
-      final img = await getImage();
+      final img = await FilePicker.getImage();
       setState(() {
         _image = img;
       });
@@ -36,7 +36,7 @@ class _OfferNewPointScreenState extends State<OfferNewPointScreen> {
 
   Future _getImageFromStorage() async {
     try {
-      final img = await getImageFromStorage();
+      final img = await FilePicker.getImageFromStorage();
       setState(() {
         _image = img;
       });

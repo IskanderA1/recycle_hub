@@ -37,7 +37,7 @@ class _ImagePickerContainerState extends State<ImagePickerContainer> {
 
   Future _getImage() async {
     try {
-      final img = await getImage();
+      final img = await FilePicker.getImage();
       _images.add(img);
       if (widget.onAdded != null && widget.images == null) {
         widget.onAdded(img);
@@ -48,7 +48,7 @@ class _ImagePickerContainerState extends State<ImagePickerContainer> {
 
   Future _getImageFromStorage() async {
     try {
-      final img = await getImageFromStorage();
+      final img = await FilePicker.getImageFromStorage();
       if (widget.onAdded != null && widget.images == null) {
         widget.onAdded(img);
       }

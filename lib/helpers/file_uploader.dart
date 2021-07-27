@@ -83,7 +83,7 @@ class FileUpLoader {
 
   static Future<void> _sendPhoto(File file, String endpoint) async {
     try {
-      Dio dio = Dio();
+      Dio dio = Dio(BaseOptions(baseUrl: devURL));
       String token = await SessionManager().getAuthorizationToken();
       if (token == null) {
         await SessionManager().relogin();
@@ -94,11 +94,17 @@ class FileUpLoader {
       }
       String fileName = file.path.split('/').last;
       FormData image = FormData.fromMap({
-        'file': [await MultipartFile.fromFile(file.path, filename:fileName)]
+        'files': [await MultipartFile.fromFile(file.path, filename: fileName)]
       });
-      final response = await dio.post(devURL + '/' + endpoint,
+      final response = await dio.post(endpoint,
           data: image,
-          options: Options(headers: {"Authorization": 'Bearer $token'}));
+          options: Options(
+            headers: {"Authorization": 'Bearer $token'},
+            followRedirects: false,
+            validateStatus: (status) {
+              return status < 500;
+            },
+            ));
       if (response.statusCode != 200) {}
     } catch (e) {
       rethrow;

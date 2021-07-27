@@ -2,29 +2,31 @@ import 'dart:io';
 
 import 'package:image_picker/image_picker.dart';
 
-Future<File> getImage() async {
-  ImagePicker picker = ImagePicker();
-  File _image;
+class FilePicker {
+  static Future<File> getImage() async {
+    ImagePicker picker = ImagePicker();
+    File _image;
 
-  final pickedFile = await picker.getImage(source: ImageSource.camera);
+    final pickedFile = await picker.getImage(source: ImageSource.camera);
 
-  if (pickedFile != null) {
-    _image = File(pickedFile.path);
-  } else {
-    throw Exception('Файл не был выбран');
+    if (pickedFile != null) {
+      _image = File(pickedFile.path);
+    } else {
+      throw Exception('Файл не был выбран');
+    }
+    return _image;
   }
-  return _image;
-}
 
-Future getImageFromStorage() async {
-  ImagePicker picker = ImagePicker();
-  File _image;
-  final pickedFile = await picker.getImage(source: ImageSource.gallery);
+  static Future<File> getImageFromStorage() async {
+    ImagePicker picker = ImagePicker();
+    File _image;
+    final pickedFile = await picker.getImage(source: ImageSource.gallery);
 
-  if (pickedFile != null) {
-    _image = File(pickedFile.path);
-  } else {
-    throw Exception('Файл не был выбран');
+    if (pickedFile != null) {
+      _image = File(pickedFile.path);
+    } else {
+      throw Exception('Файл не был выбран');
+    }
+    return _image;
   }
-  return _image;
 }
