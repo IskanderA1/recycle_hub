@@ -1,9 +1,10 @@
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:menu_button/menu_button.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:recycle_hub/bloc/marker_edit_cubit/marker_edit_cubit.dart';
-import 'package:recycle_hub/features/transactions/presentation/components/drop_down_menu_button.dart';
+import 'package:recycle_hub/helpers/image_picker.dart';
 import 'package:recycle_hub/helpers/messager_helper.dart';
 import 'package:recycle_hub/main.dart';
 import 'package:recycle_hub/style/style.dart';
@@ -24,17 +25,26 @@ class _ReportToErrorMarkerScreenState extends State<ReportToErrorMarkerScreen> {
   final _cubit = locator<MarkerEditCubit>();
   final TextEditingController _reportController = TextEditingController();
 
-  String selectedReportType = '';
+  File _image;
+  final picker = ImagePicker();
 
-  var reportsType = <String>[
-    'Название пункта приема',
-    'Адрес',
-    'Время работы',
-    'Контакты',
-    'Выдача экокоинов',
-    'Принимаемые отходы',
-    'Другое',
-  ];
+  Future _getImage() async {
+    try {
+      final img = await getImage();
+      setState(() {
+        _image = img;
+      });
+    } catch (e) {}
+  }
+
+  Future _getImageFromStorage() async {
+    try {
+      final img = await getImageFromStorage();
+      setState(() {
+        _image = img;
+      });
+    } catch (e) {}
+  }
 
   @override
   void dispose() {
@@ -64,199 +74,235 @@ class _ReportToErrorMarkerScreenState extends State<ReportToErrorMarkerScreen> {
           ),
         ),
       ),
-      body: GestureDetector(
-        onTap: () => FocusScope.of(context).unfocus(),
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(15, 20, 15, 0),
-          child: Container(
-            decoration: BoxDecoration(
-              color: kColorWhite,
-              borderRadius: BorderRadius.all(Radius.circular(25)),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(25, 20, 25, 25),
-              child: SingleChildScrollView(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Text(
-                      "Опишите в чем ошибка\n"
-                      "и выберите тип",
-                      style: TextStyle(
-                        fontFamily: 'Gillroy',
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 15, bottom: 15),
-                      child: ReportMarkerTextFields(
-                        reportController: _reportController,
-                        hintText: "Не верно указано...",
-                      ),
-                    ),
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        'Тип ошибки:',
-                        textAlign: TextAlign.start,
+      body: SingleChildScrollView(
+        child: GestureDetector(
+          onTap: () => FocusScope.of(context).unfocus(),
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(15, 20, 15, 0),
+            child: Container(
+              decoration: BoxDecoration(
+                color: kColorWhite,
+                borderRadius: BorderRadius.all(Radius.circular(25)),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(25, 20, 25, 25),
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Text(
+                        "Опишите в чем ошибка и приложите "
+                        "фото, если требуется",
                         style: TextStyle(
-                          fontSize: 14,
-                          color: Color(0xFF8D8D8D),
+                          fontFamily: 'Gillroy',
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 15, bottom: 15),
+                        child: ReportMarkerTextFields(
+                          reportController: _reportController,
+                          hintText: "Не верно указано...",
                         ),
                       ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 15, right: 100),
-                      child: Row(
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          'Тип ошибки:',
+                          textAlign: TextAlign.start,
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: Color(0xFF8D8D8D),
+                          ),
+                        ),
+                      ),
+                      _image != null
+                          ? Image.file(
+                              _image,
+                              fit: BoxFit.scaleDown,
+                              frameBuilder: (context, child, frame,
+                                  wasSynchronouslyLoaded) {
+                                if (wasSynchronouslyLoaded ?? false) {
+                                  return child;
+                                }
+                                return AnimatedOpacity(
+                                  child: Stack(
+                                    children: <Widget>[
+                                      child,
+                                      Align(
+                                        alignment: Alignment.topRight,
+                                        child: Padding(
+                                          padding: EdgeInsets.all(25),
+                                          child: GestureDetector(
+                                            onTap: () {
+                                              setState(() {
+                                                _image = null;
+                                              });
+                                            },
+                                            child: Icon(Icons.close),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  opacity: frame == null ? 0 : 1,
+                                  duration: const Duration(seconds: 1),
+                                  curve: Curves.easeOut,
+                                );
+                              },
+                            )
+                          : Container(),
+                      Center(
+                        child: Text(
+                          "Добавить фото",
+                          style: TextStyle(
+                              fontFamily: 'GillroyMedium',
+                              fontSize: 16,
+                              color: Color(0xFF8D8D8D)),
+                        ),
+                      ),
+                      SizedBox(height: 20),
+                      Row(
                         children: [
-                          Expanded(
-                            child: ClipRRect(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(15)),
-                              child: MenuButton<String>(
+                          GestureDetector(
+                              onTap: () => _getImageFromStorage(),
+                              child: Container(
+                                height: 45,
+                                width: 140,
                                 decoration: BoxDecoration(
-                                  color: Color(0xFFF7F7F7),
-                                  shape: BoxShape.rectangle,
+                                    color: kColorGreen,
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(10))),
+                                child: Center(
+                                  child: Text(
+                                    "Из галереи",
+                                    style: TextStyle(
+                                        color: kColorWhite,
+                                        fontFamily: 'GillroyMedium',
+                                        fontSize: 14),
+                                  ),
+                                ),
+                              )),
+                          Spacer(),
+                          GestureDetector(
+                              onTap: () => _getImage(),
+                              child: Container(
+                                height: 45,
+                                width: 140,
+                                decoration: BoxDecoration(
+                                    color: const Color(0xFFECECEC),
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(10))),
+                                child: Center(
+                                  child: Text(
+                                    "Камера",
+                                    style: TextStyle(
+                                        color: kColorBlack,
+                                        fontFamily: 'GillroyMedium',
+                                        fontSize: 14),
+                                  ),
+                                ),
+                              ))
+                        ],
+                      ),
+                      SizedBox(height: 20),
+                      Row(
+                        children: [
+                          Container(
+                            height: 15,
+                            width: 15,
+                            decoration: BoxDecoration(
+                              color: kColorGreen,
+                              shape: BoxShape.circle,
+                            ),
+                          ),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          Text(
+                            "Ваш запрос будет отправлен администратору",
+                            style: TextStyle(
+                              fontSize: 13,
+                              fontFamily: 'GillroyMedium',
+                            ),
+                          )
+                        ],
+                      ),
+                      SizedBox(height: 20),
+                      BlocConsumer<MarkerEditCubit, MarkerEditState>(
+                          bloc: _cubit,
+                          listener: (context, state) async {
+                            if (state.error != null) {
+                              showMessage(
+                                context: context,
+                                message: 'Ошибка: ${state.error}',
+                              );
+                            }
+                            if (state.error == null && !state.isLoading) {
+                              showMessage(
+                                context: context,
+                                message: 'Успешно',
+                                backColor: kColorGreen,
+                              );
+                              await Future.delayed(
+                                  Duration(milliseconds: 2500));
+                              Navigator.pop(context);
+                            }
+                          },
+                          builder: (context, state) {
+                            return InkWell(
+                              onTap: state.isLoading
+                                  ? null
+                                  : () {
+                                      if (_reportController.text.isNotEmpty) {
+                                        _cubit.updateMarker(
+                                          markerId: widget.markerPointID,
+                                          reportText: _reportController.text,
+                                          image: _image,
+                                        );
+                                      }
+                                    },
+                              child: Container(
+                                width: 300,
+                                height: 50,
+                                decoration: BoxDecoration(
+                                  color: kColorGreen,
                                   borderRadius: BorderRadius.all(
                                     Radius.circular(15),
                                   ),
                                 ),
-                                selectedItem: selectedReportType,
-                                itemBackgroundColor: Color(0xFFF7F7F7),
-                                menuButtonBackgroundColor: Color(0xFFF7F7F7),
-                                child: DropDownMenuChildButton(
-                                  selectedItem: selectedReportType.isEmpty
-                                      ? 'Нажмите чтобы'
-                                      : selectedReportType,
-                                ),
-                                items: reportsType,
-                                itemBuilder: (String item) => Container(
-                                  height: 30,
-                                  decoration: BoxDecoration(
-                                    color: Color(0xFFF7F7F7),
-                                  ),
-                                  alignment: Alignment.centerLeft,
-                                  padding: const EdgeInsets.symmetric(
-                                    vertical: 0,
-                                    horizontal: 20,
-                                  ),
-                                  child: Text(item),
-                                ),
-                                toggledChild: Container(
-                                  child: DropDownMenuChildButton(
-                                    selectedItem: selectedReportType,
-                                    width: 200,
-                                  ),
-                                ),
-                                onItemSelected: (String item) {
-                                  setState(() {
-                                    selectedReportType = item;
-                                  });
-                                },
-                                onMenuButtonToggle: (bool isTohgle) {
-                                  print(isTohgle);
-                                },
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Row(
-                      children: [
-                        Container(
-                          height: 15,
-                          width: 15,
-                          decoration: BoxDecoration(
-                            color: kColorGreen,
-                            shape: BoxShape.circle,
-                          ),
-                        ),
-                        SizedBox(
-                          width: 10,
-                        ),
-                        Text(
-                          "Ваш запрос будет отправлен администратору",
-                          style: TextStyle(
-                            fontSize: 13,
-                            fontFamily: 'GillroyMedium',
-                          ),
-                        )
-                      ],
-                    ),
-                    SizedBox(height: 20),
-                    BlocConsumer<MarkerEditCubit, MarkerEditState>(
-                        bloc: _cubit,
-                        listener: (context, state) async {
-                          if (state.error != null) {
-                            showMessage(
-                              context: context,
-                              message: 'Ошибка: ${state.error}',
-                            );
-                          }
-                          if (state.error == null && !state.isLoading) {
-                            showMessage(
-                              context: context,
-                              message: 'Успешно',
-                              backColor: kColorGreen,
-                            );
-                            await Future.delayed(Duration(milliseconds: 2500));
-                            Navigator.pop(context);
-                          }
-                        },
-                        builder: (context, state) {
-                          return InkWell(
-                            onTap: state.isLoading
-                                ? null
-                                : () {
-                                    if (selectedReportType.isNotEmpty &&
-                                        _reportController.text.isNotEmpty) {
-                                      _cubit.updateMarker(
-                                        reportText: _reportController.text,
-                                        reportType: selectedReportType,
-                                      );
-                                    }
-                                  },
-                            child: Container(
-                              width: 300,
-                              height: 50,
-                              decoration: BoxDecoration(
-                                color: kColorGreen,
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(15),
-                                ),
-                              ),
-                              child: Center(
-                                child: !state.isLoading
-                                    ? Text(
-                                        "Отправить",
-                                        style: TextStyle(
-                                          fontSize: 18,
-                                          color: kColorWhite,
-                                          fontWeight: FontWeight.bold,
-                                          fontFamily: 'GillroyMedium',
-                                        ),
-                                      )
-                                    : Container(
-                                        height: 20,
-                                        width: 20,
-                                        child: CircularProgressIndicator(
-                                          valueColor:
-                                              AlwaysStoppedAnimation<Color>(
-                                            Colors.white,
+                                child: Center(
+                                  child: !state.isLoading
+                                      ? Text(
+                                          "Отправить",
+                                          style: TextStyle(
+                                            fontSize: 18,
+                                            color: kColorWhite,
+                                            fontWeight: FontWeight.bold,
+                                            fontFamily: 'GillroyMedium',
                                           ),
-                                          strokeWidth: 2,
+                                        )
+                                      : Container(
+                                          height: 20,
+                                          width: 20,
+                                          child: CircularProgressIndicator(
+                                            valueColor:
+                                                AlwaysStoppedAnimation<Color>(
+                                              Colors.white,
+                                            ),
+                                            strokeWidth: 2,
+                                          ),
                                         ),
-                                      ),
+                                ),
                               ),
-                            ),
-                          );
-                        }),
-                  ],
+                            );
+                          }),
+                    ],
+                  ),
                 ),
               ),
             ),

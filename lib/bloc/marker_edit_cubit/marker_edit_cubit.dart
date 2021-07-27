@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
@@ -12,17 +14,17 @@ class MarkerEditCubit extends Cubit<MarkerEditState> {
   Future<void> updateMarker({
     @required String markerId,
     @required String reportText,
-    @required String reportType,
+    @required File image,
   }) async {
     try {
       emit(MarkerEditState(isLoading: true));
       await _mapRepository.updateMarker(
         markerId: markerId,
         reportText: reportText,
-        reportType: reportType,
       );
       emit(MarkerEditState());
     } catch (e) {
+      print(e.toString());
       if (e is ApiError) {
         emit(MarkerEditState(error: e.errorDescription));
       } else {

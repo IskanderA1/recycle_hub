@@ -7,23 +7,24 @@ class MapRepository {
   Future<bool> updateMarker({
     @required String markerId,
     @required String reportText,
-    @required String reportType,
   }) async {
     Map<String, dynamic> body = {
-      'report_text': '$reportText',
-      'report_type': '$reportType',
+      'text': '$reportText',
+      'type': ['ошибка ПП'],
+      'rec_point': markerId,
     };
     try {
       var response = await CommonRequest.makeRequest(
-        '/api/rec_offer/$markerId',
-        method: CommonRequestMethod.put,
-        body: jsonEncode(body),
+        'rec_comment',
+        method: CommonRequestMethod.post,
+        body: body,
       );
+      print(response.body);
+
       var data = jsonDecode(response.body);
-      print(data);
-      if (response.statusCode == 200) {
+      if (response.statusCode >= 200 && response.statusCode < 300) {
         return true;
-      } else if (response.statusCode == 400) {
+      } else if (response.statusCode >= 400 && response.statusCode < 500) {
         if (data['error'] != null) {
           throw ApiError(
             statusCode: 400,
