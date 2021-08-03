@@ -23,15 +23,17 @@ class _HowToGetCoinScreenState extends State<HowToGetCoinScreen> {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          icon: Icon(Icons.arrow_back,color: kColorWhite, size: 25),
-          onPressed: ()=>GetIt.I.get<ProfileMenuCubit>().goBack(),
+          icon: Icon(Icons.arrow_back, color: kColorWhite, size: 25),
+          onPressed: () => GetIt.I.get<ProfileMenuCubit>().goBack(),
         ),
-        title: Text("Как заработать баллы?", style: TextStyle(
-          color: kColorWhite,
-          fontSize: 18,
-          fontFamily: 'GillroyMedium',
-          fontWeight: FontWeight.bold
-        ),),
+        title: Text(
+          "Как заработать баллы?",
+          style: TextStyle(
+              color: kColorWhite,
+              fontSize: 18,
+              fontFamily: 'GillroyMedium',
+              fontWeight: FontWeight.bold),
+        ),
         centerTitle: true,
       ),
       body: Container(
@@ -49,13 +51,17 @@ class _HowToGetCoinScreenState extends State<HowToGetCoinScreen> {
                   children: [
                     MenuItemWidget(
                       name: "Предложить новый пункт приема",
-                      func: () =>GetIt.I.get<ProfileMenuCubit>().moveTo(ProfileMenuStates.OFFERNEWPOINT),
+                      func: () => GetIt.I
+                          .get<ProfileMenuCubit>()
+                          .moveTo(ProfileMenuStates.OFFERNEWPOINT),
                       iconData: HowToGetCoinIcons.add_pointer,
                     ),
                     EcoCoinHorisontalDivider(),
                     MenuItemWidget(
                       name: "Пригласить друга",
-                      func: () =>GetIt.I.get<ProfileMenuCubit>().moveTo(ProfileMenuStates.INVITE),
+                      func: () => GetIt.I
+                          .get<ProfileMenuCubit>()
+                          .moveTo(ProfileMenuStates.INVITE),
                       iconData: HowToGetCoinIcons.add_user,
                     ),
                     EcoCoinHorisontalDivider(),
@@ -80,8 +86,9 @@ class _HowToGetCoinScreenState extends State<HowToGetCoinScreen> {
                     MenuItemWidget(
                       name: "Пройти тест",
                       func: () {
-                        GetIt.I.get<NavBarCubit>().moveTo(NavBarItem.ECO_GIDE);
-                        GetIt.I.get<EcoGuideCubit>().moveTo(EcoGuideMenuItem.TEST);
+                        GetIt.I
+                            .get<ProfileMenuCubit>()
+                            .moveTo(ProfileMenuStates.ECOTEST);
                       },
                       iconData: HowToGetCoinIcons.brain,
                     ),

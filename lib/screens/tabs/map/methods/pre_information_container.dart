@@ -44,7 +44,7 @@ class _AnimatedPreInformationContainerState
   @override
   Widget build(BuildContext context) {
     size = MediaQuery.of(context).size;
-    widgetNotVisable = Container(
+    /* widgetNotVisable = Container(
       height: 50,
       padding: EdgeInsets.only(bottom: 8),
       child: ListView(
@@ -105,7 +105,7 @@ class _AnimatedPreInformationContainerState
           ),
         ],
       ),
-    );
+    ); */
     widgetVisible = Container(
       height: 130,
       padding: EdgeInsets.only(bottom: 8),
@@ -215,12 +215,13 @@ class _AnimatedPreInformationContainerState
         ],
       ),
     );
-    return AnimatedContainer(
+    return widgetVisible;
+    /* return AnimatedContainer(
         duration: Duration(milliseconds: 400),
         //height: 350,
         color: Colors.white,
         onEnd: () {},
-        child: widget.offset <= 0.5 ? widgetVisible : widgetNotVisable);
+        child: widget.offset <= 0.5 ? widgetVisible : widgetNotVisable); */
   }
 }
 

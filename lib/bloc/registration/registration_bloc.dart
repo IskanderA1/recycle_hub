@@ -29,7 +29,13 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
       yield* _mapRegConfirmToState(event.code);
     } else if (event is RegistrationEventHasCode) {
       yield* _mapAlreadyHasCodeToState(event);
+    } else if (event is RegistrationEventInit) {
+      yield* _mapInitToState();
     }
+  }
+
+  Stream<RegistrationState> _mapInitToState() async* {
+    yield RegistrationStateInitial();
   }
 
   Stream<RegistrationState> _mapRegisterToState(
@@ -49,7 +55,7 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
         /*SessionManager().relogin();
         final user = await userService.userInfo(); */
         yield RegistrationStateNeedConfirm();
-      }else{
+      } else {
         RegistrationStateError('Упс... Что-то пошло не так');
       }
     } catch (e) {
@@ -67,7 +73,6 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
         try {
           UserModel user = await UserService().userInfo();
           if (user != null) {
-            StaticData.user.value = user;
             GetIt.I.get<AuthBloc>().add(AuthEventInit());
             yield RegistrationStateConfirmed();
             Settings().isFirstLaunch = false;
@@ -75,6 +80,7 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
             yield RegistrationStateError('Не удалось авторизоваться');
           }
         } catch (e) {
+          print(e.toString());
           SessionManager().clearSession();
         }
       }

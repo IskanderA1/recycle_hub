@@ -179,12 +179,9 @@ class EcoCoinHorisontalDivider extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.only(top: 10, bottom: 10),
-      child: Divider(
-        color: Color(0xFF8D8D8D),
-        height: 1,
-      ),
+    return Divider(
+      color: Color(0xFF8D8D8D),
+      height: 1,
     );
   }
 }
@@ -195,46 +192,51 @@ class MenuItemWidget extends StatelessWidget {
     @required this.func,
     @required this.name,
     @required this.iconData,
+    this.padding = const EdgeInsets.only(top: 10, bottom: 10),
   }) : super(key: key);
 
   final Function func;
   final String name;
   final IconData iconData;
+  final EdgeInsetsGeometry padding;
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: func,
-      child: Row(
-        mainAxisSize: MainAxisSize.max,
-        children: [
-          Icon(
-            iconData,
-            color: Color(0xFF8D8D8D),
-            size: 30,
-          ),
-          SizedBox(
-            width: 20,
-          ),
-          RichText(
-            overflow: TextOverflow.visible,
-            text: TextSpan(
-              text: name,
-              style: TextStyle(
-                  color: kColorBlack,
-                  fontFamily: 'GillroyMedium',
-                  fontSize: 14),
+    return Padding(
+      padding: padding,
+      child: InkWell(
+        onTap: func,
+        child: Row(
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            Icon(
+              iconData,
+              color: Color(0xFF8D8D8D),
+              size: 30,
             ),
-          ),
-          Spacer(
-            flex: 1,
-          ),
-          Icon(
-            Icons.keyboard_arrow_right,
-            color: Color(0xFF8D8D8D),
-            size: 25,
-          )
-        ],
+            SizedBox(
+              width: 20,
+            ),
+            RichText(
+              overflow: TextOverflow.visible,
+              text: TextSpan(
+                text: name,
+                style: TextStyle(
+                    color: kColorBlack,
+                    fontFamily: 'GillroyMedium',
+                    fontSize: 14),
+              ),
+            ),
+            Spacer(
+              flex: 1,
+            ),
+            Icon(
+              Icons.keyboard_arrow_right,
+              color: Color(0xFF8D8D8D),
+              size: 25,
+            )
+          ],
+        ),
       ),
     );
   }

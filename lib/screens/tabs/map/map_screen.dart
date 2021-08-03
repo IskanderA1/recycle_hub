@@ -48,45 +48,46 @@ class _MapScreenState extends State<MapScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: mapScreenAppBar(),
-        body: BlocBuilder(
-          bloc: mapBloc,
-          buildWhen: (previous, current) {
-            if (previous is MapStateError) {
-              developer.log(
-                  "Got previous map screen error: ${previous.discription}",
-                  name: 'map.map_screen');
-              return true;
-            }
-            if (current is MapStateError) {
-              developer.log(
-                  "Got current map screen error: ${current.discription}",
-                  name: 'map.map_screen');
-              return false;
-            }
+      appBar: mapScreenAppBar(),
+      body: BlocBuilder(
+        bloc: mapBloc,
+        buildWhen: (previous, current) {
+          if (previous is MapStateError) {
+            developer.log(
+                "Got previous map screen error: ${previous.discription}",
+                name: 'map.map_screen');
+            return true;
+          }
+          if (current is MapStateError) {
+            developer.log(
+                "Got current map screen error: ${current.discription}",
+                name: 'map.map_screen');
+            return false;
+          }
 
-            if (previous is MapStateLoaded && current is MapStateLoaded) {
-              /* if (previous.markers == null || current.markers == null) {
+          if (previous is MapStateLoaded && current is MapStateLoaded) {
+            /* if (previous.markers == null || current.markers == null) {
                 return true;
               }
               return previous.markers.length != current.markers.length; */
-              return true;
-            }
             return true;
-          },
-          builder: (context, state) {
-            developer.log("Map rebuilds with: ${state.runtimeType}",
-                name: 'screens.tabs.map.map_screen');
-            if (state is MapStateLoaded) {
-              return GoogleMapWidget(
-                  cameraPosition: cameraPosition,
-                  state: state,
-                  mapController: _controller);
-            } else {
-              return LoaderWidget();
-            }
-          },
-        ));
+          }
+          return true;
+        },
+        builder: (context, state) {
+          developer.log("Map rebuilds with: ${state.runtimeType}",
+              name: 'screens.tabs.map.map_screen');
+          if (state is MapStateLoaded) {
+            return GoogleMapWidget(
+                cameraPosition: cameraPosition,
+                state: state,
+                mapController: _controller);
+          } else {
+            return LoaderWidget();
+          }
+        },
+      ),
+    );
     /*return FutureBuilder<String>(
       future: getCurrentPosition(),
       builder: (context, snapshot) {
@@ -149,7 +150,9 @@ class _MapScreenState extends State<MapScreen> {
     developer.log("User location: ${currentLocation.toString()}",
         name: 'screens.tabs.map.map_screen');
     GoogleMapController controller = await _controller.future;
-    controller.animateCamera(CameraUpdate.newCameraPosition(cameraPosition));
+    controller.animateCamera(
+      CameraUpdate.newCameraPosition(cameraPosition),
+    );
     return "Ok";
   }
 }
@@ -176,12 +179,14 @@ class _GoogleMapWidgetState extends State<GoogleMapWidget> {
   List<FilterType> filters = PointsService().filters;
 
   MapBloc mapBloc;
+  GoogleMapController googleMapController;
 
   List<Widget> _list;
   ClusterManager<CustMarker> clusterManager;
   Iterable<ClusterItem> _items;
-  CameraPosition _cameraPosition =
-      CameraPosition(target: LatLng(55.4727, 49.0652));
+  CameraPosition _cameraPosition = CameraPosition(
+    target: LatLng(55.4727, 49.0652),
+  );
   StreamSubscription<MapState> _mapSub;
   LatLng _userLocation;
 
@@ -198,9 +203,11 @@ class _GoogleMapWidgetState extends State<GoogleMapWidget> {
         widget.cameraPosition.target.longitude);
 
     _items = widget.state.markers
-        .map((markItem) => ClusterItem(
-            LatLng(markItem.coords[0], markItem.coords[1]),
-            item: markItem))
+        .map(
+          (markItem) => ClusterItem(
+              LatLng(markItem.coords[0], markItem.coords[1]),
+              item: markItem),
+        )
         .toList();
     clusterManager = ClusterManager<CustMarker>(
       _items,
@@ -217,9 +224,11 @@ class _GoogleMapWidgetState extends State<GoogleMapWidget> {
       if (state is MapStateLoaded && mounted) {
         setState(() {
           _items = state.markers
-              .map((markItem) => ClusterItem(
-                  LatLng(markItem.coords[0], markItem.coords[1]),
-                  item: markItem))
+              .map(
+                (markItem) => ClusterItem(
+                    LatLng(markItem.coords[0], markItem.coords[1]),
+                    item: markItem),
+              )
               .toList();
         });
         clusterManager.setItems(_items);
@@ -231,7 +240,9 @@ class _GoogleMapWidgetState extends State<GoogleMapWidget> {
       });
       _list = widget.state.markers.map((item) {
         double ddist = distanceInKm(
-            UserService().location, Point(item.coords[0], item.coords[1]));
+          UserService().location,
+          Point(item.coords[0], item.coords[1]),
+        );
         String dist = '';
         if (ddist < 0) {
           dist = ddist.toStringAsFixed(3).split('.').last + ' м';
@@ -242,9 +253,65 @@ class _GoogleMapWidgetState extends State<GoogleMapWidget> {
             index: item.hashCode,
             marker: item,
             distance: dist,
+            onTap: () {
+              if (googleMapController != null) {
+                CameraUpdate cameraUpdate = CameraUpdate.newLatLngZoom(
+                    LatLng(item.coords[0], item.coords[1]), 17);
+                googleMapController.animateCamera(cameraUpdate);
+              }
+              showStickyFlexibleBottomSheet(
+                  initHeight: 0.2,
+                  minHeight: 0.2,
+                  maxHeight: 0.85,
+                  context: context,
+                  headerHeight: 40,
+                  isExpand: false,
+                  decoration: const ShapeDecoration(
+                    color: kColorWhite,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(40),
+                        topRight: Radius.circular(40),
+                      ),
+                    ),
+                  ),
+                  headerBuilder: (context, bottomSheetOffset) {
+                    return AnimatedHeader(bottomSheetOffset: bottomSheetOffset);
+                  },
+                  builder: (context, offset) {
+                    return SliverChildListDelegate(
+                      <Widget>[
+                        AnimatedPreInformationContainer(
+                          offset: offset,
+                          marker: item,
+                          filters: filters.isNotEmpty
+                              ? filters
+                                  .where((element) =>
+                                      item.acceptTypes.contains(element.id))
+                                  .toList()
+                              : [],
+                          userPoint: Point(
+                              _userLocation.latitude, _userLocation.longitude),
+                        ),
+                        BuildBody(
+                          marker: item,
+                          filters: filters.isNotEmpty
+                              ? filters
+                                  .where((element) =>
+                                      item.acceptTypes.contains(element.id))
+                                  .toList()
+                              : [],
+                        ),
+                      ],
+                    );
+                  },
+                  anchors: [0.0, 0.2, 0.85]);
+            },
             filters: filters.isNotEmpty
                 ? filters
-                    .where((element) => item.acceptTypes.contains(element.id))
+                    .where(
+                      (element) => item.acceptTypes.contains(element.id),
+                    )
                     .toList()
                 : []);
       }).toList();
@@ -272,13 +339,15 @@ class _GoogleMapWidgetState extends State<GoogleMapWidget> {
     if (_userLocation != null) {
       _userLocation = LatLng(locationData.latitude, locationData.longitude);
       controller = await widget.mapController.future;
-      controller.animateCamera(CameraUpdate.newCameraPosition(
-        CameraPosition(
-          bearing: 0,
-          target: LatLng(_userLocation.latitude, _userLocation.longitude),
-          zoom: 15.0,
+      controller.animateCamera(
+        CameraUpdate.newCameraPosition(
+          CameraPosition(
+            bearing: 0,
+            target: LatLng(_userLocation.latitude, _userLocation.longitude),
+            zoom: 15.0,
+          ),
         ),
-      ));
+      );
     }
   }
 
@@ -291,24 +360,26 @@ class _GoogleMapWidgetState extends State<GoogleMapWidget> {
   Widget build(BuildContext context) {
     return Stack(children: [
       Container(
-          child: GoogleMap(
-        mapType: _currentMapType,
-        initialCameraPosition: widget.cameraPosition,
-        onCameraMove: _onCameraMove,
-        onCameraIdle: clusterManager.updateMap,
-        onMapCreated: (GoogleMapController controller) {
-          if (!widget.mapController.isCompleted) {
-            widget.mapController.complete(controller);
-          }
-          clusterManager.setMapController(controller);
-          setState(() {});
-        },
-        myLocationButtonEnabled: false,
-        myLocationEnabled: true,
-        zoomControlsEnabled: false,
-        compassEnabled: false,
-        markers: markers,
-      )),
+        child: GoogleMap(
+          mapType: _currentMapType,
+          initialCameraPosition: widget.cameraPosition,
+          onCameraMove: _onCameraMove,
+          onCameraIdle: clusterManager.updateMap,
+          onMapCreated: (GoogleMapController controller) {
+            if (!widget.mapController.isCompleted) {
+              widget.mapController.complete(controller);
+            }
+            clusterManager.setMapController(controller);
+            this.googleMapController = controller;
+            setState(() {});
+          },
+          myLocationButtonEnabled: false,
+          myLocationEnabled: true,
+          zoomControlsEnabled: false,
+          compassEnabled: false,
+          markers: markers,
+        ),
+      ),
 
       ///Кнопка определения местоположения
       Positioned(
@@ -320,7 +391,9 @@ class _GoogleMapWidgetState extends State<GoogleMapWidget> {
           child: FloatingActionButton(
             heroTag: null,
             onPressed: _currentLocation,
-            shape: CircleBorder(side: BorderSide(color: kColorWhite, width: 5)),
+            shape: CircleBorder(
+              side: BorderSide(color: kColorWhite, width: 5),
+            ),
             backgroundColor: kColorWhite,
             child: Icon(
               LofOut.location,
@@ -343,7 +416,9 @@ class _GoogleMapWidgetState extends State<GoogleMapWidget> {
             backgroundColor: kColorBlack,
             //foregroundColor: kColorBlack,
             onPressed: northSouth,
-            shape: CircleBorder(side: BorderSide(color: kColorWhite, width: 5)),
+            shape: CircleBorder(
+              side: BorderSide(color: kColorWhite, width: 5),
+            ),
             child: Icon(
               Icons.explore,
               size: 40,
@@ -364,7 +439,7 @@ class _GoogleMapWidgetState extends State<GoogleMapWidget> {
             heroTag: null,
             backgroundColor: kColorWhite,
             shape:
-                CircleBorder(side: BorderSide(color: kColorWhite, width: 1.5)),
+                CircleBorder(side: BorderSide(color: kColorWhite, width: 1.5),),
             onPressed: zoomIncrement,
             child: FaIcon(
               FontAwesomeIcons.plus,
@@ -386,7 +461,7 @@ class _GoogleMapWidgetState extends State<GoogleMapWidget> {
             heroTag: null,
             backgroundColor: kColorWhite,
             shape:
-                CircleBorder(side: BorderSide(color: kColorWhite, width: 1.5)),
+                CircleBorder(side: BorderSide(color: kColorWhite, width: 1.5),),
             onPressed: zoomDecrement,
             child: FaIcon(
               FontAwesomeIcons.minus,
@@ -408,8 +483,9 @@ class _GoogleMapWidgetState extends State<GoogleMapWidget> {
             heroTag: null,
             backgroundColor: kColorWhite,
             shape: RoundedRectangleBorder(
-                side: BorderSide(color: kColorWhite, width: 2),
-                borderRadius: BorderRadius.circular(50)),
+              side: BorderSide(color: kColorWhite, width: 2),
+              borderRadius: BorderRadius.circular(50),
+            ),
             onPressed: () {
               return showStickyFlexibleBottomSheet<void>(
                   initHeight: 0.4,
@@ -486,66 +562,69 @@ class _GoogleMapWidgetState extends State<GoogleMapWidget> {
           }
         }
         return Marker(
-            markerId: MarkerId(cluster.getId()),
-            position: cluster.location,
-            onTap: () {
-              if (cluster.items.length == 1) {
-                markerInfoFeedBloc.pickEvent(Mode.INFO);
-                showStickyFlexibleBottomSheet(
-                    initHeight: 0.2,
-                    minHeight: 0.2,
-                    maxHeight: 0.85,
-                    context: context,
-                    headerHeight: 40,
-                    isExpand: false,
-                    decoration: const ShapeDecoration(
-                      color: kColorWhite,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(40),
-                          topRight: Radius.circular(40),
-                        ),
+          markerId: MarkerId(
+            cluster.getId(),
+          ),
+          position: cluster.location,
+          onTap: () {
+            if (cluster.items.length == 1) {
+              showStickyFlexibleBottomSheet(
+                  initHeight: 0.2,
+                  minHeight: 0.2,
+                  maxHeight: 0.85,
+                  context: context,
+                  headerHeight: 40,
+                  isExpand: false,
+                  decoration: const ShapeDecoration(
+                    color: kColorWhite,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(40),
+                        topRight: Radius.circular(40),
                       ),
                     ),
-                    headerBuilder: (context, bottomSheetOffset) {
-                      return AnimatedHeader(
-                          bottomSheetOffset: bottomSheetOffset);
-                    },
-                    builder: (context, offset) {
-                      return SliverChildListDelegate(
-                        <Widget>[
-                          AnimatedPreInformationContainer(
-                            offset: offset,
-                            marker: cluster.items.first,
-                            filters: filters.isNotEmpty
-                                ? filters
-                                    .where((element) => cluster
-                                        .items.first.acceptTypes
-                                        .contains(element.id))
-                                    .toList()
-                                : [],
-                            userPoint: Point(_userLocation.latitude,
-                                _userLocation.longitude),
-                          ),
-                          BuildBody(
-                            marker: cluster.items.first,
-                            filters: filters.isNotEmpty
-                                ? filters
-                                    .where((element) => cluster
-                                        .items.first.acceptTypes
-                                        .contains(element.id))
-                                    .toList()
-                                : [],
-                          ),
-                        ],
-                      );
-                    },
-                    anchors: [0.0, 0.2, 0.85]);
-              }
-            },
-            icon: await _getMarkerBitmap(cluster.isMultiple ? 125 : 75,
-                text: cluster.isMultiple ? cluster.count.toString() : null,
-                type: type));
+                  ),
+                  headerBuilder: (context, bottomSheetOffset) {
+                    return AnimatedHeader(bottomSheetOffset: bottomSheetOffset);
+                  },
+                  builder: (context, offset) {
+                    return SliverChildListDelegate(
+                      <Widget>[
+                        AnimatedPreInformationContainer(
+                          offset: offset,
+                          marker: cluster.items.first,
+                          filters: filters.isNotEmpty
+                              ? filters
+                                  .where(
+                                    (element) => cluster.items.first.acceptTypes
+                                        .contains(element.id),
+                                  )
+                                  .toList()
+                              : [],
+                          userPoint: Point(
+                              _userLocation.latitude, _userLocation.longitude),
+                        ),
+                        BuildBody(
+                          marker: cluster.items.first,
+                          filters: filters.isNotEmpty
+                              ? filters
+                                  .where(
+                                    (element) => cluster.items.first.acceptTypes
+                                        .contains(element.id),
+                                  )
+                                  .toList()
+                              : [],
+                        ),
+                      ],
+                    );
+                  },
+                  anchors: [0.0, 0.2, 0.85]);
+            }
+          },
+          icon: await _getMarkerBitmap(cluster.isMultiple ? 125 : 75,
+              text: cluster.isMultiple ? cluster.count.toString() : null,
+              type: type),
+        );
       };
 
   Future<BitmapDescriptor> _getMarkerBitmap(int size,
@@ -595,7 +674,9 @@ class _GoogleMapWidgetState extends State<GoogleMapWidget> {
     final img = await pictureRecorder.endRecording().toImage(size, size);
     final data = await img.toByteData(format: ImageByteFormat.png);
 
-    return BitmapDescriptor.fromBytes(data.buffer.asUint8List());
+    return BitmapDescriptor.fromBytes(
+      data.buffer.asUint8List(),
+    );
   }
 
   void northSouth() async {
@@ -662,7 +743,7 @@ enum PTYPE { free, partner, multi }
                                     color: Colors.pink,
                                     borderRadius: BorderRadius.only(
                                         topLeft: Radius.circular(20),
-                                        topRight: Radius.circular(20))),
+                                        topRight: Radius.circular(20),)\),
                                 child: Column(
                                   children: <Widget>[
                                     Container(
@@ -671,7 +752,7 @@ enum PTYPE { free, partner, multi }
                                       decoration: BoxDecoration(
                                           color: Colors.white,
                                           borderRadius:
-                                              BorderRadius.circular(10)),
+                                              BorderRadius.circular(10),),
                                     ),
                                     SizedBox(
                                       height: 8,
@@ -702,9 +783,9 @@ enum PTYPE { free, partner, multi }
                                             decoration: BoxDecoration(
                                                 color: Colors.white,
                                                 borderRadius:
-                                                    BorderRadius.circular(10)),
+                                                    BorderRadius.circular(10),),
                                           );
-                                        }).toList())
+                                        }).toList(),)
                                   ],
                                 ),
                               ),
@@ -714,7 +795,7 @@ enum PTYPE { free, partner, multi }
                                     color: Colors.pink,
                                     borderRadius: BorderRadius.only(
                                         topLeft: Radius.circular(20),
-                                        topRight: Radius.circular(20))),
+                                        topRight: Radius.circular(20),),),
                                 child: Column(
                                   children: <Widget>[
                                     Icon(
@@ -750,13 +831,13 @@ enum PTYPE { free, partner, multi }
                                                     color: Colors.white,
                                                     borderRadius:
                                                         BorderRadius.circular(
-                                                            10)),
+                                                            10),),
                                                 child: Icon(
                                                   icons[index],
                                                   color: Colors.pink,
                                                   size: 40,
                                                 ),
-                                              )),
+                                              ),),
                                     )
                                   ],
                                 ),
@@ -768,7 +849,7 @@ enum PTYPE { free, partner, multi }
                                   Container(color: Colors.transparent),
                               blurBackground: true,
                             ),
-                          )));*/
+                          ),),);*/
 
 /*Material(
                       color: Colors.white.withOpacity(0),
@@ -779,7 +860,7 @@ enum PTYPE { free, partner, multi }
                               color: Colors.pink,
                               borderRadius: BorderRadius.only(
                                   topLeft: Radius.circular(20),
-                                  topRight: Radius.circular(20))),
+                                  topRight: Radius.circular(20),),),
                           child: Column(
                             children: <Widget>[
                               Container(
@@ -787,7 +868,7 @@ enum PTYPE { free, partner, multi }
                                 height: 6,
                                 decoration: BoxDecoration(
                                     color: Colors.white,
-                                    borderRadius: BorderRadius.circular(10)),
+                                    borderRadius: BorderRadius.circular(10),),
                               ),
                               SizedBox(
                                 height: 8,
@@ -817,9 +898,9 @@ enum PTYPE { free, partner, multi }
                                       decoration: BoxDecoration(
                                           color: Colors.white,
                                           borderRadius:
-                                              BorderRadius.circular(10)),
+                                              BorderRadius.circular(10),),
                                     );
-                                  }).toList())
+                                  }).toList(),)
                             ],
                           ),
                         ),
@@ -829,7 +910,7 @@ enum PTYPE { free, partner, multi }
                               color: Colors.pink,
                               borderRadius: BorderRadius.only(
                                   topLeft: Radius.circular(20),
-                                  topRight: Radius.circular(20))),
+                                  topRight: Radius.circular(20),)),
                           child: Column(
                             children: <Widget>[
                               Icon(
@@ -863,13 +944,13 @@ enum PTYPE { free, partner, multi }
                                           decoration: BoxDecoration(
                                               color: Colors.white,
                                               borderRadius:
-                                                  BorderRadius.circular(10)),
+                                                  BorderRadius.circular(10),),
                                           child: Icon(
                                             icons[index],
                                             color: Colors.pink,
                                             size: 40,
                                           ),
-                                        )),
+                                        ),),
                               )
                             ],
                           ),

@@ -250,7 +250,7 @@ class _NewWidgetState extends State<NewWidget> {
             ],
           ),
         ), */
-        Padding(
+        /* Padding(
           padding: const EdgeInsets.only(left: 24, right: 24, top: 8),
           child: Row(
             children: [
@@ -282,7 +282,7 @@ class _NewWidgetState extends State<NewWidget> {
             gridSize: 30,
           ),
         ),
-        myDivider(),
+        myDivider(), */
         Padding(
             padding: const EdgeInsets.fromLTRB(25, 5, 25, 5),
             child: Row(
@@ -290,7 +290,9 @@ class _NewWidgetState extends State<NewWidget> {
                 Icon(
                   Icons.copyright,
                   size: 30,
-                  color: Color(0xFF8D8D8D),
+                  color: widget.marker.paybackType == "partner"
+                      ? kColorGreen
+                      : kColorPink,
                 ),
                 SizedBox(
                   width: 15,
@@ -300,7 +302,9 @@ class _NewWidgetState extends State<NewWidget> {
                       ? "Выдает ЭкоКоины"
                       : "Не выдает ЭкоКоинов",
                   style: TextStyle(
-                      color: kColorBlack,
+                      color: widget.marker.paybackType == "partner"
+                          ? kColorGreen
+                          : kColorPink,
                       fontFamily: 'GilroyMedium',
                       fontSize: 18),
                 )

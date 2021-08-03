@@ -18,6 +18,7 @@ enum ProfileMenuStates {
   MYPURCHASES,
   TOPUPSHISTORY,
   INVITE,
+  ECOTEST,
 
   PointEdit,
   PointWriteNews,

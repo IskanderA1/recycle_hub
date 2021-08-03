@@ -4,7 +4,6 @@ abstract class AuthState extends Equatable {
   const AuthState();
 
   UserModel get userModel => UserModel.guestAcc();
-  
 
   @override
   List<Object> get props => [];
@@ -34,14 +33,12 @@ class AuthStateLogedIn extends AuthState {
   UserModel get userModel => this.user;
 
   @override
-  List<Object> get props => [];
+  List<Object> get props => [user];
 }
 
 class AuthStateGuestAcc extends AuthState {
-
   AuthStateGuestAcc();
 
   @override
   List<Object> get props => [];
 }
-

@@ -24,6 +24,7 @@ class _UserImagePickerState extends State<UserImagePicker> {
     if (widget.image != null && widget.image.isNotEmpty) {
       _loadImage(widget.image);
     } else {
+      _image = null;
       _isLoading = false;
     }
     super.initState();

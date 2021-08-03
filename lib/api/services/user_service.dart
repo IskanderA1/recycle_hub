@@ -139,8 +139,15 @@ class UserService {
         method: CommonRequestMethod.get, needAuthorization: true);
     if (response.statusCode == 200) {
       Map<String, dynamic> data = jsonDecode(response.body);
-      var stat = UserStatistic.fromMap(data);
-      _userStatistic = stat;
+      var stat;
+      try {
+        stat = UserStatistic.fromMap(data);
+        _userStatistic = stat;
+      } catch (e) {
+        print(e.toString());
+        _userStatistic = null;
+      }
+
       await loadUserStatistic();
       await StoreService().loadProducts();
       await StoreService().loadPurchases();
@@ -420,6 +427,7 @@ class UserService {
     _garbagesGiven = 0;
     _transactions.clear();
     _userTransactions.clear();
+    _userStatistic = null;
     return UserUnlogged();
   }
 

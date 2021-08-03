@@ -30,7 +30,7 @@ class _ReportToErrorMarkerScreenState extends State<ReportToErrorMarkerScreen> {
 
   Future _getImage() async {
     try {
-      final img = await getImage();
+      final img = await FilePicker.getImage();
       setState(() {
         _image = img;
       });
@@ -39,7 +39,7 @@ class _ReportToErrorMarkerScreenState extends State<ReportToErrorMarkerScreen> {
 
   Future _getImageFromStorage() async {
     try {
-      final img = await getImageFromStorage();
+      final img = await FilePicker.getImageFromStorage();
       setState(() {
         _image = img;
       });

@@ -30,7 +30,9 @@ class _EcoMainScreenState extends State<EcoMainScreen> {
           case EcoGuideMenuItem.ADVICE:
             return AdviceScreen();
           case EcoGuideMenuItem.TEST:
-            return TestScreen();
+            return TestScreen(
+              onBackPressed: GetIt.I.get<EcoGuideCubit>().goBack,
+            );
         }
       },
     );

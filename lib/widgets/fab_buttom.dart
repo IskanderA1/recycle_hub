@@ -8,6 +8,7 @@ import 'package:recycle_hub/bloc/eco_coin_menu/eco_coin_menu_cubit.dart';
 import 'package:recycle_hub/bloc/eco_guide_cubit/eco_guide_cubit_cubit.dart';
 import 'package:recycle_hub/bloc/nav_bar_cubit/nav_bar_cubit_cubit.dart';
 import 'package:recycle_hub/elements/custom_bottom_sheet.dart';
+import 'package:recycle_hub/helpers/messager_helper.dart';
 import 'package:recycle_hub/icons/nav_bar_icons_icons.dart';
 import 'package:recycle_hub/model/user_model.dart';
 import 'package:recycle_hub/screens/qr_scanner_screen.dart';
@@ -72,24 +73,29 @@ class _BottomNavBarV2State extends State<BottomNavBarV2> {
                             GetIt.I
                                 .get<NavBarCubit>()
                                 .moveTo(NavBarItem.QRSCANNER);
-                            return;
+                          } else {
+                            showModalBottomSheetCustom(
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.vertical(
+                                      top: Radius.circular(25))),
+                              context: context,
+                              builder: (context) {
+                                if (state is AuthStateLogedIn) {
+                                  return QRCodeContainer(
+                                    userState: state,
+                                  );
+                                } else {
+                                  return SizedBox.shrink();
+                                }
+                              },
+                            );
                           }
+                        } else {
+                          showMessage(
+                              context: context,
+                              message: "Авторизуйтесь",
+                              backColor: kColorGreen);
                         }
-                        showModalBottomSheetCustom(
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.vertical(
-                                  top: Radius.circular(25))),
-                          context: context,
-                          builder: (context) {
-                            if (state is AuthStateLogedIn) {
-                              return QRCodeContainer(
-                                userState: state,
-                              );
-                            } else {
-                              return SizedBox.shrink();
-                            }
-                          },
-                        );
                       },
                       child: Container(
                         child: Icon(

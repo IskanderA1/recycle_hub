@@ -96,16 +96,21 @@ class FileUpLoader {
       FormData image = FormData.fromMap({
         'files': [await MultipartFile.fromFile(file.path, filename: fileName)]
       });
-      final response = await dio.post(endpoint,
-          data: image,
-          options: Options(
-            headers: {"Authorization": 'Bearer $token'},
-            followRedirects: false,
-            validateStatus: (status) {
-              return status < 500;
-            },
-            ));
-      if (response.statusCode != 200) {}
+      final response = await dio.post(
+        endpoint,
+        data: image,
+        options: Options(
+          headers: {"Authorization": 'Bearer $token'},
+          followRedirects: false,
+          validateStatus: (status) {
+            return status < 500;
+          },
+        ),
+      );
+      print(response.statusCode);
+      if (response.statusCode != 201) {
+        print(response.statusMessage);
+      } else {}
     } catch (e) {
       rethrow;
     }

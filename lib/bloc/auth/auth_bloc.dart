@@ -55,7 +55,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       try {
         UserModel user = await userService.userInfo();
         if (user != null) {
-          StaticData.user.value = user;
+          //StaticData.user.value = user;
           NewsService().loadNews();
           yield AuthStateLogedIn(user: user);
 
@@ -71,7 +71,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           try {
             UserModel user = await UserService().userInfo();
             if (user != null) {
-              StaticData.user.value = user;
+              //StaticData.user.value = user;
               //NewsService().loadNews();
               yield AuthStateLogedIn(user: user);
               Settings().isFirstLaunch = false;
@@ -136,7 +136,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     AuthState cState = state;
 
     if (cState is AuthStateLogedIn) {
-      yield AuthStateLoading();
+      //yield AuthStateLoading();
       String token = await SessionManager().getAuthorizationToken();
       if (token == null) {
         await SessionManager().relogin();
@@ -146,7 +146,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         try {
           UserModel user = await userService.userInfo();
           if (user != null) {
-            StaticData.user.value = user;
+            //StaticData.user.value = user;
             yield AuthStateLogedIn(user: user);
           } else {
             yield cState;

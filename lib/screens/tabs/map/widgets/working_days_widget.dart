@@ -32,8 +32,6 @@ class _WorkingDaysWidgetState extends State<WorkingDaysWidget> {
   Widget divider() {
     return VerticalDivider(
       color: widget.wColor,
-      indent: 3,
-      endIndent: 3,
       width: 2,
       thickness: 0.6,
     );
@@ -255,9 +253,8 @@ class DayWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Expanded(
       child: Container(
-        color: isSelected ? kColorRed.withOpacity(0.65) : backColor,
-        child: (Column(
-          mainAxisSize: MainAxisSize.min,
+        color: isSelected ? kColorPink : backColor,
+        child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
@@ -290,7 +287,7 @@ class DayWidget extends StatelessWidget {
                   color: isSelected ? textSelectedColor : textUnSelectedColor),
             ),
           ],
-        )),
+        ),
       ),
     );
   }

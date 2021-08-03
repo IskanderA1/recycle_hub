@@ -7,6 +7,7 @@ import 'package:recycle_hub/bloc/cubit/profile_menu_cubit.dart';
 import 'package:recycle_hub/bloc/profile_bloc/profile_bloc.dart';
 import 'package:recycle_hub/features/transactions/domain/state/transactions_state.dart';
 import 'package:recycle_hub/features/transactions/internal/transactions_module.dart';
+import 'package:recycle_hub/screens/tabs/eco_gide/eco_guide_tabs/do_test_screen.dart';
 import 'package:recycle_hub/screens/tabs/profile/edit_profile_screen.dart';
 import 'package:recycle_hub/screens/tabs/profile/how_get_coin_screen.dart';
 import 'package:recycle_hub/screens/offer_new_point.dart';
@@ -65,9 +66,8 @@ class _ProfileMenuScreenState extends State<ProfileMenuScreen> {
                     break;
                   case ProfileMenuStates.STORE:
                     return StoreScreen(
-                      onBackCall: () => GetIt.I
-                          .get<ProfileMenuCubit>()
-                          .moveTo(ProfileMenuStates.MENU),
+                      onBackCall: () =>
+                          GetIt.I.get<ProfileMenuCubit>().goBack(),
                     );
                     break;
                   case ProfileMenuStates.EDITPROFILE:
@@ -89,6 +89,10 @@ class _ProfileMenuScreenState extends State<ProfileMenuScreen> {
                     break;
                   case ProfileMenuStates.PointWriteNews:
                     return OfferNewsScreen();
+                    break;
+                  case ProfileMenuStates.ECOTEST:
+                    return TestScreen(
+                        onBackPressed: GetIt.I.get<ProfileMenuCubit>().goBack);
                     break;
                   default:
                     return ProfileScreen();

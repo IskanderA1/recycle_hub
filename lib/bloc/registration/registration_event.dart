@@ -7,6 +7,12 @@ abstract class RegistrationEvent extends Equatable {
   List<Object> get props => [];
 }
 
+class RegistrationEventInit extends RegistrationEvent {
+  RegistrationEventInit();
+  @override
+  List<Object> get props => [];
+}
+
 class RegistrationEventRegister extends RegistrationEvent {
   final String name;
   final String surname;

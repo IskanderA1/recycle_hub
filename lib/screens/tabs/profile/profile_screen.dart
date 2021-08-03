@@ -51,17 +51,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   Future<void> _refresh() async {
-    //GetIt.I.get<AuthBloc>().add(AuthEventRefresh());
-    UserModel newUser;
-    try {
+    GetIt.I.get<AuthBloc>().add(AuthEventRefresh());
+    //UserModel newUser;
+    /* try {
       newUser = await UserService().userInfo();
       if (newUser != null) {
         userState = newUser;
       }
     } catch (e) {
       print(e.toString());
-    }
-    setState(() {});
+    } */
+    //setState(() {});
   }
 
   @override
@@ -69,6 +69,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
     Size _size = MediaQuery.of(context).size;
     return BlocBuilder<AuthBloc, AuthState>(
       bloc: GetIt.I.get<AuthBloc>(),
+      buildWhen: (previous, current) {
+        if (previous != current) {
+          return true;
+        } else {
+          return false;
+        }
+      },
       builder: (context, state) {
         if (state is AuthStateLogedIn &&
             state.user.userType == UserTypes.admin) {
@@ -97,8 +104,41 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         SizedBox(
                           height: 17,
                         ),
-                        buildProfileAvatar(state.userModel.name, "ЭКОЛОГ",
-                            state.userModel.image),
+                        Container(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              UserImagePicker(
+                                image: state.userModel.image,
+                              ),
+                              SizedBox(
+                                width: 12,
+                              ),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    state.userModel.name,
+                                    style: TextStyle(
+                                      color: kColorWhite,
+                                      fontFamily: 'GillroyMedium',
+                                      fontSize: 18,
+                                    ),
+                                  ),
+                                  Text(
+                                    "Эколог",
+                                    style: TextStyle(
+                                      color: kColorWhite,
+                                      fontFamily: 'GillroyMedium',
+                                      fontSize: 12,
+                                    ),
+                                  ),
+                                ],
+                              )
+                            ],
+                          ),
+                        ),
                         SizedBox(
                           height: 24,
                         ),
@@ -137,7 +177,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 ),
                               if (state is AuthStateLogedIn)
                                 buildAchievments(
-                                    "Эколог", UserService().statistic.total),
+                                    "Эколог",
+                                    UserService().statistic != null
+                                        ? UserService().statistic.total
+                                        : 0),
                               if (state is AuthStateLogedIn)
                                 SizedBox(
                                   height: 10,
@@ -199,40 +242,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   fontWeight: FontWeight.bold),
             ))
       ],
-    );
-  }
-
-  Widget buildProfileAvatar(String name, String status, String image) {
-    return Container(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          UserImagePicker(
-            image: image,
-          ),
-          SizedBox(
-            width: 12,
-          ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(name,
-                  style: TextStyle(
-                    color: kColorWhite,
-                    fontFamily: 'GillroyMedium',
-                    fontSize: 18,
-                  )),
-              Text(status,
-                  style: TextStyle(
-                    color: kColorWhite,
-                    fontFamily: 'GillroyMedium',
-                    fontSize: 12,
-                  ))
-            ],
-          )
-        ],
-      ),
     );
   }
 
@@ -400,7 +409,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
         SizedBox(
           height: 7,
         ),
-        _buildProgressIndicator(2),
+        ProfileProgressIndicator(
+            total: UserService().statistic != null
+                ? UserService().statistic.total
+                : 0),
         SizedBox(
           height: 8,
         ),
@@ -424,87 +436,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ))
           ],
         )
-      ],
-    );
-  }
-
-  Widget _buildProgressIndicator(int lastKGindex) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Container(
-            height: 20,
-            width: 47,
-            margin: EdgeInsets.only(right: 2),
-            alignment: Alignment.center,
-            decoration: BoxDecoration(
-                color: (0 < lastKGindex) ? kColorGreen : kLightGrey,
-                borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(12),
-                    bottomLeft: Radius.circular(12))),
-            child: (0 < lastKGindex)
-                ? Container()
-                : Text(
-                    "0кг",
-                    style: TextStyle(fontSize: 12, color: kColorGreyDark),
-                  )),
-        Container(
-            height: 20,
-            width: 48,
-            margin: EdgeInsets.only(right: 2),
-            alignment: Alignment.center,
-            decoration: BoxDecoration(
-              color: (1 < lastKGindex) ? kColorGreen : kLightGrey,
-            ),
-            child: (1 < lastKGindex)
-                ? Container()
-                : Text(
-                    "50кг",
-                    style: TextStyle(fontSize: 12, color: kColorGreyDark),
-                  )),
-        Container(
-            height: 20,
-            width: 50,
-            margin: EdgeInsets.only(right: 2),
-            alignment: Alignment.center,
-            decoration: BoxDecoration(
-              color: (2 < lastKGindex) ? kColorGreen : kLightGrey,
-            ),
-            child: (2 < lastKGindex)
-                ? Container()
-                : Text(
-                    "100кг",
-                    style: TextStyle(fontSize: 12, color: kColorGreyDark),
-                  )),
-        Container(
-            height: 20,
-            width: 48,
-            margin: EdgeInsets.only(right: 2),
-            alignment: Alignment.center,
-            decoration: BoxDecoration(
-              color: (3 < lastKGindex) ? kColorGreen : kLightGrey,
-            ),
-            child: (3 < lastKGindex)
-                ? Container()
-                : Text(
-                    "250кг",
-                    style: TextStyle(fontSize: 12, color: kColorGreyDark),
-                  )),
-        Container(
-            height: 20,
-            width: 47,
-            alignment: Alignment.center,
-            decoration: BoxDecoration(
-                color: (4 < lastKGindex) ? kColorGreen : kLightGrey,
-                borderRadius: BorderRadius.only(
-                    topRight: Radius.circular(12),
-                    bottomRight: Radius.circular(12))),
-            child: (4 < lastKGindex)
-                ? Container()
-                : Text(
-                    "500кг",
-                    style: TextStyle(fontSize: 12, color: kColorGreyDark),
-                  )),
       ],
     );
   }
@@ -587,8 +518,107 @@ class _ProfileScreenState extends State<ProfileScreen> {
       ),
     );
   }
+}
 
-  profileScreenAppBar() {
-    return AppBar();
+class ProfileProgressIndicator extends StatelessWidget {
+  const ProfileProgressIndicator({Key key, @required this.total})
+      : super(key: key);
+
+  final double total;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Container(
+          height: 20,
+          width: 47,
+          margin: EdgeInsets.only(right: 2),
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+            color: (0 < total) ? kColorGreen : kLightGrey,
+            gradient: (0 < total && total < 50)
+                ? LinearGradient(colors: [kColorGreen, kLightGrey])
+                : null,
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(12),
+              bottomLeft: Radius.circular(12),
+            ),
+          ),
+          child: Text(
+            "0 кг",
+            style: TextStyle(fontSize: 12, color: kColorGreyDark),
+          ),
+        ),
+        Container(
+          height: 20,
+          width: 48,
+          margin: EdgeInsets.only(right: 2),
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+            color: (50 < total) ? kColorGreen : kLightGrey,
+            gradient: (50 < total && total < 100)
+                ? LinearGradient(colors: [kColorGreen, kLightGrey])
+                : null,
+          ),
+          child: Text(
+            "50 кг",
+            style: TextStyle(fontSize: 12, color: kColorGreyDark),
+          ),
+        ),
+        Container(
+          height: 20,
+          width: 50,
+          margin: EdgeInsets.only(right: 2),
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+            color: (100 < total) ? kColorGreen : kLightGrey,
+            gradient: (100 < total && total < 250)
+                ? LinearGradient(colors: [kColorGreen, kLightGrey])
+                : null,
+          ),
+          child: Text(
+            "100 кг",
+            style: TextStyle(fontSize: 12, color: kColorGreyDark),
+          ),
+        ),
+        Container(
+          height: 20,
+          width: 48,
+          margin: EdgeInsets.only(right: 2),
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+            color: (250 < total) ? kColorGreen : kLightGrey,
+            gradient: (250 < total && total < 500)
+                ? LinearGradient(colors: [kColorGreen, kLightGrey])
+                : null,
+          ),
+          child: Text(
+            "250 кг",
+            style: TextStyle(fontSize: 12, color: kColorGreyDark),
+          ),
+        ),
+        Container(
+          height: 20,
+          width: 47,
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+            color: (500 < total) ? kColorGreen : kLightGrey,
+            gradient: (500 < total)
+                ? LinearGradient(colors: [kColorGreen, kLightGrey])
+                : null,
+            borderRadius: BorderRadius.only(
+              topRight: Radius.circular(12),
+              bottomRight: Radius.circular(12),
+            ),
+          ),
+          child: Text(
+            "500 кг",
+            style: TextStyle(fontSize: 12, color: kColorGreyDark),
+          ),
+        ),
+      ],
+    );
   }
 }

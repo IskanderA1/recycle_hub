@@ -36,8 +36,11 @@ class _AuthScreenState extends State<AuthScreen> {
     authBloc = GetIt.I.get<AuthBloc>();
     _authSub = authBloc.stream.listen((state) {
       if (state is AuthStateLogedIn) {
-        Navigator.of(context).popUntil(ModalRoute.withName('/'));
-        
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          Future.delayed(Duration(milliseconds: 15), () {
+            Navigator.of(context).popUntil(ModalRoute.withName('/'));
+          });
+        });
       } else if (state is AuthStateFail) {
         showMessage(context: context, message: state.error.toString());
       }
@@ -67,6 +70,7 @@ class _AuthScreenState extends State<AuthScreen> {
   void dispose() {
     loginController.clear();
     passController.clear();
+    _authSub.cancel();
     super.dispose();
   }
 

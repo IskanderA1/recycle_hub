@@ -42,6 +42,7 @@ class PointsService {
 
   Future<List<CustMarker>> loadMarkersFrom4Coords(LatLng latLng) async {
     await _checkBox();
+    latLng = LatLng(55.796127, 49.106414);
     try {
       DateTime lastDownLoad =
           _box.get(_boxTimeKey, defaultValue: DateTime(2020, 12, 21));

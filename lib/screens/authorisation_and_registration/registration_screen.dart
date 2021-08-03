@@ -29,6 +29,7 @@ class _ReqistrationScreenState extends State<ReqistrationScreen> {
   @override
   void initState() {
     regBloc = GetIt.I.get<RegistrationBloc>();
+    regBloc.add(RegistrationEventInit());
     super.initState();
   }
 

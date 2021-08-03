@@ -1,7 +1,6 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:recycle_hub/api/services/user_service.dart';
 import 'package:recycle_hub/helpers/settings.dart';
-import './request.dart';
 
 
 class SessionManager {
@@ -54,7 +53,7 @@ class SessionManager {
   }
 
   Future<String> _readValueFromKeychain(String key) async {
-    var value;
+    String value;
     try {
       value = await _storage.read(key: key);
     } catch (e) {
@@ -68,7 +67,7 @@ class SessionManager {
   Future<String> getAuthorizationToken() async {
     if (_token == null) {
       _token =
-          await _readValueFromKeychain(SessionManager.authorizationTokenKey);
+          await _readValueFromKeychain(authorizationTokenKey);
     }
 
     return _token;
@@ -98,10 +97,10 @@ class SessionManager {
 
   Future<void> clearSession() async {
     print("CLEAR SESSION");
+    _token = null;
     await _storage.delete(key: authorizationTokenKey);
     await _storage.delete(key: kPasswordKey);
     await _storage.delete(key: kLoginKey);
-    await initializeApi();
   }
 
 

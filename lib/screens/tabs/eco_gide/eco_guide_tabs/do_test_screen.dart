@@ -6,9 +6,12 @@ import 'package:recycle_hub/bloc/eco_test_bloc/eco_test_bloc.dart';
 import 'package:recycle_hub/elements/question_container.dart';
 import 'package:recycle_hub/elements/question_container_answered.dart';
 import 'package:recycle_hub/helpers/messager_helper.dart';
-import 'package:recycle_hub/model/profile_models/eco_test_answer_model.dart';
 
 class TestScreen extends StatefulWidget {
+  final Function onBackPressed;
+
+  TestScreen({@required this.onBackPressed});
+
   @override
   _TestScreenState createState() => _TestScreenState();
 }
@@ -26,7 +29,9 @@ class _TestScreenState extends State<TestScreen> {
         leading: IconButton(
           icon: Icon(Icons.arrow_back_sharp),
           onPressed: () {
-            GetIt.I.get<EcoGuideCubit>().goBack();
+            if (widget.onBackPressed != null) {
+              widget.onBackPressed();
+            }
           },
         ),
       ),
