@@ -68,7 +68,11 @@ class _PointProfileScreenState extends State<PointProfileScreen> {
         centerTitle: true,
         elevation: 0,
         backgroundColor: kColorGreen,
-        title: Text("Пункт приёма"),
+        title: Text(
+          "Пункт приёма",
+          style: TextStyle(
+              fontSize: 20, fontWeight: FontWeight.w700, fontFamily: 'Gilroy'),
+        ),
         /* leading: IconButton(
           icon: Icon(
             Icons.arrow_back_sharp,
@@ -80,8 +84,24 @@ class _PointProfileScreenState extends State<PointProfileScreen> {
                 .moveTo(ProfileMenuStates.USER_PROFILE);
           },
         ), */
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 16),
+            child: InkWell(
+              onTap: () {
+                GetIt.I
+                    .get<ProfileMenuCubit>()
+                    .moveTo(ProfileMenuStates.USER_PROFILE);
+              },
+              child: SvgPicture.asset('assets/icons/files-transit.svg'),
+            ),
+          ),
+        ],
         leading: IconButton(
-          icon: Icon(Icons.menu),
+          icon: Icon(
+            Icons.menu,
+            size: 25,
+          ),
           onPressed: () {
             Scaffold.of(context).openDrawer();
           },
@@ -121,7 +141,9 @@ class _PointProfileScreenState extends State<PointProfileScreen> {
                       },
                       placeholder: (context, url) =>
                           CircularProgressIndicator(),
-                      errorWidget: (context, url, error) => Icon(Icons.error),
+                      errorWidget: (context, url, error) => Icon(
+                        Icons.error,
+                      ),
                     )
                   : Image.asset(
                       "svg/trash.jpg",
@@ -138,7 +160,7 @@ class _PointProfileScreenState extends State<PointProfileScreen> {
               child: ListView(
                 physics: ClampingScrollPhysics(),
                 padding:
-                    EdgeInsets.only(left: 17, right: 17, top: 10, bottom: 100),
+                    EdgeInsets.only(left: 16, right: 16, top: 10, bottom: 100),
                 children: [
                   buildPointProfile(_address, _name, _size),
                   SizedBox(
@@ -149,7 +171,6 @@ class _PointProfileScreenState extends State<PointProfileScreen> {
                     height: 10,
                   ),
                   Container(
-                    padding: EdgeInsets.only(right: 17, left: 17, bottom: 10),
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(16),
                         color: kColorWhite),
@@ -165,6 +186,7 @@ class _PointProfileScreenState extends State<PointProfileScreen> {
                           prefixIcon: Icon(
                             UserProfileIcons.user,
                             color: kColorGreyDark,
+                            size: 25,
                           ),
                           text: 'Редактировать профиль',
                           arrowColor: kColorGreyDark,
@@ -178,6 +200,7 @@ class _PointProfileScreenState extends State<PointProfileScreen> {
                           prefixIcon: Icon(
                             UserProfileIcons.user,
                             color: kColorGreyDark,
+                            size: 25,
                           ),
                           text: 'Написать новости',
                           arrowColor: kColorGreyDark,
@@ -187,6 +210,7 @@ class _PointProfileScreenState extends State<PointProfileScreen> {
                           prefixIcon: Icon(
                             UserProfileIcons.pie_chart,
                             color: kColorGreyDark,
+                            size: 25,
                           ),
                           text: 'Статистика',
                           arrowColor: kColorGreyDark,
@@ -196,6 +220,7 @@ class _PointProfileScreenState extends State<PointProfileScreen> {
                           prefixIcon: Icon(
                             UserProfileIcons.achievement,
                             color: kColorGreyDark,
+                            size: 25,
                           ),
                           text: 'Достижения',
                           arrowColor: kColorGreyDark,
@@ -207,6 +232,7 @@ class _PointProfileScreenState extends State<PointProfileScreen> {
                           prefixIcon: Icon(
                             UserProfileIcons.log_out,
                             color: kColorGreyDark,
+                            size: 25,
                           ),
                           text: 'Выйти',
                           arrowColor: kColorGreyDark,
@@ -521,10 +547,12 @@ Widget buildListItem(int index, String text) {
           SizedBox(
             width: 5,
           ),
-          Text(text,
-              style: TextStyle(
-                color: index + 1 == svgIcons.length ? kColorRed : kColorBlack,
-              ))
+          Text(
+            text,
+            style: TextStyle(
+              color: index + 1 == svgIcons.length ? kColorRed : kColorBlack,
+            ),
+          )
         ],
       ),
       Align(
@@ -532,6 +560,7 @@ Widget buildListItem(int index, String text) {
           child: Icon(
             Icons.arrow_forward_ios_sharp,
             color: kLightGrey,
+            size: 25,
           ))
     ]),
   );

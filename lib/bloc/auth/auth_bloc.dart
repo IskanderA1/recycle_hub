@@ -129,7 +129,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
   Stream<AuthState> _mapSwitchFirstToState() async* {
     Settings().isFirstLaunch = false;
-    yield AuthStateGuestAcc();
+    yield AuthStateGuestAcc(needToShowInfo: true);
   }
 
   Stream<AuthState> _mapRefreshToState() async* {

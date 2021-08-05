@@ -74,7 +74,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           child: Icon(
             Icons.arrow_back,
             color: kColorWhite,
-            size: 35,
+            size: 25,
           ),
         ),
       ),

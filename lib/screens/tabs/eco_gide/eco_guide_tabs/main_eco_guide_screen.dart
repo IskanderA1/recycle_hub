@@ -5,6 +5,7 @@ import 'package:get_it/get_it.dart';
 import 'package:recycle_hub/bloc/auth/auth_bloc.dart';
 import 'package:recycle_hub/bloc/eco_guide_blocs/eco_menu_bloc.dart';
 import 'package:recycle_hub/bloc/eco_guide_cubit/eco_guide_cubit_cubit.dart';
+import 'package:recycle_hub/elements/common_cell.dart';
 import 'package:recycle_hub/icons/eco_guide_icons_icons.dart';
 import '../../../../style/theme.dart';
 
@@ -40,14 +41,21 @@ class _MainEcoGuideScreenState extends State<MainEcoGuideScreen> {
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
           leading: IconButton(
-            icon: Icon(Icons.menu),
+            icon: Icon(
+              Icons.menu,
+              size: 25,
+            ),
             onPressed: () {
               Scaffold.of(context).openDrawer();
             },
           ),
           title: Text(
             "ЭкоГид",
-            style: TextStyle(fontWeight: FontWeight.w700),
+            style: TextStyle(
+              fontWeight: FontWeight.w700,
+              fontFamily: 'Gilroy',
+              fontSize: 20,
+            ),
           ),
           centerTitle: true,
           iconTheme: IconThemeData(size: 1),
@@ -82,6 +90,7 @@ class _MainEcoGuideScreenState extends State<MainEcoGuideScreen> {
                           suffixIcon: Icon(
                             Icons.search_outlined,
                             color: kColorBlack,
+                            size: 25,
                           ),
                           hintText: "Что вы хотите сдать",
                           contentPadding: EdgeInsets.only(left: 16, top: 14)),
@@ -93,10 +102,63 @@ class _MainEcoGuideScreenState extends State<MainEcoGuideScreen> {
                   ),
                   Column(
                     children: [
-                      buildBtn("Виды отходов", 0),
-                      buildBtn("Справочник маркировок", 1),
-                      buildBtn("Советы для экономии", 2),
-                      if (state is AuthStateLogedIn) buildBtn("Пройти тест", 3)
+                      CommonCell(
+                        onTap: () {
+                          GetIt.I
+                              .get<EcoGuideCubit>()
+                              .moveTo(EcoGuideMenuItem.values[0]);
+                        },
+                        prefixIcon: Icon(
+                          icons[0],
+                          color: kColorGreyDark,
+                          size: 25,
+                        ),
+                        text: 'Виды отходов',
+                        arrowColor: kColorGreyDark,
+                      ),
+                      CommonCell(
+                        onTap: () {
+                          GetIt.I
+                              .get<EcoGuideCubit>()
+                              .moveTo(EcoGuideMenuItem.values[1]);
+                        },
+                        prefixIcon: Icon(
+                          icons[0],
+                          color: kColorGreyDark,
+                          size: 25,
+                        ),
+                        text: 'Справочник маркировок',
+                        arrowColor: kColorGreyDark,
+                      ),
+                      CommonCell(
+                        onTap: () {
+                          GetIt.I
+                              .get<EcoGuideCubit>()
+                              .moveTo(EcoGuideMenuItem.values[1]);
+                        },
+                        prefixIcon: Icon(
+                          icons[2],
+                          color: kColorGreyDark,
+                          size: 25,
+                        ),
+                        text: 'Советы для экономии',
+                        arrowColor: kColorGreyDark,
+                      ),
+                      if (state is AuthStateLogedIn)
+                        CommonCell(
+                          onTap: () {
+                            GetIt.I
+                                .get<EcoGuideCubit>()
+                                .moveTo(EcoGuideMenuItem.values[1]);
+                          },
+                          prefixIcon: Icon(
+                            icons[3],
+                            color: kColorGreyDark,
+                            size: 25,
+                          ),
+                          text: 'Пройти тест',
+                          arrowColor: kColorGreyDark,
+                        ),
                     ],
                   )
                 ],

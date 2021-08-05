@@ -76,8 +76,10 @@ class _BottomNavBarV2State extends State<BottomNavBarV2> {
                           } else {
                             showModalBottomSheetCustom(
                               shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.vertical(
-                                      top: Radius.circular(25))),
+                                borderRadius: BorderRadius.vertical(
+                                  top: Radius.circular(25),
+                                ),
+                              ),
                               context: context,
                               builder: (context) {
                                 if (state is AuthStateLogedIn) {
@@ -291,11 +293,11 @@ class _IconButtonV2State extends State<IconButtonV2> {
                   SizedBox(
                     height: widget.spacing,
                   ),
-                  AutoSizeText(widget.label,
+                  /* AutoSizeText(widget.label,
                       style: TextStyle(
                           fontSize: 12,
                           color:
-                              widget.isActive ? kColorGreen : kColorGreyLight))
+                              widget.isActive ? kColorGreen : kColorGreyLight),) */
                 ],
               ),
             ),

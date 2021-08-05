@@ -1,3 +1,8 @@
+import 'dart:async';
+
+import 'package:get_it/get_it.dart';
+import 'package:recycle_hub/api/services/user_service.dart';
+import 'package:recycle_hub/bloc/auth/auth_bloc.dart';
 import 'package:recycle_hub/screens/news_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -8,6 +13,18 @@ class CustomDrawer extends StatefulWidget {
 }
 
 class _CustomDrawerState extends State<CustomDrawer> {
+  double total = 0;
+  StreamSubscription<AuthState> _streamSubscription;
+
+  @override
+  void initState() {
+    /* _streamSubscription = GetIt.I.get<AuthBloc>().stream.listen((state) {
+      total = state.userModel.
+    }); */
+    total = UserService().statistic != null ? UserService().statistic.total : 0;
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -28,7 +45,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                   alignment: WrapAlignment.center,
                   children: [
                     Text(
-                      "Ура!!! Вместе мы сдали более 1320 кг!",
+                      "Ура!!! Вместе мы сдали более $total кг!",
                       style:
                           TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                       textAlign: TextAlign.center,
@@ -38,24 +55,48 @@ class _CustomDrawerState extends State<CustomDrawer> {
               ),
             ]),
           ),
-          Padding(
-            padding: const EdgeInsets.only(left: 8),
-            child: Container(
-              alignment: Alignment.centerLeft,
-              margin: EdgeInsets.only(left: 8),
-              decoration: BoxDecoration(
-                  border: Border(
-                      bottom:
-                          BorderSide(color: Color(0xFF616161), width: 0.5))),
-              child: ListTile(
-                contentPadding: EdgeInsets.all(0),
-                title: Text('Новости', style: TextStyle(fontSize: 16)),
-                onTap: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => NewsScreen()));
-                },
-              ),
-            ),
+          _CommonDrawerCell(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => NewsScreen(),
+                ),
+              );
+            },
+            title: "Новости",
+          ),
+          _CommonDrawerCell(
+            onTap: () {},
+            title: "Статистика",
+          ),
+          _CommonDrawerCell(
+            onTap: () {},
+            title: "Частые вопросы",
+          ),
+          _CommonDrawerCell(
+            onTap: () {},
+            title: "Как пользоваться",
+          ),
+          _CommonDrawerCell(
+            onTap: () {},
+            title: "Информация",
+          ),
+          _CommonDrawerCell(
+            onTap: () {},
+            title: "Контакты",
+          ),
+          _CommonDrawerCell(
+            onTap: () {},
+            title: "Партнеры",
+          ),
+          _CommonDrawerCell(
+            onTap: () {},
+            title: "О приложении",
+          ),
+          _CommonDrawerCell(
+            onTap: () {},
+            title: "О проекте",
           ),
           Padding(
             padding: const EdgeInsets.only(left: 8),
@@ -63,96 +104,16 @@ class _CustomDrawerState extends State<CustomDrawer> {
               alignment: Alignment.centerLeft,
               margin: EdgeInsets.only(left: 8),
               decoration: BoxDecoration(
-                  border: Border(
-                      bottom:
-                          BorderSide(color: Color(0xFF616161), width: 0.5))),
-              child: ListTile(
-                contentPadding: EdgeInsets.all(0),
-                title: Text('Статистика', style: TextStyle(fontSize: 16)),
-                onTap: () {},
-              ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(left: 8),
-            child: Container(
-              alignment: Alignment.centerLeft,
-              margin: EdgeInsets.only(left: 8),
-              decoration: BoxDecoration(
-                  border: Border(
-                      bottom:
-                          BorderSide(color: Color(0xFF616161), width: 0.5))),
-              child: ListTile(
-                contentPadding: EdgeInsets.all(0),
-                title: Text('Настройки', style: TextStyle(fontSize: 16)),
-                onTap: () {},
-              ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(left: 8),
-            child: Container(
-              alignment: Alignment.centerLeft,
-              margin: EdgeInsets.only(left: 8),
-              decoration: BoxDecoration(
-                  border: Border(
-                      bottom:
-                          BorderSide(color: Color(0xFF616161), width: 0.5))),
-              child: ListTile(
-                contentPadding: EdgeInsets.all(0),
-                title: Text('Частые вопросы', style: TextStyle(fontSize: 16)),
-                onTap: () {},
-              ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(left: 8),
-            child: Container(
-              alignment: Alignment.centerLeft,
-              margin: EdgeInsets.only(left: 8),
-              decoration: BoxDecoration(
-                  border: Border(
-                      bottom:
-                          BorderSide(color: Color(0xFF616161), width: 0.5))),
-              child: ListTile(
-                contentPadding: EdgeInsets.all(0),
-                title: Text('Как пользоваться', style: TextStyle(fontSize: 16)),
-                onTap: () {},
-              ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(left: 8),
-            child: Container(
-              alignment: Alignment.centerLeft,
-              margin: EdgeInsets.only(left: 8),
-              decoration: BoxDecoration(
-                  border: Border(
-                      bottom:
-                          BorderSide(color: Color(0xFF616161), width: 0.5))),
-              child: ListTile(
-                contentPadding: EdgeInsets.all(0),
-                title: Text('Информация', style: TextStyle(fontSize: 16)),
-                onTap: () {},
-                trailing: Icon(
-                  Icons.arrow_drop_down,
-                  size: 40,
+                border: Border(
+                  bottom: BorderSide(color: Color(0xFF616161), width: 0.5),
                 ),
               ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(left: 8),
-            child: Container(
-              alignment: Alignment.centerLeft,
-              margin: EdgeInsets.only(left: 8),
-              decoration: BoxDecoration(
-                  border: Border(
-                      bottom:
-                          BorderSide(color: Color(0xFF616161), width: 0.5))),
               child: ListTile(
                 contentPadding: EdgeInsets.all(0),
-                title: Text('Контакты', style: TextStyle(fontSize: 16)),
+                title: Text(
+                  'Оценить приложение',
+                  style: TextStyle(fontSize: 16),
+                ),
                 onTap: () {},
               ),
             ),
@@ -163,34 +124,50 @@ class _CustomDrawerState extends State<CustomDrawer> {
               alignment: Alignment.centerLeft,
               margin: EdgeInsets.only(left: 8),
               decoration: BoxDecoration(
-                  border: Border(
-                      bottom:
-                          BorderSide(color: Color(0xFF616161), width: 0.5))),
-              child: ListTile(
-                contentPadding: EdgeInsets.all(0),
-                title:
-                    Text('Оценить приложение', style: TextStyle(fontSize: 16)),
-                onTap: () {},
+                border: Border(
+                  bottom: BorderSide(color: Color(0xFF616161), width: 0.5),
+                ),
               ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(left: 8),
-            child: Container(
-              alignment: Alignment.centerLeft,
-              margin: EdgeInsets.only(left: 8),
-              decoration: BoxDecoration(
-                  border: Border(
-                      bottom:
-                          BorderSide(color: Color(0xFF616161), width: 0.5))),
               child: ListTile(
                 contentPadding: EdgeInsets.all(0),
-                title: Text('Обратная связь', style: TextStyle(fontSize: 16)),
+                title: Text(
+                  'Обратная связь',
+                  style: TextStyle(fontSize: 16),
+                ),
                 onTap: () {},
               ),
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _CommonDrawerCell extends StatelessWidget {
+  final String title;
+  final Function onTap;
+  _CommonDrawerCell({this.onTap, this.title});
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 8),
+      child: Container(
+        alignment: Alignment.centerLeft,
+        margin: EdgeInsets.only(left: 8),
+        decoration: BoxDecoration(
+          border: Border(
+            bottom: BorderSide(color: Color(0xFF616161), width: 0.5),
+          ),
+        ),
+        child: ListTile(
+          contentPadding: EdgeInsets.all(0),
+          title: Text(
+            title,
+            style: TextStyle(fontSize: 16),
+          ),
+          onTap: onTap,
+        ),
       ),
     );
   }

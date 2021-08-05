@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get_it/get_it.dart';
 import 'package:recycle_hub/bloc/auth/auth_bloc.dart';
 import 'package:recycle_hub/bloc/global_state_bloc.dart';
+import 'package:recycle_hub/helpers/alert_helper.dart';
 import 'package:recycle_hub/screens/authorisation_and_registration/auth_screen.dart';
 import 'package:recycle_hub/screens/stepper/page3.dart';
 import 'package:recycle_hub/screens/stepper/page4.dart';
@@ -61,10 +63,12 @@ class _WellcomePageStepperState extends State<WellcomePageStepper> {
   Future<ui.Image> getImage() async {
     final ByteData assetImageByteData =
         await rootBundle.load('assets/onboarding/back.png');
-    image.Image baseSizeImage =
-        image.decodeImage(assetImageByteData.buffer.asUint8List());
-    ui.Codec codec =
-        await ui.instantiateImageCodec(image.encodePng(baseSizeImage));
+    image.Image baseSizeImage = image.decodeImage(
+      assetImageByteData.buffer.asUint8List(),
+    );
+    ui.Codec codec = await ui.instantiateImageCodec(
+      image.encodePng(baseSizeImage),
+    );
     ui.FrameInfo frameInfo = await codec.getNextFrame();
     return frameInfo.image;
   }
@@ -73,91 +77,96 @@ class _WellcomePageStepperState extends State<WellcomePageStepper> {
   Widget build(BuildContext context) {
     _size = MediaQuery.of(context).size;
     return Scaffold(
-        backgroundColor: kColorWhite,
-        body: Stack(children: [
-          AnimatedBackGround(key: key, uimage: uimage, size: _size),
-          PageView(
-            controller: _pageController,
-            clipBehavior: Clip.antiAlias,
-            children: pages,
-            onPageChanged: (ind) {
-              if (activeStepInd < ind) {
-                switch (activeStepInd) {
-                  case 0:
-                    key.currentState.animateTo(2.4);
-                    //key.currentState.startAnim();
-                    break;
-                  case 1:
-                    key.currentState.animateTo(4.8);
-                    //key.currentState.startAnim();
-                    break;
-                  case 2:
-                    key.currentState.animateTo(7.2);
-                    //key.currentState.startAnim();
-                    break;
-                }
-              } else if (activeStepInd > ind) {
-                key.currentState.reverseAnim();
-
-                switch (activeStepInd) {
-                  case 0:
-                    break;
-                  case 1:
-                    key.currentState.animateTo(0);
-                    break;
-                  case 2:
-                    key.currentState.animateTo(2.4);
-                    break;
-                  case 3:
-                    key.currentState.animateTo(4.8);
-                    break;
-                }
+      backgroundColor: kColorWhite,
+      body: Stack(children: [
+        AnimatedBackGround(key: key, uimage: uimage, size: _size),
+        PageView(
+          controller: _pageController,
+          clipBehavior: Clip.antiAlias,
+          children: pages,
+          onPageChanged: (ind) {
+            if (activeStepInd < ind) {
+              switch (activeStepInd) {
+                case 0:
+                  key.currentState.animateTo(-0.3333);
+                  //key.currentState.startAnim();
+                  break;
+                case 1:
+                  key.currentState.animateTo(0.3333);
+                  //key.currentState.startAnim();
+                  break;
+                case 2:
+                  key.currentState.animateTo(1);
+                  //key.currentState.startAnim();
+                  break;
               }
-              setState(() {
-                activeStepInd = ind;
-              });
-            },
-          ),
-          Align(
-            alignment: Alignment.bottomLeft,
-            child: Padding(
-              padding: EdgeInsets.only(bottom: 30, left: 30),
-              child: IndicatorAnimatedSwitcher(
-                selected: activeStepInd,
-              ),
+            } else if (activeStepInd > ind) {
+              key.currentState.reverseAnim();
+
+              switch (activeStepInd) {
+                case 0:
+                  break;
+                case 1:
+                  key.currentState.animateTo(-1);
+                  break;
+                case 2:
+                  key.currentState.animateTo(-0.3333);
+                  break;
+                case 3:
+                  key.currentState.animateTo(0.3333);
+                  break;
+              }
+            }
+            setState(() {
+              activeStepInd = ind;
+            });
+          },
+        ),
+        Align(
+          alignment: Alignment.bottomLeft,
+          child: Padding(
+            padding: EdgeInsets.only(bottom: 30, left: 30),
+            child: IndicatorAnimatedSwitcher(
+              selected: activeStepInd,
             ),
           ),
-          Align(
-            alignment: Alignment.bottomRight,
-            child: Padding(
-                padding: EdgeInsets.only(bottom: 30, right: 30),
-                child: TextButton(
-                  child: Text(
-                    activeStepInd != 3 ? "Продолжить" : "Принять",
-                    style: TextStyle(
-                        fontSize: 16,
-                        color: kColorBlack,
-                        fontFamily: "Gilroy",
-                        fontWeight: FontWeight.w500),
-                  ),
-                  onPressed: () {
-                    if (activeStepInd != 3) {
-                      _pageController.nextPage(
-                          duration: Duration(milliseconds: 500),
-                          curve: Curves.easeIn);
-                    } else {
-                      /*Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => AuthScreen()));*/
-                      /* Navigator.push(
+        ),
+        Align(
+          alignment: Alignment.bottomRight,
+          child: Padding(
+            padding: EdgeInsets.only(bottom: 30, right: 30),
+            child: TextButton(
+              child: Text(
+                activeStepInd != 3 ? "Продолжить" : "Принять",
+                style: TextStyle(
+                    fontSize: 16,
+                    color: kColorBlack,
+                    fontFamily: "Gilroy",
+                    fontWeight: FontWeight.w500),
+              ),
+              onPressed: () {
+                if (activeStepInd != 3) {
+                  _pageController.nextPage(
+                      duration: Duration(milliseconds: 500),
+                      curve: Curves.easeIn);
+                } else {
+                  /*Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => AuthScreen(),),);*/
+                  /* Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => WorkSpaceScreen())); */
-                      GetIt.I.get<AuthBloc>().add(AuthEventSwitchFirstIn());
-                    }
-                  },
-                )),
+                              builder: (context) => WorkSpaceScreen(),),); */
+
+                  GetIt.I.get<AuthBloc>().add(
+                        AuthEventSwitchFirstIn(),
+                      );
+                }
+              },
+            ),
           ),
-        ]));
+        ),
+      ]),
+    );
   }
 }
 
@@ -178,26 +187,27 @@ class AnimatedBackGround extends StatefulWidget {
 class AnimatedBackGroundState extends State<AnimatedBackGround>
     with TickerProviderStateMixin {
   AnimationController _controller;
-  double offsetDx = 0;
+  double offsetDx = -1;
   @override
   void initState() {
     super.initState();
     _controller = AnimationController(
         vsync: this,
-        duration: Duration(seconds: 1),
-        lowerBound: 0.0,
-        upperBound: 10.0);
+        duration: Duration(milliseconds: 600),
+        lowerBound: -1,
+        upperBound: 1);
     _controller.addListener(update);
   }
 
   void update() {
+    print("newval ${_controller.value}");
     setState(() {
-      offsetDx = _controller.value * 150;
+      offsetDx = _controller.value;
     });
   }
 
   void startAnim() {
-    _controller.forward(from: 0).orCancel;
+    _controller.forward(from: -1).orCancel;
   }
 
   void reverseAnim() {
@@ -205,9 +215,12 @@ class AnimatedBackGroundState extends State<AnimatedBackGround>
   }
 
   void animateTo(double to) {
-    //_controller.drive(Tween(begin: 150.0, end: 300.0));
+    //_controller.drive(Tween(begin: 150.0, end: 300.0),);
     //_controller.fling()
-    _controller.animateTo(to, duration: Duration(milliseconds: 400));
+    _controller.animateTo(
+      to,
+      duration: Duration(milliseconds: 400),
+    );
   }
 
   @override
@@ -218,11 +231,15 @@ class AnimatedBackGroundState extends State<AnimatedBackGround>
 
   @override
   Widget build(BuildContext context) {
-    return Align(
-        alignment: Alignment.center,
-        child: PartImagePainter(
-            image: widget.uimage,
-            rect: Offset(offsetDx, 0) &
-                Size(widget.size.width, widget.size.height * 0.6)));
+    return Padding(
+      padding: const EdgeInsets.only(top: 120),
+      child: SvgPicture.asset(
+        "assets/svg/background.svg",
+        allowDrawingOutsideViewBox: true,
+        clipBehavior: Clip.none,
+        fit: BoxFit.fitHeight,
+        alignment: AlignmentDirectional(offsetDx, 0),
+      ),
+    );
   }
 }

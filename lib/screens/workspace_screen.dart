@@ -22,6 +22,7 @@ import 'package:recycle_hub/features/transactions/domain/state/transactions_admi
 import 'package:recycle_hub/features/transactions/internal/transactions_module.dart';
 import 'package:recycle_hub/features/transactions/presentation/admin_panel_main_screen.dart';
 import 'package:recycle_hub/features/transactions/presentation/scanner_screen.dart';
+import 'package:recycle_hub/helpers/alert_helper.dart';
 import 'package:recycle_hub/helpers/filter_types.dart';
 import 'package:recycle_hub/screens/tabs/eco_gide/main_eco_screen.dart';
 import 'package:recycle_hub/screens/tabs/map/map_screen.dart';
@@ -31,6 +32,8 @@ import 'package:recycle_hub/widgets/fab_buttom.dart';
 import 'tabs/eco_coin/eco_coin_menu.dart';
 
 class WorkSpaceScreen extends StatefulWidget {
+  WorkSpaceScreen({this.needToShowInfoAlert});
+  final bool needToShowInfoAlert;
   @override
   _WorkSpaceState createState() => _WorkSpaceState();
 }
@@ -78,6 +81,11 @@ class _WorkSpaceState extends State<WorkSpaceScreen> {
       });
     });
     GetIt.I.get<NavBarCubit>().moveTo(NavBarItem.MAP);
+    if (widget.needToShowInfoAlert) {
+      Future.delayed(Duration(seconds: 1), () {
+        AlertHelper.showWelcomeInfo(context);
+      });
+    }
     super.initState();
   }
 

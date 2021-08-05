@@ -37,7 +37,10 @@ class AuthStateLogedIn extends AuthState {
 }
 
 class AuthStateGuestAcc extends AuthState {
-  AuthStateGuestAcc();
+  AuthStateGuestAcc({
+    this.needToShowInfo = false,
+  });
+  final bool needToShowInfo;
 
   @override
   List<Object> get props => [];

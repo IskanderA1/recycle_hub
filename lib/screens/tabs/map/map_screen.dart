@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:math';
 import 'dart:ui';
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -12,7 +11,6 @@ import 'package:location/location.dart';
 import 'package:recycle_hub/api/services/points_service.dart';
 import 'package:recycle_hub/api/services/user_service.dart';
 import 'package:recycle_hub/bloc/map/map_bloc.dart';
-import 'package:recycle_hub/bloc/map_screen_blocs/marker_info_bloc.dart';
 import 'package:recycle_hub/custom_icons.dart';
 import 'package:recycle_hub/helpers/distance_helper.dart';
 import 'package:recycle_hub/model/map_models.dart/accept_types.dart';
@@ -105,7 +103,7 @@ class _MapScreenState extends State<MapScreen> {
   AppBar mapScreenAppBar() {
     return AppBar(
       title: Text(
-        "RecycleHub",
+        "Карты",
         style: TextStyle(fontWeight: FontWeight.w700),
       ),
       centerTitle: true,

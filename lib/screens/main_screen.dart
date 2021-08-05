@@ -70,8 +70,14 @@ class _MainScreenState extends State<MainScreen> {
             return WellcomePageStepper();
           } else if (state is AuthStateLoading) {
             return LoaderWidget();
-          } else
-            return WorkSpaceScreen();
+          }
+          bool needToShowInfo = false;
+          if (state is AuthStateGuestAcc) {
+            needToShowInfo = state.needToShowInfo;
+          }
+          return WorkSpaceScreen(
+            needToShowInfoAlert: needToShowInfo,
+          );
         });
   }
 }

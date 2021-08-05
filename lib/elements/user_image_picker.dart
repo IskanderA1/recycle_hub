@@ -22,7 +22,11 @@ class _UserImagePickerState extends State<UserImagePicker> {
   @override
   void initState() {
     if (widget.image != null && widget.image.isNotEmpty) {
-      _loadImage(widget.image);
+      try {
+        _loadImage(widget.image);
+      } catch (e) {
+        print(e.toString());
+      }
     } else {
       _image = null;
       _isLoading = false;
@@ -54,8 +58,8 @@ class _UserImagePickerState extends State<UserImagePicker> {
 
   Future<void> _loadImage(String imageUrl) async {
     try {
-      this._image = await File.fromUri(Uri.parse(imageUrl));
-    } on Exception catch (e) {
+      this._image = File.fromUri(Uri.tryParse(imageUrl));
+    } catch (e) {
       this._image = null;
     } finally {
       setState(() {

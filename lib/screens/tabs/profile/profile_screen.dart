@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get_it/get_it.dart';
 import 'package:recycle_hub/api/services/user_service.dart';
 import 'package:recycle_hub/bloc/auth/auth_bloc.dart';
@@ -51,7 +52,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   Future<void> _refresh() async {
-    GetIt.I.get<AuthBloc>().add(AuthEventRefresh());
+    GetIt.I.get<AuthBloc>().add(
+          AuthEventRefresh(),
+        );
     //UserModel newUser;
     /* try {
       newUser = await UserService().userInfo();
@@ -59,7 +62,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         userState = newUser;
       }
     } catch (e) {
-      print(e.toString());
+      print(e.toString(),);
     } */
     //setState(() {});
   }
@@ -77,10 +80,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
         }
       },
       builder: (context, state) {
-        if (state is AuthStateLogedIn &&
+        /* if (state is AuthStateLogedIn &&
             state.user.userType == UserTypes.admin) {
           return PointProfileScreen();
-        }
+        } */
         return Scaffold(
           body: Container(
             height: _size.height,
@@ -98,11 +101,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     child: ListView(
                       controller: controller,
                       shrinkWrap: true,
-                      padding: EdgeInsets.only(left: 17, right: 17, top: 10),
+                      padding: EdgeInsets.only(
+                        left: 16,
+                        right: 16,
+                      ),
                       children: [
                         buildAppBar(),
                         SizedBox(
-                          height: 17,
+                          height: 16,
                         ),
                         Container(
                           child: Row(
@@ -112,29 +118,29 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               UserImagePicker(
                                 image: state.userModel.image,
                               ),
-                              SizedBox(
-                                width: 12,
-                              ),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    state.userModel.name,
-                                    style: TextStyle(
-                                      color: kColorWhite,
-                                      fontFamily: 'GillroyMedium',
-                                      fontSize: 18,
+                              Padding(
+                                padding: const EdgeInsets.only(left: 16),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      state.userModel.name,
+                                      style: TextStyle(
+                                        color: kColorWhite,
+                                        fontFamily: 'GillroyMedium',
+                                        fontSize: 18,
+                                      ),
                                     ),
-                                  ),
-                                  Text(
-                                    "Эколог",
-                                    style: TextStyle(
-                                      color: kColorWhite,
-                                      fontFamily: 'GillroyMedium',
-                                      fontSize: 12,
+                                    Text(
+                                      "Эколог",
+                                      style: TextStyle(
+                                        color: kColorWhite,
+                                        fontFamily: 'GillroyMedium',
+                                        fontSize: 12,
+                                      ),
                                     ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               )
                             ],
                           ),
@@ -157,8 +163,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           padding: EdgeInsets.only(
                               top: 12, bottom: 12, right: 19, left: 19),
                           decoration: BoxDecoration(
-                              color: kColorWhite,
-                              borderRadius: BorderRadius.circular(16)),
+                            color: kColorWhite,
+                            borderRadius: BorderRadius.circular(16),
+                          ),
                           child: ListView(
                             controller: controller,
                             padding: EdgeInsets.only(
@@ -169,10 +176,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   text: 'Авторизоваться',
                                   onTap: () {
                                     Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                AuthScreen()));
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => AuthScreen(),
+                                      ),
+                                    );
                                   },
                                 ),
                               if (state is AuthStateLogedIn)
@@ -202,46 +210,45 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   Widget buildAppBar() {
-    return Stack(
-      children: [
-        Padding(
-          padding: const EdgeInsets.only(top: 16),
-          child: IconButton(
-            icon: Icon(Icons.menu),
+    return Padding(
+      padding: const EdgeInsets.only(top: 32),
+      child: Row(
+        children: [
+          IconButton(
+            icon: Icon(
+              Icons.menu,
+              size: 25,
+            ),
             onPressed: () {
               Scaffold.of(context).openDrawer();
             },
           ),
-        ),
-        /* Container(
-          padding: EdgeInsets.only(top: 8),
-          child: Align(
-            alignment: Alignment.centerLeft,
-            child: InkWell(
-              onTap: () {
+          Spacer(),
+          Text(
+            "Профиль",
+            style: TextStyle(
+                fontSize: 20,
+                color: kColorWhite,
+                fontWeight: FontWeight.w700,
+                fontFamily: 'Gilroy'),
+          ),
+          Spacer(),
+          InkWell(
+            onTap: () {
+              if (GetIt.I.get<AuthBloc>().state.userModel.userType ==
+                  UserTypes.admin)
                 GetIt.I
                     .get<ProfileMenuCubit>()
                     .moveTo(ProfileMenuStates.POINT_PROFILE);
-              },
-              child: Icon(
-                Icons.arrow_back_sharp,
-                color: kColorWhite,
-                size: 30,
-              ),
+            },
+            child: SvgPicture.asset(
+              'assets/icons/files-transit.svg',
+              height: 25,
+              width: 25,
             ),
           ),
-        ), */
-        Container(
-            alignment: Alignment.center,
-            padding: EdgeInsets.only(top: 30),
-            child: Text(
-              "Профиль",
-              style: TextStyle(
-                  fontSize: 18,
-                  color: kColorWhite,
-                  fontWeight: FontWeight.bold),
-            ))
-      ],
+        ],
+      ),
     );
   }
 
@@ -273,53 +280,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             children: [
               InkWell(
                 onTap: () {
-                  AlertHelper.showErrorAlert(
-                      context,
-                      "Информация о балансе",
-                      Container(
-                        height: 250,
-                        decoration: BoxDecoration(
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(25))),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Row(
-                              children: [
-                                BallGreen(
-                                  color: kColorRed,
-                                ),
-                                SizedBox(
-                                  width: 32,
-                                ),
-                                Expanded(
-                                  child: Text(
-                                    'Красным цветом выделена информация о количестве заблокированных экокоинов.',
-                                    overflow: TextOverflow.visible,
-                                  ),
-                                )
-                              ],
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(top: 16),
-                              child: Row(
-                                children: [
-                                  BallGreen(),
-                                  SizedBox(
-                                    width: 32,
-                                  ),
-                                  Expanded(
-                                    child: Text(
-                                      'Зеленым цветом выделена информация о количестве разблокированных экокоинов.',
-                                      overflow: TextOverflow.visible,
-                                    ),
-                                  )
-                                ],
-                              ),
-                            )
-                          ],
-                        ),
-                      ));
+                  AlertHelper.showBalanceInfo(context);
                 },
                 child: RichText(
                   text: TextSpan(
@@ -330,10 +291,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           fontFamily: 'GilroyMedium'),
                       children: [
                         TextSpan(
-                            text: '/', style: TextStyle(color: kColorBlack)),
+                          text: '/',
+                          style: TextStyle(color: kColorBlack),
+                        ),
                         TextSpan(
-                            text: '${userState.freezeEcoCoins}',
-                            style: TextStyle(color: kColorRed)),
+                          text: '${userState.freezeEcoCoins}',
+                          style: TextStyle(color: kColorRed),
+                        ),
                       ]),
                 ),
               ),
@@ -369,43 +333,50 @@ class _ProfileScreenState extends State<ProfileScreen> {
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Container(
-                height: 30,
-                width: 30,
-                child: Icon(
-                  svgIcons[6],
-                  color: kColorGreyDark,
-                )),
+              height: 30,
+              width: 30,
+              child: Icon(
+                svgIcons[6],
+                color: kColorGreyDark,
+                size: 25,
+              ),
+            ),
             SizedBox(
               width: 15,
             ),
-            Text("Достижения",
-                style: TextStyle(color: kColorBlack, fontSize: 14))
+            Text(
+              "Достижения",
+              style: TextStyle(color: kColorBlack, fontSize: 14),
+            )
           ],
         ),
         Container(
-            child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text("Статус:",
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    "Статус:",
                     style: TextStyle(
                       color: kColorBlack,
                       fontSize: 14,
-                    )),
-                SizedBox(width: 14),
-                Text(
-                  status,
-                  style: TextStyle(
-                      color: kColorGreen,
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold),
-                )
-              ],
-            ),
-          ],
-        )),
+                    ),
+                  ),
+                  SizedBox(width: 14),
+                  Text(
+                    status,
+                    style: TextStyle(
+                        color: kColorGreen,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold),
+                  )
+                ],
+              ),
+            ],
+          ),
+        ),
         SizedBox(
           height: 7,
         ),
@@ -429,11 +400,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   fontSize: 16,
                   fontWeight: FontWeight.bold),
             ),
-            Text("кг",
-                style: TextStyle(
-                  color: kColorBlack,
-                  fontSize: 14,
-                ))
+            Text(
+              "кг",
+              style: TextStyle(
+                color: kColorBlack,
+                fontSize: 14,
+              ),
+            )
           ],
         )
       ],
@@ -476,7 +449,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
           GetIt.I.get<ProfileMenuCubit>().moveTo(ProfileMenuStates.EDITPROFILE);
         else if (index == 5) {
           if (authBloc != null) {
-            authBloc.add(AuthEventLogout());
+            authBloc.add(
+              AuthEventLogout(),
+            );
           }
         } else if (index == 4) {
           NetworkHelper.openUrl('http://vk.com/id0', context);
@@ -485,18 +460,23 @@ class _ProfileScreenState extends State<ProfileScreen> {
       child: Container(
         padding: EdgeInsets.only(top: 12, bottom: 12),
         decoration: BoxDecoration(
-            border: Border(bottom: BorderSide(color: kLightGrey, width: 0.5))),
+          border: Border(
+            bottom: BorderSide(color: kLightGrey, width: 0.5),
+          ),
+        ),
         child: Stack(children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Container(
-                  height: 30,
-                  width: 30,
-                  child: Icon(
-                    svgIcons[index],
-                    color: kColorGreyDark,
-                  )),
+                height: 30,
+                width: 30,
+                child: Icon(
+                  svgIcons[index],
+                  color: kColorGreyDark,
+                  size: 25,
+                ),
+              ),
               SizedBox(
                 width: 5,
               ),
@@ -509,11 +489,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ],
           ),
           Align(
-              alignment: Alignment.centerRight,
-              child: Icon(
-                Icons.arrow_forward_ios_sharp,
-                color: kLightGrey,
-              ))
+            alignment: Alignment.centerRight,
+            child: Icon(
+              Icons.arrow_forward_ios_sharp,
+              color: kLightGrey,
+              size: 25,
+            ),
+          )
         ]),
       ),
     );

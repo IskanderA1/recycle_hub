@@ -154,7 +154,7 @@ class _StoreScreenState extends State<StoreScreen> {
                                           bottomRight: Radius.circular(4))),
                                   child: Center(
                                     child: Text(
-                                      "Еда и напитки",
+                                      "Товары",
                                       style: TextStyle(
                                         color: _selected == 1
                                             ? kColorWhite
@@ -272,6 +272,7 @@ class ProductCell extends StatelessWidget {
                 child: FaIcon(
                   FontAwesomeIcons.plus,
                   color: kColorGreen,
+                  size: 25,
                 ),
               ),
             ],

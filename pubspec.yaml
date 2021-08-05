@@ -82,6 +82,7 @@ flutter:
     - assets/icons/reg/reg_logo.svg
     - svg/
     - assets/onboarding/back.png
+    - assets/icons/files-transit.svg
 
   uses-material-design: true
   fonts:

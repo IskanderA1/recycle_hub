@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:recycle_hub/bloc/cubit/profile_menu_cubit.dart';
@@ -16,6 +17,16 @@ class HowToGetCoinScreen extends StatefulWidget {
 
 class _HowToGetCoinScreenState extends State<HowToGetCoinScreen> {
   Size size;
+  static const _text1 = '   Заработать баллы вы можете в разделе ';
+  static const _text2 =
+      '. За каждое задание, вам будут начисляться баллы, которые вы сможете потратить на услуги и товары партнеров в разделе ';
+  static const _text3 =
+      '\n   Для того, чтобы потратить ЭкоКоины, вам необходимо разблокировать их, ответив на вопросы из ';
+  static const _text4 =
+      '.\n   В профиле вы можете увидеть свой баланс. Зеленым цветом обозначен баланс о количестве доступных к трате ЭкоКоинов. Красным цветом обозначен баланс, который доступен к разблокировке.';
+  static const _ecoCoins = 'ЭкоКоины';
+  static const _store = 'Магазин.';
+  static const _test = 'Теста';
 
   @override
   Widget build(BuildContext context) {
@@ -41,13 +52,75 @@ class _HowToGetCoinScreenState extends State<HowToGetCoinScreen> {
         child: Padding(
           padding: EdgeInsets.fromLTRB(15, 15, 15, 0),
           child: Container(
-              height: size.height,
-              decoration: BoxDecoration(
-                  color: kColorWhite,
-                  borderRadius: BorderRadius.all(Radius.circular(25))),
-              child: Padding(
+            height: size.height,
+            decoration: BoxDecoration(
+              color: kColorWhite,
+              borderRadius: BorderRadius.all(
+                Radius.circular(25),
+              ),
+            ),
+            child: Padding(
                 padding: EdgeInsets.all(25),
-                child: Column(
+                child: RichText(
+                  textAlign: TextAlign.justify,
+                  text: TextSpan(
+                    text: _text1,
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontFamily: 'Gilroy',
+                      color: kColorBlack,
+                      height: 1.5,
+                    ),
+                    children: [
+                      TextSpan(
+                          text: _ecoCoins,
+                          style: TextStyle(
+                              fontSize: 16,
+                              fontFamily: "GilroyMedium",
+                              color: kColorBlack,
+                              decoration: TextDecoration.underline),
+                          recognizer: TapGestureRecognizer()
+                            ..onTap = () {
+                              ///To eco coins
+                              GetIt.I
+                                  .get<NavBarCubit>()
+                                  .moveTo(NavBarItem.ECO_COIN);
+                            }),
+                      TextSpan(text: _text2),
+                      TextSpan(
+                          text: _store,
+                          style: TextStyle(
+                              fontSize: 16,
+                              fontFamily: "GilroyMedium",
+                              color: kColorBlack,
+                              decoration: TextDecoration.underline),
+                          recognizer: TapGestureRecognizer()
+                            ..onTap = () {
+                              ///To store
+                              GetIt.I
+                                  .get<ProfileMenuCubit>()
+                                  .moveTo(ProfileMenuStates.STORE);
+                            }),
+                      TextSpan(text: _text3),
+                      TextSpan(
+                          text: _test,
+                          style: TextStyle(
+                              fontSize: 16,
+                              fontFamily: "GilroyMedium",
+                              color: kColorBlack,
+                              decoration: TextDecoration.underline),
+                          recognizer: TapGestureRecognizer()
+                            ..onTap = () {
+                              ///To test
+                              GetIt.I
+                                  .get<ProfileMenuCubit>()
+                                  .moveTo(ProfileMenuStates.ECOTEST);
+                            }),
+                      TextSpan(text: _text4),
+                    ],
+                  ),
+                )
+                /* Column(
                   children: [
                     MenuItemWidget(
                       name: "Предложить новый пункт приема",
@@ -94,8 +167,9 @@ class _HowToGetCoinScreenState extends State<HowToGetCoinScreen> {
                     ),
                     EcoCoinHorisontalDivider(),
                   ],
+                ) */
                 ),
-              )),
+          ),
         ),
       ),
     );
