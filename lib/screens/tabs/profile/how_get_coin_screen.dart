@@ -19,14 +19,13 @@ class _HowToGetCoinScreenState extends State<HowToGetCoinScreen> {
   Size size;
   static const _text1 = '   Заработать баллы вы можете в разделе ';
   static const _text2 =
-      '. За каждое задание, вам будут начисляться баллы, которые вы сможете потратить на услуги и товары партнеров в разделе ';
-  static const _text3 =
-      '\n   Для того, чтобы потратить ЭкоКоины, вам необходимо разблокировать их, ответив на вопросы из ';
+      '. За каждое задание, вам будут начисляться определенное количество Экокоинов за 1 кг сданного вторсырья, которые вы сможете потратить на услуги и товары партнеров в разделе ';
+  static const _text3 = '\n   За правильно решенный ';
   static const _text4 =
-      '.\n   В профиле вы можете увидеть свой баланс. Зеленым цветом обозначен баланс о количестве доступных к трате ЭкоКоинов. Красным цветом обозначен баланс, который доступен к разблокировке.';
+      ' система разблокирует ЭкоКоины.\n   В профиле вы можете увидеть свой баланс. Зеленым цветом обозначен баланс о количестве доступных к трате ЭкоКоинов. Красным цветом обозначен баланс, который доступен к разблокировке.';
   static const _ecoCoins = 'ЭкоКоины';
   static const _store = 'Магазин.';
-  static const _test = 'Теста';
+  static const _test = 'тест';
 
   @override
   Widget build(BuildContext context) {
@@ -65,18 +64,12 @@ class _HowToGetCoinScreenState extends State<HowToGetCoinScreen> {
                   textAlign: TextAlign.justify,
                   text: TextSpan(
                     text: _text1,
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontFamily: 'Gilroy',
-                      color: kColorBlack,
-                      height: 1.5,
-                    ),
+                    style: TextStyle(color: kColorBlack, fontFamily: 'Gilroy'),
                     children: [
                       TextSpan(
                           text: _ecoCoins,
                           style: TextStyle(
-                              fontSize: 16,
-                              fontFamily: "GilroyMedium",
+                              fontFamily: "Gilroy",
                               color: kColorBlack,
                               decoration: TextDecoration.underline),
                           recognizer: TapGestureRecognizer()
@@ -90,8 +83,7 @@ class _HowToGetCoinScreenState extends State<HowToGetCoinScreen> {
                       TextSpan(
                           text: _store,
                           style: TextStyle(
-                              fontSize: 16,
-                              fontFamily: "GilroyMedium",
+                              fontFamily: "Gilroy",
                               color: kColorBlack,
                               decoration: TextDecoration.underline),
                           recognizer: TapGestureRecognizer()
@@ -105,8 +97,7 @@ class _HowToGetCoinScreenState extends State<HowToGetCoinScreen> {
                       TextSpan(
                           text: _test,
                           style: TextStyle(
-                              fontSize: 16,
-                              fontFamily: "GilroyMedium",
+                              fontFamily: "Gilroy",
                               color: kColorBlack,
                               decoration: TextDecoration.underline),
                           recognizer: TapGestureRecognizer()

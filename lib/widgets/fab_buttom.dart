@@ -69,7 +69,9 @@ class _BottomNavBarV2State extends State<BottomNavBarV2> {
                       onPressed: () {
                         AuthState state = authBLoc.state;
                         if (state is AuthStateLogedIn) {
-                          if (state.user.userType == UserTypes.admin) {
+                          if (state.user.userType == UserTypes.admin &&
+                              GetIt.I.get<ProfileMenuCubit>().state ==
+                                  ProfileMenuStates.POINT_PROFILE) {
                             GetIt.I
                                 .get<NavBarCubit>()
                                 .moveTo(NavBarItem.QRSCANNER);
@@ -181,9 +183,9 @@ class _BottomNavBarV2State extends State<BottomNavBarV2> {
                         unselectedIconThemeData: widget.unselectedIconThemeData,
                         isActive: widget.currentItem == 3 ? true : false,
                         ontap: () {
-                          GetIt.I
+                          /*  GetIt.I
                               .get<ProfileMenuCubit>()
-                              .moveTo(ProfileMenuStates.MENU);
+                              .moveTo(ProfileMenuStates.MENU); */
                           GetIt.I.get<NavBarCubit>().moveTo(NavBarItem.PROFILE);
                         },
                       ),

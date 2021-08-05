@@ -134,7 +134,7 @@ class _MainEcoGuideScreenState extends State<MainEcoGuideScreen> {
                         onTap: () {
                           GetIt.I
                               .get<EcoGuideCubit>()
-                              .moveTo(EcoGuideMenuItem.values[1]);
+                              .moveTo(EcoGuideMenuItem.values[2]);
                         },
                         prefixIcon: Icon(
                           icons[2],
@@ -149,7 +149,7 @@ class _MainEcoGuideScreenState extends State<MainEcoGuideScreen> {
                           onTap: () {
                             GetIt.I
                                 .get<EcoGuideCubit>()
-                                .moveTo(EcoGuideMenuItem.values[1]);
+                                .moveTo(EcoGuideMenuItem.values[3]);
                           },
                           prefixIcon: Icon(
                             icons[3],
@@ -160,7 +160,7 @@ class _MainEcoGuideScreenState extends State<MainEcoGuideScreen> {
                           arrowColor: kColorGreyDark,
                         ),
                     ],
-                  )
+                  ),
                 ],
               ),
             );

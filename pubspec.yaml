@@ -79,6 +79,8 @@ flutter:
     - assets/icons/onboarding_3/People.svg
     - assets/icons/onboarding_4/People.svg
     - assets/svg/background.svg
+    - assets/svg/logo_original.svg
+    - assets/svg/logo_original.png
     - assets/icons/reg/reg_logo.svg
     - svg/
     - assets/onboarding/back.png

@@ -209,6 +209,7 @@ class _NewWidgetState extends State<NewWidget> {
             backColor: kColorWhite,
             hasSelection: true,
             fontSize: 14,
+            isPartner: widget.marker.paybackType == 'partner',
             size: Size(_size.width - 50, _size.height / 5.5),
           ),
         ),

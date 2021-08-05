@@ -435,7 +435,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   Widget buildListItem(int index, String text, {AuthBloc authBloc}) {
-    return GestureDetector(
+    return CommonCell(
       onTap: () {
         if (index == 2)
           GetIt.I.get<ProfileMenuCubit>().moveTo(ProfileMenuStates.STATISTIC);
@@ -457,7 +457,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
           NetworkHelper.openUrl('http://vk.com/id0', context);
         }
       },
-      child: Container(
+      text: text,
+      prefixIcon: Icon(
+        svgIcons[index],
+        color: kColorGreyDark,
+        size: 25,
+      ),
+      /* Container(
         padding: EdgeInsets.only(top: 12, bottom: 12),
         decoration: BoxDecoration(
           border: Border(
@@ -497,7 +503,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ),
           )
         ]),
-      ),
+      ), */
     );
   }
 }

@@ -3,9 +3,17 @@ import 'dart:async';
 import 'package:get_it/get_it.dart';
 import 'package:recycle_hub/api/services/user_service.dart';
 import 'package:recycle_hub/bloc/auth/auth_bloc.dart';
+import 'package:recycle_hub/bloc/cubit/profile_menu_cubit.dart';
+import 'package:recycle_hub/bloc/nav_bar_cubit/nav_bar_cubit_cubit.dart';
+import 'package:recycle_hub/helpers/network_helper.dart';
+import 'package:recycle_hub/screens/authorisation_and_registration/auth_screen.dart';
+import 'package:recycle_hub/screens/drawers/about_app_screen.dart';
+import 'package:recycle_hub/screens/drawers/contacts_screen.dart';
+import 'package:recycle_hub/screens/drawers/partnters_list_screen.dart';
 import 'package:recycle_hub/screens/news_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:recycle_hub/screens/drawers/about_project_screen.dart';
 
 class CustomDrawer extends StatefulWidget {
   @override
@@ -67,11 +75,29 @@ class _CustomDrawerState extends State<CustomDrawer> {
             title: "Новости",
           ),
           _CommonDrawerCell(
-            onTap: () {},
+            onTap: () {
+              if (GetIt.I.get<AuthBloc>().state is AuthStateGuestAcc) {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => AuthScreen(),
+                  ),
+                );
+              } else if (GetIt.I.get<AuthBloc>().state is AuthStateLogedIn) {
+                GetIt.I.get<NavBarCubit>().moveTo(NavBarItem.PROFILE);
+                GetIt.I
+                    .get<ProfileMenuCubit>()
+                    .moveTo(ProfileMenuStates.STATISTIC);
+                Navigator.pop(context);
+              }
+            },
             title: "Статистика",
           ),
           _CommonDrawerCell(
-            onTap: () {},
+            onTap: () {
+              NetworkHelper.openUrl('http://vk.com/id0', context);
+              Navigator.pop(context);
+            },
             title: "Частые вопросы",
           ),
           _CommonDrawerCell(
@@ -79,23 +105,47 @@ class _CustomDrawerState extends State<CustomDrawer> {
             title: "Как пользоваться",
           ),
           _CommonDrawerCell(
-            onTap: () {},
-            title: "Информация",
-          ),
-          _CommonDrawerCell(
-            onTap: () {},
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ContactsScreen(),
+                ),
+              );
+            },
             title: "Контакты",
           ),
           _CommonDrawerCell(
-            onTap: () {},
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => PartnersListScreen(),
+                ),
+              );
+            },
             title: "Партнеры",
           ),
           _CommonDrawerCell(
-            onTap: () {},
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => AboutAppScreen(),
+                ),
+              );
+            },
             title: "О приложении",
           ),
           _CommonDrawerCell(
-            onTap: () {},
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => AboutProjectScreen(),
+                ),
+              );
+            },
             title: "О проекте",
           ),
           Padding(
@@ -114,27 +164,11 @@ class _CustomDrawerState extends State<CustomDrawer> {
                   'Оценить приложение',
                   style: TextStyle(fontSize: 16),
                 ),
-                onTap: () {},
-              ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(left: 8),
-            child: Container(
-              alignment: Alignment.centerLeft,
-              margin: EdgeInsets.only(left: 8),
-              decoration: BoxDecoration(
-                border: Border(
-                  bottom: BorderSide(color: Color(0xFF616161), width: 0.5),
-                ),
-              ),
-              child: ListTile(
-                contentPadding: EdgeInsets.all(0),
-                title: Text(
-                  'Обратная связь',
-                  style: TextStyle(fontSize: 16),
-                ),
-                onTap: () {},
+                onTap: () {
+                  NetworkHelper.openUrl(
+                      'https://play.google.com/store/apps/details?id=com.iskander.kai_mobile_app',
+                      context);
+                },
               ),
             ),
           ),

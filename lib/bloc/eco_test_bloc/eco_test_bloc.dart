@@ -67,6 +67,11 @@ class EcoTestBloc extends Bloc<EcoTestEvent, EcoTestState> {
       }
       return;
     }
+    if (attempt == null) {
+      yield EcoTestStateError('Тест уже пройден');
+      yield EcoTestStateInitial();
+      return;
+    }
     currentAttempt = attempt;
     //currentTest = tests.first;
     _currentQuestionId = 0;

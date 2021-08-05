@@ -176,6 +176,8 @@ class _PointProfileScreenState extends State<PointProfileScreen> {
                         color: kColorWhite),
                     child: ListView(
                       shrinkWrap: true,
+                      padding: EdgeInsets.only(
+                          left: 16, right: 16, top: 10, bottom: 0),
                       children: [
                         CommonCell(
                           onTap: () {
@@ -198,7 +200,7 @@ class _PointProfileScreenState extends State<PointProfileScreen> {
                                 .moveTo(ProfileMenuStates.PointWriteNews);
                           },
                           prefixIcon: Icon(
-                            UserProfileIcons.user,
+                            UserProfileIcons.ask,
                             color: kColorGreyDark,
                             size: 25,
                           ),

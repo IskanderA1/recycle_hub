@@ -479,12 +479,14 @@ class _AuthScreenState extends State<AuthScreen> {
           GestureDetector(
             onTap: () {
               Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => BlocProvider<AuthBloc>.value(
-                            value: authBloc,
-                            child: ReqistrationScreen(),
-                          )));
+                context,
+                MaterialPageRoute(
+                  builder: (context) => BlocProvider<AuthBloc>.value(
+                    value: authBloc,
+                    child: ReqistrationScreen(),
+                  ),
+                ),
+              );
             },
             child: Text(
               "Создать",

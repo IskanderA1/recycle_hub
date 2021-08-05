@@ -5,6 +5,7 @@ import 'package:recycle_hub/bloc/auth/auth_bloc.dart';
 import 'package:recycle_hub/bloc/eco_coin_menu/eco_coin_menu_cubit.dart';
 import 'package:recycle_hub/bloc/global_state_bloc.dart';
 import 'package:recycle_hub/elements/common_cell.dart';
+import 'package:recycle_hub/helpers/network_helper.dart';
 import 'package:recycle_hub/icons/eco_coin_icons_icons.dart';
 import 'package:recycle_hub/screens/authorisation_and_registration/auth_screen.dart';
 import 'package:recycle_hub/style/style.dart';
@@ -45,7 +46,10 @@ class _EcoCoinScreenState extends State<EcoCoinScreen> {
               child: Row(
                 children: [
                   IconButton(
-                    icon: Icon(Icons.menu,size: 25,),
+                    icon: Icon(
+                      Icons.menu,
+                      size: 25,
+                    ),
                     onPressed: () {
                       Scaffold.of(context).openDrawer();
                     },
@@ -116,10 +120,10 @@ class _EcoCoinScreenState extends State<EcoCoinScreen> {
                             TextSpan(
                               text: kEcoCoinString,
                               children: [TextSpan(text: "  ")],
-                              style: const TextStyle(
-                                  color: kColorBlack,
-                                  fontSize: 14,
-                                  fontFamily: 'GillRoyMedium'),
+                              style: TextStyle(
+                                fontFamily: "Gilroy",
+                                color: kColorBlack,
+                              ),
                             ),
                           ],
                           style: const TextStyle(
@@ -216,13 +220,16 @@ class _EcoCoinScreenState extends State<EcoCoinScreen> {
                               MenuItemWidget(
                                 name: "Порекомендуйте нас друзьям",
                                 func: () {
-                                  if (state is AuthStateGuestAcc) {
+                                  NetworkHelper.openUrl(
+                                      'https://play.google.com/store/apps/details?id=com.iskander.kai_mobile_app',
+                                      context);
+                                  /* if (state is AuthStateGuestAcc) {
                                     guestButtonTap();
                                   } else {
                                     GetIt.I
                                         .get<EcoCoinMenuCubit>()
                                         .moveTo(EcoCoinMenuItems.RECOMMEND);
-                                  }
+                                  } */
                                 },
                                 iconData: EcoCoinIcons.adduser,
                               ),

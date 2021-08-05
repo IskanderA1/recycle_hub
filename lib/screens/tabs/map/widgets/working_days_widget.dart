@@ -14,6 +14,7 @@ class WorkingDaysWidget extends StatefulWidget {
   final bool hasSelection;
   final Size size;
   final double fontSize;
+  final bool isPartner;
   const WorkingDaysWidget(
       {Key key,
       @required this.workingTime,
@@ -21,7 +22,8 @@ class WorkingDaysWidget extends StatefulWidget {
       @required this.backColor,
       @required this.hasSelection,
       @required this.size,
-      @required this.fontSize})
+      @required this.fontSize,
+      @required this.isPartner})
       : super(key: key);
 
   @override
@@ -85,6 +87,7 @@ class _WorkingDaysWidgetState extends State<WorkingDaysWidget> {
                       textUnSelectedColor: kColorGreyDark,
                       backColor: widget.backColor,
                       fontSize: widget.fontSize,
+                      isPartner: widget.isPartner,
                     ),
                     divider(),
                     DayWidget(
@@ -94,6 +97,7 @@ class _WorkingDaysWidgetState extends State<WorkingDaysWidget> {
                       textSelectedColor: kColorBlack,
                       textUnSelectedColor: kColorGreyDark,
                       backColor: widget.backColor,
+                      isPartner: widget.isPartner,
                       fontSize: widget.fontSize,
                     ),
                     divider(),
@@ -103,6 +107,7 @@ class _WorkingDaysWidgetState extends State<WorkingDaysWidget> {
                       isSelected: dateFormat == "Wednesday" ? true : false,
                       textSelectedColor: kColorBlack,
                       textUnSelectedColor: kColorGreyDark,
+                      isPartner: widget.isPartner,
                       backColor: widget.backColor,
                       fontSize: widget.fontSize,
                     ),
@@ -114,6 +119,7 @@ class _WorkingDaysWidgetState extends State<WorkingDaysWidget> {
                       textSelectedColor: kColorBlack,
                       textUnSelectedColor: kColorGreyDark,
                       backColor: widget.backColor,
+                      isPartner: widget.isPartner,
                       fontSize: widget.fontSize,
                     ),
                     divider(),
@@ -124,6 +130,7 @@ class _WorkingDaysWidgetState extends State<WorkingDaysWidget> {
                       textSelectedColor: kColorBlack,
                       textUnSelectedColor: kColorGreyDark,
                       backColor: widget.backColor,
+                      isPartner: widget.isPartner,
                       fontSize: widget.fontSize,
                     ),
                     divider(),
@@ -134,6 +141,7 @@ class _WorkingDaysWidgetState extends State<WorkingDaysWidget> {
                       textSelectedColor: kColorBlack,
                       textUnSelectedColor: kColorGreyDark,
                       backColor: widget.backColor,
+                      isPartner: widget.isPartner,
                       fontSize: widget.fontSize,
                     ),
                     divider(),
@@ -144,6 +152,7 @@ class _WorkingDaysWidgetState extends State<WorkingDaysWidget> {
                       textSelectedColor: kColorBlack,
                       textUnSelectedColor: kColorGreyDark,
                       backColor: widget.backColor,
+                      isPartner: widget.isPartner,
                       fontSize: widget.fontSize,
                     ),
                   ],
@@ -158,6 +167,7 @@ class _WorkingDaysWidgetState extends State<WorkingDaysWidget> {
                       textSelectedColor: kColorBlack,
                       textUnSelectedColor: widget.wColor,
                       backColor: widget.backColor,
+                      isPartner: widget.isPartner,
                       fontSize: widget.fontSize,
                     ),
                     divider(),
@@ -168,6 +178,7 @@ class _WorkingDaysWidgetState extends State<WorkingDaysWidget> {
                       textSelectedColor: kColorBlack,
                       textUnSelectedColor: widget.wColor,
                       backColor: widget.backColor,
+                      isPartner: widget.isPartner,
                       fontSize: widget.fontSize,
                     ),
                     divider(),
@@ -178,6 +189,7 @@ class _WorkingDaysWidgetState extends State<WorkingDaysWidget> {
                       textSelectedColor: kColorBlack,
                       textUnSelectedColor: widget.wColor,
                       backColor: widget.backColor,
+                      isPartner: widget.isPartner,
                       fontSize: widget.fontSize,
                     ),
                     divider(),
@@ -188,6 +200,7 @@ class _WorkingDaysWidgetState extends State<WorkingDaysWidget> {
                       textSelectedColor: kColorBlack,
                       textUnSelectedColor: widget.wColor,
                       backColor: widget.backColor,
+                      isPartner: widget.isPartner,
                       fontSize: widget.fontSize,
                     ),
                     divider(),
@@ -198,6 +211,7 @@ class _WorkingDaysWidgetState extends State<WorkingDaysWidget> {
                       textSelectedColor: kColorBlack,
                       textUnSelectedColor: widget.wColor,
                       backColor: widget.backColor,
+                      isPartner: widget.isPartner,
                       fontSize: widget.fontSize,
                     ),
                     divider(),
@@ -208,6 +222,7 @@ class _WorkingDaysWidgetState extends State<WorkingDaysWidget> {
                       textSelectedColor: kColorBlack,
                       textUnSelectedColor: widget.wColor,
                       backColor: widget.backColor,
+                      isPartner: widget.isPartner,
                       fontSize: widget.fontSize,
                     ),
                     divider(),
@@ -218,6 +233,7 @@ class _WorkingDaysWidgetState extends State<WorkingDaysWidget> {
                       textSelectedColor: kColorBlack,
                       textUnSelectedColor: widget.wColor,
                       backColor: widget.backColor,
+                      isPartner: widget.isPartner,
                       fontSize: widget.fontSize,
                     ),
                   ],
@@ -228,72 +244,7 @@ class _WorkingDaysWidgetState extends State<WorkingDaysWidget> {
   }
 }
 
-class DayWidget extends StatelessWidget {
-  DayWidget(
-      {Key key,
-      @required this.dayName,
-      @required this.dayArr,
-      @required this.isSelected,
-      @required this.textSelectedColor,
-      @required this.textUnSelectedColor,
-      @required this.backColor,
-      @required this.fontSize})
-      : super(key: key);
-
-  final String dayName;
-  final WorkDay dayArr;
-  final bool isSelected;
-  final Color textSelectedColor;
-  final Color textUnSelectedColor;
-  final Color backColor;
-  final double fontSize;
-  static const String str = "--.--";
-
-  @override
-  Widget build(BuildContext context) {
-    return Expanded(
-      child: Container(
-        color: isSelected ? kColorPink : backColor,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Text(
-              "$dayName\n",
-              style: TextStyle(
-                  fontFamily: 'GilroyMedium',
-                  fontSize: fontSize + 2,
-                  color: isSelected ? textSelectedColor : textUnSelectedColor),
-            ),
-            Text(
-              dayArr != null ? "${dayArr.first}\n${dayArr.fourth}" : str,
-              style: TextStyle(
-                  fontFamily: 'GilroyMedium',
-                  fontSize: fontSize,
-                  color: isSelected ? textSelectedColor : textUnSelectedColor),
-            ),
-            Text(
-              "·",
-              style: TextStyle(
-                  fontSize: fontSize + 10,
-                  color: isSelected ? textSelectedColor : textUnSelectedColor,
-                  fontWeight: FontWeight.w900),
-            ),
-            Text(
-              dayArr != null ? "${dayArr.second}\n${dayArr.third}" : str,
-              style: TextStyle(
-                  fontFamily: 'GilroyMedium',
-                  fontSize: fontSize,
-                  color: isSelected ? textSelectedColor : textUnSelectedColor),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class DaysRow extends StatelessWidget {
+/* class DaysRow extends StatelessWidget {
   final WorkingTime workingTime;
   final double sSize;
   final double fontSize;
@@ -381,5 +332,76 @@ class DaysRow extends StatelessWidget {
           backColor: kColorWhite,
           fontSize: fontSize),
     ]);
+  }
+} */
+
+class DayWidget extends StatelessWidget {
+  DayWidget(
+      {Key key,
+      @required this.dayName,
+      @required this.dayArr,
+      @required this.isSelected,
+      @required this.textSelectedColor,
+      @required this.textUnSelectedColor,
+      @required this.backColor,
+      @required this.fontSize,
+      @required this.isPartner})
+      : super(key: key);
+
+  final String dayName;
+  final WorkDay dayArr;
+  final bool isSelected;
+  final Color textSelectedColor;
+  final Color textUnSelectedColor;
+  final Color backColor;
+  final double fontSize;
+  final bool isPartner;
+  static const String str = "--.--";
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: Container(
+        color: isSelected
+            ? isPartner
+                ? kColorGreen
+                : kColorPink
+            : backColor,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Text(
+              "$dayName\n",
+              style: TextStyle(
+                  fontFamily: 'GilroyMedium',
+                  fontSize: fontSize + 2,
+                  color: isSelected ? textSelectedColor : textUnSelectedColor),
+            ),
+            Text(
+              dayArr != null ? "${dayArr.first}\n${dayArr.fourth}" : str,
+              style: TextStyle(
+                  fontFamily: 'GilroyMedium',
+                  fontSize: fontSize,
+                  color: isSelected ? textSelectedColor : textUnSelectedColor),
+            ),
+            Text(
+              "·",
+              style: TextStyle(
+                  fontSize: fontSize + 10,
+                  color: isSelected ? textSelectedColor : textUnSelectedColor,
+                  fontWeight: FontWeight.w900),
+            ),
+            Text(
+              dayArr != null ? "${dayArr.second}\n${dayArr.third}" : str,
+              style: TextStyle(
+                  fontFamily: 'GilroyMedium',
+                  fontSize: fontSize,
+                  color: isSelected ? textSelectedColor : textUnSelectedColor),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }

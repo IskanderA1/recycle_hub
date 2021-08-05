@@ -38,10 +38,12 @@ class CommonCell extends StatelessWidget {
             mainAxisAlignment: mainAxisAlignment,
             crossAxisAlignment: crossAxisAlignment,
             children: [
-              Container(height: 30, width: 30, child: prefixIcon),
-              SizedBox(
-                width: 5,
-              ),
+              if (prefixIcon != null)
+                Container(height: 30, width: 30, child: prefixIcon),
+              if (prefixIcon != null)
+                SizedBox(
+                  width: 5,
+                ),
               Text(
                 text,
                 style: TextStyle(
