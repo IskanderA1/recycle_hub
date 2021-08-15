@@ -12,6 +12,7 @@ import 'package:recycle_hub/elements/common_cell.dart';
 import 'package:recycle_hub/helpers/network_helper.dart';
 import 'package:recycle_hub/helpers/alert_helper.dart';
 import 'package:recycle_hub/elements/user_image_picker.dart';
+import 'package:recycle_hub/icons/nav_bar_icons_icons.dart';
 import 'package:recycle_hub/icons/user_profile_icons_icons.dart';
 import 'package:recycle_hub/model/user_model.dart';
 import 'package:recycle_hub/screens/authorisation_and_registration/auth_screen.dart';
@@ -102,7 +103,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       controller: controller,
                       shrinkWrap: true,
                       padding: EdgeInsets.only(
-                        left: 16,
                         right: 16,
                       ),
                       children: [
@@ -111,6 +111,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           height: 16,
                         ),
                         Container(
+                          padding: EdgeInsets.only(left: 18),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.center,
@@ -211,17 +212,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   Widget buildAppBar() {
     return Padding(
-      padding: const EdgeInsets.only(top: 32),
+      padding: const EdgeInsets.only(top: 28),
       child: Row(
         children: [
-          IconButton(
-            icon: Icon(
-              Icons.menu,
-              size: 25,
+          Padding(
+            padding: const EdgeInsets.only(left: 4),
+            child: IconButton(
+              icon: Icon(
+                NavBarIcons.menu,
+                size: 18,
+              ),
+              onPressed: () {
+                Scaffold.of(context).openDrawer();
+              },
             ),
-            onPressed: () {
-              Scaffold.of(context).openDrawer();
-            },
           ),
           Spacer(),
           Text(
@@ -231,6 +235,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 color: kColorWhite,
                 fontWeight: FontWeight.w700,
                 fontFamily: 'Gilroy'),
+            textAlign: TextAlign.start,
           ),
           Spacer(),
           InkWell(
@@ -241,10 +246,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     .get<ProfileMenuCubit>()
                     .moveTo(ProfileMenuStates.POINT_PROFILE);
             },
-            child: SvgPicture.asset(
-              'assets/icons/files-transit.svg',
-              height: 25,
-              width: 25,
+            child: Icon(
+              NavBarIcons.app_bar_suffix,
+              size: 20,
             ),
           ),
         ],

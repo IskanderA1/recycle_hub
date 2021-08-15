@@ -9,6 +9,7 @@ import 'package:recycle_hub/api/services/points_service.dart';
 import 'package:recycle_hub/bloc/auth/auth_bloc.dart';
 import 'package:recycle_hub/bloc/cubit/profile_menu_cubit.dart';
 import 'package:recycle_hub/elements/common_cell.dart';
+import 'package:recycle_hub/icons/nav_bar_icons_icons.dart';
 import 'package:recycle_hub/icons/user_profile_icons_icons.dart';
 import 'package:recycle_hub/model/user_model.dart';
 import 'package:recycle_hub/screens/tabs/map/widgets/loader_widget.dart';
@@ -99,7 +100,7 @@ class _PointProfileScreenState extends State<PointProfileScreen> {
         ],
         leading: IconButton(
           icon: Icon(
-            Icons.menu,
+            NavBarIcons.menu,
             size: 25,
           ),
           onPressed: () {

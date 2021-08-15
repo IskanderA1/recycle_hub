@@ -13,6 +13,7 @@ import 'package:recycle_hub/api/services/user_service.dart';
 import 'package:recycle_hub/bloc/map/map_bloc.dart';
 import 'package:recycle_hub/custom_icons.dart';
 import 'package:recycle_hub/helpers/distance_helper.dart';
+import 'package:recycle_hub/icons/nav_bar_icons_icons.dart';
 import 'package:recycle_hub/model/map_models.dart/accept_types.dart';
 import 'package:recycle_hub/model/map_models.dart/marker.dart';
 import 'package:recycle_hub/screens/tabs/map/filter_detail_screen.dart';
@@ -105,17 +106,25 @@ class _MapScreenState extends State<MapScreen> {
       title: Text(
         "Карты",
         style: TextStyle(fontWeight: FontWeight.w700),
+        textAlign: TextAlign.center,
       ),
       centerTitle: true,
       leading: IconButton(
-        icon: Icon(Icons.menu),
+        icon: Icon(
+          NavBarIcons.menu,
+          size: 18,
+        ),
         onPressed: () {
           Scaffold.of(context).openDrawer();
         },
       ),
       actions: [
         IconButton(
-          icon: Icon(Icons.filter_alt),
+          icon: Icon(
+            Icons.filter_alt,
+            color: kColorWhite,
+            size: 20,
+          ),
           onPressed: () {
             Navigator.push(
               context,
@@ -510,7 +519,7 @@ class _GoogleMapWidgetState extends State<GoogleMapWidget> {
                   anchors: [0.0, 0.4, 0.85]);
             },
             icon: Icon(
-              Icons.menu,
+              NavBarIcons.menu,
               color: kColorBlack,
               size: 20,
             ),

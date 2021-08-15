@@ -7,7 +7,9 @@ import 'package:recycle_hub/bloc/global_state_bloc.dart';
 import 'package:recycle_hub/elements/common_cell.dart';
 import 'package:recycle_hub/helpers/network_helper.dart';
 import 'package:recycle_hub/icons/eco_coin_icons_icons.dart';
+import 'package:recycle_hub/icons/nav_bar_icons_icons.dart';
 import 'package:recycle_hub/screens/authorisation_and_registration/auth_screen.dart';
+import 'package:recycle_hub/screens/tabs/map/filter_detail_screen.dart';
 import 'package:recycle_hub/style/style.dart';
 import 'package:recycle_hub/style/theme.dart';
 
@@ -31,127 +33,43 @@ class _EcoCoinScreenState extends State<EcoCoinScreen> {
   Widget build(BuildContext context) {
     size = MediaQuery.of(context).size;
     return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          "ЭкоКоины",
+          style: TextStyle(fontWeight: FontWeight.w700),
+        ),
+        centerTitle: true,
+        leading: IconButton(
+          icon: Icon(
+            NavBarIcons.menu,
+            size: 18,
+          ),
+          onPressed: () {
+            Scaffold.of(context).openDrawer();
+          },
+        ),
+      ),
       body: Container(
         color: Color(0xFFF2F2F2),
-        child: Stack(
+        margin: EdgeInsets.only(left: 20, right: 20, top: 20),
+        child: ListView(
+          shrinkWrap: true,
           children: [
-            CustomPaint(
-              size: Size(size.width, size.height),
-              painter: EcoCoinCustomPainter(size: size),
-            ),
-            Positioned(
-              top: 32,
-              left: 16,
-              right: 16,
-              child: Row(
-                children: [
-                  IconButton(
-                    icon: Icon(
-                      Icons.menu,
-                      size: 25,
-                    ),
-                    onPressed: () {
-                      Scaffold.of(context).openDrawer();
-                    },
-                  ),
-                  Spacer(),
-                  Text(
-                    "ЭкоКоины",
-                    style: TextStyle(
-                        fontSize: 20,
-                        color: kColorWhite,
-                        fontWeight: FontWeight.w700,
-                        fontFamily: 'Gilroy'),
-                  ),
-                  Spacer(),
-                  InkWell(
-                    onTap: () {
-                      /* if (GetIt.I.get<AuthBloc>().state.userModel.userType ==
-                UserTypes.admin)
-              GetIt.I
-                  .get<ProfileMenuCubit>()
-                  .moveTo(ProfileMenuStates.POINT_PROFILE); */
-                    },
-                    child: Icon(
-                      Icons.arrow_back_sharp,
-                      color: kColorWhite,
-                      size: 25,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            /* Positioned(
-              top: 35,
-              left: 5,
-              child: IconButton(
-                icon: Icon(
-                  Icons.menu,
+            Container(
+              height: size.height * 0.8,
+              width: size.width * 0.9,
+              decoration: BoxDecoration(
+                color: kColorWhite,
+                borderRadius: BorderRadius.all(
+                  Radius.circular(25),
                 ),
-                onPressed: () {
-                  Scaffold.of(context).openDrawer();
-                },
               ),
-            ), */
-            Positioned(
-              top: size.height * 0.12,
-              left: 20,
-              right: 20,
-              child: Column(
-                children: [
-                  Container(
-                    height: 100,
-                    width: size.width * 0.9,
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                      color: kColorWhite,
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(25),
-                      ),
-                    ),
-                    child: Padding(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-                      child: RichText(
-                        overflow: TextOverflow.visible,
-                        text: TextSpan(
-                          children: [
-                            TextSpan(text: "  "),
-                            TextSpan(
-                              text: kEcoCoinString,
-                              children: [TextSpan(text: "  ")],
-                              style: TextStyle(
-                                fontFamily: "Gilroy",
-                                color: kColorBlack,
-                              ),
-                            ),
-                          ],
-                          style: const TextStyle(
-                              color: kColorBlack,
-                              fontSize: 14,
-                              fontFamily: 'GillRoyMedium'),
-                        ),
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Container(
-                    height: size.height * 0.8,
-                    width: size.width * 0.9,
-                    decoration: BoxDecoration(
-                      color: kColorWhite,
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(25),
-                      ),
-                    ),
-                    child: Padding(
-                      padding: EdgeInsets.fromLTRB(16, 0, 16, 32),
-                      child: BlocBuilder<AuthBloc, AuthState>(
-                        bloc: GetIt.I.get<AuthBloc>(),
-                        builder: (context, state) {
-                          /* if (state is AuthStateGuestAcc) {
+              child: Padding(
+                padding: EdgeInsets.fromLTRB(16, 16, 16, 32),
+                child: BlocBuilder<AuthBloc, AuthState>(
+                  bloc: GetIt.I.get<AuthBloc>(),
+                  builder: (context, state) {
+                    /* if (state is AuthStateGuestAcc) {
                             return ListView(
                               shrinkWrap: true,
                               children: [
@@ -162,91 +80,108 @@ class _EcoCoinScreenState extends State<EcoCoinScreen> {
                               ],
                             );
                           } */
-                          return ListView(
-                            shrinkWrap: true,
+                    return ListView(
+                      shrinkWrap: true,
+                      children: [
+                        RichText(
+                          overflow: TextOverflow.visible,
+                          text: TextSpan(
                             children: [
-                              MenuItemWidget(
-                                name: "Магазин",
-                                func: () {
-                                  if (state is AuthStateGuestAcc) {
-                                    guestButtonTap();
-                                  } else {
-                                    GetIt.I
-                                        .get<EcoCoinMenuCubit>()
-                                        .moveTo(EcoCoinMenuItems.STORE);
-                                  }
-                                },
-                                iconData: EcoCoinIcons.shoppingcart,
+                              TextSpan(text: "  "),
+                              TextSpan(
+                                text: kEcoCoinString,
+                                children: [TextSpan(text: "  ")],
+                                style: TextStyle(
+                                  fontFamily: "Gilroy",
+                                  color: kColorBlack,
+                                ),
                               ),
-                              MenuItemWidget(
-                                name: "Сдать вторсырье",
-                                func: () {
-                                  if (state is AuthStateGuestAcc) {
-                                    guestButtonTap();
-                                  } else {
-                                    GetIt.I
-                                        .get<EcoCoinMenuCubit>()
-                                        .moveTo(EcoCoinMenuItems.GIVEGARBAGE);
-                                  }
-                                },
-                                iconData: EcoCoinIcons.recyclebin,
-                              ),
-                              MenuItemWidget(
-                                name: "Добавить новый пункт приема",
-                                func: () {
-                                  if (state is AuthStateGuestAcc) {
-                                    guestButtonTap();
-                                  } else {
-                                    GetIt.I
-                                        .get<EcoCoinMenuCubit>()
-                                        .moveTo(EcoCoinMenuItems.OFFERNEWPOINT);
-                                  }
-                                },
-                                iconData: EcoCoinIcons.addpointer,
-                              ),
-                              MenuItemWidget(
-                                name: "Ответить на вопросы из ЭкоГида",
-                                func: () {
-                                  if (state is AuthStateGuestAcc) {
-                                    guestButtonTap();
-                                  } else {
-                                    GetIt.I
-                                        .get<EcoCoinMenuCubit>()
-                                        .moveTo(EcoCoinMenuItems.ANSWERQUESTS);
-                                  }
-                                },
-                                iconData: EcoCoinIcons.question,
-                              ),
-                              MenuItemWidget(
-                                name: "Порекомендуйте нас друзьям",
-                                func: () {
-                                  NetworkHelper.openUrl(
-                                      'https://play.google.com/store/apps/details?id=com.iskander.kai_mobile_app',
-                                      context);
-                                  /* if (state is AuthStateGuestAcc) {
+                            ],
+                            style: const TextStyle(
+                                color: kColorBlack,
+                                fontSize: 14,
+                                fontFamily: 'GillRoyMedium'),
+                          ),
+                        ),
+                        MenuItemWidget(
+                          name: "Магазин",
+                          func: () {
+                            if (state is AuthStateGuestAcc) {
+                              guestButtonTap();
+                            } else {
+                              GetIt.I
+                                  .get<EcoCoinMenuCubit>()
+                                  .moveTo(EcoCoinMenuItems.STORE);
+                            }
+                          },
+                          iconData: EcoCoinIcons.shoppingcart,
+                        ),
+                        MenuItemWidget(
+                          name: "Сдать вторсырье",
+                          func: () {
+                            if (state is AuthStateGuestAcc) {
+                              guestButtonTap();
+                            } else {
+                              GetIt.I
+                                  .get<EcoCoinMenuCubit>()
+                                  .moveTo(EcoCoinMenuItems.GIVEGARBAGE);
+                            }
+                          },
+                          iconData: EcoCoinIcons.recyclebin,
+                        ),
+                        MenuItemWidget(
+                          name: "Добавить новый пункт приема",
+                          func: () {
+                            if (state is AuthStateGuestAcc) {
+                              guestButtonTap();
+                            } else {
+                              GetIt.I
+                                  .get<EcoCoinMenuCubit>()
+                                  .moveTo(EcoCoinMenuItems.OFFERNEWPOINT);
+                            }
+                          },
+                          iconData: EcoCoinIcons.addpointer,
+                        ),
+                        MenuItemWidget(
+                          name: "Ответить на вопросы из ЭкоГида",
+                          func: () {
+                            if (state is AuthStateGuestAcc) {
+                              guestButtonTap();
+                            } else {
+                              GetIt.I
+                                  .get<EcoCoinMenuCubit>()
+                                  .moveTo(EcoCoinMenuItems.ANSWERQUESTS);
+                            }
+                          },
+                          iconData: EcoCoinIcons.question,
+                        ),
+                        MenuItemWidget(
+                          name: "Порекомендуйте нас друзьям",
+                          func: () {
+                            NetworkHelper.openUrl(
+                                'https://play.google.com/store/apps/details?id=com.iskander.kai_mobile_app',
+                                context);
+                            /* if (state is AuthStateGuestAcc) {
                                     guestButtonTap();
                                   } else {
                                     GetIt.I
                                         .get<EcoCoinMenuCubit>()
                                         .moveTo(EcoCoinMenuItems.RECOMMEND);
                                   } */
-                                },
-                                iconData: EcoCoinIcons.adduser,
-                              ),
-                              MenuItemWidget(
-                                name: "Оцените наше приложение\nв маркете",
-                                func: () => GetIt.I
-                                    .get<EcoCoinMenuCubit>()
-                                    .moveTo(EcoCoinMenuItems.FEEDBACK),
-                                iconData: EcoCoinIcons.reviews,
-                              )
-                            ],
-                          );
-                        },
-                      ),
-                    ),
-                  )
-                ],
+                          },
+                          iconData: EcoCoinIcons.adduser,
+                        ),
+                        MenuItemWidget(
+                          name: "Оцените наше приложение\nв маркете",
+                          func: () => GetIt.I
+                              .get<EcoCoinMenuCubit>()
+                              .moveTo(EcoCoinMenuItems.FEEDBACK),
+                          iconData: EcoCoinIcons.reviews,
+                        )
+                      ],
+                    );
+                  },
+                ),
               ),
             )
           ],

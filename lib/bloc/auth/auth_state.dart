@@ -15,7 +15,7 @@ class AuthStateFail extends AuthState {
   AuthStateFail({this.error});
 
   @override
-  List<Object> get props => [];
+  List<Object> get props => [error];
 }
 
 class AuthStateFirstIn extends AuthState {}
@@ -43,5 +43,5 @@ class AuthStateGuestAcc extends AuthState {
   final bool needToShowInfo;
 
   @override
-  List<Object> get props => [];
+  List<Object> get props => [needToShowInfo];
 }

@@ -52,16 +52,17 @@ class CommonCell extends StatelessWidget {
               ),
               Spacer(),
               Align(
-                  alignment: Alignment.centerRight,
-                  child: Icon(
-                    Icons.arrow_forward_ios_sharp,
-                    color: kLightGrey,
-                  ))
+                alignment: Alignment.centerRight,
+                child: Icon(
+                  Icons.arrow_forward_ios_sharp,
+                  color: kLightGrey,
+                  size: 20,
+                ),
+              )
             ],
           ),
         ),
       ),
     );
-    ;
   }
 }

@@ -134,10 +134,10 @@ class _BottomNavBarV2State extends State<BottomNavBarV2> {
                       IconButtonV2(
                         label: "ЭкоГид",
                         icon: Icon(
-                          NavBarIcons.ecogid,
+                          NavBarIcons.instructions,
                           size: size.width / 13,
                         ),
-                        spacing: 4,
+                        spacing: 0,
                         selectedIconThemeData: widget.selectedIconThemeData,
                         unselectedIconThemeData: widget.unselectedIconThemeData,
                         isActive: widget.currentItem == 1 ? true : false,

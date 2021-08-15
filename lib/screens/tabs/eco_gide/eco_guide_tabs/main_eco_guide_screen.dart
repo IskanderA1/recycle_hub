@@ -7,6 +7,7 @@ import 'package:recycle_hub/bloc/eco_guide_blocs/eco_menu_bloc.dart';
 import 'package:recycle_hub/bloc/eco_guide_cubit/eco_guide_cubit_cubit.dart';
 import 'package:recycle_hub/elements/common_cell.dart';
 import 'package:recycle_hub/icons/eco_guide_icons_icons.dart';
+import 'package:recycle_hub/icons/nav_bar_icons_icons.dart';
 import '../../../../style/theme.dart';
 
 List<String> titles = [
@@ -42,8 +43,8 @@ class _MainEcoGuideScreenState extends State<MainEcoGuideScreen> {
         appBar: AppBar(
           leading: IconButton(
             icon: Icon(
-              Icons.menu,
-              size: 25,
+              NavBarIcons.menu,
+              size: 18,
             ),
             onPressed: () {
               Scaffold.of(context).openDrawer();
