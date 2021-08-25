@@ -24,9 +24,8 @@ class AuthScreen extends StatefulWidget {
 
 class _AuthScreenState extends State<AuthScreen> {
   //final loginController = TextEditingController()..text  = 'kitaj77068@genebag.com';
-  final loginController = TextEditingController()
-    ..text = 'kepeyey591@slowimo.com';
-  final passController = TextEditingController()..text = '1234';
+  final loginController = TextEditingController();
+  final passController = TextEditingController();
   bool _obscureText = true;
   AuthBloc authBloc;
   StreamSubscription<AuthState> _authSub;
@@ -219,17 +218,13 @@ class _AuthScreenState extends State<AuthScreen> {
                     return Text(
                       "Неверный E-mail",
                       style: TextStyle(
-                          color: kColorRegGoogle,
-                          fontFamily: "GilroyMedium",
-                          fontSize: 14),
+                          color: kColorRegGoogle, fontFamily: "GilroyMedium", fontSize: 14),
                     );
                   }
                   return Text(
                     "",
-                    style: TextStyle(
-                        color: kColorRegGoogle,
-                        fontFamily: "GilroyMedium",
-                        fontSize: 14),
+                    style:
+                        TextStyle(color: kColorRegGoogle, fontFamily: "GilroyMedium", fontSize: 14),
                   );
                 },
               ))
@@ -302,17 +297,13 @@ class _AuthScreenState extends State<AuthScreen> {
                     return Text(
                       "Неверный пароль",
                       style: TextStyle(
-                          color: kColorRegGoogle,
-                          fontFamily: "GilroyMedium",
-                          fontSize: 14),
+                          color: kColorRegGoogle, fontFamily: "GilroyMedium", fontSize: 14),
                     );
                   }
                   return Text(
                     "",
-                    style: TextStyle(
-                        color: kColorRegGoogle,
-                        fontFamily: "GilroyMedium",
-                        fontSize: 14),
+                    style:
+                        TextStyle(color: kColorRegGoogle, fontFamily: "GilroyMedium", fontSize: 14),
                   );
                 },
               ),
@@ -329,10 +320,7 @@ class _AuthScreenState extends State<AuthScreen> {
                 },
                 child: Text(
                   "Забыли пароль?",
-                  style: TextStyle(
-                      color: kColorBlack,
-                      fontSize: 14,
-                      fontFamily: 'GilroyMedium'),
+                  style: TextStyle(color: kColorBlack, fontSize: 14, fontFamily: 'GilroyMedium'),
                 ),
               ),
             ],
@@ -350,8 +338,7 @@ class _AuthScreenState extends State<AuthScreen> {
       child: RaisedButton(
         elevation: 5.0,
         onPressed: () {
-          authBloc.add(AuthEventLogin(
-              login: loginController.text, password: passController.text));
+          authBloc.add(AuthEventLogin(login: loginController.text, password: passController.text));
         },
         padding: EdgeInsets.all(15.0),
         shape: RoundedRectangleBorder(
@@ -401,10 +388,7 @@ class _AuthScreenState extends State<AuthScreen> {
                   ),
                   Text(
                     "Google",
-                    style: TextStyle(
-                        color: kColorRegGoogle,
-                        fontSize: 13,
-                        fontFamily: 'Gilroy'),
+                    style: TextStyle(color: kColorRegGoogle, fontSize: 13, fontFamily: 'Gilroy'),
                   )
                 ],
               ),
@@ -468,10 +452,7 @@ class _AuthScreenState extends State<AuthScreen> {
         children: [
           Text(
             "Нет учетной записи?",
-            style: TextStyle(
-                color: kColorGreyDark,
-                fontFamily: "GilroyMedium",
-                fontSize: 14),
+            style: TextStyle(color: kColorGreyDark, fontFamily: "GilroyMedium", fontSize: 14),
           ),
           SizedBox(
             width: 15,
@@ -490,8 +471,7 @@ class _AuthScreenState extends State<AuthScreen> {
             },
             child: Text(
               "Создать",
-              style: TextStyle(
-                  color: kColorGreen, fontFamily: "GilroyMedium", fontSize: 14),
+              style: TextStyle(color: kColorGreen, fontFamily: "GilroyMedium", fontSize: 14),
             ),
           ),
         ],

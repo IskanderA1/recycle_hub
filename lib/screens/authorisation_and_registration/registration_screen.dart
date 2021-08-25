@@ -26,6 +26,13 @@ class _ReqistrationScreenState extends State<ReqistrationScreen> {
 
   RegistrationBloc regBloc;
 
+  GlobalKey<FormState> _passKey = GlobalKey<FormState>();
+
+  Pattern patternNum = r'^(?=.*[0-9])';
+  Pattern patternAlphabet = r'^(?=.*[a-z])';
+
+  String errorText = "";
+
   @override
   void initState() {
     regBloc = GetIt.I.get<RegistrationBloc>();
@@ -95,8 +102,7 @@ class _ReqistrationScreenState extends State<ReqistrationScreen> {
                       //height: ScreenUtil().screenHeight - 85,
                       padding: EdgeInsets.fromLTRB(15, 40, 15, 15),
                       decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(30),
-                          color: kColorWhite),
+                          borderRadius: BorderRadius.circular(30), color: kColorWhite),
                       child: Column(
                         children: [
                           _nameEnterTF(),
@@ -330,38 +336,58 @@ class _ReqistrationScreenState extends State<ReqistrationScreen> {
                 borderRadius: BorderRadius.circular(10)),
             height: 45.0,
             width: 300,
-            child: TextField(
-              controller: _password,
-              obscureText: _obscureText,
-              style: TextStyle(
-                color: kColorBlack,
-                fontFamily: 'OpenSans',
-              ),
-              decoration: InputDecoration(
-                border: InputBorder.none,
-                contentPadding: EdgeInsets.only(left: 15),
-                suffixIcon: GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      if (_obscureText) {
-                        _obscureText = false;
-                      } else {
-                        _obscureText = true;
-                      }
-                    });
-                  },
-                  child: Icon(
-                    Icons.remove_red_eye,
-                    size: 20,
-                    color: kColorBlack,
-                  ),
+            child: Form(
+              key: _passKey,
+              child: TextFormField(
+                controller: _password,
+                obscureText: _obscureText,
+                validator: (str) {
+                  if (str.length < 8) {
+                    errorText = 'Пароль должен содержать как минимум 8 символов';
+                  } else if (!RegExp(patternNum).hasMatch(str)) {
+                    errorText = 'Пароль должен содержать хотя-бы 1 цифру';
+                  } else if (!RegExp(patternAlphabet).hasMatch(str)) {
+                    errorText = 'Пароль должен содержать хотя-бы 1 букву';
+                  }
+                  setState(() {});
+                  return null;
+                },
+                style: TextStyle(
+                  color: kColorBlack,
+                  fontFamily: 'OpenSans',
                 ),
-                hintText: 'Пароль',
-                hintStyle: kHintTextStyle,
+                decoration: InputDecoration(
+                  border: InputBorder.none,
+                  contentPadding: EdgeInsets.only(left: 15),
+                  errorStyle: TextStyle(fontSize: 12),
+                  suffixIcon: GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        if (_obscureText) {
+                          _obscureText = false;
+                        } else {
+                          _obscureText = true;
+                        }
+                      });
+                    },
+                    child: Icon(
+                      Icons.remove_red_eye,
+                      size: 20,
+                      color: kColorBlack,
+                    ),
+                  ),
+                  hintText: 'Пароль',
+                  hintStyle: kHintTextStyle,
+                ),
+                textAlignVertical: TextAlignVertical.center,
               ),
-              textAlignVertical: TextAlignVertical.center,
             ),
           ),
+          if (errorText.isNotEmpty)
+            Text(
+              errorText,
+              style: TextStyle(color: kColorRed, fontSize: 12),
+            )
         ],
       ),
     );
@@ -420,6 +446,11 @@ class _ReqistrationScreenState extends State<ReqistrationScreen> {
       child: RaisedButton(
         elevation: 5.0,
         onPressed: () {
+          _passKey.currentState.validate();
+          if (errorText.isNotEmpty) {
+            showMessage(message: "Пароль не соответствует требованиям", context: context);
+            return;
+          }
           regBloc.add(RegistrationEventRegister(
               username: _email.text,
               name: _name.text,
@@ -453,10 +484,7 @@ class _ReqistrationScreenState extends State<ReqistrationScreen> {
         children: [
           Text(
             "Уже есть аккаунт?",
-            style: TextStyle(
-                color: kColorGreyDark,
-                fontFamily: "GilroyMedium",
-                fontSize: 14),
+            style: TextStyle(color: kColorGreyDark, fontFamily: "GilroyMedium", fontSize: 14),
           ),
           SizedBox(
             width: 15,
@@ -467,8 +495,7 @@ class _ReqistrationScreenState extends State<ReqistrationScreen> {
             },
             child: Text(
               "Войти",
-              style: TextStyle(
-                  color: kColorGreen, fontFamily: "GilroyMedium", fontSize: 14),
+              style: TextStyle(color: kColorGreen, fontFamily: "GilroyMedium", fontSize: 14),
             ),
           ),
         ],
@@ -483,10 +510,7 @@ class _ReqistrationScreenState extends State<ReqistrationScreen> {
         children: [
           Text(
             "Есть код?",
-            style: TextStyle(
-                color: kColorGreyDark,
-                fontFamily: "GilroyMedium",
-                fontSize: 14),
+            style: TextStyle(color: kColorGreyDark, fontFamily: "GilroyMedium", fontSize: 14),
           ),
           SizedBox(
             width: 15,
@@ -494,16 +518,14 @@ class _ReqistrationScreenState extends State<ReqistrationScreen> {
           GestureDetector(
             onTap: () {
               if (_email.text.isEmpty) {
-                showMessage(
-                    context: context, message: 'Пожалуйста, введите логин');
+                showMessage(context: context, message: 'Пожалуйста, введите логин');
                 return;
               }
               regBloc.add(RegistrationEventHasCode(username: _email.text));
             },
             child: Text(
               "Подтвердить",
-              style: TextStyle(
-                  color: kColorGreen, fontFamily: "GilroyMedium", fontSize: 14),
+              style: TextStyle(color: kColorGreen, fontFamily: "GilroyMedium", fontSize: 14),
             ),
           ),
         ],

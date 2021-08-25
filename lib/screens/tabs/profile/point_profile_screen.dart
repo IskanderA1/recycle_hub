@@ -71,8 +71,7 @@ class _PointProfileScreenState extends State<PointProfileScreen> {
         backgroundColor: kColorGreen,
         title: Text(
           "Пункт приёма",
-          style: TextStyle(
-              fontSize: 20, fontWeight: FontWeight.w700, fontFamily: 'Gilroy'),
+          style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700, fontFamily: 'Gilroy'),
         ),
         /* leading: IconButton(
           icon: Icon(
@@ -90,18 +89,19 @@ class _PointProfileScreenState extends State<PointProfileScreen> {
             padding: const EdgeInsets.only(right: 16),
             child: InkWell(
               onTap: () {
-                GetIt.I
-                    .get<ProfileMenuCubit>()
-                    .moveTo(ProfileMenuStates.USER_PROFILE);
+                GetIt.I.get<ProfileMenuCubit>().moveTo(ProfileMenuStates.USER_PROFILE);
               },
-              child: SvgPicture.asset('assets/icons/files-transit.svg'),
+              child: Icon(
+                NavBarIcons.app_bar_suffix,
+                size: 18,
+              ),
             ),
           ),
         ],
         leading: IconButton(
           icon: Icon(
             NavBarIcons.menu,
-            size: 25,
+            size: 18,
           ),
           onPressed: () {
             Scaffold.of(context).openDrawer();
@@ -122,8 +122,7 @@ class _PointProfileScreenState extends State<PointProfileScreen> {
                       imageBuilder: (context, imageProvider) {
                         return Container(
                           decoration: BoxDecoration(
-                            image: DecorationImage(
-                                image: imageProvider, fit: BoxFit.cover),
+                            image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
                           ),
                           child: BackdropFilter(
                             filter: ImageFilter.blur(sigmaX: 5.0, sigmaY: 5.0),
@@ -140,8 +139,7 @@ class _PointProfileScreenState extends State<PointProfileScreen> {
                           ),
                         );
                       },
-                      placeholder: (context, url) =>
-                          CircularProgressIndicator(),
+                      placeholder: (context, url) => Center(child: CircularProgressIndicator()),
                       errorWidget: (context, url, error) => Icon(
                         Icons.error,
                       ),
@@ -160,8 +158,7 @@ class _PointProfileScreenState extends State<PointProfileScreen> {
             Container(
               child: ListView(
                 physics: ClampingScrollPhysics(),
-                padding:
-                    EdgeInsets.only(left: 16, right: 16, top: 10, bottom: 100),
+                padding: EdgeInsets.only(left: 16, right: 16, top: 10, bottom: 100),
                 children: [
                   buildPointProfile(_address, _name, _size),
                   SizedBox(
@@ -172,19 +169,15 @@ class _PointProfileScreenState extends State<PointProfileScreen> {
                     height: 10,
                   ),
                   Container(
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(16),
-                        color: kColorWhite),
+                    decoration:
+                        BoxDecoration(borderRadius: BorderRadius.circular(16), color: kColorWhite),
                     child: ListView(
                       shrinkWrap: true,
-                      padding: EdgeInsets.only(
-                          left: 16, right: 16, top: 10, bottom: 0),
+                      padding: EdgeInsets.only(left: 16, right: 16, top: 10, bottom: 0),
                       children: [
                         CommonCell(
                           onTap: () {
-                            GetIt.I
-                                .get<ProfileMenuCubit>()
-                                .moveTo(ProfileMenuStates.PointEdit);
+                            GetIt.I.get<ProfileMenuCubit>().moveTo(ProfileMenuStates.PointEdit);
                           },
                           prefixIcon: Icon(
                             UserProfileIcons.user,
@@ -299,8 +292,7 @@ Widget buildStatus(int place, int made) {
         Expanded(
           child: Container(
             height: 115,
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(16), color: kColorWhite),
+            decoration: BoxDecoration(borderRadius: BorderRadius.circular(16), color: kColorWhite),
             padding: EdgeInsets.all(20),
             child: Column(
               children: [
@@ -329,8 +321,7 @@ Widget buildStatus(int place, int made) {
         Expanded(
           child: Container(
             height: 115,
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(16), color: kColorWhite),
+            decoration: BoxDecoration(borderRadius: BorderRadius.circular(16), color: kColorWhite),
             padding: EdgeInsets.all(20),
             child: Column(
               children: [
@@ -375,8 +366,7 @@ Widget buildAchievments(String status, double made) {
             SizedBox(
               width: 15,
             ),
-            Text("Достижения",
-                style: TextStyle(color: kColorBlack, fontSize: 14))
+            Text("Достижения", style: TextStyle(color: kColorBlack, fontSize: 14))
           ],
         ),
         Container(
@@ -394,10 +384,7 @@ Widget buildAchievments(String status, double made) {
                 SizedBox(width: 14),
                 Text(
                   status,
-                  style: TextStyle(
-                      color: kColorGreen,
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold),
+                  style: TextStyle(color: kColorGreen, fontSize: 16, fontWeight: FontWeight.bold),
                 )
               ],
             ),
@@ -418,10 +405,7 @@ Widget buildAchievments(String status, double made) {
             ),
             Text(
               "$made",
-              style: TextStyle(
-                  color: kColorBlack,
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold),
+              style: TextStyle(color: kColorBlack, fontSize: 16, fontWeight: FontWeight.bold),
             ),
             Text("кг",
                 style: TextStyle(
@@ -446,9 +430,8 @@ Widget _buildProgressIndicator(int lastKGindex) {
           alignment: Alignment.center,
           decoration: BoxDecoration(
               color: (0 < lastKGindex) ? kColorGreen : kLightGrey,
-              borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(12),
-                  bottomLeft: Radius.circular(12))),
+              borderRadius:
+                  BorderRadius.only(topLeft: Radius.circular(12), bottomLeft: Radius.circular(12))),
           child: (0 < lastKGindex)
               ? Container()
               : Text(
@@ -504,8 +487,7 @@ Widget _buildProgressIndicator(int lastKGindex) {
           decoration: BoxDecoration(
               color: (4 < lastKGindex) ? kColorGreen : kLightGrey,
               borderRadius: BorderRadius.only(
-                  topRight: Radius.circular(12),
-                  bottomRight: Radius.circular(12))),
+                  topRight: Radius.circular(12), bottomRight: Radius.circular(12))),
           child: (4 < lastKGindex)
               ? Container()
               : Text(
@@ -519,8 +501,7 @@ Widget _buildProgressIndicator(int lastKGindex) {
 Widget buildMenu(double size) {
   return Container(
     padding: EdgeInsets.only(right: 17, left: 17, bottom: 10),
-    decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(16), color: kColorWhite),
+    decoration: BoxDecoration(borderRadius: BorderRadius.circular(16), color: kColorWhite),
     child: Column(
       children: [
         buildListItem(0, "Редактировать профиль"),
@@ -536,17 +517,13 @@ Widget buildMenu(double size) {
 Widget buildListItem(int index, String text) {
   return Container(
     padding: EdgeInsets.only(top: 12, bottom: 12),
-    decoration: BoxDecoration(
-        border: Border(bottom: BorderSide(color: kColorGreyDark, width: 0.5))),
+    decoration:
+        BoxDecoration(border: Border(bottom: BorderSide(color: kColorGreyDark, width: 0.5))),
     child: Stack(children: [
       Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          Container(
-              alignment: Alignment.center,
-              height: 30,
-              width: 30,
-              child: svgIcons[index]),
+          Container(alignment: Alignment.center, height: 30, width: 30, child: svgIcons[index]),
           SizedBox(
             width: 5,
           ),

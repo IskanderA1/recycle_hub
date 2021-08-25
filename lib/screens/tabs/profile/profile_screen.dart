@@ -86,6 +86,38 @@ class _ProfileScreenState extends State<ProfileScreen> {
           return PointProfileScreen();
         } */
         return Scaffold(
+          appBar: AppBar(
+            title: Text(
+              "Профиль",
+              style: TextStyle(fontWeight: FontWeight.w700),
+              textAlign: TextAlign.center,
+            ),
+            centerTitle: true,
+            leading: IconButton(
+              icon: Icon(
+                NavBarIcons.menu,
+                size: 18,
+              ),
+              onPressed: () {
+                Scaffold.of(context).openDrawer();
+              },
+            ),
+            actions: [
+              Padding(
+                padding: const EdgeInsets.only(right: 16),
+                child: InkWell(
+                  onTap: () {
+                    if (GetIt.I.get<AuthBloc>().state.userModel.userType == UserTypes.admin)
+                      GetIt.I.get<ProfileMenuCubit>().moveTo(ProfileMenuStates.POINT_PROFILE);
+                  },
+                  child: Icon(
+                    NavBarIcons.app_bar_suffix,
+                    size: 18,
+                  ),
+                ),
+              ),
+            ],
+          ),
           body: Container(
             height: _size.height,
             width: _size.width,
@@ -95,113 +127,61 @@ class _ProfileScreenState extends State<ProfileScreen> {
               footer: ClassicalFooter(),
               header: ClassicalHeader(),
               scrollController: controller,
-              child: Stack(
-                children: [
-                  Image.asset("svg/Mask Group.png"),
-                  Container(
-                    child: ListView(
-                      controller: controller,
-                      shrinkWrap: true,
-                      padding: EdgeInsets.only(
-                        right: 16,
-                      ),
-                      children: [
-                        buildAppBar(),
-                        SizedBox(
-                          height: 16,
-                        ),
-                        Container(
-                          padding: EdgeInsets.only(left: 18),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              UserImagePicker(
-                                image: state.userModel.image,
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.only(left: 16),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      state.userModel.name,
-                                      style: TextStyle(
-                                        color: kColorWhite,
-                                        fontFamily: 'GillroyMedium',
-                                        fontSize: 18,
-                                      ),
-                                    ),
-                                    Text(
-                                      "Эколог",
-                                      style: TextStyle(
-                                        color: kColorWhite,
-                                        fontFamily: 'GillroyMedium',
-                                        fontSize: 12,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
-                        SizedBox(
-                          height: 24,
-                        ),
-                        buildStatus(
-                            UserService().statistic != null
-                                ? UserService().statistic.place
-                                : 0,
-                            UserService().statistic != null
-                                ? UserService().statistic.total
-                                : 0),
-                        SizedBox(
-                          height: 5,
-                        ),
-                        Container(
-                          height: _size.height * 0.6,
-                          padding: EdgeInsets.only(
-                              top: 12, bottom: 12, right: 19, left: 19),
-                          decoration: BoxDecoration(
-                            color: kColorWhite,
-                            borderRadius: BorderRadius.circular(16),
-                          ),
-                          child: ListView(
-                            controller: controller,
-                            padding: EdgeInsets.only(
-                                bottom: _size.height * 0.05, top: 5),
-                            children: [
-                              if (state is AuthStateGuestAcc)
-                                CommonCell(
-                                  text: 'Авторизоваться',
-                                  onTap: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => AuthScreen(),
-                                      ),
-                                    );
-                                  },
-                                ),
-                              if (state is AuthStateLogedIn)
-                                buildAchievments(
-                                    "Эколог",
-                                    UserService().statistic != null
-                                        ? UserService().statistic.total
-                                        : 0),
-                              if (state is AuthStateLogedIn)
-                                SizedBox(
-                                  height: 10,
-                                ),
-                              if (state is AuthStateLogedIn) buildMenu(authBloc)
-                            ],
-                          ),
-                        ),
-                      ],
+              child: Container(
+                child: ListView(
+                  controller: controller,
+                  shrinkWrap: true,
+                  padding: EdgeInsets.only(right: 16, left: 16),
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(top: 16),
+                      child: buildStatus(
+                          state,
+                          UserService().statistic != null ? UserService().statistic.place : 0,
+                          UserService().statistic != null ? UserService().statistic.total : 0),
                     ),
-                  ),
-                ],
+                    SizedBox(
+                      height: 5,
+                    ),
+                    Container(
+                      height: _size.height * 0.6,
+                      padding: EdgeInsets.only(top: 12, bottom: 12, right: 19, left: 19),
+                      decoration: BoxDecoration(
+                        color: kColorWhite,
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      child: ListView(
+                        controller: controller,
+                        padding: EdgeInsets.only(bottom: _size.height * 0.05, top: 5),
+                        children: [
+                          if (state is AuthStateGuestAcc)
+                            CommonCell(
+                              text: 'Авторизоваться',
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => AuthScreen(),
+                                  ),
+                                );
+                              },
+                            ),
+                          if (state is AuthStateLogedIn)
+                            buildAchievments(
+                                "Эколог",
+                                UserService().statistic != null
+                                    ? UserService().statistic.total
+                                    : 0),
+                          if (state is AuthStateLogedIn)
+                            SizedBox(
+                              height: 10,
+                            ),
+                          if (state is AuthStateLogedIn) buildMenu(authBloc)
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
@@ -240,11 +220,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
           Spacer(),
           InkWell(
             onTap: () {
-              if (GetIt.I.get<AuthBloc>().state.userModel.userType ==
-                  UserTypes.admin)
-                GetIt.I
-                    .get<ProfileMenuCubit>()
-                    .moveTo(ProfileMenuStates.POINT_PROFILE);
+              if (GetIt.I.get<AuthBloc>().state.userModel.userType == UserTypes.admin)
+                GetIt.I.get<ProfileMenuCubit>().moveTo(ProfileMenuStates.POINT_PROFILE);
             },
             child: Icon(
               NavBarIcons.app_bar_suffix,
@@ -256,74 +233,126 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  Widget buildStatus(int place, double made) {
+  Widget buildStatus(AuthState state, int place, double made) {
     return Container(
       decoration: BoxDecoration(
         color: kColorWhite,
         borderRadius: BorderRadius.circular(16),
       ),
-      padding: EdgeInsets.all(26),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      padding: EdgeInsets.all(16),
+      child: Column(
         children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Text(
-                "$place",
-                style: TextStyle(color: kColorBlack, fontSize: 28),
-              ),
-              Text(
-                "Место",
-                style: TextStyle(color: kColorBlack, fontSize: 16),
-              )
-            ],
-          ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              InkWell(
-                onTap: () {
-                  AlertHelper.showBalanceInfo(context);
-                },
-                child: RichText(
-                  text: TextSpan(
-                      text: '${userState.ecoCoins}',
-                      style: TextStyle(
-                          color: kColorGreen,
-                          fontSize: 28,
-                          fontFamily: 'GilroyMedium'),
-                      children: [
-                        TextSpan(
-                          text: '/',
-                          style: TextStyle(color: kColorBlack),
-                        ),
-                        TextSpan(
-                          text: '${userState.freezeEcoCoins}',
-                          style: TextStyle(color: kColorRed),
-                        ),
-                      ]),
+          Container(
+            padding: EdgeInsets.only(bottom: 16),
+            child: Stack(
+              fit: StackFit.passthrough,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    UserImagePicker(
+                      image: state.userModel.image,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 16),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            state.userModel.name,
+                            style: TextStyle(
+                              color: kColorBlack,
+                              fontFamily: 'GillroyMedium',
+                              fontSize: 18,
+                            ),
+                          ),
+                          Text(
+                            "Эколог",
+                            style: TextStyle(
+                              color: kColorBlack,
+                              fontFamily: 'GillroyMedium',
+                              fontSize: 12,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
+                Positioned(
+                  top: 0,
+                  right: 0,
+                  child: InkWell(
+                    onTap: () {
+                      AlertHelper.showBalanceInfo(context);
+                    },
+                    child: Icon(
+                      Icons.info_outline,
+                      color: kColorGreen,
+                      size: 25,
+                    ),
+                  ),
+                )
+              ],
+            ),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(
+                    "$place",
+                    style: TextStyle(color: kColorBlack, fontSize: 28),
+                  ),
+                  Text(
+                    "Место",
+                    style: TextStyle(color: kColorBlack, fontSize: 16),
+                  )
+                ],
               ),
-              Text(
-                "Баланс",
-                style: TextStyle(color: kColorBlack, fontSize: 16),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  RichText(
+                    text: TextSpan(
+                        text: '${userState.ecoCoins}',
+                        style:
+                            TextStyle(color: kColorGreen, fontSize: 28, fontFamily: 'GilroyMedium'),
+                        children: [
+                          TextSpan(
+                            text: '/',
+                            style: TextStyle(color: kColorBlack),
+                          ),
+                          TextSpan(
+                            text: '${userState.freezeEcoCoins}',
+                            style: TextStyle(color: kColorRed),
+                          ),
+                        ]),
+                  ),
+                  Text(
+                    "Баланс",
+                    style: TextStyle(color: kColorBlack, fontSize: 16),
+                  )
+                ],
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(
+                    "$made",
+                    style: TextStyle(color: kColorBlack, fontSize: 28),
+                  ),
+                  Text(
+                    "Сдал(кг)",
+                    style: TextStyle(color: kColorBlack, fontSize: 16),
+                  )
+                ],
               )
             ],
           ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Text(
-                "$made",
-                style: TextStyle(color: kColorBlack, fontSize: 28),
-              ),
-              Text(
-                "Сдал(кг)",
-                style: TextStyle(color: kColorBlack, fontSize: 16),
-              )
-            ],
-          )
         ],
       ),
     );
@@ -371,10 +400,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   SizedBox(width: 14),
                   Text(
                     status,
-                    style: TextStyle(
-                        color: kColorGreen,
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold),
+                    style: TextStyle(color: kColorGreen, fontSize: 16, fontWeight: FontWeight.bold),
                   )
                 ],
               ),
@@ -385,9 +411,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           height: 7,
         ),
         ProfileProgressIndicator(
-            total: UserService().statistic != null
-                ? UserService().statistic.total
-                : 0),
+            total: UserService().statistic != null ? UserService().statistic.total : 0),
         SizedBox(
           height: 8,
         ),
@@ -399,10 +423,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ),
             Text(
               "$made",
-              style: TextStyle(
-                  color: kColorBlack,
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold),
+              style: TextStyle(color: kColorBlack, fontSize: 16, fontWeight: FontWeight.bold),
             ),
             Text(
               "кг",
@@ -420,8 +441,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget buildMenu(AuthBloc authBloc) {
     return Container(
       padding: EdgeInsets.only(top: 17, bottom: 0, right: 17, left: 17),
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(16), color: kColorWhite),
+      decoration: BoxDecoration(borderRadius: BorderRadius.circular(16), color: kColorWhite),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(16),
         child: Column(
@@ -513,8 +533,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 }
 
 class ProfileProgressIndicator extends StatelessWidget {
-  const ProfileProgressIndicator({Key key, @required this.total})
-      : super(key: key);
+  const ProfileProgressIndicator({Key key, @required this.total}) : super(key: key);
 
   final double total;
 
@@ -597,9 +616,7 @@ class ProfileProgressIndicator extends StatelessWidget {
           alignment: Alignment.center,
           decoration: BoxDecoration(
             color: (500 < total) ? kColorGreen : kLightGrey,
-            gradient: (500 < total)
-                ? LinearGradient(colors: [kColorGreen, kLightGrey])
-                : null,
+            gradient: (500 < total) ? LinearGradient(colors: [kColorGreen, kLightGrey]) : null,
             borderRadius: BorderRadius.only(
               topRight: Radius.circular(12),
               bottomRight: Radius.circular(12),
