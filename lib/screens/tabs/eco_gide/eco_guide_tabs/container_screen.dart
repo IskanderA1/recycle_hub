@@ -6,6 +6,7 @@ import 'package:recycle_hub/bloc/eco_guide_blocs/eco_menu_bloc.dart';
 import 'package:recycle_hub/bloc/eco_guide_blocs/trash_details_bloc.dart';
 import 'package:recycle_hub/bloc/eco_guide_cubit/eco_guide_cubit_cubit.dart';
 import 'package:recycle_hub/elements/loader.dart';
+import 'package:recycle_hub/icons/app_bar_icons_icons.dart';
 import 'package:recycle_hub/model/eco_guide_models/filter_response.dart';
 import 'package:recycle_hub/model/map_models.dart/accept_types.dart';
 import '../../../../bloc/eco_guide_blocs/trash_details_bloc.dart';
@@ -19,13 +20,7 @@ List<SvgPicture> containerImages = [
   SvgPicture.asset("svg/black_container.svg")
 ];
 
-List<String> containerTitles = [
-  "Бумага",
-  "Пластик",
-  "Стекло",
-  "Мусор",
-  "Отходы"
-];
+List<String> containerTitles = ["Бумага", "Пластик", "Стекло", "Мусор", "Отходы"];
 
 List<Tab> tabList = [];
 
@@ -46,14 +41,17 @@ class _ContainerScreenState extends State<ContainerScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        backgroundColor: kColorScaffold,
         appBar: AppBar(
           title: Text(
             "Что в какой контейнер",
-            style: TextStyle(),
           ),
           centerTitle: true,
           leading: IconButton(
-            icon: Icon(Icons.arrow_back_sharp),
+            icon: Icon(
+              AppBarIcons.back,
+              size: 18,
+            ),
             onPressed: () {
               GetIt.I.get<EcoGuideCubit>().goBack();
             },
@@ -133,7 +131,7 @@ Widget _buildContainerList(FilterResponse filterResponse, int screenIndex) {
       builder: (context, AsyncSnapshot<StateButtons> snapshot) {
         return Container(
           alignment: Alignment.center,
-          padding: EdgeInsets.only(top: 25),
+          padding: EdgeInsets.only(top: 16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
@@ -155,10 +153,7 @@ Widget _buildContainerList(FilterResponse filterResponse, int screenIndex) {
                                 child: Align(
                                   child: Text(
                                     "Можно",
-                                    style: TextStyle(
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.w100,
-                                        color: kColorGreyLight),
+                                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.w100, color: kColorGreyLight),
                                   ),
                                 ),
                               ),
@@ -167,9 +162,7 @@ Widget _buildContainerList(FilterResponse filterResponse, int screenIndex) {
                               height: 1,
                               width: 65,
                               child: Container(
-                                color: snapshot.data == StateButtons.FORBIDDEN
-                                    ? Colors.transparent
-                                    : kColorGreen,
+                                color: snapshot.data == StateButtons.FORBIDDEN ? Colors.transparent : kColorGreen,
                               ),
                             )
                           ],
@@ -190,10 +183,7 @@ Widget _buildContainerList(FilterResponse filterResponse, int screenIndex) {
                                 child: Align(
                                   child: Text(
                                     "Нельзя",
-                                    style: TextStyle(
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.w100,
-                                        color: kColorGreyLight),
+                                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.w100, color: kColorGreyLight),
                                   ),
                                 ),
                               ),
@@ -202,9 +192,7 @@ Widget _buildContainerList(FilterResponse filterResponse, int screenIndex) {
                               height: 1,
                               width: 65,
                               child: Container(
-                                color: snapshot.data == StateButtons.ALLOWED
-                                    ? Colors.transparent
-                                    : Colors.red[600],
+                                color: snapshot.data == StateButtons.ALLOWED ? Colors.transparent : Colors.red[600],
                               ),
                             )
                           ],
@@ -221,27 +209,22 @@ Widget _buildContainerList(FilterResponse filterResponse, int screenIndex) {
                             context: context,
                             builder: (BuildContext context) {
                               return StreamBuilder(
-                                  stream: trashDetailsBloc
-                                      .containerController.stream,
+                                  stream: trashDetailsBloc.containerController.stream,
                                   builder: (context, AsyncSnapshot snapshot) {
-                                    FilterResponse filterResponse =
-                                        snapshot.data;
+                                    FilterResponse filterResponse = snapshot.data;
                                     if (snapshot.hasData) {
-                                      SvgPicture svgPicture =
-                                          containerImages[screenIndex];
+                                      SvgPicture svgPicture = containerImages[screenIndex];
                                       return AlertDialog(
                                         actionsPadding: EdgeInsets.all(0),
                                         titlePadding: EdgeInsets.all(0),
-                                        shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(5)),
+                                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
                                         title: ClipRRect(
                                           borderRadius: BorderRadius.only(
-                                              topLeft: Radius.circular(5),
-                                              topRight: Radius.circular(5)),
+                                            topLeft: Radius.circular(5),
+                                            topRight: Radius.circular(5),
+                                          ),
                                           child: Container(
-                                            padding: EdgeInsets.only(
-                                                top: 10, bottom: 10),
+                                            padding: EdgeInsets.only(top: 10, bottom: 10),
                                             height: 80,
                                             color: kColorGreen,
                                             child: svgPicture,
@@ -257,9 +240,7 @@ Widget _buildContainerList(FilterResponse filterResponse, int screenIndex) {
                                                   children: [
                                                     Text(
                                                       "Подлежат:",
-                                                      style: TextStyle(
-                                                          fontWeight:
-                                                              FontWeight.bold),
+                                                      style: TextStyle(fontWeight: FontWeight.bold),
                                                     ),
                                                     SizedBox(
                                                       height: 10,
@@ -267,29 +248,21 @@ Widget _buildContainerList(FilterResponse filterResponse, int screenIndex) {
                                                     Wrap(
                                                       children: [
                                                         Text(
-                                                          buildText(
-                                                              filterResponse,
-                                                              screenIndex)[0],
+                                                          buildText(filterResponse, screenIndex)[0],
                                                         )
                                                       ],
                                                     ),
                                                     SizedBox(
                                                       height: 10,
                                                     ),
-                                                    Text("Не подлежат:",
-                                                        style: TextStyle(
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .bold)),
+                                                    Text("Не подлежат:", style: TextStyle(fontWeight: FontWeight.bold)),
                                                     SizedBox(
                                                       height: 10,
                                                     ),
                                                     Wrap(
                                                       children: [
                                                         Text(
-                                                          buildText(
-                                                              filterResponse,
-                                                              screenIndex)[1],
+                                                          buildText(filterResponse, screenIndex)[1],
                                                         )
                                                       ],
                                                     ),
@@ -305,8 +278,7 @@ Widget _buildContainerList(FilterResponse filterResponse, int screenIndex) {
                                                   color: kColorGreen,
                                                   child: Text(
                                                     "Понятно",
-                                                    style: TextStyle(
-                                                        color: kColorWhite),
+                                                    style: TextStyle(color: kColorWhite),
                                                   ),
                                                 ),
                                               )
@@ -344,14 +316,12 @@ class _buildContainerListView extends StatelessWidget {
   StateButtons stateButtons;
   int screenIndex;
   Widget properties;
-  _buildContainerListView(List<FilterType> filterModels,
-      StateButtons stateButtons, int screenIndex) {
+  _buildContainerListView(List<FilterType> filterModels, StateButtons stateButtons, int screenIndex) {
     this.filterModels = filterModels;
     this.stateButtons = stateButtons;
     this.screenIndex = screenIndex;
-    this.properties = stateButtons == StateButtons.ALLOWED
-        ? AllowedItems(filterModels[screenIndex].keyWords)
-        : ForbiddenItems(filterModels[screenIndex].badWords);
+    this.properties =
+        stateButtons == StateButtons.ALLOWED ? AllowedItems(filterModels[screenIndex].keyWords) : ForbiddenItems(filterModels[screenIndex].badWords);
     print(filterModels[screenIndex].keyWords[0]);
   }
   @override
@@ -387,13 +357,22 @@ class AllowedItems extends StatelessWidget {
     return Container(
       alignment: Alignment.topCenter,
       decoration: BoxDecoration(
-        color: Colors.black12,
+        color: kColorGreyVeryLight,
         borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(30), topRight: Radius.circular(30)),
+          topLeft: Radius.circular(16),
+          topRight: Radius.circular(16),
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: kColorGreyLight,
+            blurRadius: 3,
+            spreadRadius: 1.5,
+          ),
+        ],
       ),
       padding: EdgeInsets.only(left: 20, top: 10, right: 20),
       margin: EdgeInsets.only(left: 20, right: 20, top: 20),
-      height: MediaQuery.of(context).size.height - 400,
+      height: MediaQuery.of(context).size.height - 330,
       width: MediaQuery.of(context).size.width,
       child: ListView(
         children: _buildAllowedItems(allowedItems),
@@ -413,8 +392,7 @@ class ForbiddenItems extends StatelessWidget {
       alignment: Alignment.center,
       decoration: BoxDecoration(
         color: Color(0xFFF14343),
-        borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(30), topRight: Radius.circular(30)),
+        borderRadius: BorderRadius.only(topLeft: Radius.circular(30), topRight: Radius.circular(30)),
       ),
       padding: EdgeInsets.only(left: 20, top: 10, right: 20),
       margin: EdgeInsets.only(left: 20, right: 20, top: 20),
@@ -440,8 +418,7 @@ List<Widget> _buildAllowedItems(List<String> allowedItems) {
             height: 125,
             margin: EdgeInsets.only(right: 2),
             child: Card(
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10)),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(kBorderRadius)),
               elevation: 3,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -476,8 +453,7 @@ List<Widget> _buildAllowedItems(List<String> allowedItems) {
                   margin: EdgeInsets.only(left: 2),
                   height: 125,
                   child: Card(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10)),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(kBorderRadius)),
                     elevation: 3,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -523,8 +499,7 @@ List<Widget> _buildForbiddenItems(List<String> forbiddenItems) {
             height: 125,
             margin: EdgeInsets.only(right: 2),
             child: Card(
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10)),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(kBorderRadius)),
               elevation: 3,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -559,8 +534,7 @@ List<Widget> _buildForbiddenItems(List<String> forbiddenItems) {
                   margin: EdgeInsets.only(left: 2),
                   height: 125,
                   child: Card(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10)),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(kBorderRadius)),
                     elevation: 3,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,

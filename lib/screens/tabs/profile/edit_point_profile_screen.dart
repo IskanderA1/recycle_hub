@@ -8,6 +8,7 @@ import 'package:recycle_hub/bloc/cubit/profile_menu_cubit.dart';
 import 'package:recycle_hub/bloc/filter_type_cubit.dart';
 import 'package:recycle_hub/elements/common_text_button.dart';
 import 'package:recycle_hub/helpers/messager_helper.dart';
+import 'package:recycle_hub/icons/app_bar_icons_icons.dart';
 import 'package:recycle_hub/model/map_models.dart/accept_types.dart';
 import 'package:recycle_hub/model/map_models.dart/marker.dart';
 import 'package:recycle_hub/model/user_model.dart';
@@ -75,8 +76,7 @@ class _EditPointProfileScreenState extends State<EditPointProfileScreen> {
     _ppPartnerPhone.text = point.contacts.first;
     _ppDescription.text = point.description;
     _recycleTypes = GetIt.I.get<FilterTypeCubit>().state;
-    _pointRecycleTypes = _recycleTypes
-        .where((element) => point.acceptTypes.contains(element.id)).toList();
+    _pointRecycleTypes = _recycleTypes.where((element) => point.acceptTypes.contains(element.id)).toList();
     _isPayback = point.getBonus;
     try {
       _photos = point.images.map((e) => File.fromUri(Uri.parse(e))).toList();
@@ -112,15 +112,15 @@ class _EditPointProfileScreenState extends State<EditPointProfileScreen> {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-            icon: Icon(Icons.arrow_back, color: kColorWhite, size: 25),
+            icon: Icon(
+              AppBarIcons.back,
+              color: kColorWhite,
+              size: 18,
+            ),
             onPressed: () => GetIt.I.get<ProfileMenuCubit>().goBack()),
         title: Text(
           "Редактировать профиль",
-          style: TextStyle(
-              color: kColorWhite,
-              fontSize: 18,
-              fontFamily: 'GillroyMedium',
-              fontWeight: FontWeight.bold),
+          /* style: TextStyle(color: kColorWhite, fontSize: 18, fontFamily: 'GillroyMedium', fontWeight: FontWeight.bold), */
         ),
         centerTitle: true,
       ),
@@ -134,10 +134,7 @@ class _EditPointProfileScreenState extends State<EditPointProfileScreen> {
                 padding: EdgeInsets.fromLTRB(16, 16, 16, 0),
                 child: Container(
                   padding: EdgeInsets.all(16),
-                  decoration: BoxDecoration(
-                      color: kColorWhite,
-                      borderRadius:
-                          BorderRadius.vertical(top: Radius.circular(16))),
+                  decoration: BoxDecoration(color: kColorWhite, borderRadius: BorderRadius.vertical(top: Radius.circular(16))),
                   child: ListView(
                     controller: scrollController,
                     shrinkWrap: true,
@@ -154,8 +151,7 @@ class _EditPointProfileScreenState extends State<EditPointProfileScreen> {
                         labelText: 'Адрес пункта приема',
                         controller: _ppAddress,
                       ),
-                      Text('Выдает экокоины',
-                          style: Theme.of(context).textTheme.headline6),
+                      Text('Выдает экокоины', style: Theme.of(context).textTheme.headline6),
                       Padding(
                           padding: EdgeInsets.only(top: 16),
                           child: CheckBoxCell(
@@ -180,8 +176,7 @@ class _EditPointProfileScreenState extends State<EditPointProfileScreen> {
                           )),
                       Padding(
                         padding: const EdgeInsets.only(top: 8.0),
-                        child: Text('Принимают на переработку',
-                            style: Theme.of(context).textTheme.headline6),
+                        child: Text('Принимают на переработку', style: Theme.of(context).textTheme.headline6),
                       ),
                       Padding(
                         padding: EdgeInsets.only(top: 8),
@@ -193,8 +188,7 @@ class _EditPointProfileScreenState extends State<EditPointProfileScreen> {
                               return Padding(
                                 padding: const EdgeInsets.only(top: 8),
                                 child: CheckBoxCell(
-                                  isSelected: _pointRecycleTypes
-                                      .contains(_recycleTypes[i]),
+                                  isSelected: _pointRecycleTypes.contains(_recycleTypes[i]),
                                   text: _recycleTypes[i].name,
                                   onTap: () {
                                     _pointRecycleTypes.add(_recycleTypes[i]);
@@ -238,13 +232,9 @@ class _EditPointProfileScreenState extends State<EditPointProfileScreen> {
                           children: [
                             BallGreen(),
                             Expanded(
-                              child: Padding(
-                                padding: const EdgeInsets.only(left: 16),
-                                child: Text(
-                                  'Ваш запрос будет отправлен модератору',
-                                  style: TextStyle(
-                                      fontSize: 14, fontFamily: 'GilroyMedium'),
-                                ),
+                              child: Text(
+                                'Ваш запрос будет отправлен модератору',
+                                style: TextStyle(fontSize: 14, fontFamily: 'GilroyMedium'),
                               ),
                             )
                           ],

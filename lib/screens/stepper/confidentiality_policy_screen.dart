@@ -12,7 +12,7 @@ class _ConfidentialityPolicyState extends State<ConfidentialityPolicy> {
     return Scaffold(
       appBar: AppBar(
         title: Text("Политика конфиденциальности",
-            style: TextStyle(fontFamily: 'Gilroy')),
+            /* style: TextStyle(fontFamily: 'Gilroy') */),
         centerTitle: true,
       ),
       backgroundColor: kColorWhite,

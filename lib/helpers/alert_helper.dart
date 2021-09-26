@@ -92,12 +92,12 @@ class AlertHelper {
         return AlertDialog(
           //title: title != null ? Text(title) : null,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
+            borderRadius: BorderRadius.circular(kBorderRadius),
           ),
           content: Container(
             height: 250,
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(20),
+              borderRadius: BorderRadius.circular(kBorderRadius),
             ),
             child: Column(
               children: [
@@ -118,7 +118,7 @@ class AlertHelper {
                       BallGreen(),
                       Expanded(
                         child: Padding(
-                          padding: EdgeInsets.only(left: 14),
+                          padding: EdgeInsets.only(left: 16),
                           child: Text(
                             partner,
                             style: TextStyle(
@@ -199,12 +199,12 @@ class AlertHelper {
         return AlertDialog(
           //title: title != null ? Text(title) : null,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
+            borderRadius: BorderRadius.circular(kBorderRadius),
           ),
           content: Container(
             height: 260,
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(20),
+              borderRadius: BorderRadius.circular(kBorderRadius),
             ),
             child: Column(
               children: [
@@ -220,7 +220,7 @@ class AlertHelper {
                 Container(
                   height: 170,
                   decoration: BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(25))),
+                      borderRadius: BorderRadius.all(Radius.circular(kBorderRadius),)),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [

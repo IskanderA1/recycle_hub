@@ -9,6 +9,7 @@ import 'package:recycle_hub/api/services/points_service.dart';
 import 'package:recycle_hub/bloc/auth/auth_bloc.dart';
 import 'package:recycle_hub/bloc/cubit/profile_menu_cubit.dart';
 import 'package:recycle_hub/elements/common_cell.dart';
+import 'package:recycle_hub/icons/app_bar_icons_icons.dart';
 import 'package:recycle_hub/icons/nav_bar_icons_icons.dart';
 import 'package:recycle_hub/icons/user_profile_icons_icons.dart';
 import 'package:recycle_hub/model/user_model.dart';
@@ -71,7 +72,7 @@ class _PointProfileScreenState extends State<PointProfileScreen> {
         backgroundColor: kColorGreen,
         title: Text(
           "Пункт приёма",
-          style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700, fontFamily: 'Gilroy'),
+          /* style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700, fontFamily: 'Gilroy'), */
         ),
         /* leading: IconButton(
           icon: Icon(
@@ -100,7 +101,7 @@ class _PointProfileScreenState extends State<PointProfileScreen> {
         ],
         leading: IconButton(
           icon: Icon(
-            NavBarIcons.menu,
+            AppBarIcons.menu,
             size: 18,
           ),
           onPressed: () {
@@ -169,8 +170,7 @@ class _PointProfileScreenState extends State<PointProfileScreen> {
                     height: 10,
                   ),
                   Container(
-                    decoration:
-                        BoxDecoration(borderRadius: BorderRadius.circular(16), color: kColorWhite),
+                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(kBorderRadius), color: kColorWhite),
                     child: ListView(
                       shrinkWrap: true,
                       padding: EdgeInsets.only(left: 16, right: 16, top: 10, bottom: 0),
@@ -189,9 +189,7 @@ class _PointProfileScreenState extends State<PointProfileScreen> {
                         ),
                         CommonCell(
                           onTap: () {
-                            GetIt.I
-                                .get<ProfileMenuCubit>()
-                                .moveTo(ProfileMenuStates.PointWriteNews);
+                            GetIt.I.get<ProfileMenuCubit>().moveTo(ProfileMenuStates.PointWriteNews);
                           },
                           prefixIcon: Icon(
                             UserProfileIcons.ask,
@@ -292,7 +290,7 @@ Widget buildStatus(int place, int made) {
         Expanded(
           child: Container(
             height: 115,
-            decoration: BoxDecoration(borderRadius: BorderRadius.circular(16), color: kColorWhite),
+            decoration: BoxDecoration(borderRadius: BorderRadius.circular(kBorderRadius), color: kColorWhite),
             padding: EdgeInsets.all(20),
             child: Column(
               children: [
@@ -321,7 +319,7 @@ Widget buildStatus(int place, int made) {
         Expanded(
           child: Container(
             height: 115,
-            decoration: BoxDecoration(borderRadius: BorderRadius.circular(16), color: kColorWhite),
+            decoration: BoxDecoration(borderRadius: BorderRadius.circular(kBorderRadius), color: kColorWhite),
             padding: EdgeInsets.all(20),
             child: Column(
               children: [
@@ -353,7 +351,7 @@ Widget buildAchievments(String status, double made) {
   return Container(
     decoration: BoxDecoration(
       color: kColorWhite,
-      borderRadius: BorderRadius.circular(16),
+      borderRadius: BorderRadius.circular(kBorderRadius),
     ),
     padding: EdgeInsets.only(top: 12, bottom: 12, right: 19, left: 19),
     child: Column(
@@ -430,8 +428,7 @@ Widget _buildProgressIndicator(int lastKGindex) {
           alignment: Alignment.center,
           decoration: BoxDecoration(
               color: (0 < lastKGindex) ? kColorGreen : kLightGrey,
-              borderRadius:
-                  BorderRadius.only(topLeft: Radius.circular(12), bottomLeft: Radius.circular(12))),
+              borderRadius: BorderRadius.only(topLeft: Radius.circular(12), bottomLeft: Radius.circular(12))),
           child: (0 < lastKGindex)
               ? Container()
               : Text(
@@ -486,8 +483,7 @@ Widget _buildProgressIndicator(int lastKGindex) {
           alignment: Alignment.center,
           decoration: BoxDecoration(
               color: (4 < lastKGindex) ? kColorGreen : kLightGrey,
-              borderRadius: BorderRadius.only(
-                  topRight: Radius.circular(12), bottomRight: Radius.circular(12))),
+              borderRadius: BorderRadius.only(topRight: Radius.circular(12), bottomRight: Radius.circular(12))),
           child: (4 < lastKGindex)
               ? Container()
               : Text(
@@ -501,7 +497,7 @@ Widget _buildProgressIndicator(int lastKGindex) {
 Widget buildMenu(double size) {
   return Container(
     padding: EdgeInsets.only(right: 17, left: 17, bottom: 10),
-    decoration: BoxDecoration(borderRadius: BorderRadius.circular(16), color: kColorWhite),
+    decoration: BoxDecoration(borderRadius: BorderRadius.circular(kBorderRadius), color: kColorWhite),
     child: Column(
       children: [
         buildListItem(0, "Редактировать профиль"),
@@ -517,8 +513,7 @@ Widget buildMenu(double size) {
 Widget buildListItem(int index, String text) {
   return Container(
     padding: EdgeInsets.only(top: 12, bottom: 12),
-    decoration:
-        BoxDecoration(border: Border(bottom: BorderSide(color: kColorGreyDark, width: 0.5))),
+    decoration: BoxDecoration(border: Border(bottom: BorderSide(color: kColorGreyDark, width: 0.5))),
     child: Stack(children: [
       Row(
         mainAxisAlignment: MainAxisAlignment.start,

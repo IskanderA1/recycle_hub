@@ -4,6 +4,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_svg_provider/flutter_svg_provider.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get_it/get_it.dart';
@@ -101,73 +102,71 @@ class _AuthScreenState extends State<AuthScreen> {
               return true;
             },
             child: Scaffold(
+                backgroundColor: kColorWhite,
                 body: Container(
-              color: kColorWhite,
-              height: _size.height,
-              width: _size.width,
-              child: SingleChildScrollView(
-                child: Column(
-                  //crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Stack(
-                      alignment: Alignment.bottomCenter,
+                  height: _size.height,
+                  width: _size.width,
+                  child: SingleChildScrollView(
+                    child: Column(
+                      //crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Container(
-                          alignment: Alignment.topCenter,
-                          child: Image(
-                            width: _size.width,
-                            height: _size.height * 0.40,
-                            color: Color(0xFFDBCCB6),
-                            image: Svg('assets/icons/onboarding_1/Clouds.svg'),
-                          ),
-                        ),
-                        Column(
+                        Stack(
+                          alignment: Alignment.bottomCenter,
                           children: [
                             Container(
-                              alignment: Alignment.center,
-                              child: Image(
-                                image: Svg('assets/icons/reg/reg_logo.svg'),
+                              alignment: Alignment.topCenter,
+                              padding: EdgeInsets.all(8.0),
+                              child: SvgPicture.asset(
+                                'assets/icons/onboarding_1/Clouds.svg',
+                                width: _size.width,
+                                height: _size.height * 0.40,
                               ),
                             ),
-                            Padding(
-                              padding: const EdgeInsets.only(top: 30),
-                              child: Text(
-                                'Добро пожаловать в',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  color: kColorBlack,
-                                  fontFamily: 'Gilroy',
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
+                            Column(
+                              children: [
+                                Container(
+                                  alignment: Alignment.center,
+                                  child: SvgPicture.asset('assets/icons/reg/reg_logo.svg'),
                                 ),
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Text(
-                                'RecycleHub',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  color: Color(0xFF249507),
-                                  fontFamily: 'Gilroy',
-                                  fontSize: 28,
-                                  fontWeight: FontWeight.w700,
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 30),
+                                  child: Text(
+                                    'Добро пожаловать в',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      color: kColorBlack,
+                                      fontFamily: 'Gilroy',
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
                                 ),
-                              ),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(
+                                    'RecycleHub',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      color: Color(0xFF249507),
+                                      fontFamily: 'Gilroy',
+                                      fontSize: 28,
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
                           ],
                         ),
+                        _buildEmailTF(),
+                        _buildPasswordTF(),
+                        _buildLoginBtn(),
+                        _regFromGoogleVkButtons(),
+                        _toCreateAcc(),
                       ],
                     ),
-                    _buildEmailTF(),
-                    _buildPasswordTF(),
-                    _buildLoginBtn(),
-                    _regFromGoogleVkButtons(),
-                    _toCreateAcc(),
-                  ],
-                ),
-              ),
-            )),
+                  ),
+                )),
           ),
         );
       },
@@ -188,7 +187,6 @@ class _AuthScreenState extends State<AuthScreen> {
           Container(
             alignment: Alignment.centerLeft,
             decoration: kBoxDecorationStyle,
-            height: 40.0,
             child: TextField(
               controller: loginController,
               keyboardType: TextInputType.emailAddress,
@@ -199,7 +197,7 @@ class _AuthScreenState extends State<AuthScreen> {
               ),
               decoration: InputDecoration(
                 border: InputBorder.none,
-                contentPadding: EdgeInsets.only(left: 15),
+                contentPadding: EdgeInsets.only(left: 16),
                 hintText: 'E-mail',
                 hintStyle: kHintTextStyle,
               ),
@@ -217,14 +215,12 @@ class _AuthScreenState extends State<AuthScreen> {
                   if (state is UserAuthFailed) {
                     return Text(
                       "Неверный E-mail",
-                      style: TextStyle(
-                          color: kColorRegGoogle, fontFamily: "GilroyMedium", fontSize: 14),
+                      style: TextStyle(color: kColorRegGoogle, fontFamily: "GilroyMedium", fontSize: 14),
                     );
                   }
                   return Text(
                     "",
-                    style:
-                        TextStyle(color: kColorRegGoogle, fontFamily: "GilroyMedium", fontSize: 14),
+                    style: TextStyle(color: kColorRegGoogle, fontFamily: "GilroyMedium", fontSize: 14),
                   );
                 },
               ))
@@ -250,8 +246,6 @@ class _AuthScreenState extends State<AuthScreen> {
           Container(
             alignment: Alignment.centerLeft,
             decoration: kBoxDecorationStyle,
-            height: 40.0,
-            width: 300,
             child: TextField(
               controller: passController,
               obscureText: _obscureText,
@@ -261,7 +255,7 @@ class _AuthScreenState extends State<AuthScreen> {
               ),
               decoration: InputDecoration(
                 border: InputBorder.none,
-                contentPadding: EdgeInsets.only(left: 15),
+                contentPadding: EdgeInsets.only(left: 16),
                 suffixIcon: GestureDetector(
                   onTap: () {
                     setState(() {
@@ -296,14 +290,12 @@ class _AuthScreenState extends State<AuthScreen> {
                   if (state is AuthStateFail) {
                     return Text(
                       "Неверный пароль",
-                      style: TextStyle(
-                          color: kColorRegGoogle, fontFamily: "GilroyMedium", fontSize: 14),
+                      style: TextStyle(color: kColorRegGoogle, fontFamily: "GilroyMedium", fontSize: 14),
                     );
                   }
                   return Text(
                     "",
-                    style:
-                        TextStyle(color: kColorRegGoogle, fontFamily: "GilroyMedium", fontSize: 14),
+                    style: TextStyle(color: kColorRegGoogle, fontFamily: "GilroyMedium", fontSize: 14),
                   );
                 },
               ),
@@ -342,7 +334,7 @@ class _AuthScreenState extends State<AuthScreen> {
         },
         padding: EdgeInsets.all(15.0),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(kBorderRadius),
         ),
         color: kColorGreen,
         child: Text(
@@ -362,7 +354,7 @@ class _AuthScreenState extends State<AuthScreen> {
   Container _regFromGoogleVkButtons() {
     return Container(
       width: 300,
-      padding: EdgeInsets.only(top: 15, bottom: 15),
+      padding: EdgeInsets.only(top: 16, bottom: 16),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -373,7 +365,7 @@ class _AuthScreenState extends State<AuthScreen> {
               width: 140,
               decoration: BoxDecoration(
                 border: Border.all(width: 1, color: kColorRegGoogle),
-                borderRadius: BorderRadius.circular(15),
+                borderRadius: BorderRadius.circular(kBorderRadius),
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -402,9 +394,7 @@ class _AuthScreenState extends State<AuthScreen> {
             child: Container(
               height: 50,
               width: 140,
-              decoration: BoxDecoration(
-                  border: Border.all(width: 1, color: Color(0xFF2787F5)),
-                  borderRadius: BorderRadius.circular(15)),
+              decoration: BoxDecoration(border: Border.all(width: 1, color: Color(0xFF2787F5)), borderRadius: BorderRadius.circular(kBorderRadius)),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -429,11 +419,7 @@ class _AuthScreenState extends State<AuthScreen> {
                   ),
                   Text(
                     "ВКОНТАКТЕ",
-                    style: TextStyle(
-                        color: kColorRegVK,
-                        fontSize: 13,
-                        fontFamily: 'Gilroy',
-                        fontWeight: FontWeight.w700),
+                    style: TextStyle(color: kColorRegVK, fontSize: 13, fontFamily: 'Gilroy', fontWeight: FontWeight.w700),
                   )
                 ],
               ),

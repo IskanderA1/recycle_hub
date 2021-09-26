@@ -65,8 +65,8 @@ class _OfferNewsContainerState extends State<OfferNewsContainer> {
       padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
       child: Container(
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(16), color: kColorWhite),
-        padding: EdgeInsets.all(20.0),
+            borderRadius: BorderRadius.circular(kBorderRadius), color: kColorWhite),
+        padding: EdgeInsets.all(16.0),
         child: ListView(
           shrinkWrap: true,
           children: [

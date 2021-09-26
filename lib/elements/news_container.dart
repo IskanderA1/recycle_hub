@@ -27,89 +27,89 @@ class NewsContainer extends StatelessWidget {
       },
       child: ClipRRect(
         borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(25),
-          topRight: Radius.circular(25),
+          topLeft: Radius.circular(kBorderRadius),
+          topRight: Radius.circular(kBorderRadius),
         ),
         child: Container(
           margin: EdgeInsets.only(bottom: 10),
-          height: 400,
-          child: Card(
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(16))),
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.all(
+                Radius.circular(kBorderRadius),
+              ),
+              color: kColorWhite,
+            ),
             child: Column(
               children: [
-                Hero(
-                  tag: news.id,
-                  child: Container(
-                    height: 200,
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.all(Radius.circular(16)),
-                      child: CachedNetworkImage(
-                        imageUrl: news.image ??
-                            "https://www.accenture.com/t20200128T032529Z__w__/lu-en/_acnmedia/Accenture/Redesign-Assets/DotCom/Images/Global/Thumbnail400x400/8/Accenture-australian-water-utility-blue-400x400.jpg",
-                        imageBuilder: (context, imageProvider) {
-                          return Blur(
-                            blur: 5.0,
-                            colorOpacity: 0.0,
-                            child: Container(
-                                decoration: BoxDecoration(
-                              image: DecorationImage(
-                                  image: imageProvider, fit: BoxFit.cover),
-                            )),
-                            overlay: Center(
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  image: DecorationImage(
-                                    image: imageProvider,
-                                    fit: BoxFit.contain,
+                news.image != null
+                    ? Hero(
+                        tag: news.id,
+                        child: Container(
+                          height: 200,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.all(Radius.circular(kBorderRadius)),
+                            child: CachedNetworkImage(
+                              imageUrl: news.image,
+                              imageBuilder: (context, imageProvider) {
+                                return Blur(
+                                  blur: 5.0,
+                                  colorOpacity: 0.0,
+                                  child: Container(
+                                      decoration: BoxDecoration(
+                                    image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
+                                  )),
+                                  overlay: Center(
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        image: DecorationImage(
+                                          image: imageProvider,
+                                          fit: BoxFit.contain,
+                                        ),
+                                      ),
+                                    ),
                                   ),
-                                ),
-                              ),
+                                );
+                              },
+                              placeholder: (context, url) => Center(child: CircularProgressIndicator()),
+                              errorWidget: (context, url, error) => Icon(Icons.error),
                             ),
-                          );
-                        },
-                        placeholder: (context, url) =>
-                            Center(child: CircularProgressIndicator()),
-                        errorWidget: (context, url, error) => Icon(Icons.error),
-                      ),
-                    ),
-                  ),
-                ),
+                          ),
+                        ),
+                      )
+                    : SizedBox.shrink(),
                 Expanded(
                     child: Container(
-                  padding: EdgeInsets.all(10),
+                  padding: EdgeInsets.fromLTRB(16, 16, 16, 10),
                   child: Column(
                     children: [
                       Text(
                         news.title,
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 20),
+                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
                       ),
                       SizedBox(
                         height: 5,
                       ),
-                      Wrap(children: [
-                        Text(
+                      Expanded(
+                        child: Text(
                           news.text,
                           maxLines: 5,
-                        )
-                      ]),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
                       SizedBox(
-                        height: 10,
+                        height: 16,
                       ),
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           Text(
-                            news.pubDate != null
-                                ? format.format(news.pubDate)
-                                : '20.12.2020',
+                            news.pubDate != null ? format.format(news.pubDate) : '20.12.2020',
                             style: TextStyle(color: kColorGreyLight),
                           ),
-                          Text(
+                          /* Text(
                             "Поподробнее",
                             style: TextStyle(color: kColorGreyLight),
-                          )
+                          ) */
                         ],
                       )
                     ],

@@ -16,7 +16,7 @@ class DropDownMenuChildButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-          color: kColorWhite, borderRadius: BorderRadius.circular(10)),
+          color: kColorWhite, borderRadius: BorderRadius.circular(kBorderRadius)),
       width: width,
       height: 30,
       child: Padding(

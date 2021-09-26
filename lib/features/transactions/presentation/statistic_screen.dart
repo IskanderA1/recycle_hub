@@ -3,6 +3,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get_it/get_it.dart';
+import 'package:http/retry.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:recycle_hub/bloc/cubit/profile_menu_cubit.dart';
@@ -10,6 +11,7 @@ import 'package:recycle_hub/features/transactions/domain/model/statistic_model.d
 import 'package:recycle_hub/features/transactions/domain/state/transactions_state.dart';
 import 'package:recycle_hub/features/transactions/presentation/components/drop_down_menu_button.dart';
 import 'package:recycle_hub/helpers/messager_helper.dart';
+import 'package:recycle_hub/icons/app_bar_icons_icons.dart';
 import 'package:recycle_hub/screens/tabs/map/widgets/loader_widget.dart';
 import 'package:recycle_hub/style/theme.dart';
 import 'package:menu_button/menu_button.dart';
@@ -51,8 +53,7 @@ class _StatisticScreenState extends State<StatisticScreen> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     _transactionsState ??= Provider.of<TransactionsState>(context);
-    _disposer = reaction((_) => _transactionsState.errorMessage,
-        (String message) => showMessage(context: context, message: message));
+    _disposer = reaction((_) => _transactionsState.errorMessage, (String message) => showMessage(context: context, message: message));
   }
 
   @override
@@ -74,98 +75,99 @@ class _StatisticScreenState extends State<StatisticScreen> {
           centerTitle: true,
           title: Text(
             "Статистика",
-            style: TextStyle(fontFamily: 'Gillroy'),
+            /* style: TextStyle(fontFamily: 'Gillroy'), */
           ),
           leading: GestureDetector(
             onTap: () {
               GetIt.I.get<ProfileMenuCubit>().goBack();
             },
             child: Icon(
-              Icons.arrow_back,
-              color: kColorWhite,
-              size: 35,
+              AppBarIcons.back,
+              size: 18,
             ),
           ),
         ),
         body: Container(
           height: double.infinity,
           width: double.infinity,
-          color: Color(0xFFF2F2F2),
+          color: kColorScaffold,
           child: Padding(
-            padding: const EdgeInsets.fromLTRB(15, 20, 15, 0),
+            padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
             child: Container(
               decoration: BoxDecoration(
                   color: kColorWhite,
                   borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(25),
-                      topRight: Radius.circular(25))),
+                    topLeft: Radius.circular(kBorderRadius),
+                    topRight: Radius.circular(kBorderRadius),
+                  )),
               child: Padding(
-                padding: const EdgeInsets.fromLTRB(30, 30, 30, 30),
+                padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
                 child: Column(
                   children: [
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              _currentPeriod.from.year == _currentPeriod.to.year
-                                  ? "${_currentPeriod.to.year}"
-                                  : "${_currentPeriod.from.year} - ${_currentPeriod.to.year}",
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 22,
-                                  fontFamily: 'Gillroy'),
-                            ),
-                            Text(
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                _currentPeriod.from.year == _currentPeriod.to.year
+                                    ? "${_currentPeriod.to.year}"
+                                    : "${_currentPeriod.from.year} - ${_currentPeriod.to.year}",
+                                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22, fontFamily: 'Gillroy'),
+                              ),
+                              Text(
                                 "${_currentPeriod.monthFrom} ${_currentPeriod.from.day} - ${_currentPeriod.monthTo} ${_currentPeriod.to.day}",
-                                style: TextStyle(
-                                    fontSize: 14, fontFamily: 'Gillroy')),
-                          ],
+                                style: TextStyle(fontSize: 14, fontFamily: 'Gillroy'),
+                              ),
+                            ],
+                          ),
                         ),
-                        ClipRRect(
-                          borderRadius: BorderRadius.all(Radius.circular(15)),
-                          child: MenuButton<DropDownMenuItem>(
-                            decoration: BoxDecoration(
-                                color: Color(0xFFF7F7F7),
-                                shape: BoxShape.rectangle,
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(15))),
-                            selectedItem: _currentPeriod,
-                            itemBackgroundColor: Color(0xFFF7F7F7),
-                            menuButtonBackgroundColor: Color(0xFFF7F7F7),
-                            child: DropDownMenuChildButton(
-                              selectedItem:
-                                  "${_currentPeriod.count} ${_currentPeriod.name}",
+                        Expanded(
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(kBorderRadius),
                             ),
-                            items: _datesList,
-                            itemBuilder: (DropDownMenuItem item) => Container(
-                              height: 30,
+                            child: MenuButton<DropDownMenuItem>(
                               decoration: BoxDecoration(
                                 color: Color(0xFFF7F7F7),
+                                shape: BoxShape.rectangle,
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(kBorderRadius),
+                                ),
                               ),
-                              alignment: Alignment.centerLeft,
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: 0, horizontal: 20),
-                              child: Text("${item.count} ${item.name}"),
-                            ),
-                            toggledChild: Container(
+                              selectedItem: _currentPeriod,
+                              itemBackgroundColor: Color(0xFFF7F7F7),
+                              menuButtonBackgroundColor: Color(0xFFF7F7F7),
                               child: DropDownMenuChildButton(
-                                selectedItem:
-                                    "${_currentPeriod.count} ${_currentPeriod.name}",
+                                selectedItem: "${_currentPeriod.count} ${_currentPeriod.name}",
                               ),
+                              items: _datesList,
+                              itemBuilder: (DropDownMenuItem item) => Container(
+                                height: 30,
+                                decoration: BoxDecoration(
+                                  color: Color(0xFFF7F7F7),
+                                ),
+                                alignment: Alignment.centerLeft,
+                                padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 20),
+                                child: Text("${item.count} ${item.name}"),
+                              ),
+                              toggledChild: Container(
+                                child: DropDownMenuChildButton(
+                                  selectedItem: "${_currentPeriod.count} ${_currentPeriod.name}",
+                                ),
+                              ),
+                              onItemSelected: (DropDownMenuItem item) {
+                                _transactionsState.getTransacts(item.from, item.to);
+                                setState(() {
+                                  _currentPeriod = item;
+                                });
+                              },
+                              onMenuButtonToggle: (bool isTohgle) {
+                                print(isTohgle);
+                              },
                             ),
-                            onItemSelected: (DropDownMenuItem item) {
-                              _transactionsState.getTransacts(
-                                  item.from, item.to);
-                              setState(() {
-                                _currentPeriod = item;
-                              });
-                            },
-                            onMenuButtonToggle: (bool isTohgle) {
-                              print(isTohgle);
-                            },
                           ),
                         )
                       ],
@@ -173,27 +175,36 @@ class _StatisticScreenState extends State<StatisticScreen> {
                     SizedBox(
                       height: 20,
                     ),
-                    Text(
-                      "Сколько сдал по отдельности",
-                      style:
-                          TextStyle(fontSize: 16, fontFamily: 'GillroyMedium'),
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
                     Observer(builder: (_) {
                       if (_transactionsState.state == StoreState.INIT) {
                         return Container();
-                      }
-                      if (_transactionsState.state == StoreState.LOADING) {
+                      } else if (_transactionsState.state == StoreState.LOADING) {
                         return LoaderWidget();
-                      }
-                      if (_transactionsState.state == StoreState.LOADED) {
-                        return StatisticWidget(
-                          statisticModel: _transactionsState.statisticModel,
-                          totalKG: _transactionsState.totalKG,
+                      } else if (_transactionsState.state == StoreState.LOADED) {
+                        final _count = (_transactionsState.totalKG ?? 0).round().toString();
+                        var msg = 'Вы сдали более';
+                        if (_count == '0') {
+                          msg = 'Здесь пока пусто';
+                        } else {
+                          msg = msg + ' $_count';
+                        }
+                        return Column(
+                          children: [
+                            Text(
+                              msg,
+                              style: TextStyle(fontSize: 16, fontFamily: 'GillroyMedium'),
+                            ),
+                            SizedBox(
+                              height: 20,
+                            ),
+                            StatisticWidget(
+                              statisticModel: _transactionsState.statisticModel,
+                              totalKG: _transactionsState.totalKG,
+                            ),
+                          ],
                         );
                       }
+                      return Container();
                     }),
                     SizedBox(
                       height: 20,
@@ -201,110 +212,129 @@ class _StatisticScreenState extends State<StatisticScreen> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Container(
-                          child: Stack(
-                            alignment: Alignment.centerLeft,
-                            children: [
-                              Row(
-                                children: [
-                                  SizedBox(
-                                    width: 20,
-                                  ),
-                                  Container(
-                                    height: 55,
-                                    width: 100,
-                                    decoration: BoxDecoration(
+                        Expanded(
+                          child: Container(
+                            child: Stack(
+                              fit: StackFit.passthrough,
+                              alignment: Alignment.centerLeft,
+                              children: [
+                                Row(
+                                  children: [
+                                    SizedBox(
+                                      width: 20,
+                                    ),
+                                    Container(
+                                      height: 55,
+                                      width: 100,
+                                      decoration: BoxDecoration(
                                         color: const Color(0xFFF7F7F7),
                                         borderRadius: BorderRadius.all(
-                                            Radius.circular(10))),
-                                  )
-                                ],
-                              ),
-                              Row(
-                                children: [
-                                  Container(
-                                    height: 40,
-                                    width: 40,
-                                    decoration: BoxDecoration(
+                                          Radius.circular(kBorderRadius),
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                                Row(
+                                  children: [
+                                    Container(
+                                      height: 40,
+                                      width: 40,
+                                      decoration: BoxDecoration(
                                         color: const Color(0xFFDCF4E0),
                                         borderRadius: BorderRadius.all(
-                                            Radius.circular(10))),
-                                    child: Icon(
-                                      Icons.arrow_upward,
-                                      color: kColorGreen,
-                                      size: 25,
+                                          Radius.circular(kBorderRadius),
+                                        ),
+                                      ),
+                                      child: Icon(
+                                        Icons.arrow_upward,
+                                        color: kColorGreen,
+                                        size: 25,
+                                      ),
                                     ),
-                                  ),
-                                  SizedBox(width: 10),
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text("Сдал всего",
-                                          style: TextStyle(
-                                            color: kColorGreyLight,
-                                            fontSize: 12,
-                                            fontFamily: 'Gillroy',
-                                          )),
-                                      Observer(builder: (_) {
-                                        if (_transactionsState.state ==
-                                            StoreState.INIT) {
-                                          return Container();
-                                        }
-                                        if (_transactionsState.state ==
-                                            StoreState.LOADING) {
-                                          return SpinKitWave(
-                                            color: kColorGreen,
-                                            size: 20,
-                                          );
-                                        }
-                                        if (_transactionsState.state ==
-                                            StoreState.LOADED) {
-                                          return Text(
-                                              "${_transactionsState.totalKG} кг",
-                                              style: TextStyle(
-                                                  color:
-                                                      const Color(0xFF484848),
-                                                  fontSize: 13,
+                                    SizedBox(width: 10),
+                                    Container(
+                                      width: 70,
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Observer(builder: (_) {
+                                            if (_transactionsState.state == StoreState.INIT) {
+                                              return FittedBox(
+                                                child: Text(
+                                                  "Пока пусто",
+                                                  style: TextStyle(
+                                                    color: kColorGreyLight,
+                                                    fontSize: 12,
+                                                    fontFamily: 'Gillroy',
+                                                  ),
+                                                ),
+                                              );
+                                            } else if (_transactionsState.state == StoreState.LOADING) {
+                                              return SpinKitWave(
+                                                color: kColorGreen,
+                                                size: 20,
+                                              );
+                                            } else if (_transactionsState.state == StoreState.LOADED) {
+                                              return Text(
+                                                "Вы сдали всего ${_transactionsState.totalKG} кг",
+                                                style: TextStyle(
+                                                  color: kColorGreyLight,
+                                                  fontSize: 12,
                                                   fontFamily: 'Gillroy',
-                                                  fontWeight: FontWeight.bold));
-                                        }
-                                      }),
-                                    ],
-                                  )
-                                ],
-                              )
-                            ],
+                                                ),
+                                              );
+                                            }
+                                            return Container();
+                                          }),
+                                        ],
+                                      ),
+                                    )
+                                  ],
+                                )
+                              ],
+                            ),
                           ),
                         ),
-                        Container(
+                        SizedBox(
+                          width: 20,
+                        ),
+                        Expanded(
+                          flex: 1,
                           child: Stack(
                             alignment: Alignment.centerLeft,
+                            fit: StackFit.passthrough,
                             children: [
                               Row(
                                 children: [
                                   SizedBox(
                                     width: 20,
                                   ),
-                                  Container(
-                                    height: 55,
-                                    width: 100,
-                                    decoration: BoxDecoration(
+                                  Expanded(
+                                    child: Container(
+                                      height: 55,
+                                      decoration: BoxDecoration(
                                         color: const Color(0xFFF7F7F7),
                                         borderRadius: BorderRadius.all(
-                                            Radius.circular(10))),
+                                          Radius.circular(kBorderRadius),
+                                        ),
+                                      ),
+                                    ),
                                   )
                                 ],
                               ),
                               Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
                                   Container(
                                     height: 40,
                                     width: 40,
                                     decoration: BoxDecoration(
-                                        color: const Color(0xFFF3DE77),
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(10))),
+                                      color: const Color(0xFFF3DE77),
+                                      borderRadius: BorderRadius.all(
+                                        Radius.circular(kBorderRadius),
+                                      ),
+                                    ),
                                     child: Icon(
                                       Icons.copyright,
                                       color: const Color(0xFFC8BB42),
@@ -312,41 +342,64 @@ class _StatisticScreenState extends State<StatisticScreen> {
                                     ),
                                   ),
                                   SizedBox(width: 10),
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text("Заработал",
-                                          style: TextStyle(
-                                            color: kColorGreyLight,
-                                            fontSize: 12,
-                                            fontFamily: 'Gillroy',
-                                          )),
-                                      Observer(builder: (_) {
-                                        if (_transactionsState.state ==
-                                            StoreState.INIT) {
-                                          return Container();
-                                        }
-                                        if (_transactionsState.state ==
-                                            StoreState.LOADING) {
-                                          return SpinKitWave(
-                                            color: kColorGreen,
-                                            size: 20,
-                                          );
-                                        }
-                                        if (_transactionsState.state ==
-                                            StoreState.LOADED) {
-                                          return Text(
-                                              " ${_transactionsState.summ}",
-                                              style: TextStyle(
-                                                  color:
-                                                      const Color(0xFF484848),
-                                                  fontSize: 13,
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Observer(builder: (_) {
+                                          if (_transactionsState.state == StoreState.INIT) {
+                                            return RichText(
+                                              overflow: TextOverflow.visible,
+                                              maxLines: 3,
+                                              text: TextSpan(
+                                                text: 'Пока пусто',
+                                                style: TextStyle(
+                                                  color: kColorGreyLight,
+                                                  fontSize: 12,
                                                   fontFamily: 'Gillroy',
-                                                  fontWeight: FontWeight.bold));
-                                        }
-                                      }),
-                                    ],
+                                                ),
+                                              ),
+                                            );
+                                          } else if (_transactionsState.state == StoreState.LOADING) {
+                                            return SpinKitWave(
+                                              color: kColorGreen,
+                                              size: 20,
+                                            );
+                                          } else if (_transactionsState.state == StoreState.LOADED) {
+                                            return RichText(
+                                              text: TextSpan(
+                                                text: 'Вы заработали ',
+                                                style: TextStyle(
+                                                  color: kColorGreyLight,
+                                                  fontSize: 12,
+                                                  fontFamily: 'Gillroy',
+                                                ),
+                                                children: [
+                                                  TextSpan(
+                                                    text: _transactionsState.summ.toString(),
+                                                    style: TextStyle(
+                                                      color: kColorGreyLight,
+                                                      fontSize: 12,
+                                                      fontFamily: 'Gillroy',
+                                                      fontWeight: FontWeight.bold,
+                                                    ),
+                                                  ),
+                                                  TextSpan(
+                                                    text: ' ЭкоКоинов',
+                                                    style: TextStyle(
+                                                      color: kColorGreyLight,
+                                                      fontSize: 12,
+                                                      fontFamily: 'Gillroy',
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            );
+                                          }
+                                          return Container();
+                                        }),
+                                      ],
+                                    ),
                                   )
                                 ],
                               )
@@ -368,8 +421,7 @@ class _StatisticScreenState extends State<StatisticScreen> {
 }
 
 class StatisticWidget extends StatelessWidget {
-  const StatisticWidget({Key key, @required this.statisticModel, this.totalKG})
-      : super(key: key);
+  const StatisticWidget({Key key, @required this.statisticModel, this.totalKG}) : super(key: key);
   final List<StatisticModel> statisticModel;
   final double totalKG;
 
@@ -386,8 +438,7 @@ class StatisticWidget extends StatelessWidget {
           svgId: 0,
           name: "${statisticModel[index].filterType.name}",
           kg: "${statisticModel[index].count}",
-          percent:
-              "${(statisticModel[index].count * 100 / totalKG).roundToDouble()}",
+          percent: "${(statisticModel[index].count * 100 / totalKG).roundToDouble()}",
         );
       },
     );
@@ -415,9 +466,7 @@ class StatisticListElement extends StatelessWidget {
         mainAxisSize: MainAxisSize.max,
         children: [
           Container(
-            decoration: BoxDecoration(
-                color: Color(0xFFF2F2F2),
-                borderRadius: BorderRadius.all(Radius.circular(10))),
+            decoration: BoxDecoration(color: Color(0xFFF2F2F2), borderRadius: BorderRadius.all(Radius.circular(kBorderRadius))),
             child: Padding(
               padding: const EdgeInsets.all(5.0),
               child: sIcons[svgId],
@@ -441,26 +490,17 @@ class StatisticListElement extends StatelessWidget {
                     children: [
                       Text(
                         name,
-                        style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w700,
-                            fontFamily: 'Gillroy'),
+                        style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700, fontFamily: 'Gillroy'),
                       ),
                       Column(
                         children: [
                           Text(
                             "$kgкг",
-                            style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w700,
-                                fontFamily: 'Gillroy'),
+                            style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700, fontFamily: 'Gillroy'),
                           ),
                           Text(
                             "$percent% от общего",
-                            style: TextStyle(
-                                fontSize: 10,
-                                color: kColorBlack.withOpacity(0.6),
-                                fontFamily: 'Gillroy'),
+                            style: TextStyle(fontSize: 10, color: kColorBlack.withOpacity(0.6), fontFamily: 'Gillroy'),
                           )
                         ],
                       )
@@ -499,8 +539,7 @@ class DropDownMenuItem {
   DateTime from;
   String monthFrom;
   String monthTo;
-  DropDownMenuItem(
-      {@required this.name, @required this.count, @required this.duration}) {
+  DropDownMenuItem({@required this.name, @required this.count, @required this.duration}) {
     to = DateTime.now();
     from = to.subtract(duration);
     monthFrom = DateFormat.MMMM().format(from);

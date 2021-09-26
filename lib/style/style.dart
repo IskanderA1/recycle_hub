@@ -31,7 +31,7 @@ final kLabelStyle = TextStyle(
 
 final kBoxDecorationStyle = BoxDecoration(
   color: Color(0xFFF7F7F7),
-  borderRadius: BorderRadius.circular(10),
+  borderRadius: BorderRadius.circular(kBorderRadius),
   boxShadow: [
     BoxShadow(
       color: kColorWhite,
@@ -43,7 +43,7 @@ final kBoxDecorationStyle = BoxDecoration(
 
 final kOfferPointScreenInputDecor = BoxDecoration(
   color: kColorWhite,
-  borderRadius: BorderRadius.circular(10),
+  borderRadius: BorderRadius.circular(kBorderRadius),
   border: Border.all(width:2, color: Color(0xFFECECEC)),
 );
 

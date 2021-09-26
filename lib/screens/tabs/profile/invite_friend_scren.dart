@@ -5,6 +5,7 @@ import 'package:recycle_hub/bloc/auth/auth_bloc.dart';
 import 'package:recycle_hub/bloc/cubit/profile_menu_cubit.dart';
 import 'package:recycle_hub/helpers/clipboard_helper.dart';
 import 'package:recycle_hub/helpers/network_helper.dart';
+import 'package:recycle_hub/icons/app_bar_icons_icons.dart';
 import 'package:recycle_hub/style/theme.dart';
 
 class InviteScreen extends StatefulWidget {
@@ -29,17 +30,16 @@ class _InviteScreenState extends State<InviteScreen> {
     return Scaffold(
         appBar: AppBar(
           leading: IconButton(
-            icon: Icon(Icons.arrow_back, color: kColorWhite, size: 25),
-            onPressed: () =>
-                GetIt.I.get<ProfileMenuCubit>().moveTo(ProfileMenuStates.MENU),
+            icon: Icon(
+              AppBarIcons.back,
+              color: kColorWhite,
+              size: 18,
+            ),
+            onPressed: () => GetIt.I.get<ProfileMenuCubit>().moveTo(ProfileMenuStates.MENU),
           ),
           title: Text(
             "Пригласить друга",
-            style: TextStyle(
-                color: kColorWhite,
-                fontSize: 18,
-                fontFamily: 'GillroyMedium',
-                fontWeight: FontWeight.bold),
+            /* style: TextStyle(color: kColorWhite, fontSize: 18, fontFamily: 'GillroyMedium', fontWeight: FontWeight.bold), */
           ),
           centerTitle: true,
         ),
@@ -77,9 +77,7 @@ class InviteWidget extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.fromLTRB(15, 25, 15, 0),
       child: Container(
-        decoration: BoxDecoration(
-            color: kColorWhite,
-            borderRadius: BorderRadius.all(Radius.circular(25))),
+        decoration: BoxDecoration(color: kColorWhite, borderRadius: BorderRadius.all(Radius.circular(kBorderRadius),)),
         child: Padding(
           padding: const EdgeInsets.fromLTRB(25, 20, 25, 60),
           child: Column(
@@ -87,13 +85,8 @@ class InviteWidget extends StatelessWidget {
             children: [
               RichText(
                 text: TextSpan(
-                    text:
-                        "Пригласите друзей и получайте экокоины! Больше активных рефералов - больше экокоинов!",
-                    style: TextStyle(
-                        fontFamily: 'Gillroy',
-                        fontSize: 18,
-                        color: kColorBlack,
-                        fontWeight: FontWeight.bold)),
+                    text: "Пригласите друзей и получайте экокоины! Больше активных рефералов - больше экокоинов!",
+                    style: TextStyle(fontFamily: 'Gillroy', fontSize: 18, color: kColorBlack, fontWeight: FontWeight.bold)),
                 textAlign: TextAlign.center,
               ),
               SizedBox(
@@ -120,10 +113,7 @@ class InviteWidget extends StatelessWidget {
                       padding: const EdgeInsets.all(8.0),
                       child: Text(
                         "$code",
-                        style: TextStyle(
-                            fontFamily: 'Gillroy',
-                            fontWeight: FontWeight.bold,
-                            fontSize: 18),
+                        style: TextStyle(fontFamily: 'Gillroy', fontWeight: FontWeight.bold, fontSize: 18),
                       ),
                     ),
                   ),
@@ -155,8 +145,7 @@ class InviteWidget extends StatelessWidget {
                       child: Container(
                         height: 15,
                         width: 15,
-                        decoration: BoxDecoration(
-                            color: kColorGreen, shape: BoxShape.circle),
+                        decoration: BoxDecoration(color: kColorGreen, shape: BoxShape.circle),
                       ),
                     ),
                   ),
@@ -164,8 +153,7 @@ class InviteWidget extends StatelessWidget {
                     flex: 5,
                     child: RichText(
                       text: TextSpan(
-                        text:
-                            "Ваш друг должен указать этот код при регистрации в приложении (код одноразовый)",
+                        text: "Ваш друг должен указать этот код при регистрации в приложении (код одноразовый)",
                         style: TextStyle(
                           color: kColorBlack,
                           fontFamily: 'GillroyMedium',
@@ -182,10 +170,7 @@ class InviteWidget extends StatelessWidget {
               ),
               Text(
                 "Поделитесь нашим приложением в социальных сетях",
-                style: TextStyle(
-                    fontFamily: 'GillroyMedium',
-                    fontSize: 16,
-                    fontWeight: FontWeight.w500),
+                style: TextStyle(fontFamily: 'GillroyMedium', fontSize: 16, fontWeight: FontWeight.w500),
                 textAlign: TextAlign.center,
               ),
               SizedBox(height: 50),
@@ -220,13 +205,10 @@ class InviteWidget extends StatelessWidget {
                       )),
                       onTap: () {
                         try {
-                          NetworkHelper.openUrl(
-                              'https://www.instagram.com/<INSTAGRAM_PROFILE>/',
-                              context);
+                          NetworkHelper.openUrl('https://www.instagram.com/<INSTAGRAM_PROFILE>/', context);
                         } catch (error) {
                           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                            content:
-                                Text("Не удалось открыть приложение Instagram"),
+                            content: Text("Не удалось открыть приложение Instagram"),
                           ));
                         }
                       },
@@ -243,8 +225,7 @@ class InviteWidget extends StatelessWidget {
                           NetworkHelper.openUrl('https://www.facebook.com', context);
                         } catch (error) {
                           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                            content:
-                                Text("Не удалось открыть приложение Facebook"),
+                            content: Text("Не удалось открыть приложение Facebook"),
                           ));
                         }
                       },

@@ -17,7 +17,7 @@ class QRCodeContainer extends StatelessWidget {
         decoration: BoxDecoration(
       color: kColorWhite,
       borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(25), topRight: Radius.circular(25))),
+          topLeft: Radius.circular(kBorderRadius), topRight: Radius.circular(kBorderRadius),),),
         child: Column(
     children: [
       Container(
@@ -40,7 +40,7 @@ class QRCodeContainer extends StatelessWidget {
         child: Wrap(
           children: [
             Text(
-              "Покажите этот qr код сотруднику пункта приёма и зарабатывайте баллы",
+              "Покажите этот QR-код сотруднику пункта приема, чтобы получить ЭкоКоины",
               textAlign: TextAlign.center,
               style: TextStyle(fontWeight: FontWeight.w600, fontSize: 15),
             ),

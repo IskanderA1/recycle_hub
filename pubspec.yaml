@@ -85,6 +85,7 @@ flutter:
     - svg/
     - assets/onboarding/back.png
     - assets/icons/files-transit.svg
+    - assets/icons/files-transit.svg
 
   uses-material-design: true
   fonts:
@@ -133,5 +134,9 @@ flutter:
     - family: LofOut
       fonts:
         - asset: assets/fonts/LofOut.ttf
+        
+    - family: AppBarIcons
+      fonts:
+        - asset: assets/fonts/AppBarIcons.ttf
 
     

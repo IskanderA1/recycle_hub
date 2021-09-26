@@ -55,7 +55,7 @@ class FilterCardWidgetState extends State<FilterCardWidget> {
                 width: 1,
               ),
               color: Color(0xFFF2F2F2),
-              borderRadius: BorderRadius.circular(15)),
+              borderRadius: BorderRadius.circular(kBorderRadius)),
           child: Stack(children: [
             Align(
               alignment: Alignment.topRight,

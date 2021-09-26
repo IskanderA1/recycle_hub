@@ -7,7 +7,9 @@ class CommonButton extends StatelessWidget {
       this.height = 45,
       this.width,
       this.ontap,
-      this.borderRadius = const BorderRadius.all(Radius.circular(15)),
+      this.borderRadius = const BorderRadius.all(
+        Radius.circular(16),
+      ),
       this.shape = BoxShape.rectangle,
       this.padding = const EdgeInsets.only(top: 16, bottom: 16),
       this.child});
@@ -29,8 +31,7 @@ class CommonButton extends StatelessWidget {
       child: Container(
           height: height,
           width: width,
-          decoration: BoxDecoration(
-              color: backGroundColor, borderRadius: borderRadius, shape: shape),
+          decoration: BoxDecoration(color: backGroundColor, borderRadius: borderRadius, shape: shape),
           child: Padding(
             padding: padding,
             child: child,

@@ -6,9 +6,12 @@ import 'package:recycle_hub/model/news.dart';
 class NewsList extends StatefulWidget {
   final bool onlyAdvices;
   final EdgeInsetsGeometry padding;
-  NewsList(
-      {this.onlyAdvices = false,
-      this.padding = const EdgeInsets.fromLTRB(16, 16, 16, 80)});
+  final EdgeInsetsGeometry margin;
+  NewsList({
+    this.onlyAdvices = false,
+    this.padding = const EdgeInsets.fromLTRB(16, 16, 16, 80),
+    this.margin = const EdgeInsets.all(0),
+  });
   @override
   _NewsListState createState() => _NewsListState();
 }
@@ -30,10 +33,12 @@ class _NewsListState extends State<NewsList> {
   Widget build(BuildContext context) {
     return Padding(
       padding: widget.padding,
-      child: ListView.builder(
+      child: GridView.builder(
+        padding: widget.margin,
         shrinkWrap: true,
         itemCount: newsList.length,
         controller: _scrollController,
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 1),
         itemBuilder: (context, i) {
           return NewsContainer(
             news: newsList[i],

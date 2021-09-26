@@ -70,7 +70,7 @@ class SimpleTextField extends StatelessWidget {
 
                   //labelText: labelText,
                   border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(16),
+                    borderRadius: BorderRadius.circular(kBorderRadius),
                   ),
                   /* labelStyle: const TextStyle(
                         color: kColorGreyDark,

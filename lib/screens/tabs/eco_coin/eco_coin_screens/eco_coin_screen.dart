@@ -6,7 +6,9 @@ import 'package:recycle_hub/bloc/eco_coin_menu/eco_coin_menu_cubit.dart';
 import 'package:recycle_hub/bloc/global_state_bloc.dart';
 import 'package:recycle_hub/elements/common_cell.dart';
 import 'package:recycle_hub/helpers/network_helper.dart';
+import 'package:recycle_hub/icons/app_bar_icons_icons.dart';
 import 'package:recycle_hub/icons/eco_coin_icons_icons.dart';
+import 'package:recycle_hub/icons/my_pyrchase_icons_icons.dart';
 import 'package:recycle_hub/icons/nav_bar_icons_icons.dart';
 import 'package:recycle_hub/screens/authorisation_and_registration/auth_screen.dart';
 import 'package:recycle_hub/screens/tabs/map/filter_detail_screen.dart';
@@ -36,12 +38,12 @@ class _EcoCoinScreenState extends State<EcoCoinScreen> {
       appBar: AppBar(
         title: Text(
           "ЭкоКоины",
-          style: TextStyle(fontWeight: FontWeight.w700),
+          /* style: TextStyle(fontWeight: FontWeight.w700), */
         ),
         centerTitle: true,
         leading: IconButton(
           icon: Icon(
-            NavBarIcons.menu,
+            AppBarIcons.menu,
             size: 18,
           ),
           onPressed: () {
@@ -61,7 +63,7 @@ class _EcoCoinScreenState extends State<EcoCoinScreen> {
               decoration: BoxDecoration(
                 color: kColorWhite,
                 borderRadius: BorderRadius.all(
-                  Radius.circular(25),
+                  Radius.circular(kBorderRadius),
                 ),
               ),
               child: Padding(
@@ -83,7 +85,7 @@ class _EcoCoinScreenState extends State<EcoCoinScreen> {
                     return ListView(
                       shrinkWrap: true,
                       children: [
-                        RichText(
+                        /* RichText(
                           overflow: TextOverflow.visible,
                           text: TextSpan(
                             children: [
@@ -102,19 +104,17 @@ class _EcoCoinScreenState extends State<EcoCoinScreen> {
                                 fontSize: 14,
                                 fontFamily: 'GillRoyMedium'),
                           ),
-                        ),
+                        ), */
                         MenuItemWidget(
                           name: "Магазин",
                           func: () {
                             if (state is AuthStateGuestAcc) {
                               guestButtonTap();
                             } else {
-                              GetIt.I
-                                  .get<EcoCoinMenuCubit>()
-                                  .moveTo(EcoCoinMenuItems.STORE);
+                              GetIt.I.get<EcoCoinMenuCubit>().moveTo(EcoCoinMenuItems.STORE);
                             }
                           },
-                          iconData: EcoCoinIcons.shoppingcart,
+                          iconData: MyPyrchaseIcons.shopping_bags,
                         ),
                         MenuItemWidget(
                           name: "Сдать вторсырье",
@@ -122,9 +122,7 @@ class _EcoCoinScreenState extends State<EcoCoinScreen> {
                             if (state is AuthStateGuestAcc) {
                               guestButtonTap();
                             } else {
-                              GetIt.I
-                                  .get<EcoCoinMenuCubit>()
-                                  .moveTo(EcoCoinMenuItems.GIVEGARBAGE);
+                              GetIt.I.get<EcoCoinMenuCubit>().moveTo(EcoCoinMenuItems.GIVEGARBAGE);
                             }
                           },
                           iconData: EcoCoinIcons.recyclebin,
@@ -135,9 +133,7 @@ class _EcoCoinScreenState extends State<EcoCoinScreen> {
                             if (state is AuthStateGuestAcc) {
                               guestButtonTap();
                             } else {
-                              GetIt.I
-                                  .get<EcoCoinMenuCubit>()
-                                  .moveTo(EcoCoinMenuItems.OFFERNEWPOINT);
+                              GetIt.I.get<EcoCoinMenuCubit>().moveTo(EcoCoinMenuItems.OFFERNEWPOINT);
                             }
                           },
                           iconData: EcoCoinIcons.addpointer,
@@ -148,9 +144,7 @@ class _EcoCoinScreenState extends State<EcoCoinScreen> {
                             if (state is AuthStateGuestAcc) {
                               guestButtonTap();
                             } else {
-                              GetIt.I
-                                  .get<EcoCoinMenuCubit>()
-                                  .moveTo(EcoCoinMenuItems.ANSWERQUESTS);
+                              GetIt.I.get<EcoCoinMenuCubit>().moveTo(EcoCoinMenuItems.ANSWERQUESTS);
                             }
                           },
                           iconData: EcoCoinIcons.question,
@@ -158,9 +152,7 @@ class _EcoCoinScreenState extends State<EcoCoinScreen> {
                         MenuItemWidget(
                           name: "Порекомендуйте нас друзьям",
                           func: () {
-                            NetworkHelper.openUrl(
-                                'https://play.google.com/store/apps/details?id=com.iskander.kai_mobile_app',
-                                context);
+                            NetworkHelper.openUrl('https://play.google.com/store/apps/details?id=com.iskander.kai_mobile_app', context);
                             /* if (state is AuthStateGuestAcc) {
                                     guestButtonTap();
                                   } else {
@@ -173,9 +165,7 @@ class _EcoCoinScreenState extends State<EcoCoinScreen> {
                         ),
                         MenuItemWidget(
                           name: "Оцените наше приложение\nв маркете",
-                          func: () => GetIt.I
-                              .get<EcoCoinMenuCubit>()
-                              .moveTo(EcoCoinMenuItems.FEEDBACK),
+                          func: () => GetIt.I.get<EcoCoinMenuCubit>().moveTo(EcoCoinMenuItems.FEEDBACK),
                           iconData: EcoCoinIcons.reviews,
                         )
                       ],
@@ -224,7 +214,7 @@ class MenuItemWidget extends StatelessWidget {
     return CommonCell(
       prefixIcon: Icon(
         iconData,
-        color: Color(0xFF8D8D8D),
+        color: kColorIcon,
         size: 25,
       ),
       text: name,
@@ -249,10 +239,7 @@ class MenuItemWidget extends StatelessWidget {
               overflow: TextOverflow.visible,
               text: TextSpan(
                 text: name,
-                style: TextStyle(
-                    color: kColorBlack,
-                    fontFamily: 'GillroyMedium',
-                    fontSize: 14),
+                style: TextStyle(color: kColorBlack, fontFamily: 'GillroyMedium', fontSize: 14),
               ),
             ),
             Spacer(
@@ -268,10 +255,6 @@ class MenuItemWidget extends StatelessWidget {
       ),
     );
   }
-}
-
-ecoCoinScreenAppBar() {
-  return AppBar();
 }
 
 class EcoCoinCustomPainter extends CustomPainter {
@@ -311,8 +294,7 @@ Path getClip(Size size) {
   Path path = Path();
   path.moveTo(0, 0); // Start
   path.lineTo(0, size.height * 0.15);
-  path.quadraticBezierTo(
-      size.width * 0.5, size.height * 0.3, size.width, size.height * 0.15);
+  path.quadraticBezierTo(size.width * 0.5, size.height * 0.3, size.width, size.height * 0.15);
   /*path.arcToPoint(Offset(size.width, size.height * 0.2),
       radius: Radius.circular(50), clockwise: false,
       largeArc: true);*/

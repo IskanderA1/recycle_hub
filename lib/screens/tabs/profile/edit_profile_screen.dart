@@ -4,6 +4,7 @@ import 'package:recycle_hub/api/services/user_service.dart';
 import 'package:recycle_hub/bloc/cubit/profile_menu_cubit.dart';
 import 'package:recycle_hub/elements/user_image_picker.dart';
 import 'package:recycle_hub/helpers/messager_helper.dart';
+import 'package:recycle_hub/icons/app_bar_icons_icons.dart';
 import 'package:recycle_hub/model/user_model.dart';
 import 'package:recycle_hub/screens/tabs/map/widgets/loader_widget.dart';
 import 'package:recycle_hub/style/style.dart';
@@ -65,16 +66,16 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         centerTitle: true,
         title: Text(
           "Редактировать профиль",
-          style: TextStyle(fontFamily: 'Gillroy'),
+          /* style: TextStyle(fontFamily: 'Gillroy'), */
         ),
         leading: GestureDetector(
           onTap: () {
             GetIt.I.get<ProfileMenuCubit>().goBack();
           },
           child: Icon(
-            Icons.arrow_back,
+            AppBarIcons.back,
             color: kColorWhite,
-            size: 25,
+            size: 18,
           ),
         ),
       ),
@@ -87,24 +88,27 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 onTap: () => FocusScope.of(context).unfocus(),
                 child: Container(
                   width: double.infinity,
-                  color: Color(0xFFF2F2F2),
+                  height: MediaQuery.of(context).size.height,
+                  color: kColorScaffold,
                   child: Padding(
-                    padding: const EdgeInsets.fromLTRB(15, 25, 15, 0),
+                    padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
                     child: Container(
                       decoration: BoxDecoration(
-                          color: kColorWhite,
-                          borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(25),
-                              topRight: Radius.circular(25))),
+                        color: kColorWhite,
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(kBorderRadius),
+                          topRight: Radius.circular(kBorderRadius),
+                        ),
+                      ),
                       child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
-                          Padding(
-                            padding: EdgeInsets.only(top: 30, bottom: 15),
-                            child: UserImagePicker(
-                              image: widget.user != null
-                                  ? widget.user.image
-                                  : null,
+                          Center(
+                            child: Padding(
+                              padding: EdgeInsets.only(top: 30, bottom: 15),
+                              child: UserImagePicker(
+                                image: widget.user != null ? widget.user.image : null,
+                              ),
                             ),
                           ),
                           /* Padding(
@@ -149,7 +153,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                             ),
                           ), */
                           Padding(
-                            padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+                            padding: const EdgeInsets.only(top: 8, bottom: 8, left: 16, right: 16),
                             child: EditProfileScreenTextField(
                               controller: _name,
                               hintText: "Имя",
@@ -349,25 +353,31 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           SizedBox(
                             height: 20,
                           ),
-                          GestureDetector(
-                            onTap: () {
-                              _saveUser();
-                            },
-                            child: Container(
-                              width: 300,
-                              height: 50,
-                              decoration: BoxDecoration(
+                          Padding(
+                            padding: const EdgeInsets.only(
+                              left: 16,
+                              right: 16,
+                            ),
+                            child: GestureDetector(
+                              onTap: () {
+                                _saveUser();
+                              },
+                              child: Container(
+                                width: 300,
+                                height: 50,
+                                decoration: BoxDecoration(
                                   color: kColorGreen,
                                   boxShadow: [BoxShadow(color: kColorGreyDark)],
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(15))),
-                              child: Center(
-                                child: Text("Сохранить изменения",
-                                    style: TextStyle(
-                                        fontSize: 18,
-                                        color: kColorWhite,
-                                        fontWeight: FontWeight.bold,
-                                        fontFamily: 'GillroyMedium')),
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(kBorderRadius),
+                                  ),
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    "Сохранить изменения",
+                                    style: TextStyle(fontSize: 18, color: kColorWhite, fontWeight: FontWeight.bold, fontFamily: 'GillroyMedium'),
+                                  ),
+                                ),
                               ),
                             ),
                           ),
@@ -387,11 +397,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
 class EditProfileScreenTextField extends StatelessWidget {
   const EditProfileScreenTextField(
-      {Key key,
-      @required TextEditingController controller,
-      @required this.hintText,
-      @required this.adText,
-      @required this.type})
+      {Key key, @required TextEditingController controller, @required this.hintText, @required this.adText, @required this.type})
       : _controller = controller,
         super(key: key);
 
@@ -425,9 +431,8 @@ class EditProfileScreenTextField extends StatelessWidget {
               ),
               decoration: InputDecoration(
                 border: OutlineInputBorder(
-                    borderSide: BorderSide(
-                        color: const Color(0xFFECECEC).withOpacity(0.5),
-                        width: 1)),
+                  borderSide: BorderSide(color: const Color(0xFFECECEC).withOpacity(0.5), width: 1),
+                ),
                 contentPadding: EdgeInsets.only(left: 15),
                 hintText: hintText,
                 hintStyle: kHintTextStyle,

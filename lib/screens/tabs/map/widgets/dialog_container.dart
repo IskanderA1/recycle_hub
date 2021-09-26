@@ -68,7 +68,7 @@ class DialogContainer extends StatelessWidget {
                   width: 200,
                   decoration: BoxDecoration(
                       color: kColorGreen,
-                      borderRadius: BorderRadius.circular(15)),
+                      borderRadius: BorderRadius.circular(kBorderRadius)),
                   child: Center(
                     child: Text(
                       "Понятно",

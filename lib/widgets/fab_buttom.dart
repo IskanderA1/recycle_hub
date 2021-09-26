@@ -79,7 +79,7 @@ class _BottomNavBarV2State extends State<BottomNavBarV2> {
                             showModalBottomSheetCustom(
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.vertical(
-                                  top: Radius.circular(25),
+                                  top: Radius.circular(kBorderRadius),
                                 ),
                               ),
                               context: context,

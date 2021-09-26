@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:recycle_hub/style/theme.dart';
 
 enum AnswerCellStatesEnum { Selected, Correct, Incorrect, None }
 
@@ -26,7 +27,7 @@ class AnswerCell extends StatelessWidget {
           margin: EdgeInsets.only(bottom: 7),
           alignment: Alignment.center,
           decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(50),
+              borderRadius: BorderRadius.circular(kBorderRadius),
               color: backColor,
               border: Border.all(color: Color(0xFFC9C9C9), width: 2)), 
           child: Row(

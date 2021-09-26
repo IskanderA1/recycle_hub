@@ -10,7 +10,9 @@ class CommonTextButton extends StatelessWidget {
       @required this.text,
       this.isExpanded = false,
       this.ontap,
-      this.borderRadius = const BorderRadius.all(Radius.circular(15)),
+      this.borderRadius = const BorderRadius.all(
+        Radius.circular(16),
+      ),
       this.shape = BoxShape.rectangle});
   final Color backGroundColor;
   final Color textColor;
@@ -30,10 +32,7 @@ class CommonTextButton extends StatelessWidget {
           if (ontap != null) ontap();
         },
         child: Container(
-            decoration: BoxDecoration(
-                color: backGroundColor,
-                borderRadius: borderRadius,
-                shape: shape),
+            decoration: BoxDecoration(color: backGroundColor, borderRadius: borderRadius, shape: shape),
             child: Padding(
               padding: const EdgeInsets.only(top: 16, bottom: 16),
               child: buildButton(),
@@ -47,8 +46,7 @@ class CommonTextButton extends StatelessWidget {
         child: Container(
           height: height,
           width: width,
-          decoration: BoxDecoration(
-              color: backGroundColor, shape: shape, borderRadius: borderRadius),
+          decoration: BoxDecoration(color: backGroundColor, shape: shape, borderRadius: borderRadius),
           child: buildButton(),
         ),
       );

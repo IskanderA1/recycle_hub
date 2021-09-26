@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:recycle_hub/bloc/auth/auth_bloc.dart';
 import 'package:recycle_hub/bloc/registration/registration_bloc.dart';
+import 'package:recycle_hub/icons/nav_bar_icons_icons.dart';
 import 'package:recycle_hub/style/style.dart';
 import 'package:recycle_hub/style/theme.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -47,9 +48,12 @@ class _ConfirmCodeScreenState extends State<ConfirmCodeScreen> {
             },
             child: Scaffold(
               appBar: AppBar(
-                toolbarHeight: 50,
-                backgroundColor: kColorWhite,
-                iconTheme: IconThemeData(color: kColorBlack),
+                leading: InkWell(
+                  onTap: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Icon(NavBarIcons.left),
+                ),
               ),
               body: Container(
                 height: ScreenUtil().screenHeight - 85,
@@ -60,18 +64,18 @@ class _ConfirmCodeScreenState extends State<ConfirmCodeScreen> {
                   child: Container(
                     padding: EdgeInsets.fromLTRB(15, 40, 15, 15),
                     decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(30),
+                        borderRadius: BorderRadius.circular(kBorderRadius),
                         color: kColorWhite),
                     child: Column(
                       children: [
                         Text(
                           "Введите код из письма",
                           textAlign: TextAlign.center,
-                          style: TextStyle(
+                          /* style: TextStyle(
                               color: kColorBlack,
                               fontFamily: "Gilroy",
                               fontSize: 21,
-                              fontWeight: FontWeight.w700),
+                              fontWeight: FontWeight.w700), */
                         ),
                         Spacer(
                           flex: 1,
@@ -140,7 +144,7 @@ class _ConfirmCodeScreenState extends State<ConfirmCodeScreen> {
                   width: 1,
                   color: Color(0xFFE0E0E0),
                 ),
-                borderRadius: BorderRadius.circular(10)),
+                borderRadius: BorderRadius.circular(kBorderRadius)),
             height: 50.0,
             child: Form(
               key: _tfKey,
@@ -189,7 +193,7 @@ class _ConfirmCodeScreenState extends State<ConfirmCodeScreen> {
         },
         padding: EdgeInsets.all(15.0),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(kBorderRadius),
         ),
         color: kColorGreen,
         child: Text(

@@ -6,6 +6,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:recycle_hub/bloc/marker_edit_cubit/marker_edit_cubit.dart';
 import 'package:recycle_hub/helpers/image_picker.dart';
 import 'package:recycle_hub/helpers/messager_helper.dart';
+import 'package:recycle_hub/icons/app_bar_icons_icons.dart';
 import 'package:recycle_hub/main.dart';
 import 'package:recycle_hub/style/style.dart';
 import 'package:recycle_hub/style/theme.dart';
@@ -61,16 +62,16 @@ class _ReportToErrorMarkerScreenState extends State<ReportToErrorMarkerScreen> {
         centerTitle: true,
         title: Text(
           "Сообщить об ошибке",
-          style: TextStyle(fontFamily: 'Gillroy'),
+          /* style: TextStyle(fontFamily: 'Gillroy'), */
         ),
         leading: GestureDetector(
           onTap: () {
             Navigator.pop(context);
           },
           child: Icon(
-            Icons.arrow_back,
+            AppBarIcons.back,
             color: kColorWhite,
-            size: 35,
+            size: 18,
           ),
         ),
       ),
@@ -82,7 +83,7 @@ class _ReportToErrorMarkerScreenState extends State<ReportToErrorMarkerScreen> {
             child: Container(
               decoration: BoxDecoration(
                 color: kColorWhite,
-                borderRadius: BorderRadius.all(Radius.circular(25)),
+                borderRadius: BorderRadius.all(Radius.circular(kBorderRadius),),
               ),
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(25, 20, 25, 25),

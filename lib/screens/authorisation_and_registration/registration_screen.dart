@@ -5,6 +5,7 @@ import 'package:recycle_hub/bloc/auth/auth_bloc.dart';
 import 'package:recycle_hub/bloc/registration/registration_bloc.dart';
 import 'package:recycle_hub/elements/loader.dart';
 import 'package:recycle_hub/helpers/messager_helper.dart';
+import 'package:recycle_hub/icons/nav_bar_icons_icons.dart';
 import 'package:recycle_hub/style/style.dart';
 import 'package:recycle_hub/style/theme.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -85,83 +86,81 @@ class _ReqistrationScreenState extends State<ReqistrationScreen> {
               }
             },
             child: Scaffold(
+              backgroundColor: kColorScaffold,
               appBar: AppBar(
-                toolbarHeight: 50,
-                backgroundColor: kColorWhite,
-                iconTheme: IconThemeData(color: kColorBlack),
+                leading: InkWell(
+                  onTap: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Icon(NavBarIcons.left),
+                ),
               ),
-              body: SingleChildScrollView(
-                child: Container(
-                  height: ScreenUtil().screenHeight - 85,
-                  width: ScreenUtil().screenWidth,
-                  color: Color(0xFFF2F2F2),
-                  child: Padding(
-                    padding: EdgeInsets.fromLTRB(15, 15, 15, 0),
-                    child: Container(
-                      //width: 300,
-                      //height: ScreenUtil().screenHeight - 85,
-                      padding: EdgeInsets.fromLTRB(15, 40, 15, 15),
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(30), color: kColorWhite),
-                      child: Column(
-                        children: [
-                          _nameEnterTF(),
-                          Spacer(
-                            flex: 1,
-                          ),
-                          _surnameEnterTF(),
-                          Spacer(
-                            flex: 1,
-                          ),
-                          _emailEnterTF(),
-                          Spacer(
-                            flex: 1,
-                          ),
-                          _buildPasswordTF(),
-                          Spacer(
-                            flex: 1,
-                          ),
-                          _refCodeEnterTF(),
-                          Spacer(
-                            flex: 2,
-                          ),
-                          /*StreamBuilder(
-                            stream: authBloc.subject,
-                            builder: (BuildContext ctx,
-                                AsyncSnapshot<UserResponse> snapshot) {
-                              if (snapshot.hasData) {
-                                if (snapshot.data is UserRegFailed) {
-                                  return Text(
-                                    snapshot.data.error,
-                                    style: TextStyle(
-                                        fontSize: 14, color: kColorRed),
-                                  );
-                                }
+              body: Container(
+                child: SingleChildScrollView(
+                  padding: EdgeInsets.fromLTRB(16, 16, 16, 0),
+                  child: Container(
+                    width: double.infinity,
+                    height: MediaQuery.of(context).size.height - 85,
+                    padding: EdgeInsets.fromLTRB(16, 16, 16, 16),
+                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(kBorderRadius), color: kColorWhite),
+                    child: Column(
+                      children: [
+                        _nameEnterTF(),
+                        Spacer(
+                          flex: 1,
+                        ),
+                        _surnameEnterTF(),
+                        Spacer(
+                          flex: 1,
+                        ),
+                        _emailEnterTF(),
+                        Spacer(
+                          flex: 1,
+                        ),
+                        _buildPasswordTF(),
+                        Spacer(
+                          flex: 1,
+                        ),
+                        _refCodeEnterTF(),
+                        Spacer(
+                          flex: 2,
+                        ),
+                        /*StreamBuilder(
+                          stream: authBloc.subject,
+                          builder: (BuildContext ctx,
+                              AsyncSnapshot<UserResponse> snapshot) {
+                            if (snapshot.hasData) {
+                              if (snapshot.data is UserRegFailed) {
+                                return Text(
+                                  snapshot.data.error,
+                                  style: TextStyle(
+                                      fontSize: 14, color: kColorRed),
+                                );
                               }
-                              return Text(
-                                "",
-                                style:
-                                    TextStyle(fontSize: 14, color: kColorRed),
-                              );
-                            },
-                          ),*/
-                          Spacer(
-                            flex: 2,
-                          ),
-                          _createButton(),
-                          Spacer(
-                            flex: 1,
-                          ),
-                          _toAuthScreen(),
-                          SizedBox(
-                            height: 20,
-                          ),
-                          _toConfirmScreen(),
-                          Spacer(
-                            flex: 6,
-                          )
-                        ],
-                      ),
+                            }
+                            return Text(
+                              "",
+                              style:
+                                  TextStyle(fontSize: 14, color: kColorRed),
+                            );
+                          },
+                        ),*/
+                        Spacer(
+                          flex: 2,
+                        ),
+                        _createButton(),
+                        Spacer(
+                          flex: 1,
+                        ),
+                        _toAuthScreen(),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        _toConfirmScreen(),
+                        Spacer(
+                          flex: 6,
+                        )
+                      ],
                     ),
                   ),
                 ),
@@ -190,7 +189,7 @@ class _ReqistrationScreenState extends State<ReqistrationScreen> {
                   width: 1,
                   color: Color(0xFFE0E0E0),
                 ),
-                borderRadius: BorderRadius.circular(10)),
+                borderRadius: BorderRadius.circular(kBorderRadius)),
             height: 45.0,
             child: TextField(
               controller: _name,
@@ -237,7 +236,7 @@ class _ReqistrationScreenState extends State<ReqistrationScreen> {
                   width: 1,
                   color: Color(0xFFE0E0E0),
                 ),
-                borderRadius: BorderRadius.circular(10)),
+                borderRadius: BorderRadius.circular(kBorderRadius)),
             height: 45.0,
             child: TextField(
               controller: _surname,
@@ -284,7 +283,7 @@ class _ReqistrationScreenState extends State<ReqistrationScreen> {
                   width: 1,
                   color: Color(0xFFE0E0E0),
                 ),
-                borderRadius: BorderRadius.circular(10)),
+                borderRadius: BorderRadius.circular(kBorderRadius)),
             height: 45.0,
             child: TextField(
               controller: _email,
@@ -333,7 +332,7 @@ class _ReqistrationScreenState extends State<ReqistrationScreen> {
                   width: 1,
                   color: Color(0xFFE0E0E0),
                 ),
-                borderRadius: BorderRadius.circular(10)),
+                borderRadius: BorderRadius.circular(kBorderRadius)),
             height: 45.0,
             width: 300,
             child: Form(
@@ -387,7 +386,10 @@ class _ReqistrationScreenState extends State<ReqistrationScreen> {
             Text(
               errorText,
               style: TextStyle(color: kColorRed, fontSize: 12),
-            )
+            ),
+          SizedBox(
+            height: 10,
+          ),
         ],
       ),
     );
@@ -414,7 +416,7 @@ class _ReqistrationScreenState extends State<ReqistrationScreen> {
                   width: 1,
                   color: Color(0xFFE0E0E0),
                 ),
-                borderRadius: BorderRadius.circular(10)),
+                borderRadius: BorderRadius.circular(kBorderRadius)),
             height: 45.0,
             width: 300,
             child: TextField(
@@ -451,16 +453,12 @@ class _ReqistrationScreenState extends State<ReqistrationScreen> {
             showMessage(message: "Пароль не соответствует требованиям", context: context);
             return;
           }
-          regBloc.add(RegistrationEventRegister(
-              username: _email.text,
-              name: _name.text,
-              surname: _surname.text,
-              pass: _password.text,
-              code: _refCode.text));
+          regBloc.add(
+              RegistrationEventRegister(username: _email.text, name: _name.text, surname: _surname.text, pass: _password.text, code: _refCode.text));
         },
         padding: EdgeInsets.all(15.0),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(kBorderRadius),
         ),
         color: kColorGreen,
         child: Text(

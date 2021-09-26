@@ -12,13 +12,9 @@ mixin _$TransactionsState on TransactionsStateBase, Store {
   Computed<StoreState> _$stateComputed;
 
   @override
-  StoreState get state =>
-      (_$stateComputed ??= Computed<StoreState>(() => super.state,
-              name: 'TransactionsStateBase.state'))
-          .value;
+  StoreState get state => (_$stateComputed ??= Computed<StoreState>(() => super.state, name: 'TransactionsStateBase.state')).value;
 
-  final _$_transactionsFutureAtom =
-      Atom(name: 'TransactionsStateBase._transactionsFuture');
+  final _$_transactionsFutureAtom = Atom(name: 'TransactionsStateBase._transactionsFuture');
 
   @override
   ObservableFuture<List<Transaction>> get _transactionsFuture {
@@ -48,8 +44,7 @@ mixin _$TransactionsState on TransactionsStateBase, Store {
     });
   }
 
-  final _$statisticModelAtom =
-      Atom(name: 'TransactionsStateBase.statisticModel');
+  final _$statisticModelAtom = Atom(name: 'TransactionsStateBase.statisticModel');
 
   @override
   List<StatisticModel> get statisticModel {
@@ -109,8 +104,7 @@ mixin _$TransactionsState on TransactionsStateBase, Store {
     });
   }
 
-  final _$getTransactsAsyncAction =
-      AsyncAction('TransactionsStateBase.getTransacts');
+  final _$getTransactsAsyncAction = AsyncAction('TransactionsStateBase.getTransacts');
 
   @override
   Future<List<Transaction>> getTransacts(DateTime from, DateTime to) {

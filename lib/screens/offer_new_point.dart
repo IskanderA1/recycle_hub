@@ -2,7 +2,9 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:recycle_hub/elements/common_button.dart';
 import 'package:recycle_hub/helpers/image_picker.dart';
+import 'package:recycle_hub/icons/app_bar_icons_icons.dart';
 import 'package:recycle_hub/model/new_point_model.dart';
 import 'package:recycle_hub/style/style.dart';
 import 'package:recycle_hub/style/theme.dart';
@@ -56,14 +58,14 @@ class _OfferNewPointScreenState extends State<OfferNewPointScreen> {
           centerTitle: true,
           title: Text(
             "Добавить пункт приема",
-            style: TextStyle(fontFamily: 'Gillroy'),
+            /* style: TextStyle(fontFamily: 'Gillroy'), */
           ),
           leading: GestureDetector(
             onTap: () {
               widget.onBack();
             },
             child: Icon(
-              Icons.arrow_back,
+              AppBarIcons.back,
               color: kColorWhite,
               size: 35,
             ),
@@ -72,15 +74,16 @@ class _OfferNewPointScreenState extends State<OfferNewPointScreen> {
         body: GestureDetector(
           onTap: () => FocusScope.of(context).unfocus(),
           child: Padding(
-            padding: const EdgeInsets.fromLTRB(15, 20, 15, 0),
+            padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
             child: Container(
               decoration: BoxDecoration(
                   color: kColorWhite,
                   borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(25),
-                      topRight: Radius.circular(25))),
+                    topLeft: Radius.circular(kBorderRadius),
+                    topRight: Radius.circular(kBorderRadius),
+                  )),
               child: Padding(
-                padding: const EdgeInsets.fromLTRB(25, 20, 25, 60),
+                padding: const EdgeInsets.fromLTRB(16, 16, 16, 60),
                 child: SingleChildScrollView(
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
@@ -89,10 +92,7 @@ class _OfferNewPointScreenState extends State<OfferNewPointScreen> {
                     children: [
                       Text(
                         "Заполните нужную информацию\nо пункте приёма:",
-                        style: TextStyle(
-                            fontFamily: 'Gillroy',
-                            fontWeight: FontWeight.bold,
-                            fontSize: 18),
+                        style: TextStyle(fontFamily: 'Gillroy', fontWeight: FontWeight.bold, fontSize: 18),
                         textAlign: TextAlign.center,
                       ),
                       Padding(
@@ -123,8 +123,7 @@ class _OfferNewPointScreenState extends State<OfferNewPointScreen> {
                           ? Image.file(
                               _image,
                               fit: BoxFit.scaleDown,
-                              frameBuilder: (context, child, frame,
-                                  wasSynchronouslyLoaded) {
+                              frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
                                 if (wasSynchronouslyLoaded ?? false) {
                                   return child;
                                 }
@@ -135,7 +134,7 @@ class _OfferNewPointScreenState extends State<OfferNewPointScreen> {
                                       Align(
                                         alignment: Alignment.topRight,
                                         child: Padding(
-                                          padding: EdgeInsets.all(25),
+                                          padding: EdgeInsets.all(16),
                                           child: GestureDetector(
                                             onTap: () {
                                               setState(() {
@@ -158,54 +157,41 @@ class _OfferNewPointScreenState extends State<OfferNewPointScreen> {
                       Center(
                         child: Text(
                           "Добавить фото",
-                          style: TextStyle(
-                              fontFamily: 'GillroyMedium',
-                              fontSize: 16,
-                              color: Color(0xFF8D8D8D)),
+                          style: TextStyle(fontFamily: 'GillroyMedium', fontSize: 16, color: Color(0xFF8D8D8D)),
                         ),
                       ),
                       SizedBox(height: 20),
                       Row(
                         children: [
-                          GestureDetector(
-                              onTap: () => _getImageFromStorage(),
-                              child: Container(
-                                height: 45,
-                                width: 140,
-                                decoration: BoxDecoration(
-                                    color: kColorGreen,
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(10))),
-                                child: Center(
-                                  child: Text(
+                          CommonButton(
+                              width: 145,
+                              height: 50,
+                              ontap: () => _getImageFromStorage(),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
                                     "Из устройства",
-                                    style: TextStyle(
-                                        color: kColorWhite,
-                                        fontFamily: 'GillroyMedium',
-                                        fontSize: 14),
+                                    style: TextStyle(color: kColorWhite, fontFamily: 'GillroyMedium', fontSize: 14),
                                   ),
-                                ),
+                                ],
                               )),
                           Spacer(),
-                          GestureDetector(
-                              onTap: () => _getImage(),
-                              child: Container(
-                                height: 45,
-                                width: 140,
-                                decoration: BoxDecoration(
-                                    color: const Color(0xFFECECEC),
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(10))),
-                                child: Center(
-                                  child: Text(
-                                    "Камера",
-                                    style: TextStyle(
-                                        color: kColorBlack,
-                                        fontFamily: 'GillroyMedium',
-                                        fontSize: 14),
-                                  ),
+                          CommonButton(
+                            width: 145,
+                            height: 50,
+                            backGroundColor: kColorGreyVeryLight,
+                            ontap: () => _getImage(),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  "Камера",
+                                  style: TextStyle(color: kColorBlack, fontFamily: 'GillroyMedium', fontSize: 14),
                                 ),
-                              ))
+                              ],
+                            ),
+                          )
                         ],
                       ),
                       SizedBox(height: 20),
@@ -214,35 +200,32 @@ class _OfferNewPointScreenState extends State<OfferNewPointScreen> {
                           Container(
                             height: 15,
                             width: 15,
-                            decoration: BoxDecoration(
-                                color: kColorGreen, shape: BoxShape.circle),
+                            decoration: BoxDecoration(color: kColorGreen, shape: BoxShape.circle),
                           ),
                           SizedBox(
                             width: 10,
                           ),
                           Text(
                             "Ваш запрос будет отправлен модератору",
-                            style: TextStyle(
-                                fontSize: 13, fontFamily: 'GillroyMedium'),
+                            style: TextStyle(fontSize: 13, fontFamily: 'GillroyMedium'),
                           )
                         ],
                       ),
                       SizedBox(height: 20),
-                      GestureDetector(
+                      CommonButton(
+                        width: 300,
+                        height: 50,
+                        ontap: () {},
                         child: Container(
-                          width: 300,
-                          height: 50,
                           decoration: BoxDecoration(
-                              color: kColorGreen,
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(15))),
+                            color: kColorGreen,
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(15),
+                            ),
+                          ),
                           child: Center(
                             child: Text("Отправить",
-                                style: TextStyle(
-                                    fontSize: 18,
-                                    color: kColorWhite,
-                                    fontWeight: FontWeight.bold,
-                                    fontFamily: 'GillroyMedium')),
+                                style: TextStyle(fontSize: 18, color: kColorWhite, fontWeight: FontWeight.bold, fontFamily: 'GillroyMedium')),
                           ),
                         ),
                       ),
@@ -295,9 +278,7 @@ class OfferPonitTextFields extends StatelessWidget {
                 fontSize: 16,
               ),
               decoration: InputDecoration(
-                border: OutlineInputBorder(
-                    borderSide:
-                        BorderSide(color: const Color(0xFFECECEC), width: 1)),
+                border: OutlineInputBorder(borderSide: BorderSide(color: const Color(0xFFECECEC), width: 1)),
                 contentPadding: EdgeInsets.only(left: 15),
                 hintText: hintText,
                 hintStyle: kHintTextStyle,

@@ -56,7 +56,7 @@ class MarkerCardWidget extends StatelessWidget {
         child: Container(
           decoration: BoxDecoration(
               color: marker.paybackType == 'partner' ? kColorGreen : kColorPink,
-              borderRadius: BorderRadius.circular(10)),
+              borderRadius: BorderRadius.circular(kBorderRadius)),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             crossAxisAlignment: CrossAxisAlignment.center,

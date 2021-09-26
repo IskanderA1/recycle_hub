@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:recycle_hub/icons/nav_bar_icons_icons.dart';
 import 'package:recycle_hub/style/style.dart';
 import 'package:recycle_hub/style/theme.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -32,9 +33,12 @@ class _PasswordRecoveryScreenState extends State<PasswordRecoveryScreen> {
             },
             child: Scaffold(
               appBar: AppBar(
-                toolbarHeight: 50,
-                backgroundColor: kColorWhite,
-                iconTheme: IconThemeData(color: kColorBlack),
+                leading: InkWell(
+                  onTap: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Icon(NavBarIcons.left),
+                ),
               ),
               body: Container(
                 height: ScreenUtil().screenHeight - 85,
@@ -45,18 +49,18 @@ class _PasswordRecoveryScreenState extends State<PasswordRecoveryScreen> {
                   child: Container(
                     padding: EdgeInsets.fromLTRB(15, 40, 15, 15),
                     decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(30),
+                        borderRadius: BorderRadius.circular(kBorderRadius),
                         color: kColorWhite),
                     child: Column(
                       children: [
                         Text(
                           "Создать новый пароль",
                           textAlign: TextAlign.center,
-                          style: TextStyle(
+                          /* style: TextStyle(
                               color: kColorBlack,
                               fontFamily: "Gilroy",
                               fontSize: 21,
-                              fontWeight: FontWeight.w700),
+                              fontWeight: FontWeight.w700), */
                         ),
                         Spacer(
                           flex: 2,
@@ -114,7 +118,7 @@ class _PasswordRecoveryScreenState extends State<PasswordRecoveryScreen> {
                   width: 1,
                   color: Color(0xFFE0E0E0),
                 ),
-                borderRadius: BorderRadius.circular(10)),
+                borderRadius: BorderRadius.circular(kBorderRadius)),
             height: 50,
             width: 300,
             child: TextField(
@@ -159,7 +163,7 @@ class _PasswordRecoveryScreenState extends State<PasswordRecoveryScreen> {
                   width: 1,
                   color: Color(0xFFE0E0E0),
                 ),
-                borderRadius: BorderRadius.circular(10)),
+                borderRadius: BorderRadius.circular(kBorderRadius)),
             height: 50,
             width: 300,
             child: TextField(
@@ -208,7 +212,7 @@ class _PasswordRecoveryScreenState extends State<PasswordRecoveryScreen> {
         },
         padding: EdgeInsets.all(15.0),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(kBorderRadius),
         ),
         color: kColorGreen,
         child: Text(

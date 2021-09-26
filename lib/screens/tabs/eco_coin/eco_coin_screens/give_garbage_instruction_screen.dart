@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get_it/get_it.dart';
 import 'package:recycle_hub/bloc/eco_coin_menu/eco_coin_menu_cubit.dart';
+import 'package:recycle_hub/icons/app_bar_icons_icons.dart';
 import 'package:recycle_hub/style/theme.dart';
 
 class GiveGarbageInstructionScreen extends StatefulWidget {
@@ -23,16 +24,16 @@ class _GiveGarbageInstructionScreenState
           centerTitle: true,
           title: Text(
             "Добавить пункт приема",
-            style: TextStyle(fontFamily: 'Gillroy'),
+            /* style: TextStyle(fontFamily: 'Gillroy'), */
           ),
           leading: GestureDetector(
             onTap: () {
               GetIt.I.get<EcoCoinMenuCubit>().moveTo(EcoCoinMenuItems.MENU);
             },
             child: Icon(
-              Icons.arrow_back,
-              color: kColorWhite,
-              size: 35,
+              AppBarIcons.back,
+            color: kColorWhite,
+            size: 18,
             ),
           ),
         ),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:recycle_hub/elements/common_cell.dart';
 import 'package:recycle_hub/helpers/network_helper.dart';
+import 'package:recycle_hub/icons/app_bar_icons_icons.dart';
 import 'package:recycle_hub/screens/drawers/be_partner_screen.dart';
 import 'package:recycle_hub/style/theme.dart';
 
@@ -18,16 +19,16 @@ class _PartnersListScreenState extends State<PartnersListScreen> {
         centerTitle: true,
         title: Text(
           "Партнеры",
-          style: TextStyle(fontFamily: 'Gillroy'),
+          /* style: TextStyle(fontFamily: 'Gillroy'), */
         ),
         leading: GestureDetector(
           onTap: () {
             Navigator.pop(context);
           },
           child: Icon(
-            Icons.arrow_back,
+            AppBarIcons.back,
             color: kColorWhite,
-            size: 35,
+            size: 18,
           ),
         ),
       ),

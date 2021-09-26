@@ -1,6 +1,7 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:recycle_hub/icons/nav_bar_icons_icons.dart';
 import 'package:recycle_hub/style/style.dart';
 import 'package:recycle_hub/style/theme.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -36,9 +37,12 @@ class _ForgetConfirmCodeScreenState extends State<ForgetConfirmCodeScreen> {
             },
             child: Scaffold(
               appBar: AppBar(
-                toolbarHeight: 50,
-                backgroundColor: kColorWhite,
-                iconTheme: IconThemeData(color: kColorBlack),
+                leading: InkWell(
+                  onTap: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Icon(NavBarIcons.left),
+                ),
               ),
               body: Container(
                 height: ScreenUtil().screenHeight - 85,
@@ -49,7 +53,7 @@ class _ForgetConfirmCodeScreenState extends State<ForgetConfirmCodeScreen> {
                   child: Container(
                     padding: EdgeInsets.fromLTRB(15, 40, 15, 15),
                     decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(30),
+                        borderRadius: BorderRadius.circular(kBorderRadius),
                         color: kColorWhite),
                     child: Column(
                       children: [
@@ -129,7 +133,7 @@ class _ForgetConfirmCodeScreenState extends State<ForgetConfirmCodeScreen> {
                   width: 1,
                   color: Color(0xFFE0E0E0),
                 ),
-                borderRadius: BorderRadius.circular(10)),
+                borderRadius: BorderRadius.circular(kBorderRadius)),
             height: 50.0,
             child: Form(
               key: _tfKey,
@@ -189,7 +193,7 @@ class _ForgetConfirmCodeScreenState extends State<ForgetConfirmCodeScreen> {
         },
         padding: EdgeInsets.all(15.0),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(kBorderRadius),
         ),
         color: kColorGreen,
         child: Text(

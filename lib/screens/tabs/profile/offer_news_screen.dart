@@ -3,6 +3,7 @@ import 'package:get_it/get_it.dart';
 import 'package:recycle_hub/bloc/cubit/profile_menu_cubit.dart';
 import 'package:recycle_hub/elements/news_list.dart';
 import 'package:recycle_hub/elements/offer_news_container.dart';
+import 'package:recycle_hub/icons/app_bar_icons_icons.dart';
 import 'package:recycle_hub/style/theme.dart';
 
 class OfferNewsScreen extends StatefulWidget {
@@ -19,15 +20,15 @@ class _OfferNewsScreenState extends State<OfferNewsScreen> {
       child: Scaffold(
           appBar: AppBar(
             leading: IconButton(
-                icon: Icon(Icons.arrow_back, color: kColorWhite, size: 25),
+                icon: Icon(
+                  AppBarIcons.back,
+                  color: kColorWhite,
+                  size: 18,
+                ),
                 onPressed: () => GetIt.I.get<ProfileMenuCubit>().goBack()),
             title: Text(
               "Новости",
-              style: TextStyle(
-                  color: kColorWhite,
-                  fontSize: 18,
-                  fontFamily: 'GillroyMedium',
-                  fontWeight: FontWeight.bold),
+              /* style: TextStyle(color: kColorWhite, fontSize: 18, fontFamily: 'GillroyMedium', fontWeight: FontWeight.bold), */
             ),
             bottom: TabBar(
               indicatorColor: kColorWhite,
@@ -37,22 +38,14 @@ class _OfferNewsScreenState extends State<OfferNewsScreen> {
                   padding: const EdgeInsets.all(8.0),
                   child: Text(
                     'Новость',
-                    style: TextStyle(
-                        color: kColorWhite,
-                        fontSize: 18,
-                        fontFamily: 'Gilroy',
-                        fontWeight: FontWeight.w600),
+                    style: TextStyle(color: kColorWhite, fontSize: 18, fontFamily: 'Gilroy', fontWeight: FontWeight.w600),
                   ),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Text(
                     'Новость',
-                    style: TextStyle(
-                        color: kColorWhite,
-                        fontSize: 18,
-                        fontFamily: 'Gilroy',
-                        fontWeight: FontWeight.w600),
+                    style: TextStyle(color: kColorWhite, fontSize: 18, fontFamily: 'Gilroy', fontWeight: FontWeight.w600),
                   ),
                 ),
               ],

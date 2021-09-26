@@ -5,6 +5,7 @@ import 'package:recycle_hub/bloc/eco_guide_blocs/button_switch_bloc.dart';
 import 'package:recycle_hub/bloc/eco_guide_blocs/trash_details_bloc.dart';
 import 'package:recycle_hub/bloc/eco_guide_cubit/eco_guide_cubit_cubit.dart';
 import 'package:recycle_hub/elements/loader.dart';
+import 'package:recycle_hub/icons/app_bar_icons_icons.dart';
 import 'package:recycle_hub/model/eco_guide_models/filter_response.dart';
 import 'package:recycle_hub/model/map_models.dart/accept_types.dart';
 
@@ -18,13 +19,7 @@ List<SvgPicture> containerImages = [
   SvgPicture.asset("svg/5.svg")
 ];
 
-List<String> containerTitles = [
-  "Бумага",
-  "Пластик",
-  "Стекло",
-  "Мусор",
-  "Отходы"
-];
+List<String> containerTitles = ["Бумага", "Пластик", "Стекло", "Мусор", "Отходы"];
 
 List<Tab> tabList = [];
 
@@ -48,11 +43,14 @@ class _ReferenceBookScreenState extends State<ReferenceBookScreen> {
         appBar: AppBar(
           title: Text(
             "Справочник маркировок",
-            style: TextStyle(),
           ),
           centerTitle: true,
           leading: IconButton(
-            icon: Icon(Icons.arrow_back_sharp),
+            icon: Icon(
+              AppBarIcons.back,
+              color: kColorWhite,
+              size: 18,
+            ),
             onPressed: () {
               GetIt.I.get<EcoGuideCubit>().goBack();
             },
@@ -127,32 +125,27 @@ Widget _buildContainerList(FilterResponse filterResponse, int screenIndex) {
   List<FilterType> filterModels = filterResponse.filterModels;
   print(filterModels[0].name);
   return StreamBuilder(
-      stream: switchButtonBloc.switchButtonController.stream,
-      initialData: switchButtonBloc.defaultStateButton,
-      builder: (context, AsyncSnapshot<StateButtons> snapshot) {
-        return Container(
-          alignment: Alignment.center,
-          padding: EdgeInsets.only(top: 25),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              SizedBox(
-                height: 30,
-              ),
-              _buildContainerListView(filterModels, snapshot.data, screenIndex)
-            ],
-          ),
-        );
-      });
+    stream: switchButtonBloc.switchButtonController.stream,
+    initialData: switchButtonBloc.defaultStateButton,
+    builder: (context, AsyncSnapshot<StateButtons> snapshot) {
+      return Container(
+        alignment: Alignment.center,
+        padding: EdgeInsets.only(top: 25),
+        child: Padding(
+          padding: const EdgeInsets.only(top: 30),
+          child: ContainerListView(filterModels, snapshot.data, screenIndex),
+        ),
+      );
+    },
+  );
 }
 
-class _buildContainerListView extends StatelessWidget {
+class ContainerListView extends StatelessWidget {
   List<FilterType> filterModels;
   StateButtons stateButtons;
   int screenIndex;
   Widget properties;
-  _buildContainerListView(List<FilterType> filterModels,
-      StateButtons stateButtons, int screenIndex) {
+  ContainerListView(List<FilterType> filterModels, StateButtons stateButtons, int screenIndex) {
     this.filterModels = filterModels;
     this.stateButtons = stateButtons;
     this.screenIndex = screenIndex;
@@ -192,15 +185,27 @@ class AllowedItems extends StatelessWidget {
     return Container(
       alignment: Alignment.topCenter,
       decoration: BoxDecoration(
-        color: Colors.black12,
+        color: kColorGreyVeryLight,
         borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(30), topRight: Radius.circular(30)),
+          topLeft: Radius.circular(16),
+          topRight: Radius.circular(16),
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: kColorGreyLight,
+            blurRadius: 3,
+            spreadRadius: 1.5,
+          ),
+        ],
       ),
       padding: EdgeInsets.only(left: 20, top: 10, right: 20),
       margin: EdgeInsets.only(left: 20, right: 20, top: 20),
-      height: MediaQuery.of(context).size.height - 380,
+      height: MediaQuery.of(context).size.height - 310,
       width: MediaQuery.of(context).size.width,
       child: ListView(
+        padding: const EdgeInsets.only(
+          bottom: 85,
+        ),
         children: _buildAllowedItems(allowedItems),
       ),
     );
@@ -218,8 +223,7 @@ List<Widget> _buildAllowedItems(List<String> allowedItems) {
             height: 125,
             margin: EdgeInsets.only(right: 2),
             child: Card(
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10)),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(kBorderRadius)),
               elevation: 3,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -228,10 +232,13 @@ List<Widget> _buildAllowedItems(List<String> allowedItems) {
                   Expanded(
                     flex: 3,
                     child: Wrap(
-                        alignment: WrapAlignment.center,
-                        crossAxisAlignment: WrapCrossAlignment.center,
-                        runAlignment: WrapAlignment.center,
-                        children: [Text(allowedItems[i])]),
+                      alignment: WrapAlignment.center,
+                      crossAxisAlignment: WrapCrossAlignment.center,
+                      runAlignment: WrapAlignment.center,
+                      children: [
+                        Text(allowedItems[i]),
+                      ],
+                    ),
                   )
                 ],
               ),

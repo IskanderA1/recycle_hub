@@ -3,6 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:recycle_hub/elements/common_button.dart';
 import 'package:recycle_hub/elements/common_cell.dart';
 import 'package:recycle_hub/helpers/network_helper.dart';
+import 'package:recycle_hub/icons/app_bar_icons_icons.dart';
 import 'package:recycle_hub/style/style.dart';
 import 'package:recycle_hub/style/theme.dart';
 
@@ -20,16 +21,16 @@ class _BePartnerScreenState extends State<BePartnerScreen> {
         centerTitle: true,
         title: Text(
           "Стать партнером",
-          style: TextStyle(fontFamily: 'Gillroy'),
+          /* style: TextStyle(fontFamily: 'Gillroy'), */
         ),
         leading: GestureDetector(
           onTap: () {
             Navigator.pop(context);
           },
           child: Icon(
-            Icons.arrow_back,
+            AppBarIcons.back,
             color: kColorWhite,
-            size: 35,
+            size: 18,
           ),
         ),
       ),
@@ -40,10 +41,7 @@ class _BePartnerScreenState extends State<BePartnerScreen> {
           children: [
             Text(
               'Отправьте нам сообщение в свободной форме и укажите в письме контакты, по которым с вами можно будет связаться. Как только наш модератор обработает ваш запрос, мы сразу дадим обратную связь',
-              style: TextStyle(
-                  fontFamily: 'GilroyMedium',
-                  fontSize: 14,
-                  fontWeight: FontWeight.w400),
+              style: TextStyle(fontFamily: 'GilroyMedium', fontSize: 14, fontWeight: FontWeight.w400),
             ),
             Padding(
               padding: const EdgeInsets.only(top: 16),
@@ -77,10 +75,7 @@ class _BePartnerScreenState extends State<BePartnerScreen> {
                   children: [
                     Text(
                       "Отправить",
-                      style: TextStyle(
-                          color: kColorWhite,
-                          fontWeight: FontWeight.bold,
-                          fontFamily: 'Gilroy'),
+                      style: TextStyle(color: kColorWhite, fontWeight: FontWeight.bold, fontFamily: 'Gilroy'),
                     )
                   ],
                 ),

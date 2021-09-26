@@ -5,6 +5,7 @@ import 'package:recycle_hub/bloc/cubit/profile_menu_cubit.dart';
 import 'package:recycle_hub/bloc/eco_guide_cubit/eco_guide_cubit_cubit.dart';
 import 'package:recycle_hub/bloc/nav_bar_cubit/nav_bar_cubit_cubit.dart';
 import 'package:recycle_hub/bloc/profile_bloc/profile_bloc.dart';
+import 'package:recycle_hub/icons/app_bar_icons_icons.dart';
 import 'package:recycle_hub/icons/how_to_get_coin_icons_icons.dart';
 import 'package:recycle_hub/style/style.dart';
 import 'package:recycle_hub/style/theme.dart';
@@ -33,33 +34,33 @@ class _HowToGetCoinScreenState extends State<HowToGetCoinScreen> {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: kColorWhite, size: 25),
+          icon: Icon(
+            AppBarIcons.back,
+            color: kColorWhite,
+            size: 18,
+          ),
           onPressed: () => GetIt.I.get<ProfileMenuCubit>().goBack(),
         ),
         title: Text(
           "Как заработать баллы?",
-          style: TextStyle(
-              color: kColorWhite,
-              fontSize: 18,
-              fontFamily: 'GillroyMedium',
-              fontWeight: FontWeight.bold),
+          /* style: TextStyle(color: kColorWhite, fontSize: 18, fontFamily: 'GillroyMedium', fontWeight: FontWeight.bold), */
         ),
         centerTitle: true,
       ),
       body: Container(
         color: Color(0xFFF2F2F2),
         child: Padding(
-          padding: EdgeInsets.fromLTRB(15, 15, 15, 0),
+          padding: EdgeInsets.fromLTRB(16, 16, 16, 0),
           child: Container(
             height: size.height,
             decoration: BoxDecoration(
               color: kColorWhite,
               borderRadius: BorderRadius.all(
-                Radius.circular(25),
+                Radius.circular(kBorderRadius),
               ),
             ),
             child: Padding(
-                padding: EdgeInsets.all(25),
+                padding: EdgeInsets.all(16),
                 child: RichText(
                   textAlign: TextAlign.justify,
                   text: TextSpan(
@@ -68,44 +69,29 @@ class _HowToGetCoinScreenState extends State<HowToGetCoinScreen> {
                     children: [
                       TextSpan(
                           text: _ecoCoins,
-                          style: TextStyle(
-                              fontFamily: "Gilroy",
-                              color: kColorBlack,
-                              decoration: TextDecoration.underline),
+                          style: TextStyle(fontFamily: "Gilroy", color: kColorBlack, decoration: TextDecoration.underline),
                           recognizer: TapGestureRecognizer()
                             ..onTap = () {
                               ///To eco coins
-                              GetIt.I
-                                  .get<NavBarCubit>()
-                                  .moveTo(NavBarItem.ECO_COIN);
+                              GetIt.I.get<NavBarCubit>().moveTo(NavBarItem.ECO_COIN);
                             }),
                       TextSpan(text: _text2),
                       TextSpan(
                           text: _store,
-                          style: TextStyle(
-                              fontFamily: "Gilroy",
-                              color: kColorBlack,
-                              decoration: TextDecoration.underline),
+                          style: TextStyle(fontFamily: "Gilroy", color: kColorBlack, decoration: TextDecoration.underline),
                           recognizer: TapGestureRecognizer()
                             ..onTap = () {
                               ///To store
-                              GetIt.I
-                                  .get<ProfileMenuCubit>()
-                                  .moveTo(ProfileMenuStates.STORE);
+                              GetIt.I.get<ProfileMenuCubit>().moveTo(ProfileMenuStates.STORE);
                             }),
                       TextSpan(text: _text3),
                       TextSpan(
                           text: _test,
-                          style: TextStyle(
-                              fontFamily: "Gilroy",
-                              color: kColorBlack,
-                              decoration: TextDecoration.underline),
+                          style: TextStyle(fontFamily: "Gilroy", color: kColorBlack, decoration: TextDecoration.underline),
                           recognizer: TapGestureRecognizer()
                             ..onTap = () {
                               ///To test
-                              GetIt.I
-                                  .get<ProfileMenuCubit>()
-                                  .moveTo(ProfileMenuStates.ECOTEST);
+                              GetIt.I.get<ProfileMenuCubit>().moveTo(ProfileMenuStates.ECOTEST);
                             }),
                       TextSpan(text: _text4),
                     ],

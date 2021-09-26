@@ -7,6 +7,7 @@ import 'package:recycle_hub/bloc/auth/auth_bloc.dart';
 import 'package:recycle_hub/bloc/recovery_bloc/recovery_bloc.dart';
 import 'package:recycle_hub/elements/loader.dart';
 import 'package:recycle_hub/helpers/messager_helper.dart';
+import 'package:recycle_hub/icons/nav_bar_icons_icons.dart';
 import 'package:recycle_hub/screens/authorisation_and_registration/forget_confirm_code_screen.dart';
 import 'package:recycle_hub/screens/authorisation_and_registration/password_recovery_screen.dart';
 import 'package:recycle_hub/screens/tabs/map/widgets/loader_widget.dart';
@@ -89,43 +90,36 @@ class _ChangePassScreenState extends State<ChangePassScreen> {
             },
             child: Scaffold(
               appBar: AppBar(
-                toolbarHeight: 50,
-                backgroundColor: kColorWhite,
-                iconTheme: IconThemeData(color: kColorBlack),
+                leading: InkWell(
+                  onTap: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Icon(NavBarIcons.left),
+                ),
               ),
               body: Container(
                 height: ScreenUtil().screenHeight - 85,
                 width: ScreenUtil().screenWidth,
                 color: Color(0xFFF2F2F2),
                 child: Padding(
-                  padding: EdgeInsets.fromLTRB(15, 15, 15, 0),
+                  padding: EdgeInsets.fromLTRB(16, 16, 16, 0),
                   child: Container(
-                    padding: EdgeInsets.fromLTRB(15, 40, 15, 15),
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(30),
-                        color: kColorWhite),
+                    padding: EdgeInsets.fromLTRB(16, 16, 16, 16),
+                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(kBorderRadius), color: kColorWhite),
                     child: Column(
                       children: [
                         Text(
                           "Сбросить пароль",
                           textAlign: TextAlign.center,
-                          style: TextStyle(
-                              color: kColorBlack,
-                              fontFamily: "Gilroy",
-                              fontSize: 21,
-                              fontWeight: FontWeight.w700),
+                          style: TextStyle(color: kColorBlack, fontFamily: "Gilroy", fontSize: 21, fontWeight: FontWeight.w700),
                         ),
                         Spacer(
                           flex: 1,
                         ),
                         RichText(
                             text: TextSpan(
-                                text:
-                                    "Пожалуйста, введите свой E-mail. Мы пришлем код на вашу почту, чтобы сбросить пароль.",
-                                style: TextStyle(
-                                    fontSize: 16,
-                                    fontFamily: "GilroyMedium",
-                                    color: Color(0xFF8B8B97)))),
+                                text: "Пожалуйста, введите свой E-mail. Мы пришлем код на вашу почту, чтобы сбросить пароль.",
+                                style: TextStyle(fontSize: 16, fontFamily: "GilroyMedium", color: Color(0xFF8B8B97)))),
                         Spacer(
                           flex: 2,
                         ),
@@ -135,10 +129,7 @@ class _ChangePassScreenState extends State<ChangePassScreen> {
                         ),
                         Text(
                           _isSimilarPasswords,
-                          style: TextStyle(
-                              color: kColorRegGoogle,
-                              fontFamily: "GilroyMedium",
-                              fontSize: 14),
+                          style: TextStyle(color: kColorRegGoogle, fontFamily: "GilroyMedium", fontSize: 14),
                         ),
                         BlocBuilder<AuthBloc, AuthState>(
                           buildWhen: (prevSt, newSt) {
@@ -151,8 +142,7 @@ class _ChangePassScreenState extends State<ChangePassScreen> {
                             if (state is AuthStateFail) {
                               return Text(
                                 state.error,
-                                style:
-                                    TextStyle(fontSize: 14, color: kColorRed),
+                                style: TextStyle(fontSize: 14, color: kColorRed),
                               );
                             }
                             return Text(
@@ -197,7 +187,7 @@ class _ChangePassScreenState extends State<ChangePassScreen> {
                   width: 1,
                   color: Color(0xFFE0E0E0),
                 ),
-                borderRadius: BorderRadius.circular(10)),
+                borderRadius: BorderRadius.circular(kBorderRadius)),
             height: 50.0,
             child: Form(
               key: _tfKey,
@@ -240,14 +230,12 @@ class _ChangePassScreenState extends State<ChangePassScreen> {
         elevation: 5.0,
         onPressed: () {
           if (_tfKey.currentState.validate()) {
-            GetIt.I
-                .get<RecoveryBloc>()
-                .add(RecoveryEventSendCode(username: _email.text));
+            GetIt.I.get<RecoveryBloc>().add(RecoveryEventSendCode(username: _email.text));
           }
         },
         padding: EdgeInsets.all(15.0),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(kBorderRadius),
         ),
         color: kColorGreen,
         child: Text(

@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:recycle_hub/bloc/cubit/profile_menu_cubit.dart';
 import 'package:recycle_hub/bloc/profile_bloc/profile_bloc.dart';
 import 'package:recycle_hub/features/transactions/domain/state/transactions_state.dart';
+import 'package:recycle_hub/icons/app_bar_icons_icons.dart';
 import 'package:recycle_hub/icons/my_pyrchase_icons_icons.dart';
 import 'package:recycle_hub/screens/tabs/eco_coin/eco_coin_screens/eco_coin_screen.dart';
 import 'package:recycle_hub/style/theme.dart';
@@ -23,46 +24,40 @@ class _MyPurseScreenState extends State<MyPurseScreen> {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: kColorWhite, size: 25),
+          icon: Icon(
+            AppBarIcons.back,
+            color: kColorWhite,
+            size: 18,
+          ),
           onPressed: () => GetIt.I.get<ProfileMenuCubit>().goBack(),
         ),
         title: Text(
           "Кошелек",
-          style: TextStyle(
-              color: kColorWhite,
-              fontSize: 18,
-              fontFamily: 'GillroyMedium',
-              fontWeight: FontWeight.bold),
+          /* style: TextStyle(color: kColorWhite, fontSize: 18, fontFamily: 'GillroyMedium', fontWeight: FontWeight.bold), */
         ),
         centerTitle: true,
       ),
       body: Container(
         color: Color(0xFFF2F2F2),
         child: Padding(
-          padding: EdgeInsets.fromLTRB(15, 15, 15, 0),
+          padding: EdgeInsets.fromLTRB(16, 16, 16, 0),
           child: Container(
               height: size.height,
-              decoration: BoxDecoration(
-                  color: kColorWhite,
-                  borderRadius: BorderRadius.all(Radius.circular(25))),
+              decoration: BoxDecoration(color: kColorWhite, borderRadius: BorderRadius.all(Radius.circular(kBorderRadius),)),
               child: Padding(
-                padding: EdgeInsets.all(25),
+                padding: EdgeInsets.all(16),
                 child: Column(
                   children: [
                     MenuItemWidget(
                       name: "Магазин",
-                      func: () => GetIt.I
-                          .get<ProfileMenuCubit>()
-                          .moveTo(ProfileMenuStates.STORE),
+                      func: () => GetIt.I.get<ProfileMenuCubit>().moveTo(ProfileMenuStates.STORE),
                       iconData: MyPyrchaseIcons.shopping_bags,
                     ),
                     EcoCoinHorisontalDivider(),
                     MenuItemWidget(
                       name: "Мои покупки",
                       func: () {
-                        GetIt.I
-                            .get<ProfileMenuCubit>()
-                            .moveTo(ProfileMenuStates.MYPURCHASES);
+                        GetIt.I.get<ProfileMenuCubit>().moveTo(ProfileMenuStates.MYPURCHASES);
                       },
                       iconData: MyPyrchaseIcons.exchange,
                     ),
@@ -70,9 +65,7 @@ class _MyPurseScreenState extends State<MyPurseScreen> {
                     MenuItemWidget(
                       name: "История пополнений",
                       func: () async {
-                        GetIt.I
-                            .get<ProfileMenuCubit>()
-                            .moveTo(ProfileMenuStates.TOPUPSHISTORY);
+                        GetIt.I.get<ProfileMenuCubit>().moveTo(ProfileMenuStates.TOPUPSHISTORY);
                       },
                       iconData: MyPyrchaseIcons.shopping_cart,
                     ),

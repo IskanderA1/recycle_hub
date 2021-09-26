@@ -95,7 +95,7 @@ class QuestionContainerAnswered extends StatelessWidget {
           height: 10,
         ),
         Container(
-            padding: EdgeInsets.all(15),
+            padding: EdgeInsets.all(16),
             child: ListView(
               shrinkWrap: true,
               physics: ClampingScrollPhysics(),

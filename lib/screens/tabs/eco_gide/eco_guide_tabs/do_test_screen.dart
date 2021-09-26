@@ -6,6 +6,8 @@ import 'package:recycle_hub/bloc/eco_test_bloc/eco_test_bloc.dart';
 import 'package:recycle_hub/elements/question_container.dart';
 import 'package:recycle_hub/elements/question_container_answered.dart';
 import 'package:recycle_hub/helpers/messager_helper.dart';
+import 'package:recycle_hub/icons/app_bar_icons_icons.dart';
+import 'package:recycle_hub/style/theme.dart';
 
 class TestScreen extends StatefulWidget {
   final Function onBackPressed;
@@ -27,7 +29,11 @@ class _TestScreenState extends State<TestScreen> {
         title: Text("Пройти Тест"),
         centerTitle: true,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back_sharp),
+          icon: Icon(
+            AppBarIcons.back,
+            color: kColorWhite,
+            size: 18,
+          ),
           onPressed: () {
             if (widget.onBackPressed != null) {
               widget.onBackPressed();
@@ -73,9 +79,7 @@ class _TestScreenState extends State<TestScreen> {
               EcoTestContinueButton(
                 btnText: 'Ответить',
                 onTap: () {
-                  GetIt.I
-                      .get<EcoTestBloc>()
-                      .add(EcoTestAnswerToQuestionEvent());
+                  GetIt.I.get<EcoTestBloc>().add(EcoTestAnswerToQuestionEvent());
                 },
               ),
             ]);
@@ -113,12 +117,10 @@ class _TestScreenState extends State<TestScreen> {
             );
           } else if (state is EcoTestStateCompleted) {
             String resultStr;
-            if (state.result.isAttemptSuccess != null &&
-                state.result.isAttemptSuccess) {
+            if (state.result.isAttemptSuccess != null && state.result.isAttemptSuccess) {
               resultStr = 'Ура, вы прошли тест!';
             } else {
-              resultStr =
-                  'Повторите попытку позже, вы получили ${state.gotPoints} из ${state.currentAttempt.points}';
+              resultStr = 'Повторите попытку позже, вы получили ${state.gotPoints} из ${state.currentAttempt.points}';
             }
             return Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -169,7 +171,7 @@ class EcoTestContinueButton extends StatelessWidget {
         child: Container(
           height: 50,
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(15),
+            borderRadius: BorderRadius.circular(kBorderRadius),
             color: Color(0xFF249507),
           ),
           padding: EdgeInsets.all(15),

@@ -6,16 +6,12 @@ import 'package:recycle_hub/bloc/auth/auth_bloc.dart';
 import 'package:recycle_hub/bloc/eco_guide_blocs/eco_menu_bloc.dart';
 import 'package:recycle_hub/bloc/eco_guide_cubit/eco_guide_cubit_cubit.dart';
 import 'package:recycle_hub/elements/common_cell.dart';
+import 'package:recycle_hub/icons/app_bar_icons_icons.dart';
 import 'package:recycle_hub/icons/eco_guide_icons_icons.dart';
 import 'package:recycle_hub/icons/nav_bar_icons_icons.dart';
 import '../../../../style/theme.dart';
 
-List<String> titles = [
-  "Виды отходов",
-  "Справочник маркировок",
-  "Советы для экономии",
-  "Пройти тест"
-];
+List<String> titles = ["Виды отходов", "Справочник маркировок", "Советы для экономии", "Пройти тест"];
 
 List<IconData> icons = [
   EcoGuideIcons.recyclebin,
@@ -43,7 +39,7 @@ class _MainEcoGuideScreenState extends State<MainEcoGuideScreen> {
         appBar: AppBar(
           leading: IconButton(
             icon: Icon(
-              NavBarIcons.menu,
+              AppBarIcons.menu,
               size: 18,
             ),
             onPressed: () {
@@ -52,11 +48,11 @@ class _MainEcoGuideScreenState extends State<MainEcoGuideScreen> {
           ),
           title: Text(
             "ЭкоГид",
-            style: TextStyle(
+            /* style: TextStyle(
               fontWeight: FontWeight.w700,
               fontFamily: 'Gilroy',
               fontSize: 20,
-            ),
+            ), */
           ),
           centerTitle: true,
           iconTheme: IconThemeData(size: 1),
@@ -70,15 +66,17 @@ class _MainEcoGuideScreenState extends State<MainEcoGuideScreen> {
             return Container(
               height: _size.height - 26,
               width: _size.width,
-              margin: EdgeInsets.only(left: 20, right: 20, top: 20),
+              margin: EdgeInsets.all(16),
               decoration: BoxDecoration(
-                  color: kColorWhite, borderRadius: BorderRadius.circular(16)),
+                color: kColorWhite,
+                borderRadius: BorderRadius.circular(kBorderRadius),
+              ),
               padding: EdgeInsets.all(16),
               child: Column(
                 children: [
                   Container(
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: BorderRadius.circular(kBorderRadius),
                       color: kColorGreyVeryLight,
                     ),
                     child: TextField(
@@ -105,13 +103,11 @@ class _MainEcoGuideScreenState extends State<MainEcoGuideScreen> {
                     children: [
                       CommonCell(
                         onTap: () {
-                          GetIt.I
-                              .get<EcoGuideCubit>()
-                              .moveTo(EcoGuideMenuItem.values[0]);
+                          GetIt.I.get<EcoGuideCubit>().moveTo(EcoGuideMenuItem.values[0]);
                         },
                         prefixIcon: Icon(
                           icons[0],
-                          color: kColorGreyDark,
+                          color: kColorIcon,
                           size: 25,
                         ),
                         text: 'Виды отходов',
@@ -119,13 +115,11 @@ class _MainEcoGuideScreenState extends State<MainEcoGuideScreen> {
                       ),
                       CommonCell(
                         onTap: () {
-                          GetIt.I
-                              .get<EcoGuideCubit>()
-                              .moveTo(EcoGuideMenuItem.values[1]);
+                          GetIt.I.get<EcoGuideCubit>().moveTo(EcoGuideMenuItem.values[1]);
                         },
                         prefixIcon: Icon(
                           icons[0],
-                          color: kColorGreyDark,
+                          color: kColorIcon,
                           size: 25,
                         ),
                         text: 'Справочник маркировок',
@@ -133,32 +127,28 @@ class _MainEcoGuideScreenState extends State<MainEcoGuideScreen> {
                       ),
                       CommonCell(
                         onTap: () {
-                          GetIt.I
-                              .get<EcoGuideCubit>()
-                              .moveTo(EcoGuideMenuItem.values[2]);
+                          GetIt.I.get<EcoGuideCubit>().moveTo(EcoGuideMenuItem.values[2]);
                         },
                         prefixIcon: Icon(
                           icons[2],
-                          color: kColorGreyDark,
+                          color: kColorIcon,
                           size: 25,
                         ),
                         text: 'Советы для экономии',
-                        arrowColor: kColorGreyDark,
+                        arrowColor: kColorIcon,
                       ),
                       if (state is AuthStateLogedIn)
                         CommonCell(
                           onTap: () {
-                            GetIt.I
-                                .get<EcoGuideCubit>()
-                                .moveTo(EcoGuideMenuItem.values[3]);
+                            GetIt.I.get<EcoGuideCubit>().moveTo(EcoGuideMenuItem.values[3]);
                           },
                           prefixIcon: Icon(
                             icons[3],
-                            color: kColorGreyDark,
+                            color: kColorIcon,
                             size: 25,
                           ),
                           text: 'Пройти тест',
-                          arrowColor: kColorGreyDark,
+                          arrowColor: kColorIcon,
                         ),
                     ],
                   ),
@@ -179,9 +169,7 @@ Widget buildBtn(String text, int index) {
     },
     child: Container(
       padding: EdgeInsets.only(top: 16, bottom: 16),
-      decoration: BoxDecoration(
-          border:
-              Border(bottom: BorderSide(color: kColorGreyLight, width: 0.5))),
+      decoration: BoxDecoration(border: Border(bottom: BorderSide(color: kColorGreyLight, width: 0.5))),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -199,10 +187,7 @@ Widget buildBtn(String text, int index) {
               ),
               Text(
                 text,
-                style: TextStyle(
-                    color: kColorBlack,
-                    fontSize: 17,
-                    fontWeight: FontWeight.w500),
+                style: TextStyle(color: kColorBlack, fontSize: 17, fontWeight: FontWeight.w500),
               )
             ],
           ),

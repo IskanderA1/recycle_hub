@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:recycle_hub/elements/common_cell.dart';
+import 'package:recycle_hub/icons/app_bar_icons_icons.dart';
 import 'package:recycle_hub/style/theme.dart';
 import 'about_developers_screen.dart';
 
@@ -16,16 +17,15 @@ class _AboutAppScreenState extends State<AboutAppScreen> {
         centerTitle: true,
         title: Text(
           "О приложении",
-          style: TextStyle(fontFamily: 'Gillroy'),
+          /* style: TextStyle(fontFamily: 'Gillroy'), */
         ),
         leading: GestureDetector(
           onTap: () {
             Navigator.pop(context);
           },
           child: Icon(
-            Icons.arrow_back,
-            color: kColorWhite,
-            size: 35,
+            AppBarIcons.back,
+            size: 18,
           ),
         ),
       ),

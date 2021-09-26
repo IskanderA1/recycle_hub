@@ -10,6 +10,7 @@ import 'package:recycle_hub/bloc/nav_bar_cubit/nav_bar_cubit_cubit.dart';
 import 'package:recycle_hub/elements/common_button.dart';
 import 'package:recycle_hub/elements/common_text_button.dart';
 import 'package:recycle_hub/features/transactions/domain/state/transactions_admin_panel_state.dart/transactions_admin_panel_state.dart';
+import 'package:recycle_hub/icons/app_bar_icons_icons.dart';
 import 'package:recycle_hub/style/theme.dart';
 
 class AdminScannerScreen extends StatefulWidget {
@@ -42,15 +43,19 @@ class _AdminScannerScreenState extends State<AdminScannerScreen> {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-            icon: Icon(Icons.arrow_back, color: kColorWhite, size: 25),
+            icon: Icon(
+              AppBarIcons.back,
+              size: 18,
+            ),
             onPressed: () => GetIt.I.get<NavBarCubit>().goBack()),
         title: Text(
           "QR Сканнер",
-          style: TextStyle(
-              color: kColorWhite,
-              fontSize: 18,
-              fontFamily: 'GillroyMedium',
-              fontWeight: FontWeight.bold),
+          /* style: TextStyle(
+            color: kColorWhite,
+            fontSize: 18,
+            fontFamily: 'GillroyMedium',
+            fontWeight: FontWeight.bold,
+          ), */
         ),
         centerTitle: true,
       ),
@@ -59,8 +64,7 @@ class _AdminScannerScreenState extends State<AdminScannerScreen> {
           QRView(
             key: qrKey,
             onQRViewCreated: _onQRViewCreated,
-            overlay: QrScannerOverlayShape(
-                borderColor: kColorGreen, borderWidth: 4, cutOutSize: 300),
+            overlay: QrScannerOverlayShape(borderColor: kColorGreen, borderWidth: 4, cutOutSize: 300),
           ),
           Column(
             mainAxisAlignment: MainAxisAlignment.end,
@@ -86,12 +90,12 @@ class _AdminScannerScreenState extends State<AdminScannerScreen> {
                         color: kColorWhite,
                         size: 32,
                       ),
-                      ontap: (){
+                      ontap: () {
                         controller.toggleFlash();
                       },
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(left:16),
+                      padding: const EdgeInsets.only(left: 16),
                       child: CommonButton(
                         width: 50,
                         height: 50,
@@ -104,7 +108,7 @@ class _AdminScannerScreenState extends State<AdminScannerScreen> {
                           color: kColorWhite,
                           size: 32,
                         ),
-                        ontap: (){
+                        ontap: () {
                           reassemble();
                         },
                       ),
@@ -130,8 +134,7 @@ class _AdminScannerScreenState extends State<AdminScannerScreen> {
         _scanned = true;
       });
       print(scanData.code);
-      Provider.of<AdminTransactionsState>(context, listen: false)
-          .saveUserToken(scanData.code);
+      Provider.of<AdminTransactionsState>(context, listen: false).saveUserToken(scanData.code);
     });
   }
 

@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get_it/get_it.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:recycle_hub/bloc/eco_coin_menu/eco_coin_menu_cubit.dart';
+import 'package:recycle_hub/icons/app_bar_icons_icons.dart';
 import 'package:recycle_hub/model/map_models.dart/contact_model.dart';
 import 'package:recycle_hub/model/map_models.dart/coord.dart';
 import 'package:recycle_hub/style/style.dart';
@@ -60,16 +61,16 @@ class _EcoOfferNewPointScreenState extends State<EcoOfferNewPointScreen> {
           centerTitle: true,
           title: Text(
             "Добавить пункт приема",
-            style: TextStyle(fontFamily: 'Gillroy'),
+            /* style: TextStyle(fontFamily: 'Gillroy'), */
           ),
           leading: GestureDetector(
             onTap: () {
               GetIt.I.get<EcoCoinMenuCubit>().moveTo(EcoCoinMenuItems.MENU);
             },
             child: Icon(
-              Icons.arrow_back,
-              color: kColorWhite,
-              size: 35,
+             AppBarIcons.back,
+            color: kColorWhite,
+            size: 18,
             ),
           ),
         ),
@@ -86,8 +87,8 @@ class _EcoOfferNewPointScreenState extends State<EcoOfferNewPointScreen> {
                   decoration: BoxDecoration(
                       color: kColorWhite,
                       borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(25),
-                          topRight: Radius.circular(25))),
+                          topLeft: Radius.circular(kBorderRadius),
+                          topRight: Radius.circular(kBorderRadius),)),
                   child: Padding(
                     padding: const EdgeInsets.fromLTRB(30, 30, 30, 30),
                     child: Column(

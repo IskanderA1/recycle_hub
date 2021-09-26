@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg_provider/flutter_svg_provider.dart';
+import 'package:recycle_hub/icons/app_bar_icons_icons.dart';
 import 'package:recycle_hub/style/theme.dart';
 
 class AboutProjectScreen extends StatefulWidget {
@@ -15,16 +16,15 @@ class _AboutProjectScreenState extends State<AboutProjectScreen> {
         centerTitle: true,
         title: Text(
           "О проекте",
-          style: TextStyle(fontFamily: 'Gillroy'),
+          /* style: TextStyle(fontFamily: 'Gillroy'), */
         ),
         leading: GestureDetector(
           onTap: () {
             Navigator.pop(context);
           },
           child: Icon(
-            Icons.arrow_back,
-            color: kColorWhite,
-            size: 35,
+            AppBarIcons.back,
+            size: 18,
           ),
         ),
       ),
@@ -44,10 +44,7 @@ class _AboutProjectScreenState extends State<AboutProjectScreen> {
               child: Text(
                 "О приложении RecycleHub",
                 textAlign: TextAlign.center,
-                style: TextStyle(
-                    fontSize: 18,
-                    fontFamily: 'Gilroy',
-                    fontWeight: FontWeight.bold),
+                style: TextStyle(fontSize: 18, fontFamily: 'Gilroy', fontWeight: FontWeight.bold),
               ),
             ),
             Text(

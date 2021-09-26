@@ -55,7 +55,7 @@ class CommonCell extends StatelessWidget {
                 alignment: Alignment.centerRight,
                 child: Icon(
                   Icons.arrow_forward_ios_sharp,
-                  color: kLightGrey,
+                  color: kColorIcon,
                   size: 20,
                 ),
               )

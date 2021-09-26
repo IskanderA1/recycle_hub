@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:recycle_hub/elements/common_cell.dart';
 import 'package:recycle_hub/helpers/network_helper.dart';
+import 'package:recycle_hub/icons/app_bar_icons_icons.dart';
 import 'package:recycle_hub/style/theme.dart';
 
 class ContactsScreen extends StatefulWidget {
@@ -13,20 +14,21 @@ class _ContactsScreenState extends State<ContactsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: kColorWhite,
       appBar: AppBar(
         centerTitle: true,
         title: Text(
           "Контакты",
-          style: TextStyle(fontFamily: 'Gillroy'),
+          /* style: TextStyle(fontFamily: 'Gillroy'), */
         ),
         leading: GestureDetector(
           onTap: () {
             Navigator.pop(context);
           },
           child: Icon(
-            Icons.arrow_back,
+            AppBarIcons.back,
             color: kColorWhite,
-            size: 35,
+            size: 18,
           ),
         ),
       ),
@@ -35,26 +37,22 @@ class _ContactsScreenState extends State<ContactsScreen> {
         child: ListView(
           shrinkWrap: true,
           children: [
-            Padding(
+            /* Padding(
               padding: const EdgeInsets.only(top: 16),
               child: Text(
                 "Наши контакты",
-                style: TextStyle(
-                    fontSize: 18,
-                    fontFamily: 'Gilroy',
-                    fontWeight: FontWeight.bold),
+                style: TextStyle(fontSize: 18, fontFamily: 'Gilroy', fontWeight: FontWeight.bold),
               ),
-            ),
-            CommonCell(
+            ), */
+           /*  CommonCell(
               prefixIcon: Icon(
                 Icons.phone_outlined,
                 size: 25,
                 color: kColorGreyLight,
               ),
               text: '+7 (999) 999-99-99',
-              onTap: () {
-              },
-            ),
+              onTap: () {},
+            ), */
             CommonCell(
               prefixIcon: Icon(
                 Icons.email_outlined,
@@ -66,16 +64,13 @@ class _ContactsScreenState extends State<ContactsScreen> {
                 NetworkHelper.openUrl('example@gmail.com', context);
               },
             ),
-            Padding(
+            /* Padding(
               padding: const EdgeInsets.only(top: 16),
               child: Text(
                 "Наш сайт",
-                style: TextStyle(
-                    fontSize: 18,
-                    fontFamily: 'Gilroy',
-                    fontWeight: FontWeight.bold),
+                style: TextStyle(fontSize: 18, fontFamily: 'Gilroy', fontWeight: FontWeight.bold),
               ),
-            ),
+            ), */
             CommonCell(
               prefixIcon: Icon(
                 Icons.link,
@@ -87,16 +82,13 @@ class _ContactsScreenState extends State<ContactsScreen> {
                 NetworkHelper.openUrl('www.recyclehub.ru', context);
               },
             ),
-            Padding(
+            /* Padding(
               padding: const EdgeInsets.only(top: 16),
               child: Text(
                 "Мы в соц-сетях",
-                style: TextStyle(
-                    fontSize: 18,
-                    fontFamily: 'Gilroy',
-                    fontWeight: FontWeight.bold),
+                style: TextStyle(fontSize: 18, fontFamily: 'Gilroy', fontWeight: FontWeight.bold),
               ),
-            ),
+            ), */
             CommonCell(
               prefixIcon: FaIcon(
                 FontAwesomeIcons.vk,
@@ -116,8 +108,7 @@ class _ContactsScreenState extends State<ContactsScreen> {
               ),
               text: "Инстаграм",
               onTap: () {
-                NetworkHelper.openUrl(
-                    'https://instagram.com/recyclehub.ru', context);
+                NetworkHelper.openUrl('https://instagram.com/recyclehub.ru', context);
               },
             ),
             CommonCell(

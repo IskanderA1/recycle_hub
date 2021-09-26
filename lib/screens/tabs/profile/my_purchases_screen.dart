@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:recycle_hub/api/services/store_service.dart';
 import 'package:recycle_hub/api/services/user_service.dart';
 import 'package:recycle_hub/bloc/cubit/profile_menu_cubit.dart';
+import 'package:recycle_hub/icons/app_bar_icons_icons.dart';
 import 'package:recycle_hub/model/purchase.dart';
 import 'package:recycle_hub/screens/tabs/map/widgets/loader_widget.dart';
 import 'purchase_detail_screen.dart';
@@ -21,25 +22,28 @@ class _MyPurchasesScreenState extends State<MyPurchasesScreen> {
   List<Purchase> list = StoreService().purchases;
 
   ListView cardsList;
+  ScrollController scrollController;
 
   @override
   void initState() {
     super.initState();
     cardsList = ListView.builder(
-        shrinkWrap: true,
-        itemCount: list.length,
-        padding: EdgeInsets.all(16),
-        itemBuilder: (BuildContext context, int i) {
-          return GestureDetector(
-              onTap: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) =>
-                          PurchaseDetailScreen(purchase: list[i]))),
-              child: PurchaseCell(
-                purchase: list[i],
-              ));
-        });
+      controller: scrollController,
+      shrinkWrap: true,
+      itemCount: list.length,
+      padding: EdgeInsets.only(
+        bottom: 80,
+      ),
+      itemBuilder: (BuildContext context, int i) {
+        return GestureDetector(
+          onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => PurchaseDetailScreen(purchase: list[i]))),
+          child: PurchaseCell(
+            purchase: list[i],
+          ),
+        );
+      },
+    );
+    scrollController = ScrollController();
   }
 
   @override
@@ -47,21 +51,21 @@ class _MyPurchasesScreenState extends State<MyPurchasesScreen> {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: kColorWhite, size: 25),
+          icon: Icon(
+            AppBarIcons.back,
+            color: kColorWhite,
+            size: 18,
+          ),
           onPressed: () => GetIt.I.get<ProfileMenuCubit>().goBack(),
         ),
         title: Text(
           "Мои покупки",
-          style: TextStyle(
-              color: kColorWhite,
-              fontSize: 18,
-              fontFamily: 'GillroyMedium',
-              fontWeight: FontWeight.bold),
+          /* style: TextStyle(color: kColorWhite, fontSize: 18, fontFamily: 'GillroyMedium', fontWeight: FontWeight.bold), */
         ),
         centerTitle: true,
       ),
-      backgroundColor: kColorGreyVeryLight,
-      body: SingleChildScrollView(child: cardsList),
+      backgroundColor: kColorScaffold,
+      body: Padding(padding: EdgeInsets.fromLTRB(16, 0, 16, 0), child: cardsList),
     );
   }
 }
@@ -76,13 +80,13 @@ class PurchaseCell extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(Radius.circular(15)),
+        borderRadius: BorderRadius.all(
+          Radius.circular(kBorderRadius),
+        ),
       ),
       child: Container(
         padding: EdgeInsets.fromLTRB(16, 8, 16, 8),
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.all(Radius.circular(15)),
-            color: kColorWhite),
+        decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(15)), color: kColorWhite),
         child: Row(
           children: [
             Expanded(
@@ -95,15 +99,12 @@ class PurchaseCell extends StatelessWidget {
                     children: [
                       Text(
                         "Сумма покупки:",
-                        style: const TextStyle(
-                            color: kColorGreyLight,
-                            fontFamily: 'GillroyMedium'),
+                        style: const TextStyle(color: kColorGreyLight, fontFamily: 'GillroyMedium'),
                       ),
                       Spacer(),
                       Text(
                         "${purchase.amount}",
-                        style: const TextStyle(
-                            color: kColorBlack, fontFamily: 'GillroyMedium'),
+                        style: const TextStyle(color: kColorBlack, fontFamily: 'GillroyMedium'),
                       ),
                     ],
                   ),
@@ -113,21 +114,15 @@ class PurchaseCell extends StatelessWidget {
                     children: [
                       Text(
                         "Осталось:",
-                        style: const TextStyle(
-                            color: kColorGreyLight,
-                            fontFamily: 'GillroyMedium'),
+                        style: const TextStyle(color: kColorGreyLight, fontFamily: 'GillroyMedium'),
                       ),
                       Spacer(),
                       Flexible(
                         child: AutoSizeText(
-                          purchase.daysRest < 0
-                              ? 'Просрочено ' +
-                                  dateFormat.format(purchase.dateTo)
-                              : "${purchase.daysRest}",
+                          purchase.daysRest < 0 ? 'Просрочено ' + dateFormat.format(purchase.dateTo) : "${purchase.daysRest}",
                           maxLines: 1,
                           overflow: TextOverflow.visible,
-                          style: const TextStyle(
-                              color: kColorBlack, fontFamily: 'GillroyMedium'),
+                          style: const TextStyle(color: kColorBlack, fontFamily: 'GillroyMedium'),
                         ),
                       ),
                     ],
@@ -138,15 +133,12 @@ class PurchaseCell extends StatelessWidget {
                     children: [
                       Text(
                         "Дата покупки:",
-                        style: const TextStyle(
-                            color: kColorGreyLight,
-                            fontFamily: 'GillroyMedium'),
+                        style: const TextStyle(color: kColorGreyLight, fontFamily: 'GillroyMedium'),
                       ),
                       Spacer(),
                       Text(
                         "${purchase.buyDate.day}.${purchase.buyDate.month}.${purchase.buyDate.year}",
-                        style: const TextStyle(
-                            color: kColorBlack, fontFamily: 'GillroyMedium'),
+                        style: const TextStyle(color: kColorBlack, fontFamily: 'GillroyMedium'),
                       )
                     ],
                   ),

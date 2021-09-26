@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:recycle_hub/elements/common_cell.dart';
 import 'package:recycle_hub/helpers/network_helper.dart';
+import 'package:recycle_hub/icons/app_bar_icons_icons.dart';
 import 'package:recycle_hub/style/theme.dart';
 
 class AboutDevelopersScreen extends StatefulWidget {
@@ -17,16 +18,15 @@ class _AboutDevelopersScreenState extends State<AboutDevelopersScreen> {
         centerTitle: true,
         title: Text(
           "О разработчиках",
-          style: TextStyle(fontFamily: 'Gillroy'),
+         /*  style: TextStyle(fontFamily: 'Gillroy'), */
         ),
         leading: GestureDetector(
           onTap: () {
             Navigator.pop(context);
           },
           child: Icon(
-            Icons.arrow_back,
-            color: kColorWhite,
-            size: 35,
+            AppBarIcons.back,
+              size: 18,
           ),
         ),
       ),
