@@ -83,8 +83,7 @@ class _TransactionCreateAdminPanelScreenState extends State<TransactionCreateAdm
             appBar: AppBar(
               leading: IconButton(
                   icon: Icon(
-                    AppBarIcons.back,
-                    size: 18,
+                    Icons.arrow_back,
                   ),
                   onPressed: () => state.toState(AdmStoreState.INIT)),
               title: Text(

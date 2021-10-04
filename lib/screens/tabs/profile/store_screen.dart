@@ -55,13 +55,12 @@ class _StoreScreenState extends State<StoreScreen> {
           "Магазин",
           /* style: TextStyle(color: kColorWhite, fontFamily: 'GillRoyMedium', fontSize: 18, fontWeight: FontWeight.bold), */
         ),
-        leading: IconButton(
-          icon: Icon(
-            AppBarIcons.back,
+        leading: InkWell(
+          child: Icon(
+            Icons.arrow_back,
             color: kColorWhite,
-            size: 18,
           ),
-          onPressed: () => widget.onBackCall(),
+          onTap: () => widget.onBackCall(),
         ),
       ),
       body: Container(

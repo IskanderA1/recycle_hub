@@ -27,6 +27,7 @@ ThemeData kAppThemeData() {
       shadowColor: kColorWhite,
       iconTheme: IconThemeData(
         color: Color(0xFFF2F2F2),
+        size: 25,
         //size: 20
       ),
       centerTitle: true,

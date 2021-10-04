@@ -49,9 +49,9 @@ class _ForgetConfirmCodeScreenState extends State<ForgetConfirmCodeScreen> {
                 width: ScreenUtil().screenWidth,
                 color: Color(0xFFF2F2F2),
                 child: Padding(
-                  padding: EdgeInsets.fromLTRB(15, 15, 15, 0),
+                  padding: EdgeInsets.fromLTRB(16, 16, 16, 0),
                   child: Container(
-                    padding: EdgeInsets.fromLTRB(15, 40, 15, 15),
+                    padding: EdgeInsets.fromLTRB(16, 40, 16, 16),
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(kBorderRadius),
                         color: kColorWhite),

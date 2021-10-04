@@ -68,9 +68,8 @@ class _EcoOfferNewPointScreenState extends State<EcoOfferNewPointScreen> {
               GetIt.I.get<EcoCoinMenuCubit>().moveTo(EcoCoinMenuItems.MENU);
             },
             child: Icon(
-             AppBarIcons.back,
+             Icons.arrow_back,
             color: kColorWhite,
-            size: 18,
             ),
           ),
         ),

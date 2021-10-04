@@ -47,12 +47,12 @@ class _ContainerScreenState extends State<ContainerScreen> {
             "Что в какой контейнер",
           ),
           centerTitle: true,
-          leading: IconButton(
-            icon: Icon(
-              AppBarIcons.back,
-              size: 18,
+          leading: InkWell(
+            child: Icon(
+              Icons.arrow_back,
+              color: kColorWhite,
             ),
-            onPressed: () {
+            onTap: () {
               GetIt.I.get<EcoGuideCubit>().goBack();
             },
           ),

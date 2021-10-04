@@ -28,13 +28,12 @@ class _TestScreenState extends State<TestScreen> {
       appBar: AppBar(
         title: Text("Пройти Тест"),
         centerTitle: true,
-        leading: IconButton(
-          icon: Icon(
-            AppBarIcons.back,
+        leading: InkWell(
+          child: Icon(
+            Icons.arrow_back,
             color: kColorWhite,
-            size: 18,
           ),
-          onPressed: () {
+          onTap: () {
             if (widget.onBackPressed != null) {
               widget.onBackPressed();
             }

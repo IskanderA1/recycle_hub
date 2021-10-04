@@ -21,9 +21,8 @@ class _OfferNewsScreenState extends State<OfferNewsScreen> {
           appBar: AppBar(
             leading: IconButton(
                 icon: Icon(
-                  AppBarIcons.back,
+                  Icons.arrow_back,
                   color: kColorWhite,
-                  size: 18,
                 ),
                 onPressed: () => GetIt.I.get<ProfileMenuCubit>().goBack()),
             title: Text(

@@ -25,99 +25,95 @@ class NewsContainer extends StatelessWidget {
           },
         ));
       },
-      child: ClipRRect(
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(kBorderRadius),
-          topRight: Radius.circular(kBorderRadius),
+      child: Container(
+        margin: EdgeInsets.only(bottom: 10),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.all(
+            Radius.circular(kBorderRadius),
+          ),
+          color: kColorWhite,
         ),
-        child: Container(
-          margin: EdgeInsets.only(bottom: 10),
-          child: Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.all(
-                Radius.circular(kBorderRadius),
-              ),
-              color: kColorWhite,
-            ),
-            child: Column(
-              children: [
-                news.image != null
-                    ? Hero(
-                        tag: news.id,
-                        child: Container(
-                          height: 200,
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.all(Radius.circular(kBorderRadius)),
-                            child: CachedNetworkImage(
-                              imageUrl: news.image,
-                              imageBuilder: (context, imageProvider) {
-                                return Blur(
-                                  blur: 5.0,
-                                  colorOpacity: 0.0,
-                                  child: Container(
-                                      decoration: BoxDecoration(
-                                    image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
-                                  )),
-                                  overlay: Center(
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                        image: DecorationImage(
-                                          image: imageProvider,
-                                          fit: BoxFit.contain,
-                                        ),
-                                      ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            news.image != null
+                ? Hero(
+                    tag: news.id,
+                    child: Container(
+                      height: 200,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.all(Radius.circular(kBorderRadius)),
+                        child: CachedNetworkImage(
+                          imageUrl: news.image,
+                          imageBuilder: (context, imageProvider) {
+                            return Blur(
+                              blur: 5.0,
+                              colorOpacity: 0.0,
+                              child: Container(
+                                  decoration: BoxDecoration(
+                                image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
+                              )),
+                              overlay: Center(
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    image: DecorationImage(
+                                      image: imageProvider,
+                                      fit: BoxFit.contain,
                                     ),
                                   ),
-                                );
-                              },
-                              placeholder: (context, url) => Center(child: CircularProgressIndicator()),
-                              errorWidget: (context, url, error) => Icon(Icons.error),
+                                ),
+                              ),
+                            );
+                          },
+                          placeholder: (context, url) => Center(child: CircularProgressIndicator()),
+                          errorWidget: (context, url, error) => Center(
+                            child: Icon(
+                              Icons.error,
+                              color: kColorIcon,
                             ),
                           ),
                         ),
-                      )
-                    : SizedBox.shrink(),
-                Expanded(
-                    child: Container(
-                  padding: EdgeInsets.fromLTRB(16, 16, 16, 10),
-                  child: Column(
+                      ),
+                    ),
+                  )
+                : SizedBox.shrink(),
+            Padding(
+              padding: EdgeInsets.fromLTRB(16, 16, 16, 10),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    news.title,
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                  ),
+                  SizedBox(
+                    height: 5,
+                  ),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      news.text,
+                      maxLines: 5,
+                      overflow: TextOverflow.ellipsis,
+                      textAlign: TextAlign.start,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 16,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Text(
-                        news.title,
-                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                        news.pubDate != null ? format.format(news.pubDate) : '20.12.2020',
+                        style: TextStyle(color: kColorGreyLight),
                       ),
-                      SizedBox(
-                        height: 5,
-                      ),
-                      Expanded(
-                        child: Text(
-                          news.text,
-                          maxLines: 5,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                      SizedBox(
-                        height: 16,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Text(
-                            news.pubDate != null ? format.format(news.pubDate) : '20.12.2020',
-                            style: TextStyle(color: kColorGreyLight),
-                          ),
-                          /* Text(
-                            "Поподробнее",
-                            style: TextStyle(color: kColorGreyLight),
-                          ) */
-                        ],
-                      )
                     ],
-                  ),
-                ))
-              ],
-            ),
-          ),
+                  )
+                ],
+              ),
+            )
+          ],
         ),
       ),
     );

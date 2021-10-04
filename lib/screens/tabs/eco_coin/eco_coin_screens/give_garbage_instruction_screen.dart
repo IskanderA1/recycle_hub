@@ -7,12 +7,10 @@ import 'package:recycle_hub/style/theme.dart';
 
 class GiveGarbageInstructionScreen extends StatefulWidget {
   @override
-  _GiveGarbageInstructionScreenState createState() =>
-      _GiveGarbageInstructionScreenState();
+  _GiveGarbageInstructionScreenState createState() => _GiveGarbageInstructionScreenState();
 }
 
-class _GiveGarbageInstructionScreenState
-    extends State<GiveGarbageInstructionScreen> {
+class _GiveGarbageInstructionScreenState extends State<GiveGarbageInstructionScreen> {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -31,15 +29,14 @@ class _GiveGarbageInstructionScreenState
               GetIt.I.get<EcoCoinMenuCubit>().moveTo(EcoCoinMenuItems.MENU);
             },
             child: Icon(
-              AppBarIcons.back,
-            color: kColorWhite,
-            size: 18,
+              Icons.arrow_back,
+              color: kColorWhite,
             ),
           ),
         ),
         backgroundColor: kColorGreyVeryLight,
         body: Padding(
-          padding: EdgeInsets.fromLTRB(15, 20, 15, 0),
+          padding: EdgeInsets.fromLTRB(16, 16, 16, 0),
           child: Container(
             height: ScreenUtil().screenHeight,
             decoration: BoxDecoration(
@@ -49,16 +46,19 @@ class _GiveGarbageInstructionScreenState
               color: kColorWhite,
             ),
             child: Padding(
-              padding: const EdgeInsets.fromLTRB(10, 20, 10, 100),
+              padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
               child: SingleChildScrollView(
                 child: Column(
                   children: [
                     RichText(
+                      textAlign: TextAlign.justify,
                       text: TextSpan(
                         text:
                             "1. Сдавайте макулатуры в пункт приема и покажите сгенерированный в личном кабинете Qr-код партнеру 2. Партнер в лице пункта приема открывает свой личный кабинет, вводит данные о сданном макулатуры, сканирует ваш код 3. Система начисляет вам 10 Экокоинов за 1кг сданной макулатуры. Также вы, получитереальные деньги от пункта вне рамок проекта, если пункт выплачивает вознаграждение за вторсырье4. Чтобы потратить Экокоинов, вам необходимо ответить на вопросы из образовательного блока. За один правильный ответ система позволяет разблокировать 10 Экокоинов. 5. Тратьте накопленные баллы у партнеров на их продукцию/услуги",
-                        style:
-                            TextStyle(color: kColorBlack, fontFamily: 'Gilroy'),
+                        style: TextStyle(
+                          color: kColorBlack,
+                          fontFamily: 'Gilroy',
+                        ),
                       ),
                     ),
                   ],

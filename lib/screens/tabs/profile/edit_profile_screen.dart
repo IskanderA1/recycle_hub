@@ -73,9 +73,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             GetIt.I.get<ProfileMenuCubit>().goBack();
           },
           child: Icon(
-            AppBarIcons.back,
+            Icons.arrow_back,
             color: kColorWhite,
-            size: 18,
           ),
         ),
       ),

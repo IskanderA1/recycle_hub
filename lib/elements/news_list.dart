@@ -33,12 +33,11 @@ class _NewsListState extends State<NewsList> {
   Widget build(BuildContext context) {
     return Padding(
       padding: widget.padding,
-      child: GridView.builder(
+      child: ListView.builder(
         padding: widget.margin,
         shrinkWrap: true,
         itemCount: newsList.length,
         controller: _scrollController,
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 1),
         itemBuilder: (context, i) {
           return NewsContainer(
             news: newsList[i],

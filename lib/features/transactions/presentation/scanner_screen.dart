@@ -44,8 +44,7 @@ class _AdminScannerScreenState extends State<AdminScannerScreen> {
       appBar: AppBar(
         leading: IconButton(
             icon: Icon(
-              AppBarIcons.back,
-              size: 18,
+              Icons.arrow_back,
             ),
             onPressed: () => GetIt.I.get<NavBarCubit>().goBack()),
         title: Text(

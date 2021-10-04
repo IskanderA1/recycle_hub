@@ -26,9 +26,8 @@ class _PartnersListScreenState extends State<PartnersListScreen> {
             Navigator.pop(context);
           },
           child: Icon(
-            AppBarIcons.back,
+            Icons.arrow_back,
             color: kColorWhite,
-            size: 18,
           ),
         ),
       ),

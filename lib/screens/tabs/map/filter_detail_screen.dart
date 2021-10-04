@@ -63,9 +63,8 @@ class _MapFilterDetailScreenState extends State<MapFilterDetailScreen> {
                 Navigator.pop(context);
               },
               child: Icon(
-                AppBarIcons.back,
+                Icons.arrow_back,
                 color: kColorWhite,
-                size: 18,
               ),
             ),
           ),
@@ -100,11 +99,11 @@ class _MapFilterDetailScreenState extends State<MapFilterDetailScreen> {
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.fromLTRB(15, 5, 15, 5),
+                  padding: EdgeInsets.fromLTRB(16, 5, 16, 5),
                   child: _garbCollectTypeWidget(),
                 ),
                 Padding(
-                  padding: EdgeInsets.fromLTRB(15, 5, 15, 5),
+                  padding: EdgeInsets.fromLTRB(16, 5, 16, 5),
                   child: _markerModeCheck(),
                 ),
                 Expanded(
@@ -151,7 +150,7 @@ class _MapFilterDetailScreenState extends State<MapFilterDetailScreen> {
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.fromLTRB(15, 10, 15, 10),
+                  padding: EdgeInsets.fromLTRB(16, 16, 16, 10),
                   child: Align(
                     alignment: Alignment.bottomCenter,
                     child: GestureDetector(

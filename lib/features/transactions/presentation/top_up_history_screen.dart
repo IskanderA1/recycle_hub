@@ -50,12 +50,12 @@ class _TopUpHistoryScreenState extends State<TopUpHistoryScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(
-            icon: Icon(
-              AppBarIcons.back,
-              size: 18,
+        leading: InkWell(
+            child: Icon(
+              Icons.arrow_back,
+              color: kColorWhite,
             ),
-            onPressed: () => GetIt.I.get<ProfileMenuCubit>().goBack()),
+            onTap: () => GetIt.I.get<ProfileMenuCubit>().goBack()),
         title: Text(
           "История пополнений",
           /* style: TextStyle(

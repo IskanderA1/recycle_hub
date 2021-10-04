@@ -96,27 +96,28 @@ class _ProfileScreenState extends State<ProfileScreen> {
             centerTitle: true,
             leading: IconButton(
               icon: Icon(
-                AppBarIcons.menu,
-                size: 18,
+                Icons.menu,
+                color: kColorWhite,
               ),
               onPressed: () {
                 Scaffold.of(context).openDrawer();
               },
             ),
             actions: [
-              Padding(
-                padding: const EdgeInsets.only(right: 16),
-                child: InkWell(
-                  onTap: () {
-                    if (GetIt.I.get<AuthBloc>().state.userModel.userType == UserTypes.admin)
-                      GetIt.I.get<ProfileMenuCubit>().moveTo(ProfileMenuStates.POINT_PROFILE);
-                  },
-                  child: Icon(
-                    NavBarIcons.app_bar_suffix,
-                    size: 18,
+              if (userState != null && userState.role == 'admin')
+                Padding(
+                  padding: const EdgeInsets.only(right: 16),
+                  child: InkWell(
+                    onTap: () {
+                      if (GetIt.I.get<AuthBloc>().state.userModel.userType == UserTypes.admin)
+                        GetIt.I.get<ProfileMenuCubit>().moveTo(ProfileMenuStates.POINT_PROFILE);
+                    },
+                    child: Icon(
+                      NavBarIcons.app_bar_suffix,
+                      size: 18,
+                    ),
                   ),
                 ),
-              ),
             ],
           ),
           body: Container(
@@ -204,8 +205,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
             padding: const EdgeInsets.only(left: 4),
             child: IconButton(
               icon: Icon(
-                AppBarIcons.menu,
-                size: 18,
+                Icons.menu,
+                color: kColorWhite,
               ),
               onPressed: () {
                 Scaffold.of(context).openDrawer();

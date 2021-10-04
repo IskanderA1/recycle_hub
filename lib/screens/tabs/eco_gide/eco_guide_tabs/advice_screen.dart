@@ -29,13 +29,12 @@ class _AdviceScreenState extends State<AdviceScreen> {
       appBar: AppBar(
         title: Text("Советы для экономии"),
         centerTitle: true,
-        leading: IconButton(
-          icon: Icon(
-            AppBarIcons.back,
+        leading: InkWell(
+          child: Icon(
+            Icons.arrow_back,
             color: kColorWhite,
-            size: 18,
           ),
-          onPressed: () {
+          onTap: () {
             GetIt.I.get<EcoGuideCubit>().goBack();
           },
         ),

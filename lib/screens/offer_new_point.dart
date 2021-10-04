@@ -65,9 +65,7 @@ class _OfferNewPointScreenState extends State<OfferNewPointScreen> {
               widget.onBack();
             },
             child: Icon(
-              AppBarIcons.back,
-              color: kColorWhite,
-              size: 35,
+              Icons.arrow_back,
             ),
           ),
         ),

@@ -24,8 +24,7 @@ class _AboutAppScreenState extends State<AboutAppScreen> {
             Navigator.pop(context);
           },
           child: Icon(
-            AppBarIcons.back,
-            size: 18,
+            Icons.arrow_back,
           ),
         ),
       ),

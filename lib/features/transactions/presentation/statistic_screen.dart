@@ -82,8 +82,7 @@ class _StatisticScreenState extends State<StatisticScreen> {
               GetIt.I.get<ProfileMenuCubit>().goBack();
             },
             child: Icon(
-              AppBarIcons.back,
-              size: 18,
+              Icons.arrow_back,
             ),
           ),
         ),

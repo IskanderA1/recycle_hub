@@ -103,8 +103,8 @@ class _MapScreenState extends State<MapScreen> {
       centerTitle: true,
       leading: IconButton(
         icon: Icon(
-          AppBarIcons.menu,
-          size: 18,
+          Icons.menu,
+          color: kColorWhite,
         ),
         onPressed: () {
           Scaffold.of(context).openDrawer();

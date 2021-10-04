@@ -101,8 +101,8 @@ class _PointProfileScreenState extends State<PointProfileScreen> {
         ],
         leading: IconButton(
           icon: Icon(
-            AppBarIcons.menu,
-            size: 18,
+            Icons.menu,
+            color: kColorWhite,
           ),
           onPressed: () {
             Scaffold.of(context).openDrawer();

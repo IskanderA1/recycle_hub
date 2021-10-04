@@ -22,10 +22,18 @@ class _NewsScreenState extends State<NewsScreen> {
       },
       child: Scaffold(
         appBar: AppBar(
-          leading: BackButton(),
+          leading: InkWell(
+            child: Icon(
+              Icons.arrow_back,
+              color: kColorWhite,
+            ),
+            onTap: () {
+              Navigator.pop(context);
+            },
+          ),
           title: Text(
             'Новости',
-           /*  style: TextStyle(
+            /*  style: TextStyle(
                 color: kColorWhite,
                 fontSize: 18,
                 fontFamily: 'GillroyMedium',

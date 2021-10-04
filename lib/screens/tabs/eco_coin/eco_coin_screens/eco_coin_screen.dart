@@ -43,8 +43,8 @@ class _EcoCoinScreenState extends State<EcoCoinScreen> {
         centerTitle: true,
         leading: IconButton(
           icon: Icon(
-            AppBarIcons.menu,
-            size: 18,
+            Icons.menu,
+            color: kColorWhite,
           ),
           onPressed: () {
             Scaffold.of(context).openDrawer();

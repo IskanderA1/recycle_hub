@@ -24,9 +24,8 @@ class _PurchaseDetailScreenState extends State<PurchaseDetailScreen> {
       appBar: AppBar(
         leading: IconButton(
             icon: Icon(
-              AppBarIcons.back,
+              Icons.arrow_back,
               color: kColorWhite,
-              size: 18,
             ),
             onPressed: () => Navigator.pop(context)),
         title: Text(
@@ -40,9 +39,9 @@ class _PurchaseDetailScreenState extends State<PurchaseDetailScreen> {
         height: double.infinity,
         width: double.infinity,
         child: Padding(
-          padding: EdgeInsets.fromLTRB(15, 20, 15, 0),
+          padding: EdgeInsets.fromLTRB(16, 16, 16, 0),
           child: Container(
-            padding: EdgeInsets.fromLTRB(15, 20, 15, 0),
+            padding: EdgeInsets.fromLTRB(16, 16, 16, 0),
             decoration: BoxDecoration(color: kColorWhite, borderRadius: BorderRadius.circular(kBorderRadius)),
             child: SingleChildScrollView(
               child: Column(

@@ -69,9 +69,8 @@ class _ReportToErrorMarkerScreenState extends State<ReportToErrorMarkerScreen> {
             Navigator.pop(context);
           },
           child: Icon(
-            AppBarIcons.back,
+            Icons.arrow_back,
             color: kColorWhite,
-            size: 18,
           ),
         ),
       ),
@@ -339,7 +338,7 @@ class ReportMarkerTextFields extends StatelessWidget {
         border: OutlineInputBorder(
           borderSide: BorderSide(color: const Color(0xFFECECEC), width: 1),
         ),
-        contentPadding: EdgeInsets.fromLTRB(15, 20, 15, 20),
+        contentPadding: EdgeInsets.fromLTRB(16, 20, 16, 20),
         hintText: hintText,
         hintStyle: kHintTextStyle,
       ),

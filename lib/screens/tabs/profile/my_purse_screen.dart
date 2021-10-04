@@ -23,13 +23,12 @@ class _MyPurseScreenState extends State<MyPurseScreen> {
     size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(
-          icon: Icon(
-            AppBarIcons.back,
+        leading: InkWell(
+          child: Icon(
+            Icons.arrow_back,
             color: kColorWhite,
-            size: 18,
           ),
-          onPressed: () => GetIt.I.get<ProfileMenuCubit>().goBack(),
+          onTap: () => GetIt.I.get<ProfileMenuCubit>().goBack(),
         ),
         title: Text(
           "Кошелек",

@@ -39,8 +39,8 @@ class _MainEcoGuideScreenState extends State<MainEcoGuideScreen> {
         appBar: AppBar(
           leading: IconButton(
             icon: Icon(
-              AppBarIcons.menu,
-              size: 18,
+              Icons.menu,
+              color: kColorWhite,
             ),
             onPressed: () {
               Scaffold.of(context).openDrawer();
@@ -88,7 +88,7 @@ class _MainEcoGuideScreenState extends State<MainEcoGuideScreen> {
                           disabledBorder: InputBorder.none,
                           suffixIcon: Icon(
                             Icons.search_outlined,
-                            color: kColorBlack,
+                            color: kColorIcon,
                             size: 25,
                           ),
                           hintText: "Что вы хотите сдать",

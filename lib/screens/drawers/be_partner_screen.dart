@@ -28,9 +28,8 @@ class _BePartnerScreenState extends State<BePartnerScreen> {
             Navigator.pop(context);
           },
           child: Icon(
-            AppBarIcons.back,
+            Icons.arrow_back,
             color: kColorWhite,
-            size: 18,
           ),
         ),
       ),

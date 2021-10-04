@@ -31,9 +31,8 @@ class _InviteScreenState extends State<InviteScreen> {
         appBar: AppBar(
           leading: IconButton(
             icon: Icon(
-              AppBarIcons.back,
+              Icons.arrow_back,
               color: kColorWhite,
-              size: 18,
             ),
             onPressed: () => GetIt.I.get<ProfileMenuCubit>().moveTo(ProfileMenuStates.MENU),
           ),
@@ -75,7 +74,7 @@ class InviteWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.fromLTRB(15, 25, 15, 0),
+      padding: EdgeInsets.fromLTRB(16, 16, 16, 0),
       child: Container(
         decoration: BoxDecoration(color: kColorWhite, borderRadius: BorderRadius.all(Radius.circular(kBorderRadius),)),
         child: Padding(
