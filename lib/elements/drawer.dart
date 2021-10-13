@@ -21,7 +21,7 @@ class CustomDrawer extends StatefulWidget {
 }
 
 class _CustomDrawerState extends State<CustomDrawer> {
-  double total = 0;
+  int total = 0;
   StreamSubscription<AuthState> _streamSubscription;
 
   @override
@@ -39,7 +39,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
       child: ListView(
         padding: EdgeInsets.only(bottom: 45),
         children: <Widget>[
-          Container(
+          UserService().statistic != null ? Container(
             color: Colors.grey[300],
             child: Stack(children: [
               SvgPicture.asset(
@@ -47,22 +47,20 @@ class _CustomDrawerState extends State<CustomDrawer> {
               ),
               Container(
                 alignment: Alignment.center,
-                padding:
-                    EdgeInsets.only(left: 30, top: 45, bottom: 20, right: 30),
+                padding: EdgeInsets.only(left: 30, top: 45, bottom: 20, right: 30),
                 child: Wrap(
                   alignment: WrapAlignment.center,
                   children: [
                     Text(
-                      "Ура!!! Вместе мы сдали более $total кг!",
-                      style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                      "Ура! В сервисе RecycleHub ${UserService().statistic?.usersCount ?? 0} пользователей",
+                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                       textAlign: TextAlign.center,
                     )
                   ],
                 ),
               ),
             ]),
-          ),
+          ) : SizedBox.shrink(),
           _CommonDrawerCell(
             onTap: () {
               Navigator.push(
@@ -85,9 +83,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                 );
               } else if (GetIt.I.get<AuthBloc>().state is AuthStateLogedIn) {
                 GetIt.I.get<NavBarCubit>().moveTo(NavBarItem.PROFILE);
-                GetIt.I
-                    .get<ProfileMenuCubit>()
-                    .moveTo(ProfileMenuStates.STATISTIC);
+                GetIt.I.get<ProfileMenuCubit>().moveTo(ProfileMenuStates.STATISTIC);
                 Navigator.pop(context);
               }
             },
@@ -165,9 +161,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                   style: TextStyle(fontSize: 16),
                 ),
                 onTap: () {
-                  NetworkHelper.openUrl(
-                      'https://play.google.com/store/apps/details?id=com.iskander.kai_mobile_app',
-                      context);
+                  NetworkHelper.openUrl('https://play.google.com/store/apps/details?id=com.iskander.kai_mobile_app', context);
                 },
               ),
             ),

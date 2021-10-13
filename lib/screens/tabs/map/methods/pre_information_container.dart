@@ -235,6 +235,9 @@ class FilterTypesContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if(filters.isEmpty){
+      return Container();
+    }
     return SizedBox(
       height: gridSize,
       child: GridView.builder(

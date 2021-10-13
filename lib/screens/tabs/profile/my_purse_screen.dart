@@ -62,7 +62,7 @@ class _MyPurseScreenState extends State<MyPurseScreen> {
                     ),
                     EcoCoinHorisontalDivider(),
                     MenuItemWidget(
-                      name: "История пополнений",
+                      name: "История начисления ЭкоКоинов",
                       func: () async {
                         GetIt.I.get<ProfileMenuCubit>().moveTo(ProfileMenuStates.TOPUPSHISTORY);
                       },

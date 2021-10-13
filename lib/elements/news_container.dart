@@ -66,12 +66,12 @@ class NewsContainer extends StatelessWidget {
                             );
                           },
                           placeholder: (context, url) => Center(child: CircularProgressIndicator()),
-                          errorWidget: (context, url, error) => Center(
+                          /* errorWidget: (context, url, error) => Center(
                             child: Icon(
                               Icons.error,
                               color: kColorIcon,
                             ),
-                          ),
+                          ), */
                         ),
                       ),
                     ),

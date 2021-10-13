@@ -235,7 +235,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  Widget buildStatus(AuthState state, int place, double made) {
+  Widget buildStatus(AuthState state, int place, int made) {
     return Container(
       decoration: BoxDecoration(
         color: kColorWhite,
@@ -363,7 +363,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  Widget buildAchievments(String status, double made) {
+  Widget buildAchievments(String status, int made) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
@@ -539,7 +539,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 class ProfileProgressIndicator extends StatelessWidget {
   const ProfileProgressIndicator({Key key, @required this.total}) : super(key: key);
 
-  final double total;
+  final int total;
 
   @override
   Widget build(BuildContext context) {

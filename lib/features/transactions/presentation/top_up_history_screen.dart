@@ -57,7 +57,7 @@ class _TopUpHistoryScreenState extends State<TopUpHistoryScreen> {
             ),
             onTap: () => GetIt.I.get<ProfileMenuCubit>().goBack()),
         title: Text(
-          "История пополнений",
+          "История начисления ЭкоКоинов",
           /* style: TextStyle(
               color: kColorWhite,
               fontSize: 18,

@@ -116,8 +116,7 @@ class UserService {
   }
 
   Future<UserModel> userInfo() async {
-    var response = await CommonRequest.makeRequest('user_info',
-        method: CommonRequestMethod.get, needAuthorization: true);
+    var response = await CommonRequest.makeRequest('user_info', method: CommonRequestMethod.get, needAuthorization: true);
     if (response.statusCode == 200) {
       Map<String, dynamic> data = jsonDecode(response.body);
       var user = UserModel.fromMap(data);
@@ -135,8 +134,11 @@ class UserService {
   }
 
   Future<UserStatistic> userStatistic() async {
-    var response = await CommonRequest.makeRequest('stats',
-        method: CommonRequestMethod.get, needAuthorization: true);
+    var response = await CommonRequest.makeRequest(
+      'stats',
+      method: CommonRequestMethod.get,
+      needAuthorization: true,
+    );
     if (response.statusCode == 200) {
       Map<String, dynamic> data = jsonDecode(response.body);
       var stat;
@@ -176,8 +178,7 @@ class UserService {
         _userTransactions = [];
       }
     } catch (e) {
-      developer.log("Error type: ${e.runtimeType} ${e.toString()}",
-          name: 'api.services.user_service');
+      developer.log("Error type: ${e.runtimeType} ${e.toString()}", name: 'api.services.user_service');
       _userTransactions = [];
     }
 
@@ -197,8 +198,7 @@ class UserService {
         _transactions = [];
       }
     } catch (e) {
-      developer.log("Error type: ${e.runtimeType} ${e.toString()}",
-          name: 'api.services.user_service');
+      developer.log("Error type: ${e.runtimeType} ${e.toString()}", name: 'api.services.user_service');
       _transactions = [];
     }
     _garbagesGiven = 0;
@@ -217,9 +217,7 @@ class UserService {
   Future<void> sendCode({String username}) async {
     try {
       final response = await CommonRequest.makeRequest("/api/send_check_code",
-          method: CommonRequestMethod.post,
-          body: {"username": username},
-          needAuthorization: false);
+          method: CommonRequestMethod.post, body: {"username": username}, needAuthorization: false);
       if (response.statusCode != 201) {
         throw RequestError(code: RequestErrorCode.noSuchUser);
       }
@@ -231,11 +229,8 @@ class UserService {
 
   Future<bool> chechCode({String username, String code}) async {
     try {
-      final response = await CommonRequest.makeRequest(
-          "/api/get_recovery_token",
-          method: CommonRequestMethod.post,
-          body: {"username": username, "code": code},
-          needAuthorization: false);
+      final response = await CommonRequest.makeRequest("/api/get_recovery_token",
+          method: CommonRequestMethod.post, body: {"username": username, "code": code}, needAuthorization: false);
       if (response.statusCode == 201) {
         var data = jsonDecode(response.body);
         SessionManager().saveToken(data["recovery_token"]);
@@ -253,12 +248,10 @@ class UserService {
   Future<void> changePassword({String password}) async {
     try {
       final response = await CommonRequest.makeRequest("/api/change_password",
-          method: CommonRequestMethod.post,
-          body: {"password": password, "password_repeat": password});
+          method: CommonRequestMethod.post, body: {"password": password, "password_repeat": password});
       if (response.statusCode == 201) {
         SessionManager().savePassword(password);
-        developer.log('Password successfully changed',
-            name: 'api.services.user_service');
+        developer.log('Password successfully changed', name: 'api.services.user_service');
       } else {
         throw RequestError(code: RequestErrorCode.recoverCodeInvalid);
       }
@@ -269,14 +262,11 @@ class UserService {
 
   Future<void> saveUserInfo({String name}) async {
     try {
-      final response = await CommonRequest.makeRequest("user_info",
-          method: CommonRequestMethod.put, body: jsonEncode({"name": '$name'}));
+      final response = await CommonRequest.makeRequest("user_info", method: CommonRequestMethod.put, body: jsonEncode({"name": '$name'}));
       if (response.statusCode == 200) {
-        developer.log('User successfully changed',
-            name: 'api.services.user_service.save_user_info');
+        developer.log('User successfully changed', name: 'api.services.user_service.save_user_info');
       } else {
-        throw RequestError(
-            code: RequestErrorCode.unknown, description: "Что-то пошло не так");
+        throw RequestError(code: RequestErrorCode.unknown, description: "Что-то пошло не так");
       }
     } catch (e) {
       throw RequestError(code: RequestErrorCode.unknown);
@@ -286,28 +276,15 @@ class UserService {
   ///Запрос на регистрацию
   ///Если запрос успешен, сохраняет пользователя в БД
   ///затем, после подтверждения кода, в другом методе, возвращается юзер
-  Future<UserModel> regUser(String name, String surname, String username,
-      String pass, String code) async {
+  Future<UserModel> regUser(String name, String surname, String username, String pass, String code) async {
     try {
       var response;
       if (code == "") {
         response = await CommonRequest.makeRequest('register',
-            method: CommonRequestMethod.post,
-            body: {
-              "name": name + ' ' + surname,
-              "username": username,
-              "password": pass
-            },
-            needAuthorization: false);
+            method: CommonRequestMethod.post, body: {"name": name + ' ' + surname, "username": username, "password": pass}, needAuthorization: false);
       } else {
         response = await CommonRequest.makeRequest('register',
-            method: CommonRequestMethod.post,
-            body: {
-              "name": name + ' ' + surname,
-              "username": username,
-              "password": pass
-            },
-            needAuthorization: false);
+            method: CommonRequestMethod.post, body: {"name": name + ' ' + surname, "username": username, "password": pass}, needAuthorization: false);
         /*response = await http.post(mainUrl + "/users?code=$code", body: {
           "name": '$name $surname',
           "username": '$username',
@@ -321,9 +298,7 @@ class UserService {
         return UserModel.fromMap(data);
       } else {
         print(response.reasonPhrase);
-        throw RequestError(
-            code: RequestErrorCode.userAlreadyExists,
-            description: 'Пользователь с таким e-mail уже существует');
+        throw RequestError(code: RequestErrorCode.userAlreadyExists, description: 'Пользователь с таким e-mail уже существует');
       }
     } catch (error, stacktrace) {
       print("Exception occured: $error stackTrace: $stacktrace");
@@ -357,9 +332,7 @@ class UserService {
       String username = await SessionManager().getLogin();
       if (username == null) {}
       var response = await CommonRequest.makeRequest("confirm",
-          body: {"username": username, "code": code},
-          method: CommonRequestMethod.post,
-          needAuthorization: false);
+          body: {"username": username, "code": code}, method: CommonRequestMethod.post, needAuthorization: false);
       Map<String, dynamic> data = jsonDecode(response.body);
       print(data);
       if (response.statusCode == 200) {
