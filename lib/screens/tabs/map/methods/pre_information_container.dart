@@ -16,18 +16,12 @@ class AnimatedPreInformationContainer extends StatefulWidget {
   final List<FilterType> filters;
   final Point userPoint;
 
-  AnimatedPreInformationContainer(
-      {@required this.offset,
-      @required this.marker,
-      @required this.filters,
-      @required this.userPoint});
+  AnimatedPreInformationContainer({@required this.offset, @required this.marker, @required this.filters, @required this.userPoint});
   @override
-  _AnimatedPreInformationContainerState createState() =>
-      _AnimatedPreInformationContainerState();
+  _AnimatedPreInformationContainerState createState() => _AnimatedPreInformationContainerState();
 }
 
-class _AnimatedPreInformationContainerState
-    extends State<AnimatedPreInformationContainer> {
+class _AnimatedPreInformationContainerState extends State<AnimatedPreInformationContainer> {
   Widget widgetVisible;
   Widget widgetNotVisable = Container();
   Size size;
@@ -35,17 +29,14 @@ class _AnimatedPreInformationContainerState
 
   @override
   void initState() {
-    distance = distanceInKm(
-        Point(widget.marker.coords[0], widget.marker.coords[1]),
-        widget.userPoint);
+    distance = distanceInKm(Point(widget.marker.coords[0], widget.marker.coords[1]), widget.userPoint);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     size = MediaQuery.of(context).size;
-    /* widgetNotVisable = Container(
-      height: 50,
+    return Container(
       padding: EdgeInsets.only(bottom: 8),
       child: ListView(
         physics: NeverScrollableScrollPhysics(),
@@ -61,17 +52,10 @@ class _AnimatedPreInformationContainerState
                     Flexible(
                       child: AutoSizeText(
                         widget.marker.name,
-                        style: TextStyle(
-                            fontSize: 18, fontWeight: FontWeight.bold),
+                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                         overflow: TextOverflow.visible,
                       ),
                     ),
-                    /* Flexible(
-                      child: AutoSizeText(
-                        "Рейтинг",
-                        style: TextStyle(color: Colors.green),
-                      ),
-                    ), */
                   ],
                 ),
               ),
@@ -93,89 +77,14 @@ class _AnimatedPreInformationContainerState
                         width: 15,
                       ),
                       Container(
-                          child: AutoSizeText(distance < 1
-                              ? distance.toStringAsFixed(3).split(',').last +
-                                  ' м'
-                              : distance.toStringAsFixed(1) + ' км')),
+                          child:
+                              AutoSizeText(distance < 1 ? distance.toStringAsFixed(3).split(',').last + ' м' : distance.toStringAsFixed(1) + ' км')),
                     ],
                   ),
                 ),
               ),
             ],
           ),
-        ],
-      ),
-    ); */
-    widgetVisible = Container(
-      height: 130,
-      padding: EdgeInsets.only(bottom: 8),
-      child: ListView(
-        physics: NeverScrollableScrollPhysics(),
-        shrinkWrap: true,
-        children: [
-          Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(left: 24, right: 24),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Flexible(
-                      child: AutoSizeText(
-                        widget.marker.name,
-                        style: TextStyle(
-                            fontSize: 18, fontWeight: FontWeight.bold),
-                        overflow: TextOverflow.visible,
-                      ),
-                    ),
-                    /* Flexible(
-                      child: AutoSizeText(
-                        "Рейтинг",
-                        style: TextStyle(color: Colors.green),
-                      ),
-                    ), */
-                  ],
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 24, right: 24),
-                child: Container(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    mainAxisSize: MainAxisSize.max,
-                    children: [
-                      Flexible(
-                        child: AutoSizeText(
-                          widget.marker.address,
-                          style: TextStyle(fontSize: 16),
-                          overflow: TextOverflow.visible,
-                        ),
-                      ),
-                      SizedBox(
-                        width: 15,
-                      ),
-                      Container(
-                          child: AutoSizeText(distance < 1
-                              ? distance.toStringAsFixed(3).split(',').last +
-                                  ' м'
-                              : distance.toStringAsFixed(1) + ' км')),
-                    ],
-                  ),
-                ),
-              ),
-            ],
-          ),
-          /* Expanded(
-            flex: 6,
-            child: WorkingDaysWidget(
-              workingTime: widget.marker.workTime,
-              backColor: kColorWhite,
-              wColor: kColorBlack,
-              hasSelection: false,
-              size: Size(size.width - 90, size.height * 0.14),
-              fontSize: 11,
-            ),
-          ), */
           Padding(
             padding: const EdgeInsets.only(left: 24, right: 24, top: 8),
             child: Row(
@@ -191,18 +100,18 @@ class _AnimatedPreInformationContainerState
                 Expanded(
                   child: Text(
                     "Принимают на переработку:",
-                    style: TextStyle(
-                        color: kColorBlack,
-                        fontWeight: FontWeight.w400,
-                        fontFamily: 'GilroyMedium',
-                        fontSize: 16),
+                    style: TextStyle(color: kColorBlack, fontWeight: FontWeight.w400, fontFamily: 'GilroyMedium', fontSize: 16),
                   ),
                 ),
               ],
             ),
           ),
           Padding(
-            padding: const EdgeInsets.only(top: 8),
+            padding: const EdgeInsets.only(
+              top: 8,
+              left: 16,
+              right: 16,
+            ),
             child: FilterTypesContainer(
               filters: widget.filters,
               gridSize: 30,
@@ -215,7 +124,6 @@ class _AnimatedPreInformationContainerState
         ],
       ),
     );
-    return widgetVisible;
     /* return AnimatedContainer(
         duration: Duration(milliseconds: 400),
         //height: 350,
@@ -226,16 +134,14 @@ class _AnimatedPreInformationContainerState
 }
 
 class FilterTypesContainer extends StatelessWidget {
-  const FilterTypesContainer(
-      {Key key, @required this.filters, @required this.gridSize})
-      : super(key: key);
+  const FilterTypesContainer({Key key, @required this.filters, @required this.gridSize}) : super(key: key);
 
   final List<FilterType> filters;
   final double gridSize;
 
   @override
   Widget build(BuildContext context) {
-    if(filters.isEmpty){
+    if (filters.isEmpty) {
       return Container();
     }
     return SizedBox(
@@ -244,25 +150,21 @@ class FilterTypesContainer extends StatelessWidget {
         shrinkWrap: true,
         scrollDirection: Axis.horizontal,
         gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-            maxCrossAxisExtent: 250,
-            childAspectRatio: 2 / 9,
-            crossAxisSpacing: 2,
-            mainAxisSpacing: 8),
+          maxCrossAxisExtent: 250,
+          childAspectRatio: 2 / 9,
+          crossAxisSpacing: 2,
+          mainAxisSpacing: 8,
+        ),
         itemCount: filters.length,
         itemBuilder: (context, index) {
           return Container(
             padding: EdgeInsets.all(4),
-            decoration: BoxDecoration(
-                color: Color(0xFFF2F2F2),
-                borderRadius: BorderRadius.all(Radius.circular(5))),
+            decoration: BoxDecoration(color: Color(0xFFF2F2F2), borderRadius: BorderRadius.all(Radius.circular(5))),
             child: Center(
               child: AutoSizeText(
                 "${filters[index].name}",
                 textAlign: TextAlign.center,
-                style: TextStyle(
-                    fontFamily: 'Gilroy',
-                    fontSize: 14,
-                    fontWeight: FontWeight.w600),
+                style: TextStyle(fontFamily: 'Gilroy', fontSize: 14, fontWeight: FontWeight.w600),
               ),
             ),
           );

@@ -141,15 +141,26 @@ class _TopUpCardsState extends State<TopUpCards> {
                                 children: [
                                   Text(
                                     "Источник:",
-                                    style: const TextStyle(color: kColorGreyLight, fontFamily: 'GillroyMedium'),
+                                    style: const TextStyle(
+                                      color: kColorGreyLight,
+                                      fontFamily: 'GillroyMedium',
+                                    ),
                                   ),
-                                  Text(
-                                    widget.transactions[i].actionType == 'recycle'
-                                        ? "Сдача вторсырья"
-                                        : widget.transactions[i].actionType == 'invite'
-                                            ? 'Приглошение друга'
-                                            : '__',
-                                    style: const TextStyle(color: kColorBlack, fontFamily: 'GillroyMedium'),
+                                  Expanded(
+                                    child: Text(
+                                      widget.transactions[i].actionType == 'recycle'
+                                          ? "Сдача вторсырья"
+                                          : widget.transactions[i].actionType == 'invite'
+                                              ? 'Приглошение друга'
+                                              : widget.transactions[i].actionType == 'update_pp'
+                                                  ? 'Обновление информации'
+                                                  : '',
+                                      textAlign: TextAlign.right,
+                                      style: const TextStyle(
+                                        color: kColorBlack,
+                                        fontFamily: 'GillroyMedium',
+                                      ),
+                                    ),
                                   )
                                 ],
                               ),

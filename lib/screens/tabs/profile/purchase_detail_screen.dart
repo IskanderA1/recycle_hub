@@ -51,8 +51,9 @@ class _PurchaseDetailScreenState extends State<PurchaseDetailScreen> {
                     "Детали покупки",
                     style: TextStyle(fontFamily: 'GillroyMedium', fontSize: 16),
                   ), */
+                  if(widget.purchase.image != null && widget.purchase.image.isNotEmpty)
                   Image.network(
-                    'https://cdn2.zp.ru/job/attaches/2020/07/be/76/be764d2d5dd2a062333610f7ba880d56.jpg',
+                    '${widget.purchase.image}',
                     height: 200,
                     width: 200,
                   ),
@@ -61,10 +62,12 @@ class _PurchaseDetailScreenState extends State<PurchaseDetailScreen> {
                     controller: TextEditingController(text: "${widget.purchase.productName}"),
                     textAlign: TextAlign.center,
                     decoration: InputDecoration(
-                        border: UnderlineInputBorder(
-                            borderSide: BorderSide(
-                      color: kColorGreyLight,
-                    ))),
+                      border: UnderlineInputBorder(
+                        borderSide: BorderSide(
+                          color: kColorGreyLight,
+                        ),
+                      ),
+                    ),
                     style: TextStyle(fontFamily: 'GillroyMedium', fontSize: 16, fontWeight: FontWeight.w600),
                   ),
                   Row(

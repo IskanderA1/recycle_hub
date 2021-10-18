@@ -348,7 +348,9 @@ class _ReqistrationScreenState extends State<ReqistrationScreen> {
                   } else if (!RegExp(patternAlphabet).hasMatch(str)) {
                     errorText = 'Пароль должен содержать хотя-бы 1 букву';
                   }
-                  setState(() {});
+                  setState(() {
+                    errorText = '';
+                  });
                   return null;
                 },
                 style: TextStyle(

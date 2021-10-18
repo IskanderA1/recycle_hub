@@ -39,28 +39,30 @@ class _CustomDrawerState extends State<CustomDrawer> {
       child: ListView(
         padding: EdgeInsets.only(bottom: 45),
         children: <Widget>[
-          UserService().statistic != null ? Container(
-            color: Colors.grey[300],
-            child: Stack(children: [
-              SvgPicture.asset(
-                "svg/drawer_header.svg",
-              ),
-              Container(
-                alignment: Alignment.center,
-                padding: EdgeInsets.only(left: 30, top: 45, bottom: 20, right: 30),
-                child: Wrap(
-                  alignment: WrapAlignment.center,
-                  children: [
-                    Text(
-                      "Ура! В сервисе RecycleHub ${UserService().statistic?.usersCount ?? 0} пользователей",
-                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-                      textAlign: TextAlign.center,
-                    )
-                  ],
-                ),
-              ),
-            ]),
-          ) : SizedBox.shrink(),
+          UserService().statistic != null
+              ? Container(
+                  color: Colors.grey[300],
+                  child: Stack(children: [
+                    SvgPicture.asset(
+                      "svg/drawer_header.svg",
+                    ),
+                    Container(
+                      alignment: Alignment.center,
+                      padding: EdgeInsets.only(left: 30, top: 45, bottom: 20, right: 30),
+                      child: Wrap(
+                        alignment: WrapAlignment.center,
+                        children: [
+                          Text(
+                            "Ура! В сервисе RecycleHub ${UserService().statistic?.usersCount ?? 0} пользователей",
+                            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                            textAlign: TextAlign.center,
+                          )
+                        ],
+                      ),
+                    ),
+                  ]),
+                )
+              : SizedBox.shrink(),
           _CommonDrawerCell(
             onTap: () {
               Navigator.push(
@@ -91,7 +93,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
           ),
           _CommonDrawerCell(
             onTap: () {
-              NetworkHelper.openUrl('http://vk.com/id0', context);
+              NetworkHelper.openUrl('https://vk.com/recyclehub', context);
               Navigator.pop(context);
             },
             title: "Частые вопросы",

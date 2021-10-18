@@ -215,11 +215,12 @@ class ProductCell extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              Image.network(
-                'https://cdn2.zp.ru/job/attaches/2020/07/be/76/be764d2d5dd2a062333610f7ba880d56.jpg',
-                height: 100,
-                width: 100,
-              ),
+              if (product.image != null && product.image.isNotEmpty)
+                Image.network(
+                  '${product.image}',
+                  height: 100,
+                  width: 100,
+                ),
               Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [

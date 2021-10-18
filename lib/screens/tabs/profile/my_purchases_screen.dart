@@ -1,4 +1,5 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:intl/intl.dart';
@@ -93,6 +94,16 @@ class PurchaseCell extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Padding(
+                      padding: EdgeInsets.fromLTRB(0, 8, 8, 8),
+                      child: Text(
+                        purchase.productName,
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -120,6 +131,7 @@ class PurchaseCell extends StatelessWidget {
                         child: AutoSizeText(
                           purchase.daysRest < 0 ? 'Просрочено ' + dateFormat.format(purchase.dateTo) : "${purchase.daysRest}",
                           maxLines: 1,
+                          textAlign: TextAlign.end,
                           overflow: TextOverflow.visible,
                           style: const TextStyle(color: kColorBlack, fontFamily: 'GillroyMedium'),
                         ),
@@ -151,13 +163,14 @@ class PurchaseCell extends StatelessWidget {
                 children: [],
               ),
             ), */
-            Expanded(
-              child: Image.network(
-                'https://cdn2.zp.ru/job/attaches/2020/07/be/76/be764d2d5dd2a062333610f7ba880d56.jpg',
-                height: 80,
-                width: 80,
-              ),
-            )
+            if (purchase.image != null && purchase.image.isNotEmpty)
+              Expanded(
+                child: Image.network(
+                  'https://cdn2.zp.ru/job/attaches/2020/07/be/76/be764d2d5dd2a062333610f7ba880d56.jpg',
+                  height: 80,
+                  width: 80,
+                ),
+              )
           ],
         ),
       ),

@@ -97,7 +97,7 @@ class CommonRequest {
     var response;
     try {
       response = await defaultClient.get(
-          Uri.https('167.172.105.146:5000', '/api/$endpoint', body),
+          Uri.https('recyclehub.ru:5000', '/api/$endpoint', body),
           headers: headers);
     } on http.ClientException catch (e) {
       throw ApiError(
@@ -106,6 +106,7 @@ class CommonRequest {
       throw ApiError(
           type: ApiErrorType.descriptionError, errorDescription: e.message);
     } catch (e) {
+      print(e);
       throw e;
     }
 

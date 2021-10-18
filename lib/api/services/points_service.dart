@@ -69,7 +69,7 @@ class PointsService {
                 ", " +
                 latLng.longitude.toString() +
                 "]",
-            'radius': '20'
+            'radius': '100'
           });
 
       List<dynamic> data = jsonDecode(response.body)['data'];

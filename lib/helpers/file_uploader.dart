@@ -9,8 +9,8 @@ import 'package:recycle_hub/style/theme.dart';
 import 'dart:developer' as d;
 
 class FileUpLoader {
-  static const String devURL = "https://167.172.105.146:5000/api";
-  static const String prodURL = "https://167.172.105.146:5000/api";
+  static const String devURL = "https://recyclehub.ru:5000/api";
+  static const String prodURL = "https://recyclehub.ru:5000/api";
 
   static Future<void> sendPhoto(File file, String endpoint,
       [BuildContext context]) async {
@@ -101,7 +101,6 @@ class FileUpLoader {
         data: image,
         options: Options(
           headers: {"Authorization": 'Bearer $token'},
-          followRedirects: false,
           validateStatus: (status) {
             return status < 500;
           },

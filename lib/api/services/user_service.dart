@@ -119,6 +119,7 @@ class UserService {
     var response = await CommonRequest.makeRequest('user_info', method: CommonRequestMethod.get, needAuthorization: true);
     if (response.statusCode == 200) {
       Map<String, dynamic> data = jsonDecode(response.body);
+      print('GetUserRequest: $data');
       var user = UserModel.fromMap(data);
       _user = user;
       await loadUserStatistic();
@@ -294,7 +295,7 @@ class UserService {
 
       Map<String, dynamic> data = jsonDecode(response.body);
       print(data);
-      if (response.statusCode == 200) {
+      if (response.statusCode == 201) {
         return UserModel.fromMap(data);
       } else {
         print(response.reasonPhrase);
