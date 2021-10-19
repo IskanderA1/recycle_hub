@@ -39,7 +39,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
       child: ListView(
         padding: EdgeInsets.only(bottom: 45),
         children: <Widget>[
-          UserService().statistic != null
+          UserService().usersCount != null
               ? Container(
                   color: Colors.grey[300],
                   child: Stack(children: [
@@ -53,7 +53,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                         alignment: WrapAlignment.center,
                         children: [
                           Text(
-                            "Ура! В сервисе RecycleHub ${UserService().statistic?.usersCount ?? 0} пользователей",
+                            "Ура! В сервисе RecycleHub ${UserService().usersCount} пользователей",
                             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                             textAlign: TextAlign.center,
                           )

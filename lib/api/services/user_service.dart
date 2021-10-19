@@ -13,6 +13,7 @@ import 'package:recycle_hub/model/new_point_model.dart';
 import 'package:recycle_hub/model/transactions/transaction_model.dart';
 import 'package:recycle_hub/model/user_model.dart';
 import 'package:http/http.dart' as http;
+import 'package:recycle_hub/model/users_count_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:developer' as developer;
 import '../../model/transactions/user_transaction_model.dart';
@@ -33,6 +34,8 @@ class UserService {
   Point _location;
 
   UserStatistic _userStatistic;
+
+  int usersCount = 0;
 
   List<UserTransaction> get userTransactions => _userTransactions;
   List<Transaction> get transactions => _transactions;
@@ -113,6 +116,28 @@ class UserService {
     }
 
     return response;
+  }
+
+  Future<int> getUsersCount() async {
+    try {
+      var response = await CommonRequest.makeRequest(
+        'common_stat',
+        method: CommonRequestMethod.get,
+        needAuthorization: false,
+      );
+      if (response.statusCode == 200) {
+        Map<String, dynamic> data = jsonDecode(response.body);
+        print('GetUsersCountResponse: $data');
+        var countModel = UsersCountModel.fromMap(data);
+        usersCount = countModel?.usersCount ?? 0;
+        return usersCount;
+      } else {
+        return 0;
+      }
+    } catch (e) {
+      print(e);
+      return 0;
+    }
   }
 
   Future<UserModel> userInfo() async {

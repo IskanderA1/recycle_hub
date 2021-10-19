@@ -104,7 +104,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               },
             ),
             actions: [
-              if (userState != null && userState.role == 'admin')
+              if (userState != null && userState.userType == UserTypes.admin)
                 Padding(
                   padding: const EdgeInsets.only(right: 16),
                   child: InkWell(

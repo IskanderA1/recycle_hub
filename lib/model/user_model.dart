@@ -10,7 +10,7 @@ import 'package:hive/hive.dart';
 
 //@HiveType(typeId: 0)
 
-enum UserTypes { user, admin, moder, guest }
+enum UserTypes { user, admin, moderator, guest }
 
 class UserModel {
   UserModel(
@@ -106,7 +106,7 @@ class UserModel {
               ? UserTypes.admin
               : json["role"] == 'user'
                   ? UserTypes.user
-                  : UserTypes.moder);
+                  : UserTypes.moderator);
 
   Map<String, dynamic> toMap() => {
         "id": id == null ? null : id,

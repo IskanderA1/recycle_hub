@@ -26,7 +26,7 @@ class PointProfileScreen extends StatefulWidget {
 class _PointProfileScreenState extends State<PointProfileScreen> {
   String _name = 'Пункт приема';
   String _address = '_';
-  List<String> _images;
+  List<String> _images = [];
   bool _isLoading = false;
   @override
   void initState() {

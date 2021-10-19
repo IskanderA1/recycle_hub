@@ -7,6 +7,7 @@ import 'package:get_it/get_it.dart';
 import 'package:hive/hive.dart';
 import 'package:recycle_hub/api/profile_repository/profile_repository.dart';
 import 'package:recycle_hub/api/services/points_service.dart';
+import 'package:recycle_hub/api/services/user_service.dart';
 import 'package:recycle_hub/bloc/auth/auth_bloc.dart';
 import 'package:recycle_hub/bloc/cubit/profile_menu_cubit.dart';
 import 'package:recycle_hub/bloc/eco_coin_menu/eco_coin_menu_cubit.dart';
@@ -62,6 +63,7 @@ Future<void> main() async {
   Hive.registerAdapter(UserTransactionAdapter());
   Hive.openBox('user');
   Hive.openBox('markers');
+  UserService().getUsersCount();
   GetIt.I.registerSingleton<EcoCoinMenuCubit>(EcoCoinMenuCubit());
   GetIt.I.registerSingleton<EcoGuideCubit>(EcoGuideCubit());
   GetIt.I.registerSingleton<NavBarCubit>(NavBarCubit());

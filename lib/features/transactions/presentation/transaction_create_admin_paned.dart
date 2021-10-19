@@ -349,7 +349,9 @@ class _TransactionCreateAdminPanelScreenState extends State<TransactionCreateAdm
           ),
         ),*/
         onItemSelected: (FilterType item) {
-          _selectedFilterType = item;
+          setState(() {
+            _selectedFilterType = item;
+          });
         },
         onMenuButtonToggle: (bool isTohgle) {
           print(isTohgle);
