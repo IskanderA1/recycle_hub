@@ -79,7 +79,7 @@ class _StoreScreenState extends State<StoreScreen> {
               return LoaderWidget();
             } else if (state is StoreStateError) {
               return CustomErrorWidget(
-                error: state.error,
+                message: state.message,
               );
             } else if (state is StoreStateLoaded) {
               return Padding(
@@ -211,9 +211,9 @@ class ProductCell extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(color: kColorWhite, borderRadius: BorderRadius.all(Radius.circular(15))),
         child: Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            mainAxisAlignment: MainAxisAlignment.end,
             children: [
               if (product.image != null && product.image.isNotEmpty)
                 Image.network(
@@ -221,6 +221,7 @@ class ProductCell extends StatelessWidget {
                   height: 100,
                   width: 100,
                 ),
+              if (product.image != null && product.image.isNotEmpty) Spacer(),
               Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -234,6 +235,7 @@ class ProductCell extends StatelessWidget {
                   ),
                 ],
               ),
+              Spacer(),
               InkWell(
                 onTap: () {
                   showErrorAlert(

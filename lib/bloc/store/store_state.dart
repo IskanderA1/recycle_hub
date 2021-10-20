@@ -29,8 +29,9 @@ class StoreStateBought extends StoreState {
 }
 
 class StoreStateError extends StoreState {
-  StoreStateError({this.error});
+  StoreStateError({@required this.error, @required this.message});
   final Error error;
+  final String message;
 
   @override
   List<Object> get props => [error];

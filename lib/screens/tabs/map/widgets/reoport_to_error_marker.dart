@@ -109,7 +109,7 @@ class _ReportToErrorMarkerScreenState extends State<ReportToErrorMarkerScreen> {
                           hintText: "Не верно указано...",
                         ),
                       ),
-                      Align(
+                      /* Align(
                         alignment: Alignment.centerLeft,
                         child: Text(
                           'Тип ошибки:',
@@ -119,7 +119,7 @@ class _ReportToErrorMarkerScreenState extends State<ReportToErrorMarkerScreen> {
                             color: Color(0xFF8D8D8D),
                           ),
                         ),
-                      ),
+                      ), */
                       _image != null
                           ? Image.file(
                               _image,

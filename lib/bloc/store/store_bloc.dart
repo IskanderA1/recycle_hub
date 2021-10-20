@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:recycle_hub/api/request/api_error.dart';
 import 'package:recycle_hub/api/services/store_service.dart';
 import 'package:recycle_hub/model/product.dart';
@@ -33,10 +34,10 @@ class StoreBloc extends Bloc<StoreEvent, StoreState> {
       yield StoreStateLoaded(serviceProducts: list, toEatProducts: []);
     } on RequestError catch (e) {
       dev.log("RequestError ERROR ${e.description}", name: 'bloc.store_bloc');
-      yield StoreStateError(error: e);
+      yield StoreStateError(error: e, message: e.description);
     } catch (e) {
       dev.log("ERROR ${e.toString()}", name: 'bloc.store_bloc');
-      yield StoreStateError(error: e);
+      yield StoreStateError(error: e, message: e.toString());
     }
   }
 
@@ -49,10 +50,10 @@ class StoreBloc extends Bloc<StoreEvent, StoreState> {
       }
     } on RequestError catch (e) {
       dev.log("RequestError ERROR ${e.description}", name: 'bloc.store_bloc');
-      yield StoreStateError(error: e);
+      yield StoreStateError(error: e, message: e.description);
     } catch (e) {
       dev.log("ERROR ${e.toString()}", name: 'bloc.store_bloc');
-      yield StoreStateError(error: e);
+      yield StoreStateError(error: e, message: e.toString());
     }
   }
 }

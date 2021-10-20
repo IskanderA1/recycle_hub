@@ -110,18 +110,19 @@ class PointsService {
                   element.receptionType == model.recType)
               .toList();
         }
+        List<CustMarker> filteredList = [];
         if (model.filters.isNotEmpty) {
           for (FilterType filter in model.filters) {
-            localList = localList.where((element) {
-              for (String item in element.acceptTypes) {
-                if (item == filter.id) return true;
+            localList.forEach((element) {
+              if(element.acceptTypes.contains(filter.id)){
+                filteredList.add(element);
               }
-              return false;
-            }).toList();
+            });
           }
         }
         print("Маркеры загружены из локального хранилища");
-        return localList;
+        filteredList = filteredList.toSet().toList();
+        return filteredList;
       }
 
       String _filters = '[';
