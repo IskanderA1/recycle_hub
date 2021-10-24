@@ -190,7 +190,11 @@ class _EditPointProfileScreenState extends State<EditPointProfileScreen> {
                                   isSelected: _pointRecycleTypes.contains(_recycleTypes[i]),
                                   text: _recycleTypes[i].name,
                                   onTap: () {
-                                    _pointRecycleTypes.add(_recycleTypes[i]);
+                                    if (_pointRecycleTypes.contains(_recycleTypes[i])) {
+                                      _pointRecycleTypes.remove(_recycleTypes[i]);
+                                    } else {
+                                      _pointRecycleTypes.add(_recycleTypes[i]);
+                                    }
                                     setState(() {});
                                   },
                                 ),

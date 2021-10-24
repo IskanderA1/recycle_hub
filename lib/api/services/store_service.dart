@@ -30,7 +30,7 @@ class StoreService {
       response = await CommonRequest.makeRequest('products');
       if (response.statusCode == 200) {
         var data = jsonDecode(response.body);
-        this._products = List<Product>.from(data?.map((e) => Product.fromMap(e)));
+        _products = List<Product>.from(data?.map((e) => Product.fromMap(e)));
       } else {
         _products = [];
       }
@@ -46,7 +46,10 @@ class StoreService {
       response = await CommonRequest.makeRequest('buy_product');
       if (response.statusCode == 200) {
         var data = jsonDecode(response.body);
-        this._purchases = List<Purchase>.from(data?.map((e) => Purchase.fromMap(e)));
+        _purchases = List<Purchase>.from(data?.map((e) => Purchase.fromMap(e)));
+        _purchases.sort((prev, current) {
+          return current.buyDate.compareTo(prev.buyDate ?? DateTime.now());
+        });
       } else {
         _purchases = [];
       }

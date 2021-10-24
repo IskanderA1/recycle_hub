@@ -271,10 +271,10 @@ class PointsService {
           method: CommonRequestMethod.put, body: point.toJson());
       var data = jsonDecode(response.body);
       print(data);
-      if (response.statusCode == 200) {
+      if (response.statusCode == 202) {
         /* final imagesResponse = await CommonRequest.makeRequest('rec_offer/${point.id}/images',
         body: ); */
-        FileUpLoader.sendPhotos(images, 'rec_offer/${point.id}/images');
+        FileUpLoader.sendPhotos(images, 'rec_points/${point.id}/images');
       } else {
         throw Exception('Не удалось сохранить изменения');
       }

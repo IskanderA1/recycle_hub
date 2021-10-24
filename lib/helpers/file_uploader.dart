@@ -7,19 +7,19 @@ import 'package:recycle_hub/helpers/messager_helper.dart';
 import 'package:recycle_hub/screens/tabs/map/widgets/loader_widget.dart';
 import 'package:recycle_hub/style/theme.dart';
 import 'dart:developer' as d;
+import 'package:http_parser/http_parser.dart';
 
 class FileUpLoader {
-  static const String devURL = "https://recyclehub.ru:5000/api";
-  static const String prodURL = "https://recyclehub.ru:5000/api";
+  static const String devURL = "https://recyclehub.ru:5000/api/";
+  static const String prodURL = "https://recyclehub.ru:5000/api/";
 
-  static Future<void> sendPhoto(File file, String endpoint,
-      [BuildContext context]) async {
+  static Future<void> sendPhoto(File file, String endpoint, [BuildContext context]) async {
     if (context != null) {
       _showLoader(context);
     }
 
     try {
-      await _sendPhoto(file, endpoint);
+      await _sendPhoto(file, endpoint, true);
     } catch (e) {
       d.log(e.toString(), name: 'helpers.file_uploader');
       if (context != null) {
@@ -55,8 +55,7 @@ class FileUpLoader {
     Navigator.of(context).popUntil(ModalRoute.withName('/'));
   }
 
-  static Future<void> sendPhotos(List<File> files, String endpoint,
-      [BuildContext context]) async {
+  static Future<void> sendPhotos(List<File> files, String endpoint, [BuildContext context]) async {
     if (context != null) {
       _showLoader(context);
     }
@@ -81,7 +80,7 @@ class FileUpLoader {
     }
   }
 
-  static Future<void> _sendPhoto(File file, String endpoint) async {
+  static Future<void> _sendPhoto(File file, String endpoint, [bool isProfileImage = false]) async {
     try {
       Dio dio = Dio(BaseOptions(baseUrl: devURL));
       String token = await SessionManager().getAuthorizationToken();
@@ -93,9 +92,23 @@ class FileUpLoader {
         throw Exception('Пользователь не авторизован');
       }
       String fileName = file.path.split('/').last;
-      FormData image = FormData.fromMap({
-        'files': [await MultipartFile.fromFile(file.path, filename: fileName)]
-      });
+      FormData image = isProfileImage
+          ? FormData.fromMap({
+              'file': await MultipartFile.fromFile(
+                file.path,
+                filename: fileName,
+                contentType: MediaType('image', 'jpg'),
+              ),
+            })
+          : FormData.fromMap({
+              'files': [
+                await MultipartFile.fromFile(
+                  file.path,
+                  filename: fileName,
+                  contentType: MediaType('image', 'jpg'),
+                ),
+              ]
+            });
       final response = await dio.post(
         endpoint,
         data: image,
@@ -111,6 +124,7 @@ class FileUpLoader {
         print(response.statusMessage);
       } else {}
     } catch (e) {
+      print(e);
       rethrow;
     }
   }

@@ -13,12 +13,10 @@ class AdminTransactionsPanelMainScreen extends StatefulWidget {
   const AdminTransactionsPanelMainScreen({Key key}) : super(key: key);
 
   @override
-  _AdminTransactionsPanelMainScreenState createState() =>
-      _AdminTransactionsPanelMainScreenState();
+  _AdminTransactionsPanelMainScreenState createState() => _AdminTransactionsPanelMainScreenState();
 }
 
-class _AdminTransactionsPanelMainScreenState
-    extends State<AdminTransactionsPanelMainScreen> {
+class _AdminTransactionsPanelMainScreenState extends State<AdminTransactionsPanelMainScreen> {
   AdminTransactionsState state;
   ReactionDisposer _disposer;
   ReactionDisposer _disposer2;
@@ -31,12 +29,8 @@ class _AdminTransactionsPanelMainScreenState
   @override
   void didChangeDependencies() {
     state ??= Provider.of<AdminTransactionsState>(context);
-    _disposer ??= reaction((_) => state.errorMessage,
-        (String message) => showMessage(context: context, message: message));
-    _disposer2 ??= reaction(
-        (_) => state.message,
-        (String message) => showMessage(
-            context: context, message: message, backColor: kColorGreen));
+    _disposer ??= reaction((_) => state.errorMessage, (String message) => showMessage(context: context, message: message));
+    _disposer2 ??= reaction((_) => state.message, (String message) => showMessage(context: context, message: message, backColor: kColorGreen));
     super.didChangeDependencies();
   }
 
@@ -44,7 +38,7 @@ class _AdminTransactionsPanelMainScreenState
   Widget build(BuildContext context) {
     return Scaffold(
       body: Observer(
-        builder: (context) {
+        builder: (_) {
           if (state.loading) {
             return LoaderWidget();
           }
@@ -70,7 +64,10 @@ class _AdminTransactionsPanelMainScreenState
           if (state.state == AdmStoreState.INIT) {
             return AdminScannerScreen();
           } else if (state.state == AdmStoreState.SCANNED) {
-            return TransactionCreateAdminPanelScreen();
+            return Provider<AdminTransactionsState>(
+              create: (_) => state,
+              child: TransactionCreateAdminPanelScreen(),
+            );
           } else if (state.state == AdmStoreState.CREATED) {
             return WillPopScope(
               onWillPop: () async {

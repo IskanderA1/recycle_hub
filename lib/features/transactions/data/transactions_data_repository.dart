@@ -40,23 +40,19 @@ class TransactionsDataRepository extends TransactionsRepository {
   }*/
 
   @override
-  Future<void> createGarbageCollect(
-      String userToken, List<GarbageTupple> items) async {
+  Future<Transaction> createGarbageCollect(String userToken, List<GarbageTupple> items) async {
     try {
-      var response = await CommonRequest.makeRequest("recycle",
-          method: CommonRequestMethod.post,
-          body: {
-            "user_token": userToken,
-            "items": items
-                .map((e) => {
-                      "filter_type": e.filterType.id,
-                      "amount": e.ammount.toInt()
-                    })
-                .toList()
-          });
+      var response = await CommonRequest.makeRequest("recycle", method: CommonRequestMethod.post, body: {
+        "user_token": userToken,
+        "items": items.map((e) => {"filter_type": e.filterType.id, "amount": e.ammount.toInt()}).toList()
+      });
       if (response.statusCode != 200) {
         print(jsonDecode(response.body));
         throw Exception("Не удалось отправить заявку");
+      } else {
+        final data = jsonDecode(response.body);
+        Transaction tr = Transaction.fromMap(data);
+        return tr;
       }
     } catch (e) {
       rethrow;
@@ -81,8 +77,7 @@ class TransactionsDataRepository extends TransactionsRepository {
   @override
   Future<Transaction> getTransactionById(String recycleId) async {
     try {
-      var response = await CommonRequest.makeRequest('recycle',
-          params: {"recycle_id": recycleId});
+      var response = await CommonRequest.makeRequest('recycle', params: {"recycle_id": recycleId});
       if (response.statusCode == 200) {
         var data = jsonDecode(response.body);
         return Transaction.fromMap(data);

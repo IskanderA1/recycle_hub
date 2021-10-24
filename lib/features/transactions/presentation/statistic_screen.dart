@@ -17,6 +17,7 @@ import 'package:recycle_hub/style/theme.dart';
 import 'package:menu_button/menu_button.dart';
 import 'package:step_progress_indicator/step_progress_indicator.dart';
 import 'package:mobx/mobx.dart';
+import 'package:intl/date_symbol_data_local.dart';
 
 List<Widget> sIcons = [
   SvgPicture.asset("svg/blue_container.svg"),
@@ -42,11 +43,14 @@ class _StatisticScreenState extends State<StatisticScreen> {
   DropDownMenuItem _currentPeriod;
   TransactionsState _transactionsState;
   ReactionDisposer _disposer;
+  DateFormat _formatM, _formatD;
 
   @override
   void initState() {
     super.initState();
     _currentPeriod = _datesList[0];
+    initializeDateFormatting('ru_RU', null);
+    _formatM = DateFormat('MMMM dd', 'ru_RU');
   }
 
   @override
@@ -117,7 +121,7 @@ class _StatisticScreenState extends State<StatisticScreen> {
                                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22, fontFamily: 'Gillroy'),
                               ),
                               Text(
-                                "${_currentPeriod.monthFrom} ${_currentPeriod.from.day} - ${_currentPeriod.monthTo} ${_currentPeriod.to.day}",
+                                "${_formatM.format(_currentPeriod.from)} - ${_formatM.format(_currentPeriod.to)}",
                                 style: TextStyle(fontSize: 14, fontFamily: 'Gillroy'),
                               ),
                             ],
@@ -222,13 +226,14 @@ class _StatisticScreenState extends State<StatisticScreen> {
                                     SizedBox(
                                       width: 20,
                                     ),
-                                    Container(
-                                      height: 55,
-                                      width: 100,
-                                      decoration: BoxDecoration(
-                                        color: const Color(0xFFF7F7F7),
-                                        borderRadius: BorderRadius.all(
-                                          Radius.circular(kBorderRadius),
+                                    Expanded(
+                                      child: Container(
+                                        constraints: BoxConstraints(maxHeight: 55, minHeight: 55),
+                                        decoration: BoxDecoration(
+                                          color: const Color(0xFFF7F7F7),
+                                          borderRadius: BorderRadius.all(
+                                            Radius.circular(kBorderRadius),
+                                          ),
                                         ),
                                       ),
                                     )
@@ -311,7 +316,7 @@ class _StatisticScreenState extends State<StatisticScreen> {
                                   ),
                                   Expanded(
                                     child: Container(
-                                      height: 55,
+                                      constraints: BoxConstraints(maxHeight: 55, minHeight: 55),
                                       decoration: BoxDecoration(
                                         color: const Color(0xFFF7F7F7),
                                         borderRadius: BorderRadius.all(

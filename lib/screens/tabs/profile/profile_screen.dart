@@ -74,13 +74,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
     Size _size = MediaQuery.of(context).size;
     return BlocBuilder<AuthBloc, AuthState>(
       bloc: GetIt.I.get<AuthBloc>(),
-      buildWhen: (previous, current) {
-        if (previous != current) {
-          return true;
-        } else {
-          return false;
-        }
-      },
       builder: (context, state) {
         /* if (state is AuthStateLogedIn &&
             state.user.userType == UserTypes.admin) {
@@ -236,131 +229,133 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   Widget buildStatus(AuthState state, int place, int made) {
-    return Container(
-      decoration: BoxDecoration(
-        color: kColorWhite,
-        borderRadius: BorderRadius.circular(kBorderRadius),
-      ),
-      padding: EdgeInsets.all(16),
-      child: Column(
-        children: [
-          Container(
-            padding: EdgeInsets.only(bottom: 16),
-            child: Stack(
-              fit: StackFit.passthrough,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    UserImagePicker(
-                      image: state.userModel.image,
-                    ),
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 16, top: 16),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              state.userModel.name,
-                              style: TextStyle(
-                                color: kColorBlack,
-                                fontFamily: 'GillroyMedium',
-                                fontSize: 18,
+    return Builder(builder: (context) {
+      return Container(
+        decoration: BoxDecoration(
+          color: kColorWhite,
+          borderRadius: BorderRadius.circular(kBorderRadius),
+        ),
+        padding: EdgeInsets.all(16),
+        child: Column(
+          children: [
+            Container(
+              padding: EdgeInsets.only(bottom: 16),
+              child: Stack(
+                fit: StackFit.passthrough,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      UserImagePicker(
+                        image: state.userModel.image,
+                      ),
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 16, top: 16),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                state.userModel.name,
+                                style: TextStyle(
+                                  color: kColorBlack,
+                                  fontFamily: 'GillroyMedium',
+                                  fontSize: 18,
+                                ),
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 2,
                               ),
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 2,
-                            ),
-                            Text(
-                              "Эколог",
-                              style: TextStyle(
-                                color: kColorBlack,
-                                fontFamily: 'GillroyMedium',
-                                fontSize: 12,
+                              Text(
+                                "Эколог",
+                                style: TextStyle(
+                                  color: kColorBlack,
+                                  fontFamily: 'GillroyMedium',
+                                  fontSize: 12,
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
+                    ],
+                  ),
+                  Positioned(
+                    top: 0,
+                    right: 0,
+                    child: InkWell(
+                      onTap: () {
+                        AlertHelper.showBalanceInfo(context);
+                      },
+                      child: Icon(
+                        Icons.info_outline,
+                        color: kColorGreen,
+                        size: 25,
+                      ),
                     ),
+                  )
+                ],
+              ),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(
+                      "$place",
+                      style: TextStyle(color: kColorBlack, fontSize: 28),
+                    ),
+                    Text(
+                      "Место",
+                      style: TextStyle(color: kColorBlack, fontSize: 16),
+                    )
                   ],
                 ),
-                Positioned(
-                  top: 0,
-                  right: 0,
-                  child: InkWell(
-                    onTap: () {
-                      AlertHelper.showBalanceInfo(context);
-                    },
-                    child: Icon(
-                      Icons.info_outline,
-                      color: kColorGreen,
-                      size: 25,
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    RichText(
+                      text: TextSpan(
+                          text: '${userState.ecoCoins}',
+                          style: TextStyle(color: kColorGreen, fontSize: 28, fontFamily: 'GilroyMedium'),
+                          children: [
+                            TextSpan(
+                              text: '/',
+                              style: TextStyle(color: kColorBlack),
+                            ),
+                            TextSpan(
+                              text: '${userState.freezeEcoCoins}',
+                              style: TextStyle(color: kColorRed),
+                            ),
+                          ]),
                     ),
-                  ),
+                    Text(
+                      "Баланс",
+                      style: TextStyle(color: kColorBlack, fontSize: 16),
+                    )
+                  ],
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(
+                      "$made",
+                      style: TextStyle(color: kColorBlack, fontSize: 28),
+                    ),
+                    Text(
+                      "Сдал(кг)",
+                      style: TextStyle(color: kColorBlack, fontSize: 16),
+                    )
+                  ],
                 )
               ],
             ),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Text(
-                    "$place",
-                    style: TextStyle(color: kColorBlack, fontSize: 28),
-                  ),
-                  Text(
-                    "Место",
-                    style: TextStyle(color: kColorBlack, fontSize: 16),
-                  )
-                ],
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  RichText(
-                    text: TextSpan(
-                        text: '${userState.ecoCoins}',
-                        style: TextStyle(color: kColorGreen, fontSize: 28, fontFamily: 'GilroyMedium'),
-                        children: [
-                          TextSpan(
-                            text: '/',
-                            style: TextStyle(color: kColorBlack),
-                          ),
-                          TextSpan(
-                            text: '${userState.freezeEcoCoins}',
-                            style: TextStyle(color: kColorRed),
-                          ),
-                        ]),
-                  ),
-                  Text(
-                    "Баланс",
-                    style: TextStyle(color: kColorBlack, fontSize: 16),
-                  )
-                ],
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Text(
-                    "$made",
-                    style: TextStyle(color: kColorBlack, fontSize: 28),
-                  ),
-                  Text(
-                    "Сдал(кг)",
-                    style: TextStyle(color: kColorBlack, fontSize: 16),
-                  )
-                ],
-              )
-            ],
-          ),
-        ],
-      ),
-    );
+          ],
+        ),
+      );
+    });
   }
 
   Widget buildAchievments(String status, int made) {
@@ -482,7 +477,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             );
           }
         } else if (index == 4) {
-          NetworkHelper.openUrl('http://vk.com/id0', context);
+          NetworkHelper.openUrl('https://vk.com/recyclehub', context);
         }
       },
       text: text,

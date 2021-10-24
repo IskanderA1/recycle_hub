@@ -6,9 +6,12 @@ import 'package:flutter/foundation.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 import 'package:recycle_hub/api/services/points_service.dart';
+import 'package:recycle_hub/model/map_models.dart/accept_types_collection_model.dart';
 import 'package:recycle_hub/model/map_models.dart/filter_model.dart';
 import 'package:recycle_hub/model/map_models.dart/marker.dart';
 import 'dart:developer' as developer;
+
+import 'package:recycle_hub/screens/tabs/map/widgets/filter_card_widget.dart';
 
 part 'map_event.dart';
 part 'map_state.dart';
@@ -18,6 +21,8 @@ class MapBloc extends Bloc<MapEvent, MapState> {
 
   static final PointsService mapService = PointsService();
   final Location location = Location.instance;
+  MapFilterModel currentFilterModel = MapFilterModel();
+  FilterTypesCollection filterTypesCollection;
 
   @override
   Stream<MapState> mapEventToState(

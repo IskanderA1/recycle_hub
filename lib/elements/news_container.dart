@@ -47,12 +47,13 @@ class NewsContainer extends StatelessWidget {
                           imageUrl: news.image,
                           imageBuilder: (context, imageProvider) {
                             return Blur(
-                              blur: 5.0,
+                              blur: 10.0,
                               colorOpacity: 0.0,
                               child: Container(
-                                  decoration: BoxDecoration(
-                                image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
-                              )),
+                                decoration: BoxDecoration(
+                                  image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
+                                ),
+                              ),
                               overlay: Center(
                                 child: Container(
                                   decoration: BoxDecoration(

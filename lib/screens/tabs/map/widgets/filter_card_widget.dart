@@ -12,7 +12,7 @@ class FilterCardWidget extends StatefulWidget {
   final Function(FilterType type) onpressed;
   final Function(FilterType type) onUp;
   final bool tapable;
-  bool isSelected;
+  final bool isSelected;
   FilterCardWidget(
       {Key key,
       @required this.size,
@@ -30,15 +30,24 @@ class FilterCardWidget extends StatefulWidget {
 }
 
 class FilterCardWidgetState extends State<FilterCardWidget> {
+
+  bool isSelected;
+  
+  @override
+  void initState() {
+    super.initState();
+    isSelected = widget.isSelected;
+  }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
         if (widget.tapable) {
-          if (widget.isSelected) {
+          if (isSelected) {
             widget.onUp(widget.acceptType);
             setState(() {
-              widget.isSelected = false;
+              isSelected = false;
             });
           } else {
             pressFunc();
@@ -51,7 +60,7 @@ class FilterCardWidgetState extends State<FilterCardWidget> {
           margin: EdgeInsets.all(10),
           decoration: BoxDecoration(
               border: Border.all(
-                color: widget.isSelected ? kColorGreen : Color(0xFFF2F2F2),
+                color: isSelected ? kColorGreen : Color(0xFFF2F2F2),
                 width: 1,
               ),
               color: Color(0xFFF2F2F2),
@@ -74,7 +83,7 @@ class FilterCardWidgetState extends State<FilterCardWidget> {
                     width: 30,
                     child: Icon(
                       Icons.info_outline,
-                      color: widget.isSelected ? Colors.green : kColorGreyDark,
+                      color: isSelected ? Colors.green : kColorGreyDark,
                       size: 25,
                     ),
                   ),
@@ -88,7 +97,7 @@ class FilterCardWidgetState extends State<FilterCardWidget> {
                   Icon(
                     getIconData(widget.acceptType.varName),
                     size: widget.size / 6,
-                    color: widget.isSelected ? kColorGreen : Color(0xFF616161),
+                    color: isSelected ? kColorGreen : Color(0xFF616161),
                   ),
                   SizedBox(
                     height: 5,
@@ -96,7 +105,7 @@ class FilterCardWidgetState extends State<FilterCardWidget> {
                   AutoSizeText(
                     widget.acceptType.name,
                     style: TextStyle(
-                        color: widget.isSelected
+                        color: isSelected
                             ? kColorGreen
                             : Color(0xFF616161)),
                   )
@@ -110,7 +119,7 @@ class FilterCardWidgetState extends State<FilterCardWidget> {
   void pressFunc() {
     widget.onpressed(widget.acceptType);
     setState(() {
-      widget.isSelected = true;
+      isSelected = true;
     });
   }
 }

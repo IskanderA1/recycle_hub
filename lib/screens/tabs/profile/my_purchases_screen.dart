@@ -6,6 +6,8 @@ import 'package:intl/intl.dart';
 import 'package:recycle_hub/api/services/store_service.dart';
 import 'package:recycle_hub/api/services/user_service.dart';
 import 'package:recycle_hub/bloc/cubit/profile_menu_cubit.dart';
+import 'package:recycle_hub/bloc/store/store_bloc.dart';
+import 'package:recycle_hub/helpers/messager_helper.dart';
 import 'package:recycle_hub/icons/app_bar_icons_icons.dart';
 import 'package:recycle_hub/model/purchase.dart';
 import 'package:recycle_hub/screens/tabs/map/widgets/loader_widget.dart';
@@ -20,31 +22,26 @@ class MyPurchasesScreen extends StatefulWidget {
 }
 
 class _MyPurchasesScreenState extends State<MyPurchasesScreen> {
-  List<Purchase> list = StoreService().purchases;
+  List<Purchase> list = [];
 
-  ListView cardsList;
+  Widget cardsList;
   ScrollController scrollController;
 
   @override
   void initState() {
     super.initState();
-    cardsList = ListView.builder(
-      controller: scrollController,
-      shrinkWrap: true,
-      itemCount: list.length,
-      padding: EdgeInsets.only(
-        bottom: 80,
-      ),
-      itemBuilder: (BuildContext context, int i) {
-        return GestureDetector(
-          onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => PurchaseDetailScreen(purchase: list[i]))),
-          child: PurchaseCell(
-            purchase: list[i],
-          ),
-        );
-      },
-    );
     scrollController = ScrollController();
+  }
+
+  Future<List<Purchase>> _loadPurchases() async {
+    try {
+      await StoreService().loadPurchases();
+      list = StoreService().purchases;
+      return list;
+    } catch (e) {
+      showMessage(context: context, message: 'Не удалось загрузить покупки');
+      return [];
+    }
   }
 
   @override
@@ -65,7 +62,44 @@ class _MyPurchasesScreenState extends State<MyPurchasesScreen> {
         centerTitle: true,
       ),
       backgroundColor: kColorScaffold,
-      body: Padding(padding: EdgeInsets.fromLTRB(16, 0, 16, 0), child: cardsList),
+      body: FutureBuilder(
+          future: _loadPurchases(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.done) {
+              if (snapshot.hasData) {
+                cardsList = ListView.builder(
+                  controller: scrollController,
+                  shrinkWrap: true,
+                  itemCount: snapshot.data.length,
+                  padding: EdgeInsets.only(
+                    bottom: 80,
+                  ),
+                  itemBuilder: (BuildContext context, int i) {
+                    return GestureDetector(
+                      onTap: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => PurchaseDetailScreen(
+                            purchase: snapshot.data[i],
+                          ),
+                        ),
+                      ),
+                      child: PurchaseCell(
+                        purchase: list[i],
+                      ),
+                    );
+                  },
+                );
+              } else {
+                cardsList = Container();
+              }
+              return Padding(
+                padding: EdgeInsets.fromLTRB(16, 0, 16, 0),
+                child: cardsList,
+              );
+            }
+            return Container();
+          }),
     );
   }
 }

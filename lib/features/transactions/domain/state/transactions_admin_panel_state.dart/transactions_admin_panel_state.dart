@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:mobx/mobx.dart';
 
 import 'package:recycle_hub/features/transactions/domain/repository/repository.dart';
+import 'package:recycle_hub/helpers/file_uploader.dart';
 import '../../../../../model/garbage.dart';
 part 'transactions_admin_panel_state.g.dart';
 
@@ -32,7 +33,7 @@ abstract class TransactionsStateB with Store {
   bool loading = false;
 
   @observable
-  List<File> images;
+  List<File> images = [];
 
   @observable
   AdmStoreState state = AdmStoreState.INIT;
@@ -93,7 +94,14 @@ abstract class TransactionsStateB with Store {
     try {
       errorMessage = null;
       try {
-        await _registrationRepository.createGarbageCollect(userToken, garbages);
+        final tr = await _registrationRepository.createGarbageCollect(userToken, garbages);
+        if(tr != null){
+          try {
+            FileUpLoader.sendPhotos(images, 'recycle/${tr.id}/images');
+          }catch (e) {
+            print(e);
+          }
+        }
       } catch (e) {
         print(errorMessage = e.toString());
         errorMessage = e.toString();

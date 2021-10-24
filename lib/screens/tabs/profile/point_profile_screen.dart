@@ -222,6 +222,7 @@ class _PointProfileScreenState extends State<PointProfileScreen> {
                         CommonCell(
                           onTap: () {
                             GetIt.I.get<AuthBloc>().add(AuthEventLogout());
+                            GetIt.I.get<ProfileMenuCubit>().moveTo(ProfileMenuStates.USER_PROFILE);
                           },
                           prefixIcon: Icon(
                             UserProfileIcons.log_out,

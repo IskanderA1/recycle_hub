@@ -1,9 +1,14 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:recycle_hub/api/request/request.dart';
 import 'package:recycle_hub/elements/common_button.dart';
 import 'package:recycle_hub/elements/common_cell.dart';
+import 'package:recycle_hub/helpers/messager_helper.dart';
 import 'package:recycle_hub/helpers/network_helper.dart';
 import 'package:recycle_hub/icons/app_bar_icons_icons.dart';
+import 'package:recycle_hub/screens/tabs/map/widgets/loader_widget.dart';
 import 'package:recycle_hub/style/style.dart';
 import 'package:recycle_hub/style/theme.dart';
 
@@ -14,6 +19,7 @@ class BePartnerScreen extends StatefulWidget {
 
 class _BePartnerScreenState extends State<BePartnerScreen> {
   TextEditingController _text = TextEditingController();
+  bool isLoading = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -57,7 +63,8 @@ class _BePartnerScreenState extends State<BePartnerScreen> {
                   border: OutlineInputBorder(),
                   contentPadding: EdgeInsets.only(left: 15),
                   hintText: 'Напишите ваше сообщение тут...',
-                  hintStyle: kHintTextStyle,
+                  hintStyle: kHintTextStyle.copyWith(height: 1.6),
+                  
                 ),
                 textAlign: TextAlign.left,
                 textAlignVertical: TextAlignVertical.top,
@@ -72,13 +79,53 @@ class _BePartnerScreenState extends State<BePartnerScreen> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(
-                      "Отправить",
-                      style: TextStyle(color: kColorWhite, fontWeight: FontWeight.bold, fontFamily: 'Gilroy'),
-                    )
+                    if (isLoading)
+                      Align(
+                        alignment: Alignment.center,
+                        child: LoaderWidget(
+                          color: kColorWhite,
+                          size: 30,
+                        ),
+                      ),
+                    if (!isLoading)
+                      Text(
+                        "Отправить",
+                        style: TextStyle(color: kColorWhite, fontWeight: FontWeight.bold, fontFamily: 'Gilroy'),
+                      )
                   ],
                 ),
-                ontap: () {},
+                ontap: () async {
+                  try {
+                    if (_text.text.trim().isEmpty) return;
+                    setState(() {
+                      isLoading = true;
+                    });
+                    final response = await CommonRequest.makeRequest(
+                      'partners',
+                      method: CommonRequestMethod.post,
+                      body: {"request_message": _text.text},
+                    );
+                    if (response.statusCode == 201) {
+                      showMessage(
+                        context: context,
+                        message: 'Успешно',
+                        backColor: kColorGreen,
+                      );
+                    } else {
+                      var data = jsonDecode(response.body);
+                      showMessage(
+                        context: context,
+                        message: '${data['error']}',
+                      );
+                    }
+                  } catch (e) {
+                    print(e.toString());
+                  } finally {
+                    setState(() {
+                      isLoading = false;
+                    });
+                  }
+                },
               ),
             ),
           ],

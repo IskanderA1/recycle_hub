@@ -100,11 +100,7 @@ class _ContactsScreenState extends State<ContactsScreen> {
               },
             ),
             CommonCell(
-              prefixIcon: FaIcon(
-                FontAwesomeIcons.instagram,
-                color: kColorGreyLight,
-                size: 25,
-              ),
+              prefixIcon: Image.asset('assets/icons/inst.webp',),
               text: "Инстаграм",
               onTap: () {
                 NetworkHelper.openUrl('https://instagram.com/recyclehub.ru', context);

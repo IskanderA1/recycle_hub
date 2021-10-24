@@ -36,7 +36,7 @@ class AdviceDetails extends StatelessWidget {
                             imageUrl: news.image,
                             imageBuilder: (context, imageProvider) {
                               return Blur(
-                                blur: 5.0,
+                                blur: 10.0,
                                 colorOpacity: 0.0,
                                 child: Container(
                                     decoration: BoxDecoration(

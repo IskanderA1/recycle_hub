@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -10,7 +11,11 @@ import 'package:recycle_hub/style/theme.dart';
 class UserImagePicker extends StatefulWidget {
   final String image;
   final Function(bool) onSelected;
-  UserImagePicker({this.image, this.onSelected});
+  UserImagePicker({
+    Key key,
+    this.image,
+    this.onSelected,
+  }) : super(key: key);
   @override
   _UserImagePickerState createState() => _UserImagePickerState();
 }
@@ -18,6 +23,7 @@ class UserImagePicker extends StatefulWidget {
 class _UserImagePickerState extends State<UserImagePicker> {
   File _image;
   bool _isLoading = true;
+  Widget _imageWidget;
 
   @override
   void initState() {
@@ -44,13 +50,18 @@ class _UserImagePickerState extends State<UserImagePicker> {
     try {
       final img = await FilePicker.getImageFromStorage();
       if (img != null) {
-        this._image = img;
+        _image = img;
         await FileUpLoader.sendPhoto(_image, '/update_profile_image', context);
       }
       if (widget.onSelected != null) {
         widget.onSelected(true);
       }
-      setState(() {});
+      setState(() {
+        _imageWidget = Image.file(
+          _image,
+          fit: BoxFit.cover,
+        );
+      });
     } catch (e) {
       _image = null;
     }
@@ -58,9 +69,12 @@ class _UserImagePickerState extends State<UserImagePicker> {
 
   Future<void> _loadImage(String imageUrl) async {
     try {
-      this._image = File.fromUri(Uri.tryParse(imageUrl));
+      _imageWidget = CachedNetworkImage(
+        imageUrl: imageUrl,
+        fit: BoxFit.cover,
+      );
     } catch (e) {
-      this._image = null;
+      _image = null;
     } finally {
       setState(() {
         _isLoading = false;
@@ -85,29 +99,14 @@ class _UserImagePickerState extends State<UserImagePicker> {
             ),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(41),
-              child:
-                  /* image != null
-                        ? Container(
-                            width: 100.0,
-                            height: 100.0,
-                            decoration: new BoxDecoration(
-                              borderRadius: new BorderRadius.circular(3.0),
-                              color: const Color(0xff7c94b6),
-                              image: new DecorationImage(
-                                image: new NetworkImage(image),
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                          )
-                        :  */
-                  _image != null
-                      ? Image.file(_image)
-                      : Center(
-                          child: FaIcon(
-                            FontAwesomeIcons.user,
-                            color: kColorGreen,
-                          ),
-                        ),
+              child: _imageWidget != null
+                  ? _imageWidget
+                  : Center(
+                      child: FaIcon(
+                        FontAwesomeIcons.user,
+                        color: kColorGreen,
+                      ),
+                    ),
             ),
           ),
           Container(
@@ -120,8 +119,7 @@ class _UserImagePickerState extends State<UserImagePicker> {
                 alignment: Alignment.center,
                 height: 31,
                 width: 31,
-                decoration:
-                    BoxDecoration(shape: BoxShape.circle, color: kColorWhite),
+                decoration: BoxDecoration(shape: BoxShape.circle, color: kColorWhite),
                 child: Icon(
                   Icons.camera_alt_outlined,
                   color: kColorGreen,

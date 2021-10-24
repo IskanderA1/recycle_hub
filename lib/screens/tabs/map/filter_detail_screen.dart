@@ -26,19 +26,18 @@ class MapFilterDetailScreen extends StatefulWidget {
 class _MapFilterDetailScreenState extends State<MapFilterDetailScreen> {
   final TextEditingController _searchController = TextEditingController();
   Size size;
-  MapFilterModel currentFilterModel = MapFilterModel();
-  FilterTypesCollection filterTypesCollection;
-  List<FilterCardWidget> filterCards;
+
   GarbageCollectionTypeBloc garbageCollBloc = GarbageCollectionTypeBloc();
   MarkerWorkModeBloc markerWorkModeBloc = MarkerWorkModeBloc();
   MapBloc mapBloc;
+  List<FilterCardWidget> filterCards;
   /*GlobalKey<FilterCardWidgetState> _key =
       GlobalKey<FilterCardWidgetState>(debugLabel: "__myKey__");*/
 
   @override
   void initState() {
     mapBloc = GetIt.I.get<MapBloc>();
-    filterTypesCollection = FilterTypesCollection.fromFilterTypes(GetIt.I.get<FilterTypeCubit>().state);
+    mapBloc.filterTypesCollection = FilterTypesCollection.fromFilterTypes(GetIt.I.get<FilterTypeCubit>().state);
     super.initState();
   }
 
@@ -59,7 +58,7 @@ class _MapFilterDetailScreenState extends State<MapFilterDetailScreen> {
             centerTitle: true,
             leading: GestureDetector(
               onTap: () {
-                //markersCollectionBloc.loadMarkersFromLast();
+                mapBloc.add(MapEventFilter(filter: mapBloc.currentFilterModel));
                 Navigator.pop(context);
               },
               child: Icon(
@@ -84,7 +83,7 @@ class _MapFilterDetailScreenState extends State<MapFilterDetailScreen> {
                         cursorColor: kColorBlack,
                       ),
                       suggestionsCallback: (str) {
-                        return filterTypesCollection.getPatterns(str);
+                        return mapBloc.filterTypesCollection.getPatterns(str);
                       },
                       itemBuilder: (BuildContext context, suggestion) {
                         return ListTile(
@@ -92,8 +91,9 @@ class _MapFilterDetailScreenState extends State<MapFilterDetailScreen> {
                         );
                       },
                       onSuggestionSelected: (String suggestion) {
-                        selectCardByVarName(filterTypesCollection.getVarNameByKeyWord(suggestion));
-                        currentFilterModel.filters.add(filterTypesCollection.acceptTypes.firstWhere((element) => element.varName == suggestion));
+                        selectCardByVarName(mapBloc.filterTypesCollection.getVarNameByKeyWord(suggestion));
+                        mapBloc.currentFilterModel.filters
+                            .add(mapBloc.filterTypesCollection.acceptTypes.firstWhere((element) => element.varName == suggestion));
                       },
                     ),
                   ),
@@ -112,15 +112,21 @@ class _MapFilterDetailScreenState extends State<MapFilterDetailScreen> {
                       bloc: GetIt.I.get<FilterTypeCubit>(),
                       builder: (context, List<FilterType> state) {
                         double _size = MediaQuery.of(context).size.width;
-                        filterCards = List<FilterCardWidget>.from(state.map((x) => FilterCardWidget(
-                              //key: _key,
-                              isSelected: false,
-                              acceptType: x,
-                              size: _size,
-                              onUp: rejectVarName,
-                              onpressed: injectNewVarName,
-                              tapable: true,
-                            )));
+                        filterCards = List<FilterCardWidget>.from(
+                          state.map(
+                            (x) {
+                              return FilterCardWidget(
+                                //key: _key,
+                                isSelected: mapBloc.currentFilterModel.filters.contains(x),
+                                acceptType: x,
+                                size: _size,
+                                onUp: rejectVarName,
+                                onpressed: injectNewVarName,
+                                tapable: true,
+                              );
+                            },
+                          ),
+                        );
 
                         return GridView.count(
                           /*gridDelegate:
@@ -155,7 +161,7 @@ class _MapFilterDetailScreenState extends State<MapFilterDetailScreen> {
                     alignment: Alignment.bottomCenter,
                     child: GestureDetector(
                       onTap: () {
-                        mapBloc.add(MapEventFilter(filter: currentFilterModel));
+                        mapBloc.add(MapEventFilter(filter: mapBloc.currentFilterModel));
                         Navigator.pop(context);
                       },
                       child: ConstrainedBox(
@@ -196,17 +202,17 @@ class _MapFilterDetailScreenState extends State<MapFilterDetailScreen> {
   }
 
   injectNewVarName(FilterType type) {
-    this.currentFilterModel.filters.add(type);
+    this.mapBloc.currentFilterModel.filters.add(type);
   }
 
   rejectVarName(FilterType type) {
-    this.currentFilterModel.filters.remove(type);
+    mapBloc.currentFilterModel.filters = mapBloc.currentFilterModel.filters.toSet().toList()..remove(type);
   }
 
   void acceptFilters() {
     print("///////////////////");
-    for (int i = 0; i < currentFilterModel.filters.length; i++) {
-      print(currentFilterModel.filters[i]);
+    for (int i = 0; i < mapBloc.currentFilterModel.filters.length; i++) {
+      print(mapBloc.currentFilterModel.filters[i]);
     }
     print("///////////////////");
     //markersCollectionBloc.filterMarkers(currentFilterModel);
@@ -226,7 +232,7 @@ class _MapFilterDetailScreenState extends State<MapFilterDetailScreen> {
                   Expanded(
                     child: GestureDetector(
                       onTap: () {
-                        currentFilterModel.paybackType = "paid";
+                        mapBloc.currentFilterModel.paybackType = "paid";
                         markerWorkModeBloc.pickEvent(MODE.PAID);
                       },
                       child: Container(
@@ -247,7 +253,7 @@ class _MapFilterDetailScreenState extends State<MapFilterDetailScreen> {
                   Expanded(
                     child: GestureDetector(
                       onTap: () {
-                        currentFilterModel.paybackType = "free";
+                        mapBloc.currentFilterModel.paybackType = "free";
                         markerWorkModeBloc.pickEvent(MODE.FREE);
                       },
                       child: Container(
@@ -292,7 +298,7 @@ class _MapFilterDetailScreenState extends State<MapFilterDetailScreen> {
                   Expanded(
                     child: GestureDetector(
                       onTap: () {
-                        currentFilterModel.paybackType = "partner";
+                        mapBloc.currentFilterModel.paybackType = "partner";
                         markerWorkModeBloc.pickEvent(MODE.PARTNERS);
                       },
                       child: Container(
@@ -324,7 +330,7 @@ class _MapFilterDetailScreenState extends State<MapFilterDetailScreen> {
               Expanded(
                 child: GestureDetector(
                   onTap: () {
-                    currentFilterModel.recType = "recycle";
+                    mapBloc.currentFilterModel.recType = "recycle";
                     garbageCollBloc.pickEvent(GCOLLTYPE.RECYCLING);
                   },
                   child: Container(
@@ -346,7 +352,7 @@ class _MapFilterDetailScreenState extends State<MapFilterDetailScreen> {
               Expanded(
                 child: GestureDetector(
                   onTap: () {
-                    currentFilterModel.recType = "utilisation";
+                    mapBloc.currentFilterModel.recType = "utilisation";
                     garbageCollBloc.pickEvent(GCOLLTYPE.UTILISATION);
                   },
                   child: Container(
@@ -368,7 +374,7 @@ class _MapFilterDetailScreenState extends State<MapFilterDetailScreen> {
               Expanded(
                 child: GestureDetector(
                   onTap: () {
-                    currentFilterModel.recType = "charity";
+                    mapBloc.currentFilterModel.recType = "charity";
                     garbageCollBloc.pickEvent(GCOLLTYPE.BENEFIT);
                   },
                   child: Container(

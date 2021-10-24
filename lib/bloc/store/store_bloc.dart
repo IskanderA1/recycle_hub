@@ -30,6 +30,7 @@ class StoreBloc extends Bloc<StoreEvent, StoreState> {
   Stream<StoreState> _mapInitToState() async* {
     yield StoreStateLoading();
     try {
+      await service.loadProducts();
       final list = service.products;
       yield StoreStateLoaded(serviceProducts: list, toEatProducts: []);
     } on RequestError catch (e) {
@@ -42,7 +43,7 @@ class StoreBloc extends Bloc<StoreEvent, StoreState> {
   }
 
   Stream<StoreState> _mapBuyToState(StoreEventBuy event) async* {
-    yield StoreStateLoading();
+    /* yield StoreStateLoading(); */
     try {
       final purchase = await service.buyProduct(event.product.id);
       if(purchase != null){
