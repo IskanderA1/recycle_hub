@@ -3,7 +3,7 @@ description: A new Flutter project.
 
 # The following line prevents the package from being accidentally published to
 # pub.dev using `pub publish`. This is preferred for private packages.
-version: 1.0.1+2
+version: 1.0.3+3
 
 environment:
   sdk: ">=2.3.0 <3.0.0"
