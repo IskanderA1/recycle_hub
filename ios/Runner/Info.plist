@@ -6,6 +6,10 @@
 	<true/>
 	<key>NSCameraUsageDescription</key>
 	<string>This app needs camera access to scan QR codes</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+    <string>This app needs photo for send PP info</string>
+    <key>kTCCServiceMediaLibrary</key>
+    <string>This app needs photo for send PP info</string>
 	<key>NSLocationAlwaysUsageDescription</key>
 	<string>Needed to access location</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
