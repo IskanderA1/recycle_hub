@@ -1,4 +1,4 @@
-package com.example.recycle_hub
+package com.beerstudio.recycle_hub
 
 import io.flutter.embedding.android.FlutterActivity
 
