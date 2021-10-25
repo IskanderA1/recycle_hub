@@ -242,9 +242,9 @@ class UserService {
 
   Future<void> sendCode({String username}) async {
     try {
-      final response = await CommonRequest.makeRequest("/api/send_check_code",
+      final response = await CommonRequest.makeRequest("send_check_code",
           method: CommonRequestMethod.post, body: {"username": username}, needAuthorization: false);
-      if (response.statusCode != 201) {
+      if (response.statusCode != 200) {
         throw RequestError(code: RequestErrorCode.noSuchUser);
       }
       SessionManager().saveLogin(username);
@@ -254,10 +254,13 @@ class UserService {
   }
 
   Future<bool> chechCode({String username, String code}) async {
+    if(username == null){
+      username = await SessionManager().getLogin();
+    }
     try {
-      final response = await CommonRequest.makeRequest("/api/get_recovery_token",
+      final response = await CommonRequest.makeRequest("get_recovery_token",
           method: CommonRequestMethod.post, body: {"username": username, "code": code}, needAuthorization: false);
-      if (response.statusCode == 201) {
+      if (response.statusCode == 200) {
         var data = jsonDecode(response.body);
         SessionManager().saveToken(data["recovery_token"]);
         developer.log('Code is valid', name: 'api.services.user_service');
@@ -273,9 +276,9 @@ class UserService {
 
   Future<void> changePassword({String password}) async {
     try {
-      final response = await CommonRequest.makeRequest("/api/change_password",
+      final response = await CommonRequest.makeRequest("change_password",
           method: CommonRequestMethod.post, body: {"password": password, "password_repeat": password});
-      if (response.statusCode == 201) {
+      if (response.statusCode == 200) {
         SessionManager().savePassword(password);
         developer.log('Password successfully changed', name: 'api.services.user_service');
       } else {

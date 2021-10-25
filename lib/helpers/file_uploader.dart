@@ -119,7 +119,7 @@ class FileUpLoader {
           },
         ),
       );
-      print(response.statusCode);
+      print('Image loaded: ${response.statusCode}');
       if (response.statusCode != 201) {
         print(response.statusMessage);
       } else {}

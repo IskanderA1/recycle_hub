@@ -1,7 +1,16 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get_it/get_it.dart';
+import 'package:recycle_hub/api/request/session_manager.dart';
+import 'package:recycle_hub/api/services/user_service.dart';
+import 'package:recycle_hub/bloc/auth/auth_bloc.dart';
+import 'package:recycle_hub/bloc/recovery_bloc/recovery_bloc.dart';
+import 'package:recycle_hub/helpers/messager_helper.dart';
 import 'package:recycle_hub/icons/nav_bar_icons_icons.dart';
+import 'package:recycle_hub/model/authorisation_models/user_response.dart';
+import 'package:recycle_hub/model/global_state_models.dart';
+import 'package:recycle_hub/screens/authorisation_and_registration/password_recovery_screen.dart';
 import 'package:recycle_hub/style/style.dart';
 import 'package:recycle_hub/style/theme.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -9,14 +18,12 @@ import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
 class ForgetConfirmCodeScreen extends StatefulWidget {
   @override
-  _ForgetConfirmCodeScreenState createState() =>
-      _ForgetConfirmCodeScreenState();
+  _ForgetConfirmCodeScreenState createState() => _ForgetConfirmCodeScreenState();
 }
 
 class _ForgetConfirmCodeScreenState extends State<ForgetConfirmCodeScreen> {
   TextEditingController _code = TextEditingController();
-  var maskFormatter = new MaskTextInputFormatter(
-      mask: '######', filter: {"#": RegExp(r'[0-9]')});
+  var maskFormatter = new MaskTextInputFormatter(mask: '######', filter: {"#": RegExp(r'[0-9]')});
   final _tfKey = GlobalKey<FormState>();
 
   @override
@@ -52,19 +59,13 @@ class _ForgetConfirmCodeScreenState extends State<ForgetConfirmCodeScreen> {
                   padding: EdgeInsets.fromLTRB(16, 16, 16, 0),
                   child: Container(
                     padding: EdgeInsets.fromLTRB(16, 40, 16, 16),
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(kBorderRadius),
-                        color: kColorWhite),
+                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(kBorderRadius), color: kColorWhite),
                     child: Column(
                       children: [
                         Text(
                           "Введите код из письма",
                           textAlign: TextAlign.center,
-                          style: TextStyle(
-                              color: kColorBlack,
-                              fontFamily: "Gilroy",
-                              fontSize: 21,
-                              fontWeight: FontWeight.w700),
+                          style: TextStyle(color: kColorBlack, fontFamily: "Gilroy", fontSize: 21, fontWeight: FontWeight.w700),
                         ),
                         Spacer(
                           flex: 1,
@@ -73,32 +74,24 @@ class _ForgetConfirmCodeScreenState extends State<ForgetConfirmCodeScreen> {
                         Spacer(
                           flex: 1,
                         ),
-                        /*StreamBuilder(
-                          stream: authBloc.subject,
-                          builder: (BuildContext ctx,
-                              AsyncSnapshot<UserResponse> snapshot) {
-                            if (snapshot.hasData) {
-                              if (snapshot.data is UserCodeConfirmFailed) {
+                        StreamBuilder(
+                          stream: GetIt.I.get<RecoveryBloc>().stream,
+                          builder: (BuildContext ctx, state) {
+                            if (state.hasData) {
+                              if (state.data is RecoveryStateError) {
                                 return Text(
-                                  snapshot.data.error,
-                                  style:
-                                      TextStyle(fontSize: 14, color: kColorRed),
+                                  state.data.error,
+                                  style: TextStyle(fontSize: 14, color: kColorRed),
                                 );
                               }
-                              if (snapshot.data is UserLoading) {
-                                return Text(
-                                  snapshot.data.error,
-                                  style:
-                                      TextStyle(fontSize: 14, color: kColorRed),
-                                );
-                              }
+                              return Container();
                             }
                             return Text(
                               "",
                               style: TextStyle(fontSize: 14, color: kColorRed),
                             );
                           },
-                        ),*/
+                        ),
                         Spacer(flex: 1),
                         _confirmButton(),
                         Spacer(
@@ -177,14 +170,18 @@ class _ForgetConfirmCodeScreenState extends State<ForgetConfirmCodeScreen> {
         elevation: 5.0,
         onPressed: () {
           if (_tfKey.currentState.validate()) {
-            /*authBloc.forgetPassCodeConfirm(_code.text).then((i) {
-              if (i == 0) {
+            UserService().chechCode(username: null, code: _code.text).catchError((e){
+              showMessage(context: context, backColor: kColorRed, message: 'Код неверный');
+            }).then((i) {
+              if (i) {
                 Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => PasswordRecoveryScreen()));
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => PasswordRecoveryScreen(),
+                  ),
+                );
               }
-            });*/
+            });
             /*Navigator.push(
                 context,
                 MaterialPageRoute(

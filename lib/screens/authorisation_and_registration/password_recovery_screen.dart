@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:recycle_hub/api/services/user_service.dart';
+import 'package:recycle_hub/helpers/messager_helper.dart';
 import 'package:recycle_hub/icons/nav_bar_icons_icons.dart';
 import 'package:recycle_hub/style/style.dart';
 import 'package:recycle_hub/style/theme.dart';
@@ -48,9 +50,7 @@ class _PasswordRecoveryScreenState extends State<PasswordRecoveryScreen> {
                   padding: EdgeInsets.fromLTRB(16, 16, 16, 0),
                   child: Container(
                     padding: EdgeInsets.fromLTRB(16, 40, 16, 16),
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(kBorderRadius),
-                        color: kColorWhite),
+                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(kBorderRadius), color: kColorWhite),
                     child: Column(
                       children: [
                         Text(
@@ -75,10 +75,7 @@ class _PasswordRecoveryScreenState extends State<PasswordRecoveryScreen> {
                         ),
                         Text(
                           _isSimilarPasswords,
-                          style: TextStyle(
-                              color: kColorRegGoogle,
-                              fontFamily: "GilroyMedium",
-                              fontSize: 14),
+                          style: TextStyle(color: kColorRegGoogle, fontFamily: "GilroyMedium", fontSize: 14),
                         ),
                         Spacer(
                           flex: 2,
@@ -194,7 +191,7 @@ class _PasswordRecoveryScreenState extends State<PasswordRecoveryScreen> {
       //height: 50,
       child: RaisedButton(
         elevation: 5.0,
-        onPressed: () {
+        onPressed: () async {
           if (_firstPass.text != _secondPass.text) {
             setState(() {
               _isSimilarPasswords = "Пароли не совпадают";
@@ -203,11 +200,13 @@ class _PasswordRecoveryScreenState extends State<PasswordRecoveryScreen> {
             setState(() {
               _isSimilarPasswords = "";
             });
-            /*authBloc.passChange(_firstPass.text).then((i) {
-              if (i == 0) {
-                Navigator.pop(context);
-              }
-            });*/
+            try {
+              await UserService().changePassword(password: _firstPass.text);
+              Navigator.pop(context);
+            } catch (e) {
+              showMessage(context: context, backColor: kColorRed, message: e.toString());
+            }
+            
           }
         },
         padding: EdgeInsets.all(15.0),

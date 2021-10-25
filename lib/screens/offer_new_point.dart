@@ -2,10 +2,15 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:recycle_hub/api/request/request.dart';
 import 'package:recycle_hub/elements/common_button.dart';
+import 'package:recycle_hub/helpers/file_uploader.dart';
 import 'package:recycle_hub/helpers/image_picker.dart';
+import 'package:recycle_hub/helpers/messager_helper.dart';
 import 'package:recycle_hub/icons/app_bar_icons_icons.dart';
+import 'package:recycle_hub/model/map_models.dart/marker.dart';
 import 'package:recycle_hub/model/new_point_model.dart';
+import 'package:recycle_hub/screens/tabs/map/widgets/loader_widget.dart';
 import 'package:recycle_hub/style/style.dart';
 import 'package:recycle_hub/style/theme.dart';
 
@@ -26,6 +31,7 @@ class _OfferNewPointScreenState extends State<OfferNewPointScreen> {
   File _image;
   NewPoint newPoint;
   final picker = ImagePicker();
+  bool _isLoading = false;
 
   Future _getImage() async {
     try {
@@ -43,6 +49,40 @@ class _OfferNewPointScreenState extends State<OfferNewPointScreen> {
         _image = img;
       });
     } catch (e) {}
+  }
+
+  Future<void> _sendNewPoint() async {
+    if (_address.text.isEmpty || _phoneNumber.text.isEmpty || _discription.text.isEmpty) {
+      return;
+    }
+    setState(() {
+      _isLoading = true;
+    });
+    try {
+      final response = await CommonRequest.makeRequest(
+        'rec_points',
+        method: CommonRequestMethod.post,
+        body: {
+          "address": _address.text,
+          "contacts": [_phoneNumber.text],
+          "description": _discription.text
+        },
+      );
+      if (response.statusCode == 200) {
+        final marker = CustMarker.fromJson(response.body);
+        if (_image != null) {
+          FileUpLoader.sendPhotos([_image], 'rec_points/${marker.id}/images');
+        }
+        showMessage(context: context, message: 'Успешно', backColor: kColorGreen);
+      }
+    } catch (e) {
+      print(e.toString());
+      showMessage(context: context, message: 'Не удалось отправить запрос');
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
+    }
   }
 
   @override
@@ -213,7 +253,7 @@ class _OfferNewPointScreenState extends State<OfferNewPointScreen> {
                       CommonButton(
                         width: 300,
                         height: 50,
-                        ontap: () {},
+                        ontap: _sendNewPoint,
                         child: Container(
                           decoration: BoxDecoration(
                             color: kColorGreen,
@@ -222,8 +262,12 @@ class _OfferNewPointScreenState extends State<OfferNewPointScreen> {
                             ),
                           ),
                           child: Center(
-                            child: Text("Отправить",
-                                style: TextStyle(fontSize: 18, color: kColorWhite, fontWeight: FontWeight.bold, fontFamily: 'GillroyMedium')),
+                            child: _isLoading
+                                ? LoaderWidget(
+                                    color: Colors.white,
+                                  )
+                                : Text("Отправить",
+                                    style: TextStyle(fontSize: 18, color: kColorWhite, fontWeight: FontWeight.bold, fontFamily: 'GillroyMedium')),
                           ),
                         ),
                       ),

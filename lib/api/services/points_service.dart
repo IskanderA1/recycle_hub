@@ -62,7 +62,7 @@ class PointsService {
           method: CommonRequestMethod.get,
           needAuthorization: false,
           body: {
-            'size': '10',
+            'size': '200',
             'page': '1',
             'position': "[" +
                 latLng.latitude.toString() +
