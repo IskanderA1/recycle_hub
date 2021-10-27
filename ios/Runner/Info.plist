@@ -30,17 +30,17 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSCameraUsageDescription</key>
-	<string>This app needs camera access to scan QR codes</string>
+	<string>Этому приложению требуется доступ к камере для сканирования QR-кодов.</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>Needed to access location</string>
+	<string>Этому приложению требуется доступ к локации для показа ближайших пунктов переработки мусора</string>
 	<key>NSLocationAlwaysUsageDescription</key>
-	<string>Needed to access location</string>
+	<string>Этому приложению требуется доступ к локации для показа ближайших пунктов переработки мусора</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Needed to access location</string>
+	<string>Этому приложению требуется доступ к локации для показа ближайших пунктов переработки мусора</string>
 	<key>NSLocationUsageDescription</key>
-	<string>Needed to access location</string>
+	<string>Этому приложению требуется доступ к локации для показа ближайших пунктов переработки мусора</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>This application requires a photo to send information about the waste collection point</string>
+	<string>Это приложение требует фото для отправки информации о пункте сбора мусора.</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
@@ -62,7 +62,5 @@
 	<false/>
 	<key>io.flutter.embedded_views_preview</key>
 	<true/>
-	<key>kTCCServiceMediaLibrary</key>
-	<string>This app needs photo for send PP info</string>
 </dict>
 </plist>
