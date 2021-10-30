@@ -30,7 +30,7 @@ class Page2 extends StatelessWidget {
           "Вместе",
           style: TextStyle(
               color: kColorBlack,
-              fontSize: 35,
+              fontSize: 28,
               fontFamily: "Gilroy",
               fontWeight: FontWeight.w700),
         ),

@@ -2,22 +2,18 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get_it/get_it.dart';
 import 'package:recycle_hub/api/services/user_service.dart';
 import 'package:recycle_hub/bloc/auth/auth_bloc.dart';
 import 'package:recycle_hub/bloc/cubit/profile_menu_cubit.dart';
-import 'package:recycle_hub/elements/ball.dart';
 import 'package:recycle_hub/elements/common_cell.dart';
 import 'package:recycle_hub/helpers/network_helper.dart';
 import 'package:recycle_hub/helpers/alert_helper.dart';
 import 'package:recycle_hub/elements/user_image_picker.dart';
-import 'package:recycle_hub/icons/app_bar_icons_icons.dart';
 import 'package:recycle_hub/icons/nav_bar_icons_icons.dart';
 import 'package:recycle_hub/icons/user_profile_icons_icons.dart';
 import 'package:recycle_hub/model/user_model.dart';
 import 'package:recycle_hub/screens/authorisation_and_registration/auth_screen.dart';
-import 'package:recycle_hub/screens/tabs/profile/point_profile_screen.dart';
 import 'package:recycle_hub/style/theme.dart';
 
 List<IconData> svgIcons = [
@@ -102,8 +98,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   padding: const EdgeInsets.only(right: 16),
                   child: InkWell(
                     onTap: () {
-                      if (GetIt.I.get<AuthBloc>().state.userModel.userType == UserTypes.admin)
-                        GetIt.I.get<ProfileMenuCubit>().moveTo(ProfileMenuStates.POINT_PROFILE);
+                      if (GetIt.I.get<AuthBloc>().state.userModel.userType ==
+                          UserTypes.admin)
+                        GetIt.I
+                            .get<ProfileMenuCubit>()
+                            .moveTo(ProfileMenuStates.POINT_PROFILE);
                     },
                     child: Icon(
                       NavBarIcons.app_bar_suffix,
@@ -130,8 +129,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   children: [
                     Padding(
                       padding: const EdgeInsets.only(top: 16),
-                      child: buildStatus(state, UserService().statistic != null ? UserService().statistic.place : 0,
-                          UserService().statistic != null ? UserService().statistic.total : 0),
+                      child: buildStatus(
+                          state,
+                          UserService().statistic != null
+                              ? UserService().statistic.place
+                              : 0,
+                          UserService().statistic != null
+                              ? UserService().statistic.total
+                              : 0),
                     ),
                     SizedBox(
                       height: 16,
@@ -139,12 +144,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     if (state is AuthStateLogedIn)
                       Container(
                         height: 136,
-                        padding: EdgeInsets.only(top: 16, bottom: 16, right: 16, left: 16),
+                        padding: EdgeInsets.only(
+                            top: 16, bottom: 16, right: 16, left: 16),
                         decoration: BoxDecoration(
                           color: kColorWhite,
                           borderRadius: BorderRadius.circular(kBorderRadius),
                         ),
-                        child: buildAchievments("Эколог", UserService().statistic != null ? UserService().statistic.total : 0),
+                        child: buildAchievments(
+                            "Эколог",
+                            UserService().statistic != null
+                                ? UserService().statistic.total
+                                : 0),
                       ),
                     if (state is AuthStateLogedIn)
                       SizedBox(
@@ -158,7 +168,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ),
                       child: ListView(
                         controller: controller,
-                        padding: EdgeInsets.only(bottom: _size.height * 0.05, top: 5),
+                        padding: EdgeInsets.only(
+                            bottom: _size.height * 0.05, top: 5),
                         children: [
                           if (state is AuthStateGuestAcc)
                             Padding(
@@ -209,14 +220,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
           Spacer(),
           Text(
             "Профиль",
-            style: TextStyle(fontSize: 20, color: kColorWhite, fontWeight: FontWeight.w700, fontFamily: 'Gilroy'),
+            style: TextStyle(
+                fontSize: 20,
+                color: kColorWhite,
+                fontWeight: FontWeight.w700,
+                fontFamily: 'Gilroy'),
             textAlign: TextAlign.start,
           ),
           Spacer(),
           InkWell(
             onTap: () {
-              if (GetIt.I.get<AuthBloc>().state.userModel.userType == UserTypes.admin)
-                GetIt.I.get<ProfileMenuCubit>().moveTo(ProfileMenuStates.POINT_PROFILE);
+              if (GetIt.I.get<AuthBloc>().state.userModel.userType ==
+                  UserTypes.admin)
+                GetIt.I
+                    .get<ProfileMenuCubit>()
+                    .moveTo(ProfileMenuStates.POINT_PROFILE);
             },
             child: Icon(
               NavBarIcons.app_bar_suffix,
@@ -249,6 +267,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     children: [
                       UserImagePicker(
                         image: state.userModel.image,
+                        state: state,
                       ),
                       Expanded(
                         child: Padding(
@@ -319,7 +338,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     RichText(
                       text: TextSpan(
                           text: '${userState.ecoCoins}',
-                          style: TextStyle(color: kColorGreen, fontSize: 28, fontFamily: 'GilroyMedium'),
+                          style: TextStyle(
+                              color: kColorGreen,
+                              fontSize: 28,
+                              fontFamily: 'GilroyMedium'),
                           children: [
                             TextSpan(
                               text: '/',
@@ -400,7 +422,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   SizedBox(width: 14),
                   Text(
                     status,
-                    style: TextStyle(color: kColorGreen, fontSize: 16, fontWeight: FontWeight.bold),
+                    style: TextStyle(
+                        color: kColorGreen,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold),
                   )
                 ],
               ),
@@ -410,7 +435,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
         SizedBox(
           height: 7,
         ),
-        ProfileProgressIndicator(total: UserService().statistic != null ? UserService().statistic.total : 0),
+        ProfileProgressIndicator(
+            total: UserService().statistic != null
+                ? UserService().statistic.total
+                : 0),
         SizedBox(
           height: 8,
         ),
@@ -422,7 +450,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ),
             Text(
               "$made",
-              style: TextStyle(color: kColorBlack, fontSize: 16, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                  color: kColorBlack,
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold),
             ),
             Text(
               "кг",
@@ -439,8 +470,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   Widget buildMenu(AuthBloc authBloc) {
     return Container(
-      padding: EdgeInsets.only(top: 16, bottom: 16, right: 16, left: 16),
-      decoration: BoxDecoration(borderRadius: BorderRadius.circular(kBorderRadius), color: kColorWhite),
+      padding: EdgeInsets.only(top: 16, bottom: 32, right: 16, left: 16),
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(kBorderRadius),
+          color: kColorWhite),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(kBorderRadius),
         child: Column(
@@ -532,7 +565,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
 }
 
 class ProfileProgressIndicator extends StatelessWidget {
-  const ProfileProgressIndicator({Key key, @required this.total}) : super(key: key);
+  const ProfileProgressIndicator({Key key, @required this.total})
+      : super(key: key);
 
   final int total;
 
@@ -548,7 +582,9 @@ class ProfileProgressIndicator extends StatelessWidget {
           alignment: Alignment.center,
           decoration: BoxDecoration(
             color: (0 < total) ? kColorGreen : kLightGrey,
-            gradient: (0 < total && total < 50) ? LinearGradient(colors: [kColorGreen, kLightGrey]) : null,
+            gradient: (0 < total && total < 50)
+                ? LinearGradient(colors: [kColorGreen, kLightGrey])
+                : null,
             borderRadius: BorderRadius.only(
               topLeft: Radius.circular(12),
               bottomLeft: Radius.circular(12),
@@ -566,7 +602,9 @@ class ProfileProgressIndicator extends StatelessWidget {
           alignment: Alignment.center,
           decoration: BoxDecoration(
             color: (50 < total) ? kColorGreen : kLightGrey,
-            gradient: (50 < total && total < 100) ? LinearGradient(colors: [kColorGreen, kLightGrey]) : null,
+            gradient: (50 < total && total < 100)
+                ? LinearGradient(colors: [kColorGreen, kLightGrey])
+                : null,
           ),
           child: Text(
             "50 кг",
@@ -580,7 +618,9 @@ class ProfileProgressIndicator extends StatelessWidget {
           alignment: Alignment.center,
           decoration: BoxDecoration(
             color: (100 < total) ? kColorGreen : kLightGrey,
-            gradient: (100 < total && total < 250) ? LinearGradient(colors: [kColorGreen, kLightGrey]) : null,
+            gradient: (100 < total && total < 250)
+                ? LinearGradient(colors: [kColorGreen, kLightGrey])
+                : null,
           ),
           child: Text(
             "100 кг",
@@ -594,7 +634,9 @@ class ProfileProgressIndicator extends StatelessWidget {
           alignment: Alignment.center,
           decoration: BoxDecoration(
             color: (250 < total) ? kColorGreen : kLightGrey,
-            gradient: (250 < total && total < 500) ? LinearGradient(colors: [kColorGreen, kLightGrey]) : null,
+            gradient: (250 < total && total < 500)
+                ? LinearGradient(colors: [kColorGreen, kLightGrey])
+                : null,
           ),
           child: Text(
             "250 кг",
@@ -607,7 +649,9 @@ class ProfileProgressIndicator extends StatelessWidget {
           alignment: Alignment.center,
           decoration: BoxDecoration(
             color: (500 < total) ? kColorGreen : kLightGrey,
-            gradient: (500 < total) ? LinearGradient(colors: [kColorGreen, kLightGrey]) : null,
+            gradient: (500 < total)
+                ? LinearGradient(colors: [kColorGreen, kLightGrey])
+                : null,
             borderRadius: BorderRadius.only(
               topRight: Radius.circular(12),
               bottomRight: Radius.circular(12),

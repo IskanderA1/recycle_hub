@@ -1,9 +1,7 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
-import 'package:recycle_hub/bloc/auth/auth_bloc.dart';
 import 'package:recycle_hub/bloc/registration/registration_bloc.dart';
 import 'package:recycle_hub/icons/nav_bar_icons_icons.dart';
 import 'package:recycle_hub/style/style.dart';
@@ -52,7 +50,10 @@ class _ConfirmCodeScreenState extends State<ConfirmCodeScreen> {
                   onTap: () {
                     Navigator.of(context).pop();
                   },
-                  child: Icon(NavBarIcons.left),
+                  child: Icon(
+                    NavBarIcons.app_bar_suffix,
+                    size: 18,
+                  ),
                 ),
               ),
               body: Container(

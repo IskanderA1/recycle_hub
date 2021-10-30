@@ -3,17 +3,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:recycle_hub/bloc/auth/auth_bloc.dart';
 import 'package:recycle_hub/bloc/eco_coin_menu/eco_coin_menu_cubit.dart';
-import 'package:recycle_hub/bloc/global_state_bloc.dart';
 import 'package:recycle_hub/elements/common_cell.dart';
 import 'package:recycle_hub/helpers/network_helper.dart';
-import 'package:recycle_hub/icons/app_bar_icons_icons.dart';
 import 'package:recycle_hub/icons/eco_coin_icons_icons.dart';
 import 'package:recycle_hub/icons/my_pyrchase_icons_icons.dart';
-import 'package:recycle_hub/icons/nav_bar_icons_icons.dart';
 import 'package:recycle_hub/screens/authorisation_and_registration/auth_screen.dart';
-import 'package:recycle_hub/screens/tabs/map/filter_detail_screen.dart';
-import 'package:recycle_hub/style/style.dart';
 import 'package:recycle_hub/style/theme.dart';
+import 'dart:io' show Platform;
+
 
 class EcoCoinScreen extends StatefulWidget {
   @override
@@ -152,7 +149,9 @@ class _EcoCoinScreenState extends State<EcoCoinScreen> {
                         MenuItemWidget(
                           name: "Порекомендуйте нас друзьям",
                           func: () {
-                            NetworkHelper.openUrl('https://play.google.com/store/apps/details?id=com.iskander.kai_mobile_app', context);
+                            NetworkHelper.openUrl(Platform.isIOS
+                ? 'https://apps.apple.com/us/app/recyclehub/id1584204305#?platform=iphone'
+                : 'https://play.google.com/store/apps/details?id=com.beerstudio.recycle_hub', context);
                             /* if (state is AuthStateGuestAcc) {
                                     guestButtonTap();
                                   } else {

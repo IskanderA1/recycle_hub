@@ -4,7 +4,6 @@ import 'package:recycle_hub/model/map_models.dart/accept_types.dart';
 import 'package:recycle_hub/model/map_models.dart/marker.dart';
 import 'package:recycle_hub/screens/tabs/map/methods/pre_information_container.dart';
 import 'package:recycle_hub/screens/tabs/map/widgets/report_button.dart';
-import 'package:recycle_hub/screens/tabs/map/widgets/working_days_widget.dart';
 import 'package:recycle_hub/style/theme.dart';
 
 class MarkersListWidget extends StatefulWidget {
@@ -45,7 +44,7 @@ class MarkerCardWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     Size _size = MediaQuery.of(context).size;
     return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 30, 16, 30),
+      padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
       child: InkWell(
         onTap: () {
           Navigator.pop(context);

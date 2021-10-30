@@ -28,4 +28,7 @@ class UserProfileIcons {
   static const IconData pie_chart = IconData(0xe804, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData user = IconData(0xe805, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData wallet = IconData(0xe806, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+
+
+  
 }

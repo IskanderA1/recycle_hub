@@ -3,14 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:recycle_hub/bloc/auth/auth_bloc.dart';
-import 'package:recycle_hub/bloc/global_state_bloc.dart';
-import 'package:recycle_hub/bloc/nav_bar_cubit/nav_bar_cubit_cubit.dart';
-import 'package:recycle_hub/elements/loader.dart';
-import 'package:recycle_hub/helpers/messager_helper.dart';
 import 'package:recycle_hub/screens/stepper/stepper.dart';
 import 'package:recycle_hub/screens/tabs/map/widgets/loader_widget.dart';
 import 'package:recycle_hub/screens/workspace_screen.dart';
-import 'authorisation_and_registration/authorisation_main_screen.dart';
 
 class MainScreen extends StatefulWidget {
   @override
@@ -58,26 +53,27 @@ class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder(
-        bloc: authBloc,
-        buildWhen: (previous, current) {
-          if (current is AuthStateLoading) {
-            return false;
-          }
-          return true;
-        },
-        builder: (context, state) {
-          if (state is AuthStateFirstIn) {
-            return WellcomePageStepper();
-          } else if (state is AuthStateLoading) {
-            return LoaderWidget();
-          }
-          bool needToShowInfo = false;
-          if (state is AuthStateGuestAcc) {
-            needToShowInfo = state.needToShowInfo;
-          }
-          return WorkSpaceScreen(
-            needToShowInfoAlert: needToShowInfo,
-          );
-        });
+      bloc: authBloc,
+      buildWhen: (previous, current) {
+        if (current is AuthStateLoading) {
+          return false;
+        }
+        return true;
+      },
+      builder: (context, state) {
+        if (state is AuthStateFirstIn) {
+          return WellcomePageStepper();
+        } else if (state is AuthStateLoading) {
+          return LoaderWidget();
+        }
+        bool needToShowInfo = false;
+        if (state is AuthStateGuestAcc) {
+          needToShowInfo = state.needToShowInfo;
+        }
+        return WorkSpaceScreen(
+          needToShowInfoAlert: needToShowInfo,
+        );
+      },
+    );
   }
 }

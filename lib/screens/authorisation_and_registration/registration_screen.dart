@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
-import 'package:recycle_hub/bloc/auth/auth_bloc.dart';
 import 'package:recycle_hub/bloc/registration/registration_bloc.dart';
 import 'package:recycle_hub/elements/loader.dart';
 import 'package:recycle_hub/helpers/messager_helper.dart';
@@ -92,7 +91,10 @@ class _ReqistrationScreenState extends State<ReqistrationScreen> {
                   onTap: () {
                     Navigator.of(context).pop();
                   },
-                  child: Icon(NavBarIcons.left),
+                  child: Icon(
+                    NavBarIcons.app_bar_suffix,
+                    size: 18,
+                  ),
                 ),
               ),
               body: Container(
@@ -100,9 +102,11 @@ class _ReqistrationScreenState extends State<ReqistrationScreen> {
                   padding: EdgeInsets.fromLTRB(16, 16, 16, 0),
                   child: Container(
                     width: double.infinity,
-                    height: MediaQuery.of(context).size.height - 85,
+                    height: MediaQuery.of(context).size.height - 60,
                     padding: EdgeInsets.fromLTRB(16, 16, 16, 16),
-                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(kBorderRadius), color: kColorWhite),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(kBorderRadius),
+                        color: kColorWhite),
                     child: Column(
                       children: [
                         _nameEnterTF(),
@@ -125,26 +129,6 @@ class _ReqistrationScreenState extends State<ReqistrationScreen> {
                         Spacer(
                           flex: 2,
                         ),
-                        /*StreamBuilder(
-                          stream: authBloc.subject,
-                          builder: (BuildContext ctx,
-                              AsyncSnapshot<UserResponse> snapshot) {
-                            if (snapshot.hasData) {
-                              if (snapshot.data is UserRegFailed) {
-                                return Text(
-                                  snapshot.data.error,
-                                  style: TextStyle(
-                                      fontSize: 14, color: kColorRed),
-                                );
-                              }
-                            }
-                            return Text(
-                              "",
-                              style:
-                                  TextStyle(fontSize: 14, color: kColorRed),
-                            );
-                          },
-                        ),*/
                         Spacer(
                           flex: 2,
                         ),
@@ -342,7 +326,8 @@ class _ReqistrationScreenState extends State<ReqistrationScreen> {
                 obscureText: _obscureText,
                 validator: (str) {
                   if (str.length < 8) {
-                    errorText = 'Пароль должен содержать как минимум 8 символов';
+                    errorText =
+                        'Пароль должен содержать как минимум 8 символов';
                   } else if (!RegExp(patternNum).hasMatch(str)) {
                     errorText = 'Пароль должен содержать хотя-бы 1 цифру';
                   } else if (!RegExp(patternAlphabet).hasMatch(str)) {
@@ -446,17 +431,42 @@ class _ReqistrationScreenState extends State<ReqistrationScreen> {
     return Container(
       padding: EdgeInsets.symmetric(vertical: 25.0),
       width: 300,
-      //height: 50,
       child: RaisedButton(
         elevation: 5.0,
         onPressed: () {
-          _passKey.currentState.validate();
-          if (errorText.isNotEmpty) {
-            showMessage(message: "Пароль не соответствует требованиям", context: context);
-            return;
+          if (_name.text.length == 0) {
+            showMessage(message: "Введите свое имя", context: context);
+          } else if (_surname.text.length == 0) {
+            showMessage(message: "Введите свою фамилию", context: context);
+          } else if (_email.text.length == 0 || !_email.text.contains('@')) {
+            showMessage(
+                message: "Введите корректную почту e-mail", context: context);
+          } else if (_password.text.length < 8) {
+            showMessage(
+                message: "Пароль должен содержать как минимум 8 символов",
+                context: context);
+          } else if (!RegExp(patternNum).hasMatch(_password.text)) {
+            showMessage(
+                message: "Пароль должен содержать хотя-бы 1 цифру",
+                context: context);
+          } else if (!RegExp(patternAlphabet).hasMatch(_password.text)) {
+            showMessage(
+                message: "Пароль должен содержать хотя-бы 1 букву",
+                context: context);
           }
-          regBloc.add(
-              RegistrationEventRegister(username: _email.text, name: _name.text, surname: _surname.text, pass: _password.text, code: _refCode.text));
+
+          // if (_passKey.currentState.validate()) {
+          //   showMessage(
+          //       message: "Пароль не соответствует требованиям",
+          //       context: context);
+          //   return;
+          // }
+          regBloc.add(RegistrationEventRegister(
+              username: _email.text,
+              name: _name.text,
+              surname: _surname.text,
+              pass: _password.text,
+              code: _refCode.text));
         },
         padding: EdgeInsets.all(15.0),
         shape: RoundedRectangleBorder(
@@ -484,7 +494,10 @@ class _ReqistrationScreenState extends State<ReqistrationScreen> {
         children: [
           Text(
             "Уже есть аккаунт?",
-            style: TextStyle(color: kColorGreyDark, fontFamily: "GilroyMedium", fontSize: 14),
+            style: TextStyle(
+                color: kColorGreyDark,
+                fontFamily: "GilroyMedium",
+                fontSize: 14),
           ),
           SizedBox(
             width: 15,
@@ -495,7 +508,8 @@ class _ReqistrationScreenState extends State<ReqistrationScreen> {
             },
             child: Text(
               "Войти",
-              style: TextStyle(color: kColorGreen, fontFamily: "GilroyMedium", fontSize: 14),
+              style: TextStyle(
+                  color: kColorGreen, fontFamily: "GilroyMedium", fontSize: 14),
             ),
           ),
         ],
@@ -510,7 +524,10 @@ class _ReqistrationScreenState extends State<ReqistrationScreen> {
         children: [
           Text(
             "Есть код?",
-            style: TextStyle(color: kColorGreyDark, fontFamily: "GilroyMedium", fontSize: 14),
+            style: TextStyle(
+                color: kColorGreyDark,
+                fontFamily: "GilroyMedium",
+                fontSize: 14),
           ),
           SizedBox(
             width: 15,
@@ -518,14 +535,16 @@ class _ReqistrationScreenState extends State<ReqistrationScreen> {
           GestureDetector(
             onTap: () {
               if (_email.text.isEmpty) {
-                showMessage(context: context, message: 'Пожалуйста, введите логин');
+                showMessage(
+                    context: context, message: 'Пожалуйста, введите логин');
                 return;
               }
               regBloc.add(RegistrationEventHasCode(username: _email.text));
             },
             child: Text(
               "Подтвердить",
-              style: TextStyle(color: kColorGreen, fontFamily: "GilroyMedium", fontSize: 14),
+              style: TextStyle(
+                  color: kColorGreen, fontFamily: "GilroyMedium", fontSize: 14),
             ),
           ),
         ],

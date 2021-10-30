@@ -13,8 +13,6 @@ import 'package:recycle_hub/api/services/user_service.dart';
 import 'package:recycle_hub/bloc/map/map_bloc.dart';
 import 'package:recycle_hub/custom_icons.dart';
 import 'package:recycle_hub/helpers/distance_helper.dart';
-import 'package:recycle_hub/icons/app_bar_icons_icons.dart';
-import 'package:recycle_hub/icons/nav_bar_icons_icons.dart';
 import 'package:recycle_hub/model/map_models.dart/accept_types.dart';
 import 'package:recycle_hub/model/map_models.dart/marker.dart';
 import 'package:recycle_hub/screens/tabs/map/filter_detail_screen.dart';
@@ -33,7 +31,8 @@ class MapScreen extends StatefulWidget {
 }
 
 class _MapScreenState extends State<MapScreen> {
-  CameraPosition cameraPosition = CameraPosition(target: LatLng(55.7985293, 49.1156465), zoom: 12.1);
+  CameraPosition cameraPosition =
+      CameraPosition(target: LatLng(55.7985293, 49.1156465), zoom: 12.1);
   final Completer<GoogleMapController> _controller = Completer();
   MapBloc mapBloc;
 
@@ -52,11 +51,15 @@ class _MapScreenState extends State<MapScreen> {
         bloc: mapBloc,
         buildWhen: (previous, current) {
           if (previous is MapStateError) {
-            developer.log("Got previous map screen error: ${previous.discription}", name: 'map.map_screen');
+            developer.log(
+                "Got previous map screen error: ${previous.discription}",
+                name: 'map.map_screen');
             return true;
           }
           if (current is MapStateError) {
-            developer.log("Got current map screen error: ${current.discription}", name: 'map.map_screen');
+            developer.log(
+                "Got current map screen error: ${current.discription}",
+                name: 'map.map_screen');
             return false;
           }
 
@@ -70,9 +73,13 @@ class _MapScreenState extends State<MapScreen> {
           return true;
         },
         builder: (context, state) {
-          developer.log("Map rebuilds with: ${state.runtimeType}", name: 'screens.tabs.map.map_screen');
+          developer.log("Map rebuilds with: ${state.runtimeType}",
+              name: 'screens.tabs.map.map_screen');
           if (state is MapStateLoaded) {
-            return GoogleMapWidget(cameraPosition: cameraPosition, state: state, mapController: _controller);
+            return GoogleMapWidget(
+                cameraPosition: cameraPosition,
+                state: state,
+                mapController: _controller);
           } else {
             return LoaderWidget();
           }
@@ -146,7 +153,8 @@ class _MapScreenState extends State<MapScreen> {
       target: LatLng(currentLocation.latitude, currentLocation.longitude),
       zoom: 12.1,
     );
-    developer.log("User location: ${currentLocation.toString()}", name: 'screens.tabs.map.map_screen');
+    developer.log("User location: ${currentLocation.toString()}",
+        name: 'screens.tabs.map.map_screen');
     GoogleMapController controller = await _controller.future;
     controller.animateCamera(
       CameraUpdate.newCameraPosition(cameraPosition),
@@ -156,7 +164,12 @@ class _MapScreenState extends State<MapScreen> {
 }
 
 class GoogleMapWidget extends StatefulWidget {
-  GoogleMapWidget({Key key, @required this.cameraPosition, @required this.state, @required this.mapController}) : super(key: key);
+  GoogleMapWidget(
+      {Key key,
+      @required this.cameraPosition,
+      @required this.state,
+      @required this.mapController})
+      : super(key: key);
   final CameraPosition cameraPosition;
   final MapStateLoaded state;
   final Completer<GoogleMapController> mapController;
@@ -192,11 +205,14 @@ class _GoogleMapWidgetState extends State<GoogleMapWidget> {
 
   @override
   void initState() {
-    _userLocation = LatLng(widget.cameraPosition.target.latitude, widget.cameraPosition.target.longitude);
+    _userLocation = LatLng(widget.cameraPosition.target.latitude,
+        widget.cameraPosition.target.longitude);
 
     _items = widget.state.markers
         .map(
-          (markItem) => ClusterItem(LatLng(markItem.coords[0], markItem.coords[1]), item: markItem),
+          (markItem) => ClusterItem(
+              LatLng(markItem.coords[0], markItem.coords[1]),
+              item: markItem),
         )
         .toList();
     clusterManager = ClusterManager<CustMarker>(
@@ -215,7 +231,9 @@ class _GoogleMapWidgetState extends State<GoogleMapWidget> {
         setState(() {
           _items = state.markers
               .map(
-                (markItem) => ClusterItem(LatLng(markItem.coords[0], markItem.coords[1]), item: markItem),
+                (markItem) => ClusterItem(
+                    LatLng(markItem.coords[0], markItem.coords[1]),
+                    item: markItem),
               )
               .toList();
         });
@@ -243,7 +261,8 @@ class _GoogleMapWidgetState extends State<GoogleMapWidget> {
             distance: dist,
             onTap: () {
               if (googleMapController != null) {
-                CameraUpdate cameraUpdate = CameraUpdate.newLatLngZoom(LatLng(item.coords[0], item.coords[1]), 17);
+                CameraUpdate cameraUpdate = CameraUpdate.newLatLngZoom(
+                    LatLng(item.coords[0], item.coords[1]), 17);
                 googleMapController.animateCamera(cameraUpdate);
               }
               showStickyFlexibleBottomSheet(
@@ -271,12 +290,23 @@ class _GoogleMapWidgetState extends State<GoogleMapWidget> {
                         AnimatedPreInformationContainer(
                           offset: offset,
                           marker: item,
-                          filters: filters.isNotEmpty ? filters.where((element) => item.acceptTypes.contains(element.id)).toList() : [],
-                          userPoint: Point(_userLocation.latitude, _userLocation.longitude),
+                          filters: filters.isNotEmpty
+                              ? filters
+                                  .where((element) =>
+                                      item.acceptTypes.contains(element.id))
+                                  .toList()
+                              : [],
+                          userPoint: Point(
+                              _userLocation.latitude, _userLocation.longitude),
                         ),
                         BuildBody(
                           marker: item,
-                          filters: filters.isNotEmpty ? filters.where((element) => item.acceptTypes.contains(element.id)).toList() : [],
+                          filters: filters.isNotEmpty
+                              ? filters
+                                  .where((element) =>
+                                      item.acceptTypes.contains(element.id))
+                                  .toList()
+                              : [],
                         ),
                       ],
                     );
@@ -295,7 +325,13 @@ class _GoogleMapWidgetState extends State<GoogleMapWidget> {
     super.initState();
   }
 
-  List<IconData> icons = [Icons.ac_unit, Icons.account_balance, Icons.adb, Icons.add_photo_alternate, Icons.format_line_spacing];
+  List<IconData> icons = [
+    Icons.ac_unit,
+    Icons.account_balance,
+    Icons.adb,
+    Icons.add_photo_alternate,
+    Icons.format_line_spacing
+  ];
 
   void _currentLocation() async {
     LocationData locationData;
@@ -457,6 +493,7 @@ class _GoogleMapWidgetState extends State<GoogleMapWidget> {
               borderRadius: BorderRadius.circular(kBorderRadius),
             ),
             onPressed: () {
+              print('heloooo');
               return showStickyFlexibleBottomSheet<void>(
                   initHeight: 0.4,
                   minHeight: 0.40,
@@ -483,7 +520,11 @@ class _GoogleMapWidgetState extends State<GoogleMapWidget> {
             },
             label: Text(
               "Список",
-              style: TextStyle(color: kColorBlack, fontFamily: "GilroyMedium", fontWeight: FontWeight.w600, fontSize: 16),
+              style: TextStyle(
+                  color: kColorBlack,
+                  fontFamily: "GilroyMedium",
+                  fontWeight: FontWeight.w600,
+                  fontSize: 16),
             ),
           ),
         ),
@@ -491,10 +532,13 @@ class _GoogleMapWidgetState extends State<GoogleMapWidget> {
     ]);
   }
 
-  Future<Marker> Function(Cluster<CustMarker>) get _markerBuilder => (cluster) async {
+  Future<Marker> Function(Cluster<CustMarker>) get _markerBuilder =>
+      (cluster) async {
         bool hasFree = false;
         bool hasPartner = false;
-        List<CustMarker> items = cluster.items != null ? cluster.items.toList() : List<CustMarker>.empty();
+        List<CustMarker> items = cluster.items != null
+            ? cluster.items.toList()
+            : List<CustMarker>.empty();
         PTYPE type;
 
         for (int i = 0; i < items.length; i++) {
@@ -527,8 +571,8 @@ class _GoogleMapWidgetState extends State<GoogleMapWidget> {
           onTap: () {
             if (cluster.items.length == 1) {
               showStickyFlexibleBottomSheet(
-                  initHeight: 0.2,
-                  minHeight: 0.2,
+                  initHeight: 0.3,
+                  minHeight: 0.3,
                   maxHeight: 0.85,
                   context: context,
                   headerHeight: 40,
@@ -554,18 +598,21 @@ class _GoogleMapWidgetState extends State<GoogleMapWidget> {
                           filters: filters.isNotEmpty
                               ? filters
                                   .where(
-                                    (element) => cluster.items.first.acceptTypes.contains(element.id),
+                                    (element) => cluster.items.first.acceptTypes
+                                        .contains(element.id),
                                   )
                                   .toList()
                               : [],
-                          userPoint: Point(_userLocation.latitude, _userLocation.longitude),
+                          userPoint: Point(
+                              _userLocation.latitude, _userLocation.longitude),
                         ),
                         BuildBody(
                           marker: cluster.items.first,
                           filters: filters.isNotEmpty
                               ? filters
                                   .where(
-                                    (element) => cluster.items.first.acceptTypes.contains(element.id),
+                                    (element) => cluster.items.first.acceptTypes
+                                        .contains(element.id),
                                   )
                                   .toList()
                               : [],
@@ -576,11 +623,14 @@ class _GoogleMapWidgetState extends State<GoogleMapWidget> {
                   anchors: [0.0, 0.2, 0.85]);
             }
           },
-          icon: await _getMarkerBitmap(cluster.isMultiple ? 125 : 75, text: cluster.isMultiple ? cluster.count.toString() : null, type: type),
+          icon: await _getMarkerBitmap(cluster.isMultiple ? 125 : 75,
+              text: cluster.isMultiple ? cluster.count.toString() : null,
+              type: type),
         );
       };
 
-  Future<BitmapDescriptor> _getMarkerBitmap(int size, {String text, @required PTYPE type}) async {
+  Future<BitmapDescriptor> _getMarkerBitmap(int size,
+      {String text, @required PTYPE type}) async {
     if (kIsWeb) size = (size / 2).floor();
 
     final PictureRecorder pictureRecorder = PictureRecorder();
@@ -611,7 +661,10 @@ class _GoogleMapWidgetState extends State<GoogleMapWidget> {
       TextPainter painter = TextPainter(textDirection: TextDirection.ltr);
       painter.text = TextSpan(
         text: text,
-        style: TextStyle(fontSize: size / 3, color: Colors.white, fontWeight: FontWeight.normal),
+        style: TextStyle(
+            fontSize: size / 3,
+            color: Colors.white,
+            fontWeight: FontWeight.normal),
       );
       painter.layout();
       painter.paint(

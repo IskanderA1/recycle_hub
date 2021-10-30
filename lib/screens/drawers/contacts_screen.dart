@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:recycle_hub/elements/common_cell.dart';
 import 'package:recycle_hub/helpers/network_helper.dart';
-import 'package:recycle_hub/icons/app_bar_icons_icons.dart';
 import 'package:recycle_hub/style/theme.dart';
 
 class ContactsScreen extends StatefulWidget {
@@ -58,9 +57,9 @@ class _ContactsScreenState extends State<ContactsScreen> {
                 color: kColorGreyLight,
                 size: 25,
               ),
-              text: 'example@gmail.com',
+              text: 'recyclehub.ru@gmail.com',
               onTap: () {
-                NetworkHelper.openUrl('example@gmail.com', context);
+                NetworkHelper.openUrl('https://recyclehub.ru@gmail.com', context);
               },
             ),
             /* Padding(
@@ -78,7 +77,7 @@ class _ContactsScreenState extends State<ContactsScreen> {
               ),
               text: 'www.recyclehub.ru',
               onTap: () {
-                NetworkHelper.openUrl('www.recyclehub.ru', context);
+                NetworkHelper.openUrl('https://recyclehub.ru/', context);
               },
             ),
             /* Padding(

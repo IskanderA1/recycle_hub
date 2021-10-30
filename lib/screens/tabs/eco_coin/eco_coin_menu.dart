@@ -2,14 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:recycle_hub/bloc/eco_coin_menu/eco_coin_menu_cubit.dart';
-import 'package:recycle_hub/bloc/eco_guide_cubit/eco_guide_cubit_cubit.dart';
-import 'package:recycle_hub/bloc/nav_bar_cubit/nav_bar_cubit_cubit.dart';
 import 'package:recycle_hub/screens/offer_new_point.dart';
 import 'package:recycle_hub/screens/tabs/eco_coin/eco_coin_screens/give_garbage_instruction_screen.dart';
 import 'package:recycle_hub/screens/tabs/eco_gide/eco_guide_tabs/do_test_screen.dart';
 import 'package:recycle_hub/screens/tabs/profile/store_screen.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'eco_coin_screens/eco_coin_screen.dart';
+import 'dart:io' show Platform;
 
 class EcoCoinMainScreen extends StatefulWidget {
   @override
@@ -35,7 +34,9 @@ class _EcoCoinMainScreenState extends State<EcoCoinMainScreen> {
               onBackPressed: GetIt.I.get<EcoCoinMenuCubit>().goBack,
             );
           } else if (state == EcoCoinMenuItems.FEEDBACK) {
-            openApp('https://pub.dev/packages/url_launcher');
+            openApp(Platform.isIOS
+                ? 'https://apps.apple.com/us/app/recyclehub/id1584204305#?platform=iphone'
+                : 'https://play.google.com/store/apps/details?id=com.beerstudio.recycle_hub');
             return EcoCoinScreen();
           } else if (state == EcoCoinMenuItems.GIVEGARBAGE) {
             return GiveGarbageInstructionScreen();

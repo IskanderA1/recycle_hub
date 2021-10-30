@@ -3,7 +3,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg_provider/flutter_svg_provider.dart';
 import 'package:recycle_hub/style/theme.dart';
 
-import 'first_custom_paint.dart';
 
 class Page3 extends StatelessWidget {
   static const _text =
@@ -34,7 +33,7 @@ class Page3 extends StatelessWidget {
               "Получайте ЭкоКоины",
               style: TextStyle(
                   color: kColorBlack,
-                  fontSize: 35,
+                  fontSize: 28,
                   fontFamily: "Gilroy",
                   fontWeight: FontWeight.w700),
             ),

@@ -4,17 +4,21 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:recycle_hub/bloc/auth/auth_bloc.dart';
 import 'package:recycle_hub/helpers/file_uploader.dart';
 import 'package:recycle_hub/helpers/image_picker.dart';
+import 'package:recycle_hub/screens/authorisation_and_registration/auth_screen.dart';
 import 'package:recycle_hub/style/theme.dart';
 
 class UserImagePicker extends StatefulWidget {
   final String image;
   final Function(bool) onSelected;
+  final AuthState state;
   UserImagePicker({
     Key key,
     this.image,
     this.onSelected,
+    this.state,
   }) : super(key: key);
   @override
   _UserImagePickerState createState() => _UserImagePickerState();
@@ -48,20 +52,31 @@ class _UserImagePickerState extends State<UserImagePicker> {
 
   void _selectImage() async {
     try {
-      final img = await FilePicker.getImageFromStorage();
-      if (img != null) {
-        _image = img;
-        await FileUpLoader.sendPhoto(_image, '/update_profile_image', context);
-      }
-      if (widget.onSelected != null) {
-        widget.onSelected(true);
-      }
-      setState(() {
-        _imageWidget = Image.file(
-          _image,
-          fit: BoxFit.cover,
+      if (widget.state is AuthStateGuestAcc) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => AuthScreen(),
+          ),
         );
-      });
+      }
+      if (widget.state is AuthStateLogedIn) {
+        final img = await FilePicker.getImageFromStorage();
+        if (img != null) {
+          _image = img;
+          await FileUpLoader.sendPhoto(
+              _image, '/update_profile_image', context);
+        }
+        if (widget.onSelected != null) {
+          widget.onSelected(true);
+        }
+        setState(() {
+          _imageWidget = Image.file(
+            _image,
+            fit: BoxFit.cover,
+          );
+        });
+      }
     } catch (e) {
       _image = null;
     }
@@ -119,7 +134,8 @@ class _UserImagePickerState extends State<UserImagePicker> {
                 alignment: Alignment.center,
                 height: 31,
                 width: 31,
-                decoration: BoxDecoration(shape: BoxShape.circle, color: kColorWhite),
+                decoration:
+                    BoxDecoration(shape: BoxShape.circle, color: kColorWhite),
                 child: Icon(
                   Icons.camera_alt_outlined,
                   color: kColorGreen,
