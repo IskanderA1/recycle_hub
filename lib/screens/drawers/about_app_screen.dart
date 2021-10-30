@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:recycle_hub/elements/common_cell.dart';
-import 'package:recycle_hub/icons/app_bar_icons_icons.dart';
-import 'package:recycle_hub/style/theme.dart';
 import 'about_developers_screen.dart';
 
 class AboutAppScreen extends StatefulWidget {
@@ -12,6 +10,7 @@ class AboutAppScreen extends StatefulWidget {
 class _AboutAppScreenState extends State<AboutAppScreen> {
   @override
   Widget build(BuildContext context) {
+    print('helloabdu');
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
