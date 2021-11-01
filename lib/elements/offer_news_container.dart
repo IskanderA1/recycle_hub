@@ -23,7 +23,7 @@ class _OfferNewsContainerState extends State<OfferNewsContainer> {
       _isLoading = true;
     });
     if (_titleController.text.isEmpty || _bodyController.text.isEmpty) {
-      showMessage(context: context, message: 'Заполните поля');
+      AlertHelper.showMessage(context: context, message: 'Заполните поля');
       setState(() {
         _isLoading = false;
       });
@@ -37,14 +37,14 @@ class _OfferNewsContainerState extends State<OfferNewsContainer> {
           isAdvice: _isAdvice);
 
       NewsService().sendNews(model);
-      showMessage(
+      AlertHelper.showMessage(
           context: context,
           message: 'Новость успешно сохранена',
           backColor: kColorGreen);
       clear();
     } catch (e) {
       print(e.toString());
-      showMessage(context: context, message: e.toString());
+      AlertHelper.showMessage(context: context, message: e.toString());
     }
 
     setState(() {

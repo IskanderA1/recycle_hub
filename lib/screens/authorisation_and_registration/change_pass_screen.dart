@@ -37,7 +37,7 @@ class _ChangePassScreenState extends State<ChangePassScreen> {
           Navigator.pop(context);
         }
       } else if (state is RecoveryStateError) {
-        showMessage(context: context, message: state.toString());
+        AlertHelper.showMessage(context: context, message: state.toString());
       }
     });
     super.initState();

@@ -106,14 +106,14 @@ class _BePartnerScreenState extends State<BePartnerScreen> {
                       body: {"request_message": _text.text},
                     );
                     if (response.statusCode == 201) {
-                      showMessage(
+                      AlertHelper.showMessage(
                         context: context,
                         message: 'Успешно',
                         backColor: kColorGreen,
                       );
                     } else {
                       var data = jsonDecode(response.body);
-                      showMessage(
+                      AlertHelper.showMessage(
                         context: context,
                         message: '${data['error']}',
                       );

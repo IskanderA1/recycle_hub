@@ -88,7 +88,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       yield AuthStateGuestAcc();
     }
     try {
-      UserService().loadLocation();
+      /* UserService().loadLocation(); */
     } catch (e) {}
   }
 

@@ -171,7 +171,7 @@ class _ForgetConfirmCodeScreenState extends State<ForgetConfirmCodeScreen> {
         onPressed: () {
           if (_tfKey.currentState.validate()) {
             UserService().chechCode(username: null, code: _code.text).catchError((e){
-              showMessage(context: context, backColor: kColorRed, message: 'Код неверный');
+              AlertHelper.showMessage(context: context, backColor: kColorRed, message: 'Код неверный');
             }).then((i) {
               if (i) {
                 Navigator.pushReplacement(

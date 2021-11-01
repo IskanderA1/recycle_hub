@@ -40,7 +40,7 @@ class _StoreScreenState extends State<StoreScreen> {
     storeBloc.add(StoreEventInit());
     _storeSub = storeBloc.stream.listen((state) {
       if (state is StoreStateBought) {
-        showInfoAlert(context, "Товар куплен", 'Товар добавлен в ваши покупки, Вы можете посмотреть свою покупку в раздале "Мои покупки"');
+        AlertHelper.showInfoAlert(context, "Товар куплен", 'Товар добавлен в ваши покупки, Вы можете посмотреть свою покупку в раздале "Мои покупки"');
       }
     });
     super.initState();
@@ -238,7 +238,7 @@ class ProductCell extends StatelessWidget {
               Spacer(),
               InkWell(
                 onTap: () {
-                  showErrorAlert(
+                  AlertHelper.showErrorAlert(
                     context,
                     "${product.name}",
                     "Вы действительно хотите купить этот товар?",

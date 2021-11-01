@@ -237,13 +237,13 @@ class _ReportToErrorMarkerScreenState extends State<ReportToErrorMarkerScreen> {
                           bloc: _cubit,
                           listener: (context, state) async {
                             if (state.error != null) {
-                              showMessage(
+                              AlertHelper.showMessage(
                                 context: context,
                                 message: 'Ошибка: ${state.error}',
                               );
                             }
                             if (state.error == null && !state.isLoading) {
-                              showMessage(
+                              AlertHelper.showMessage(
                                 context: context,
                                 message: 'Успешно',
                                 backColor: kColorGreen,

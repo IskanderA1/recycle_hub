@@ -145,17 +145,9 @@ class PointsService {
       if (model.recType != null && model.paybackType != null) {
         response = await CommonRequest.makeRequest('rec_points',
             params: {'payback_type': model.recType, 'filters': _filters});
-        /*await http.get(
-            "$mainUrl/api/rec_points?coords=[[33, 33],[60, 33],[60, 60],[33, 60]]&rec_type=" +
-                model.recType +
-                "&payback_type=" +
-                model.paybackType +
-                "&filters=$_filters");*/
       } else {
         response = await CommonRequest.makeRequest('rec_points',
             params: {'filters': _filters});
-        /*http.get(
-            "$mainUrl/api/rec_points?coords=[[33, 33],[60, 33],[60, 60],[33, 60]]&filters=$_filters");*/
       }
       var data = jsonDecode(response.body);
       print(data);

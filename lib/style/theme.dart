@@ -38,6 +38,10 @@ ThemeData kAppThemeData() {
         fontWeight: FontWeight.w700,
       ),
       color: kColorGreen,
+      /* toolbarTextStyle: TextStyle(
+        fontSize: 14,
+        color: kColorWhite,
+      ), */
     ),
     textTheme: TextTheme(headline6: TextStyle(color: kColorGreyDark, fontSize: 14, fontFamily: 'GilroyMedium')),
     bottomNavigationBarTheme: BottomNavigationBarThemeData(

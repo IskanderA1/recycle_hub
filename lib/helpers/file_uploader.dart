@@ -23,7 +23,7 @@ class FileUpLoader {
     } catch (e) {
       d.log(e.toString(), name: 'helpers.file_uploader');
       if (context != null) {
-        showMessage(context: context, message: 'Не удалось отправить фото');
+        AlertHelper.showMessage(context: context, message: 'Не удалось отправить фото');
       }
     }
 
@@ -71,7 +71,7 @@ class FileUpLoader {
     } catch (e) {
       d.log(e.toString(), name: 'helpers.file_uploader');
       if (context != null) {
-        showMessage(context: context, message: 'Не удалось отправить фото');
+        AlertHelper.showMessage(context: context, message: 'Не удалось отправить фото');
       }
     }
 

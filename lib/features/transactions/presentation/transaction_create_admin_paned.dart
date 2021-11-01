@@ -174,7 +174,7 @@ class _TransactionCreateAdminPanelScreenState extends State<TransactionCreateAdm
                                 backGroundColor: kColorGreyVeryLight,
                                 ontap: () {
                                   if (_massTextController.text.isEmpty) {
-                                    showMessage(context: context, message: 'Введите вес');
+                                    AlertHelper.showMessage(context: context, message: 'Введите вес');
                                     return;
                                   }
                                   state.saveFilterAndAmmount(

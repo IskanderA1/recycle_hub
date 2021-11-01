@@ -28,7 +28,7 @@ class Page4 extends StatelessWidget {
                 flex: 7,
               ),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 100),
+                padding: const EdgeInsets.symmetric(horizontal: 90),
                 child: Image(
                   width: ScreenUtil().screenWidth * 0.8,
                   height: ScreenUtil().screenHeight * 0.3,

@@ -41,7 +41,7 @@ class _AuthScreenState extends State<AuthScreen> {
           });
         });
       } else if (state is AuthStateFail) {
-        showMessage(context: context, message: state.error.toString());
+        AlertHelper.showMessage(context: context, message: state.error.toString());
       }
       /* if (state is AuthStateLoading) {
         Navigator.push(

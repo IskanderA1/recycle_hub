@@ -17,7 +17,7 @@ class Page3 extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Spacer(
-              flex: 7,
+              flex: 6,
             ),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 80),

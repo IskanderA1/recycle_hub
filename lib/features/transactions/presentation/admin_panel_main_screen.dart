@@ -29,8 +29,8 @@ class _AdminTransactionsPanelMainScreenState extends State<AdminTransactionsPane
   @override
   void didChangeDependencies() {
     state ??= Provider.of<AdminTransactionsState>(context);
-    _disposer ??= reaction((_) => state.errorMessage, (String message) => showMessage(context: context, message: message));
-    _disposer2 ??= reaction((_) => state.message, (String message) => showMessage(context: context, message: message, backColor: kColorGreen));
+    _disposer ??= reaction((_) => state.errorMessage, (String message) => AlertHelper.showMessage(context: context, message: message));
+    _disposer2 ??= reaction((_) => state.message, (String message) => AlertHelper.showMessage(context: context, message: message, backColor: kColorGreen));
     super.didChangeDependencies();
   }
 

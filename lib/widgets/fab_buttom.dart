@@ -95,7 +95,7 @@ class _BottomNavBarV2State extends State<BottomNavBarV2> {
                             );
                           }
                         } else {
-                          showMessage(
+                          AlertHelper.showMessage(
                               context: context,
                               message: "Авторизуйтесь",
                               backColor: kColorGreen);

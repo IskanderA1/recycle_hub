@@ -37,7 +37,7 @@ class _TopUpHistoryScreenState extends State<TopUpHistoryScreen> {
     super.didChangeDependencies();
     Provider.of<TransactionsState>(context, listen: false).getTransacts(DateTime.parse("2020-02-27"), DateTime.now());
     _transactionsState ??= Provider.of<TransactionsState>(context);
-    _disposer = reaction((_) => _transactionsState.errorMessage, (String message) => showMessage(context: context, message: message));
+    _disposer = reaction((_) => _transactionsState.errorMessage, (String message) => AlertHelper.showMessage(context: context, message: message));
   }
 
   @override

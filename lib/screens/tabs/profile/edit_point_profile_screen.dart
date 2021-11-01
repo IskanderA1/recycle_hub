@@ -100,7 +100,7 @@ class _EditPointProfileScreenState extends State<EditPointProfileScreen> {
       );
       await PointsService().sendPointInfo(marker, _photos);
     } catch (e) {
-      showMessage(context: context, message: e.toString());
+      AlertHelper.showMessage(context: context, message: e.toString());
     }
     setState(() {
       _isLoading = false;

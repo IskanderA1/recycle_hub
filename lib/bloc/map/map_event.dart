@@ -12,6 +12,11 @@ class MapEventInit extends MapEvent {
   List<Object> get props => [];
 }
 
+class MapEventReset extends MapEvent {
+  @override
+  List<Object> get props => [];
+}
+
 class MapEventFilter extends MapEvent {
   final MapFilterModel filter;
   MapEventFilter({this.filter});

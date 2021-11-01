@@ -46,7 +46,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         await UserService().saveUserInfo(name: _name.text);
         GetIt.I.get<ProfileMenuCubit>().goBack();
       } on Exception catch (e) {
-        showMessage(
+        AlertHelper.showMessage(
           context: context,
           message: e.toString(),
         );

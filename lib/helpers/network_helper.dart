@@ -27,7 +27,7 @@ class NetworkHelper {
         universalLinksOnly: true,
       );
     } else {
-      showMessage(context: context, message: "Ошибка при попытке открыть ссылку");
+      AlertHelper.showMessage(context: context, message: "Ошибка при попытке открыть ссылку");
     }
   }
 }

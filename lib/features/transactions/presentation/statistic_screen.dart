@@ -57,7 +57,7 @@ class _StatisticScreenState extends State<StatisticScreen> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     _transactionsState ??= Provider.of<TransactionsState>(context);
-    _disposer = reaction((_) => _transactionsState.errorMessage, (String message) => showMessage(context: context, message: message));
+    _disposer = reaction((_) => _transactionsState.errorMessage, (String message) => AlertHelper.showMessage(context: context, message: message));
   }
 
   @override

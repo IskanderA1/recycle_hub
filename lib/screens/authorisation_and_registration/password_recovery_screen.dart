@@ -204,7 +204,7 @@ class _PasswordRecoveryScreenState extends State<PasswordRecoveryScreen> {
               await UserService().changePassword(password: _firstPass.text);
               Navigator.pop(context);
             } catch (e) {
-              showMessage(context: context, backColor: kColorRed, message: e.toString());
+              AlertHelper.showMessage(context: context, backColor: kColorRed, message: e.toString());
             }
             
           }

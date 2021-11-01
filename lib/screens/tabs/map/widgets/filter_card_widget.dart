@@ -40,6 +40,16 @@ class FilterCardWidgetState extends State<FilterCardWidget> {
   }
 
   @override
+  void didUpdateWidget(covariant FilterCardWidget oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if(widget.isSelected != oldWidget.isSelected){
+      setState(() {
+        isSelected = widget.isSelected;
+      });
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {

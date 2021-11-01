@@ -73,11 +73,11 @@ class _OfferNewPointScreenState extends State<OfferNewPointScreen> {
         if (_image != null) {
           FileUpLoader.sendPhotos([_image], 'rec_points/${marker.id}/images');
         }
-        showMessage(context: context, message: 'Успешно', backColor: kColorGreen);
+        AlertHelper.showMessage(context: context, message: 'Успешно', backColor: kColorGreen);
       }
     } catch (e) {
       print(e.toString());
-      showMessage(context: context, message: 'Не удалось отправить запрос');
+      AlertHelper.showMessage(context: context, message: 'Не удалось отправить запрос');
     } finally {
       setState(() {
         _isLoading = false;

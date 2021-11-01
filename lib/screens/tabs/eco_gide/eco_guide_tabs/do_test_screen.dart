@@ -44,7 +44,7 @@ class _TestScreenState extends State<TestScreen> {
         bloc: GetIt.I.get<EcoTestBloc>(),
         listener: (context, state) {
           if (state is EcoTestStateError) {
-            showMessage(context: context, message: state.toString());
+            AlertHelper.showMessage(context: context, message: state.toString());
           }
 
           if (state is EcoTestStateInitial || state is EcoTestStateError) {

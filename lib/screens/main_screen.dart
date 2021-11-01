@@ -36,7 +36,7 @@ class _MainScreenState extends State<MainScreen> {
         globalStateBloc.pickItem(GLobalStates.AUTH);
       }
       if (state is AuthStateFail) {
-        showMessage(context: context, message: state.error);
+        AlertHelper.showMessage(context: context, message: state.error);
       } */
     });
     authBloc.add(AuthEventInit());

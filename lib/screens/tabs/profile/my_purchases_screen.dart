@@ -39,7 +39,7 @@ class _MyPurchasesScreenState extends State<MyPurchasesScreen> {
       list = StoreService().purchases;
       return list;
     } catch (e) {
-      showMessage(context: context, message: 'Не удалось загрузить покупки');
+      AlertHelper.showMessage(context: context, message: 'Не удалось загрузить покупки');
       return [];
     }
   }

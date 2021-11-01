@@ -61,7 +61,7 @@ class _ReqistrationScreenState extends State<ReqistrationScreen> {
       },
       listener: (context, state) {
         if (state is RegistrationStateError) {
-          showMessage(context: context, message: state.error.toString());
+          AlertHelper.showMessage(context: context, message: state.error.toString());
         } else if (state is RegistrationStateConfirmed) {
           Navigator.pop(context);
         }
@@ -435,28 +435,28 @@ class _ReqistrationScreenState extends State<ReqistrationScreen> {
         elevation: 5.0,
         onPressed: () {
           if (_name.text.length == 0) {
-            showMessage(message: "Введите свое имя", context: context);
+            AlertHelper.showMessage(message: "Введите свое имя", context: context);
           } else if (_surname.text.length == 0) {
-            showMessage(message: "Введите свою фамилию", context: context);
+            AlertHelper.showMessage(message: "Введите свою фамилию", context: context);
           } else if (_email.text.length == 0 || !_email.text.contains('@')) {
-            showMessage(
+            AlertHelper.showMessage(
                 message: "Введите корректную почту e-mail", context: context);
           } else if (_password.text.length < 8) {
-            showMessage(
+            AlertHelper.showMessage(
                 message: "Пароль должен содержать как минимум 8 символов",
                 context: context);
           } else if (!RegExp(patternNum).hasMatch(_password.text)) {
-            showMessage(
+            AlertHelper.showMessage(
                 message: "Пароль должен содержать хотя-бы 1 цифру",
                 context: context);
           } else if (!RegExp(patternAlphabet).hasMatch(_password.text)) {
-            showMessage(
+            AlertHelper.showMessage(
                 message: "Пароль должен содержать хотя-бы 1 букву",
                 context: context);
           }
 
           // if (_passKey.currentState.validate()) {
-          //   showMessage(
+          //   AlertHelper.showMessage(
           //       message: "Пароль не соответствует требованиям",
           //       context: context);
           //   return;
@@ -535,7 +535,7 @@ class _ReqistrationScreenState extends State<ReqistrationScreen> {
           GestureDetector(
             onTap: () {
               if (_email.text.isEmpty) {
-                showMessage(
+                AlertHelper.showMessage(
                     context: context, message: 'Пожалуйста, введите логин');
                 return;
               }
