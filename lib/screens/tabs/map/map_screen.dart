@@ -32,7 +32,7 @@ class MapScreen extends StatefulWidget {
 
 class _MapScreenState extends State<MapScreen> {
   CameraPosition cameraPosition =
-      CameraPosition(target: LatLng(55.7985293, 49.1156465), zoom: 12.1);
+      CameraPosition(target: LatLng(55.7985293, 49.1156465), zoom: 15.1);
   final Completer<GoogleMapController> _controller = Completer();
   MapBloc mapBloc;
 
@@ -198,9 +198,11 @@ class _GoogleMapWidgetState extends State<GoogleMapWidget> {
 
   void _updateMarkers(Set<Marker> markers) {
     print('Updated ${markers.length} markers');
-    setState(() {
-      this.markers = markers;
-    });
+    setState(
+      () {
+        this.markers = markers;
+      },
+    );
   }
 
   @override
@@ -226,102 +228,116 @@ class _GoogleMapWidgetState extends State<GoogleMapWidget> {
     );
     clusterManager.onCameraMove(_cameraPosition);
     clusterManager.setItems(_items);
-    _mapSub = GetIt.I.get<MapBloc>().stream.listen((state) {
-      if (state is MapStateLoaded && mounted) {
-        setState(() {
-          _items = state.markers
-              .map(
-                (markItem) => ClusterItem(
-                    LatLng(markItem.coords[0], markItem.coords[1]),
-                    item: markItem),
-              )
-              .toList();
-        });
-        clusterManager.setItems(_items);
-      }
-    });
-    PointsService().loadAcceptTypes().then((value) {
-      setState(() {
-        filters = value;
-      });
-      _list = widget.state.markers.map((item) {
-        double ddist = distanceInKm(
-          UserService().location,
-          Point(item.coords[0], item.coords[1]),
-        );
-        String dist = '';
-        if (ddist < 0) {
-          dist = ddist.toStringAsFixed(3).split('.').last + ' м';
-        } else {
-          dist = ddist.toStringAsFixed(1).toString() + ' км';
-        }
-        return MarkerCardWidget(
-            index: item.hashCode,
-            marker: item,
-            distance: dist,
-            onTap: () {
-              if (googleMapController != null) {
-                CameraUpdate cameraUpdate = CameraUpdate.newLatLngZoom(
-                    LatLng(item.coords[0], item.coords[1]), 17);
-                googleMapController.animateCamera(cameraUpdate);
-              }
-              showStickyFlexibleBottomSheet(
-                  initHeight: 0.2,
-                  minHeight: 0.2,
-                  maxHeight: 0.85,
-                  context: context,
-                  headerHeight: 40,
-                  isExpand: false,
-                  decoration: const ShapeDecoration(
-                    color: kColorWhite,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(40),
-                        topRight: Radius.circular(40),
-                      ),
-                    ),
-                  ),
-                  headerBuilder: (context, bottomSheetOffset) {
-                    return AnimatedHeader(bottomSheetOffset: bottomSheetOffset);
-                  },
-                  builder: (context, offset) {
-                    return SliverChildListDelegate(
-                      <Widget>[
-                        AnimatedPreInformationContainer(
-                          offset: offset,
-                          marker: item,
-                          filters: filters.isNotEmpty
-                              ? filters
-                                  .where((element) =>
-                                      item.acceptTypes.contains(element.id))
-                                  .toList()
-                              : [],
-                          userPoint: Point(
-                              _userLocation.latitude, _userLocation.longitude),
-                        ),
-                        BuildBody(
-                          marker: item,
-                          filters: filters.isNotEmpty
-                              ? filters
-                                  .where((element) =>
-                                      item.acceptTypes.contains(element.id))
-                                  .toList()
-                              : [],
-                        ),
-                      ],
-                    );
-                  },
-                  anchors: [0.0, 0.2, 0.85]);
+    _mapSub = GetIt.I.get<MapBloc>().stream.listen(
+      (state) {
+        if (state is MapStateLoaded && mounted) {
+          setState(
+            () {
+              _items = state.markers
+                  .map(
+                    (markItem) => ClusterItem(
+                        LatLng(markItem.coords[0], markItem.coords[1]),
+                        item: markItem),
+                  )
+                  .toList();
             },
-            filters: filters.isNotEmpty
-                ? filters
-                    .where(
-                      (element) => item.acceptTypes.contains(element.id),
-                    )
-                    .toList()
-                : []);
-      }).toList();
-    });
+          );
+          clusterManager.setItems(_items);
+        }
+      },
+    );
+    PointsService().loadAcceptTypes().then(
+      (value) {
+        setState(
+          () {
+            filters = value;
+          },
+        );
+        _list = widget.state.markers.map(
+          (item) {
+            double ddist = distanceInKm(
+              UserService().location,
+              Point(item.coords[0], item.coords[1]),
+            );
+            String dist = '';
+            if (ddist < 0) {
+              dist = ddist.toStringAsFixed(3).split('.').last + ' м';
+            } else {
+              dist = ddist.toStringAsFixed(1).toString() + ' км';
+            }
+            return MarkerCardWidget(
+                index: item.hashCode,
+                marker: item,
+                distance: dist,
+                onTap: () {
+                  if (googleMapController != null) {
+                    CameraUpdate cameraUpdate = CameraUpdate.newLatLngZoom(
+                        LatLng(item.coords[0], item.coords[1]), 17);
+                    googleMapController.animateCamera(cameraUpdate);
+                  }
+                  showStickyFlexibleBottomSheet(
+                      initHeight: 0.2,
+                      minHeight: 0.2,
+                      maxHeight: 0.85,
+                      context: context,
+                      headerHeight: 40,
+                      isExpand: false,
+                      decoration: const ShapeDecoration(
+                        color: kColorWhite,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(40),
+                            topRight: Radius.circular(40),
+                          ),
+                        ),
+                      ),
+                      headerBuilder: (context, bottomSheetOffset) {
+                        return AnimatedHeader(
+                            bottomSheetOffset: bottomSheetOffset);
+                      },
+                      builder: (context, offset) {
+                        return SliverChildListDelegate(
+                          <Widget>[
+                            AnimatedPreInformationContainer(
+                              offset: offset,
+                              marker: item,
+                              filters: filters.isNotEmpty
+                                  ? filters
+                                      .where((element) =>
+                                          item.acceptTypes.contains(element.id))
+                                      .toList()
+                                  : [],
+                              userPoint: Point(_userLocation.latitude,
+                                  _userLocation.longitude),
+                            ),
+                            BuildBody(
+                              marker: item,
+                              filters: filters.isNotEmpty
+                                  ? filters
+                                      .where((element) =>
+                                          item.acceptTypes.contains(element.id))
+                                      .toList()
+                                  : [],
+                            ),
+                          ],
+                        );
+                      },
+                      anchors: [0.0, 0.2, 0.85]);
+                },
+                filters: filters.isNotEmpty
+                    ? filters
+                        .where(
+                          (element) => item.acceptTypes.contains(element.id),
+                        )
+                        .toList()
+                    : []);
+          },
+        ).toList();
+      },
+    );
+    _onCameraMove(
+        CameraPosition(target: LatLng(55.7985293, 49.1156465), zoom: 15.1));
+
     super.initState();
   }
 

@@ -10,6 +10,8 @@ import 'package:url_launcher/url_launcher.dart';
 import 'eco_coin_screens/eco_coin_screen.dart';
 import 'dart:io' show Platform;
 
+import 'eco_coin_screens/share_friends.dart';
+
 class EcoCoinMainScreen extends StatefulWidget {
   @override
   _EcoCoinMainScreenState createState() => _EcoCoinMainScreenState();
@@ -40,6 +42,8 @@ class _EcoCoinMainScreenState extends State<EcoCoinMainScreen> {
             return EcoCoinScreen();
           } else if (state == EcoCoinMenuItems.GIVEGARBAGE) {
             return GiveGarbageInstructionScreen();
+          } else if (state == EcoCoinMenuItems.SHAREFRIEND) {
+            return ShareFineds();
           } else if (state == EcoCoinMenuItems.OFFERNEWPOINT) {
             return OfferNewPointScreen(
                 onBack: () => GetIt.I

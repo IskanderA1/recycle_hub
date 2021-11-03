@@ -9,7 +9,8 @@ enum EcoCoinMenuItems {
   OFFERNEWPOINT,
   ANSWERQUESTS,
   RECOMMEND,
-  FEEDBACK
+  FEEDBACK,
+  SHAREFRIEND
 }
 
 class EcoCoinMenuCubit extends Cubit<EcoCoinMenuItems> {

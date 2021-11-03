@@ -51,8 +51,8 @@ class _ConfirmCodeScreenState extends State<ConfirmCodeScreen> {
                     Navigator.of(context).pop();
                   },
                   child: Icon(
-                    NavBarIcons.app_bar_suffix,
-                    size: 18,
+                    Icons.arrow_back,
+                    size: 24,
                   ),
                 ),
               ),

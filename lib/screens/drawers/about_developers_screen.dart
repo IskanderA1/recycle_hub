@@ -74,7 +74,7 @@ class _AboutDevelopersScreenState extends State<AboutDevelopersScreen> {
               post: 'Frontend-разработчик',
             ),
             _ContactCell(
-              link: "https://vk.com/im?sel=554327760",
+              link: "https://vk.com/yakubiam",
               name: '-Якуби Абдукаххор',
               post: 'UI/UX дизайнер',
             ),

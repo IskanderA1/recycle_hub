@@ -78,6 +78,12 @@ flutter:
     - assets/icons/onboarding_2/People.svg
     - assets/icons/onboarding_3/People.svg
     - assets/icons/onboarding_4/People.svg
+    - assets/icons/socials/vk.svg
+    - assets/icons/socials/fb.svg
+    - assets/icons/socials/in.svg
+    - assets/icons/socials/telegram.png
+
+
     - assets/svg/background.svg
     - assets/svg/logo_original.svg
     - assets/svg/logo_original.png

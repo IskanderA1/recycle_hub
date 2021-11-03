@@ -11,7 +11,6 @@ import 'package:recycle_hub/screens/authorisation_and_registration/auth_screen.d
 import 'package:recycle_hub/style/theme.dart';
 import 'dart:io' show Platform;
 
-
 class EcoCoinScreen extends StatefulWidget {
   @override
   _EcoCoinScreenState createState() => _EcoCoinScreenState();
@@ -108,7 +107,9 @@ class _EcoCoinScreenState extends State<EcoCoinScreen> {
                             if (state is AuthStateGuestAcc) {
                               guestButtonTap();
                             } else {
-                              GetIt.I.get<EcoCoinMenuCubit>().moveTo(EcoCoinMenuItems.STORE);
+                              GetIt.I
+                                  .get<EcoCoinMenuCubit>()
+                                  .moveTo(EcoCoinMenuItems.STORE);
                             }
                           },
                           iconData: MyPyrchaseIcons.shopping_bags,
@@ -119,7 +120,9 @@ class _EcoCoinScreenState extends State<EcoCoinScreen> {
                             if (state is AuthStateGuestAcc) {
                               guestButtonTap();
                             } else {
-                              GetIt.I.get<EcoCoinMenuCubit>().moveTo(EcoCoinMenuItems.GIVEGARBAGE);
+                              GetIt.I
+                                  .get<EcoCoinMenuCubit>()
+                                  .moveTo(EcoCoinMenuItems.GIVEGARBAGE);
                             }
                           },
                           iconData: EcoCoinIcons.recyclebin,
@@ -130,7 +133,9 @@ class _EcoCoinScreenState extends State<EcoCoinScreen> {
                             if (state is AuthStateGuestAcc) {
                               guestButtonTap();
                             } else {
-                              GetIt.I.get<EcoCoinMenuCubit>().moveTo(EcoCoinMenuItems.OFFERNEWPOINT);
+                              GetIt.I
+                                  .get<EcoCoinMenuCubit>()
+                                  .moveTo(EcoCoinMenuItems.OFFERNEWPOINT);
                             }
                           },
                           iconData: EcoCoinIcons.addpointer,
@@ -141,7 +146,9 @@ class _EcoCoinScreenState extends State<EcoCoinScreen> {
                             if (state is AuthStateGuestAcc) {
                               guestButtonTap();
                             } else {
-                              GetIt.I.get<EcoCoinMenuCubit>().moveTo(EcoCoinMenuItems.ANSWERQUESTS);
+                              GetIt.I
+                                  .get<EcoCoinMenuCubit>()
+                                  .moveTo(EcoCoinMenuItems.ANSWERQUESTS);
                             }
                           },
                           iconData: EcoCoinIcons.question,
@@ -149,22 +156,21 @@ class _EcoCoinScreenState extends State<EcoCoinScreen> {
                         MenuItemWidget(
                           name: "Порекомендуйте нас друзьям",
                           func: () {
-                            NetworkHelper.openUrl(Platform.isIOS
-                ? 'https://apps.apple.com/us/app/recyclehub/id1584204305#?platform=iphone'
-                : 'https://play.google.com/store/apps/details?id=com.beerstudio.recycle_hub', context);
-                            /* if (state is AuthStateGuestAcc) {
-                                    guestButtonTap();
-                                  } else {
-                                    GetIt.I
-                                        .get<EcoCoinMenuCubit>()
-                                        .moveTo(EcoCoinMenuItems.RECOMMEND);
-                                  } */
+                            if (state is AuthStateGuestAcc) {
+                              guestButtonTap();
+                            } else {
+                              GetIt.I
+                                  .get<EcoCoinMenuCubit>()
+                                  .moveTo(EcoCoinMenuItems.SHAREFRIEND);
+                            }
                           },
                           iconData: EcoCoinIcons.adduser,
                         ),
                         MenuItemWidget(
                           name: "Оцените наше приложение\nв маркете",
-                          func: () => GetIt.I.get<EcoCoinMenuCubit>().moveTo(EcoCoinMenuItems.FEEDBACK),
+                          func: () => GetIt.I
+                              .get<EcoCoinMenuCubit>()
+                              .moveTo(EcoCoinMenuItems.FEEDBACK),
                           iconData: EcoCoinIcons.reviews,
                         )
                       ],
@@ -238,7 +244,10 @@ class MenuItemWidget extends StatelessWidget {
               overflow: TextOverflow.visible,
               text: TextSpan(
                 text: name,
-                style: TextStyle(color: kColorBlack, fontFamily: 'GillroyMedium', fontSize: 14),
+                style: TextStyle(
+                    color: kColorBlack,
+                    fontFamily: 'GillroyMedium',
+                    fontSize: 14),
               ),
             ),
             Spacer(
@@ -293,7 +302,8 @@ Path getClip(Size size) {
   Path path = Path();
   path.moveTo(0, 0); // Start
   path.lineTo(0, size.height * 0.15);
-  path.quadraticBezierTo(size.width * 0.5, size.height * 0.3, size.width, size.height * 0.15);
+  path.quadraticBezierTo(
+      size.width * 0.5, size.height * 0.3, size.width, size.height * 0.15);
   /*path.arcToPoint(Offset(size.width, size.height * 0.2),
       radius: Radius.circular(50), clockwise: false,
       largeArc: true);*/

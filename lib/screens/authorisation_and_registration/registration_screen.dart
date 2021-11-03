@@ -4,6 +4,7 @@ import 'package:get_it/get_it.dart';
 import 'package:recycle_hub/bloc/registration/registration_bloc.dart';
 import 'package:recycle_hub/elements/loader.dart';
 import 'package:recycle_hub/helpers/messager_helper.dart';
+import 'package:recycle_hub/icons/eco_guide_icons_icons.dart';
 import 'package:recycle_hub/icons/nav_bar_icons_icons.dart';
 import 'package:recycle_hub/style/style.dart';
 import 'package:recycle_hub/style/theme.dart';
@@ -61,7 +62,8 @@ class _ReqistrationScreenState extends State<ReqistrationScreen> {
       },
       listener: (context, state) {
         if (state is RegistrationStateError) {
-          AlertHelper.showMessage(context: context, message: state.error.toString());
+          AlertHelper.showMessage(
+              context: context, message: state.error.toString());
         } else if (state is RegistrationStateConfirmed) {
           Navigator.pop(context);
         }
@@ -92,8 +94,8 @@ class _ReqistrationScreenState extends State<ReqistrationScreen> {
                     Navigator.of(context).pop();
                   },
                   child: Icon(
-                    NavBarIcons.app_bar_suffix,
-                    size: 18,
+                    Icons.arrow_back,
+                    size: 24,
                   ),
                 ),
               ),
@@ -162,7 +164,11 @@ class _ReqistrationScreenState extends State<ReqistrationScreen> {
         children: <Widget>[
           Text(
             'Имя',
-            style: TextStyle(fontSize: 14, color: Color(0xFF8D8D8D)),
+            style: TextStyle(
+              fontSize: 14,
+              color: Color(0xFF8D8D8D),
+              fontFamily: 'GilroyMedium',
+            ),
           ),
           SizedBox(height: 10.0),
           Container(
@@ -180,7 +186,7 @@ class _ReqistrationScreenState extends State<ReqistrationScreen> {
               keyboardType: TextInputType.name,
               style: TextStyle(
                 color: kColorBlack,
-                fontFamily: 'Gilroy',
+                fontFamily: 'GilroyMedium',
                 fontSize: 14,
               ),
               decoration: InputDecoration(
@@ -435,9 +441,11 @@ class _ReqistrationScreenState extends State<ReqistrationScreen> {
         elevation: 5.0,
         onPressed: () {
           if (_name.text.length == 0) {
-            AlertHelper.showMessage(message: "Введите свое имя", context: context);
+            AlertHelper.showMessage(
+                message: "Введите свое имя", context: context);
           } else if (_surname.text.length == 0) {
-            AlertHelper.showMessage(message: "Введите свою фамилию", context: context);
+            AlertHelper.showMessage(
+                message: "Введите свою фамилию", context: context);
           } else if (_email.text.length == 0 || !_email.text.contains('@')) {
             AlertHelper.showMessage(
                 message: "Введите корректную почту e-mail", context: context);

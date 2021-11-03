@@ -2,14 +2,10 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get_it/get_it.dart';
-import 'package:recycle_hub/api/request/session_manager.dart';
 import 'package:recycle_hub/api/services/user_service.dart';
-import 'package:recycle_hub/bloc/auth/auth_bloc.dart';
 import 'package:recycle_hub/bloc/recovery_bloc/recovery_bloc.dart';
 import 'package:recycle_hub/helpers/messager_helper.dart';
 import 'package:recycle_hub/icons/nav_bar_icons_icons.dart';
-import 'package:recycle_hub/model/authorisation_models/user_response.dart';
-import 'package:recycle_hub/model/global_state_models.dart';
 import 'package:recycle_hub/screens/authorisation_and_registration/password_recovery_screen.dart';
 import 'package:recycle_hub/style/style.dart';
 import 'package:recycle_hub/style/theme.dart';
@@ -43,61 +39,64 @@ class _ForgetConfirmCodeScreenState extends State<ForgetConfirmCodeScreen> {
               }
             },
             child: Scaffold(
+
               appBar: AppBar(
                 leading: InkWell(
                   onTap: () {
                     Navigator.of(context).pop();
                   },
-                  child: Icon(NavBarIcons.left),
+                  child: Icon(Icons.arrow_back, size: 24,),
                 ),
               ),
-              body: Container(
-                height: ScreenUtil().screenHeight - 85,
-                width: ScreenUtil().screenWidth,
-                color: Color(0xFFF2F2F2),
-                child: Padding(
-                  padding: EdgeInsets.fromLTRB(16, 16, 16, 0),
-                  child: Container(
-                    padding: EdgeInsets.fromLTRB(16, 40, 16, 16),
-                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(kBorderRadius), color: kColorWhite),
-                    child: Column(
-                      children: [
-                        Text(
-                          "Введите код из письма",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(color: kColorBlack, fontFamily: "Gilroy", fontSize: 21, fontWeight: FontWeight.w700),
-                        ),
-                        Spacer(
-                          flex: 1,
-                        ),
-                        _codeEnterTF(),
-                        Spacer(
-                          flex: 1,
-                        ),
-                        StreamBuilder(
-                          stream: GetIt.I.get<RecoveryBloc>().stream,
-                          builder: (BuildContext ctx, state) {
-                            if (state.hasData) {
-                              if (state.data is RecoveryStateError) {
-                                return Text(
-                                  state.data.error,
-                                  style: TextStyle(fontSize: 14, color: kColorRed),
-                                );
+              body: SingleChildScrollView(
+                child: Container(
+                  height: ScreenUtil().screenHeight - 85,
+                  width: ScreenUtil().screenWidth,
+                  color: Color(0xFFF2F2F2),
+                  child: Padding(
+                    padding: EdgeInsets.fromLTRB(16, 16, 16, 0),
+                    child: Container(
+                      padding: EdgeInsets.fromLTRB(16, 40, 16, 16),
+                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(kBorderRadius), color: kColorWhite),
+                      child: Column(
+                        children: [
+                          Text(
+                            "Введите код из письма",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(color: kColorBlack, fontFamily: "Gilroy", fontSize: 21, fontWeight: FontWeight.w700),
+                          ),
+                          Spacer(
+                            flex: 1,
+                          ),
+                          _codeEnterTF(),
+                          Spacer(
+                            flex: 1,
+                          ),
+                          StreamBuilder(
+                            stream: GetIt.I.get<RecoveryBloc>().stream,
+                            builder: (BuildContext ctx, state) {
+                              if (state.hasData) {
+                                if (state.data is RecoveryStateError) {
+                                  return Text(
+                                    state.data.error,
+                                    style: TextStyle(fontSize: 14, color: kColorRed),
+                                  );
+                                }
+                                return Container();
                               }
-                              return Container();
-                            }
-                            return Text(
-                              "",
-                              style: TextStyle(fontSize: 14, color: kColorRed),
-                            );
-                          },
-                        ),
-                        Spacer(flex: 1),
-                        _confirmButton(),
-                        Spacer(
-                          flex: 4,
-                        )
-                      ],
+                              return Text(
+                                "",
+                                style: TextStyle(fontSize: 14, color: kColorRed),
+                              );
+                            },
+                          ),
+                          Spacer(flex: 1),
+                          _confirmButton(),
+                          Spacer(
+                            flex: 4,
+                          )
+                        ],
+                      ),
                     ),
                   ),
                 ),
@@ -132,7 +131,7 @@ class _ForgetConfirmCodeScreenState extends State<ForgetConfirmCodeScreen> {
               key: _tfKey,
               child: TextFormField(
                 controller: _code,
-                keyboardType: TextInputType.emailAddress,
+                keyboardType: TextInputType.number,
                 style: TextStyle(
                   color: kColorBlack,
                   fontFamily: 'Gilroy',

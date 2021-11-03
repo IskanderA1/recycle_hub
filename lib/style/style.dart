@@ -20,7 +20,7 @@ class Style {
 
 final kHintTextStyle = TextStyle(
   color: Color(0xFFc5c8cf),
-  fontFamily: 'OpenSans',
+  fontFamily: 'GilroyMedium',
 );
 
 final kLabelStyle = TextStyle(
@@ -44,7 +44,7 @@ final kBoxDecorationStyle = BoxDecoration(
 final kOfferPointScreenInputDecor = BoxDecoration(
   color: kColorWhite,
   borderRadius: BorderRadius.circular(kBorderRadius),
-  border: Border.all(width:2, color: Color(0xFFECECEC)),
+  border: Border.all(width: 2, color: Color(0xFFECECEC)),
 );
 
 final kListItemBoxDecorationStyle = BoxDecoration(
@@ -117,4 +117,5 @@ final kLeftButtonBottomRadius = BorderRadius.only(topLeft: Radius.circular(10));
 final kRightButtonBottomRadius =
     BorderRadius.only(topRight: Radius.circular(10));
 
-final kEcoCoinString = "Тут вы можете выполнять задания и получать внутреннюю валюту для последующего обмена на услуги и товары партнеров в магазине";
+final kEcoCoinString =
+    "Тут вы можете выполнять задания и получать внутреннюю валюту для последующего обмена на услуги и товары партнеров в магазине";
