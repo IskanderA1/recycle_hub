@@ -24,7 +24,8 @@ class Page2 extends StatelessWidget {
           child: Image(
             width: ScreenUtil().screenWidth * 0.8,
             height: ScreenUtil().screenHeight * 0.3,
-            image: Svg('assets/icons/onboarding_2/People.svg'),
+            image: AssetImage('assets/icons/onboarding_2/People.png'),
+            // image: Svg('assets/icons/onboarding_2/People.svg'),
           ),
         ),
         Spacer(flex: 1),

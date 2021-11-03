@@ -74,8 +74,12 @@ flutter:
     - assets/fonts/
     - assets/icons/
     - assets/icons/onboarding_1/People.svg
+
+
     - assets/icons/onboarding_1/Clouds.svg
     - assets/icons/onboarding_2/People.svg
+    - assets/icons/onboarding_2/People.png
+
     - assets/icons/onboarding_3/People.svg
     - assets/icons/onboarding_4/People.svg
     - assets/icons/socials/vk.svg
