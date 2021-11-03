@@ -102,7 +102,7 @@ class _ShareFinedsState extends State<ShareFineds> {
                   children: [
                     Container(
                       child: Text(
-                        'Пригласите друзей и получайте экокоины! Больше активны хрефералов-больше экокоинов!',
+                        'Пригласите друзей и получайте экокоины! Больше активных рефералов-больше экокоинов!',
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           fontSize: 18,

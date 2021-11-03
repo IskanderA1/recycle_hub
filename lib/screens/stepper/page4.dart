@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg_provider/flutter_svg_provider.dart';
 import 'package:recycle_hub/screens/stepper/confidentiality_policy_screen.dart';
 import 'package:recycle_hub/style/theme.dart';
+import 'package:recycle_hub/helpers/network_helper.dart';
 
 import 'second_custom_paint.dart';
 
@@ -89,8 +90,8 @@ class Page44 extends StatelessWidget {
 class Page4 extends StatelessWidget {
   static const _text =
       "Мы не собираем лишних данных и запрашиваем только лишь доступ к местоположению во время работы приложения. Нажимая «Принять», вы соглашаетесь с ";
-  static const _buttonText =
-      "пользовательским соглашением и политикой конфиденциальности";
+  static const _buttonText_1 = "пользовательским соглашением";
+  static const _buttonText_2 = "политикой конфиденциальности";
   final bool val;
   final Function onChaned;
   Page4({this.val, this.onChaned});
@@ -132,7 +133,7 @@ class Page4 extends StatelessWidget {
                   fontSize: 16, fontFamily: "GilroyMedium", color: kColorBlack),
               children: <TextSpan>[
                 TextSpan(
-                  text: _buttonText,
+                  text: _buttonText_1,
                   style: TextStyle(
                       fontSize: 16,
                       fontFamily: "GilroyMedium",
@@ -140,12 +141,30 @@ class Page4 extends StatelessWidget {
                       decoration: TextDecoration.underline),
                   recognizer: TapGestureRecognizer()
                     ..onTap = () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => ConfidentialityPolicy(),
-                        ),
-                      );
+                      NetworkHelper.openUrl(
+                          'https://recyclehub.ru/privacy/#/conditions/',
+                          context);
+                    },
+                ),
+                TextSpan(
+                  text: ' и ',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontFamily: "GilroyMedium",
+                    color: kColorBlack,
+                  ),
+                ),
+                TextSpan(
+                  text: _buttonText_2,
+                  style: TextStyle(
+                      fontSize: 16,
+                      fontFamily: "GilroyMedium",
+                      color: kColorBlack,
+                      decoration: TextDecoration.underline),
+                  recognizer: TapGestureRecognizer()
+                    ..onTap = () {
+                      NetworkHelper.openUrl(
+                          'https://recyclehub.ru/privacy/#/', context);
                     },
                 ),
               ],
