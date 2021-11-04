@@ -201,10 +201,12 @@ class _MapFilterDetailScreenState extends State<MapFilterDetailScreen> {
 
   injectNewVarName(FilterType type) {
     this.mapBloc.currentFilterModel.filters.add(type);
+    setState(() {});
   }
 
   rejectVarName(FilterType type) {
     mapBloc.currentFilterModel.filters = mapBloc.currentFilterModel.filters.toSet().toList()..remove(type);
+    setState(() {});
   }
 
   void acceptFilters() {
@@ -217,9 +219,9 @@ class _MapFilterDetailScreenState extends State<MapFilterDetailScreen> {
   }
 
   _markerModeCheck() {
-    return StreamBuilder<Object>(
-        stream: mapBloc.markerWorkModeBloc.stream,
-        //initialData: markerWorkModeBloc.defaultItem,
+    return BlocBuilder<MarkerWorkModeCubit, MODE>(
+        bloc: mapBloc.markerWorkModeCubit,
+        //initialData: MarkerWorkModeCubit.defaultItem,
         builder: (context, state) {
           return Container(
               height: 60,
@@ -230,17 +232,16 @@ class _MapFilterDetailScreenState extends State<MapFilterDetailScreen> {
                   Expanded(
                     child: GestureDetector(
                       onTap: () {
-                        mapBloc.currentFilterModel.paybackType = "paid";
-                        mapBloc.markerWorkModeBloc.pickEvent(MODE.PAID);
+                        mapBloc.markerWorkModeCubit.pickEvent(MODE.PAID);
                       },
                       child: Container(
-                        color: state.data == MODE.PAID ? kColorGreyLight : Color(0xFFFFFFFF),
+                        color: state == MODE.PAID ? kColorGreyLight : Color(0xFFFFFFFF),
                         padding: EdgeInsets.zero,
                         alignment: Alignment.center,
                         child: AutoSizeText("Платный приём",
                             softWrap: true,
                             textAlign: TextAlign.center,
-                            style: TextStyle(color: state.data == MODE.PAID ? Color(0xFFFFFFFF) : kColorGreyLight)),
+                            style: TextStyle(color: state == MODE.PAID ? Color(0xFFFFFFFF) : kColorGreyLight)),
                       ),
                     ),
                   ),
@@ -251,11 +252,10 @@ class _MapFilterDetailScreenState extends State<MapFilterDetailScreen> {
                   Expanded(
                     child: GestureDetector(
                       onTap: () {
-                        mapBloc.currentFilterModel.paybackType = "free";
-                        mapBloc.markerWorkModeBloc.pickEvent(MODE.FREE);
+                        mapBloc.markerWorkModeCubit.pickEvent(MODE.FREE);
                       },
                       child: Container(
-                        color: state.data == MODE.FREE ? kColorGreyLight : Color(0xFFFFFFFF),
+                        color: state == MODE.FREE ? kColorGreyLight : Color(0xFFFFFFFF),
                         //alignment: Alignment.center,
                         padding: EdgeInsets.zero,
                         child: Align(
@@ -263,7 +263,7 @@ class _MapFilterDetailScreenState extends State<MapFilterDetailScreen> {
                           child: AutoSizeText("Бесплатный приём",
                               overflow: TextOverflow.visible,
                               textAlign: TextAlign.center,
-                              style: TextStyle(color: state.data == MODE.FREE ? Color(0xFFFFFFFF) : kColorGreyLight)),
+                              style: TextStyle(color: state == MODE.FREE ? Color(0xFFFFFFFF) : kColorGreyLight)),
                         ),
                       ),
                     ),
@@ -274,7 +274,7 @@ class _MapFilterDetailScreenState extends State<MapFilterDetailScreen> {
                   ),
                   /*Expanded(
                     child: GestureDetector(
-                      onTap: () => markerWorkModeBloc.pickEvent(MODE.ROUND),
+                      onTap: () => MarkerWorkModeCubit.pickEvent(MODE.ROUND),
                       child: Container(
                         color: snapshot.data == MODE.ROUND
                             ? Color(0xFF62C848)
@@ -296,16 +296,15 @@ class _MapFilterDetailScreenState extends State<MapFilterDetailScreen> {
                   Expanded(
                     child: GestureDetector(
                       onTap: () {
-                        mapBloc.currentFilterModel.paybackType = "partner";
-                        mapBloc.markerWorkModeBloc.pickEvent(MODE.PARTNERS);
+                        mapBloc.markerWorkModeCubit.pickEvent(MODE.PARTNERS);
                       },
                       child: Container(
-                        color: state.data == MODE.PARTNERS ? kColorGreyLight : Color(0xFFFFFFFF),
+                        color: state == MODE.PARTNERS ? kColorGreyLight : Color(0xFFFFFFFF),
                         alignment: Alignment.center,
                         child: AutoSizeText("Партнёры",
                             softWrap: true,
                             textAlign: TextAlign.center,
-                            style: TextStyle(color: state.data == MODE.PARTNERS ? Color(0xFFFFFFFF) : kColorGreyLight)),
+                            style: TextStyle(color: state == MODE.PARTNERS ? Color(0xFFFFFFFF) : kColorGreyLight)),
                       ),
                     ),
                   )
@@ -315,10 +314,10 @@ class _MapFilterDetailScreenState extends State<MapFilterDetailScreen> {
   }
 
   _garbCollectTypeWidget() {
-    return StreamBuilder(
-      stream: mapBloc.garbageCollBloc.stream,
+    return BlocBuilder<GarbageCollectionTypeCubit, GCOLLTYPE>(
+      bloc: mapBloc.garbageCollBloc,
       //initialData: garbageCollBloc.defaultItem,
-      builder: (ctx, AsyncSnapshot<GCOLLTYPE> snapshot) {
+      builder: (ctx, GCOLLTYPE state) {
         return Container(
           height: 40,
           decoration: BoxDecoration(borderRadius: BorderRadius.circular(3), border: Border.all(color: kColorGreyLight, width: 1.5)),
@@ -328,19 +327,19 @@ class _MapFilterDetailScreenState extends State<MapFilterDetailScreen> {
               Expanded(
                 child: GestureDetector(
                   onTap: () {
-                    mapBloc.currentFilterModel.recType = "recycle";
                     mapBloc.garbageCollBloc.pickEvent(GCOLLTYPE.RECYCLING);
                   },
                   child: Container(
-                      color: snapshot.data == GCOLLTYPE.RECYCLING ? kColorGreyLight : Color(0xFFFFFFFF),
-                      padding: EdgeInsets.zero,
-                      alignment: Alignment.center,
-                      child: Text(
-                        "Переработка",
-                        style: TextStyle(
-                          color: snapshot.data == GCOLLTYPE.RECYCLING ? Color(0xFFFFFFFF) : kColorGreyLight,
-                        ),
-                      )),
+                    color: state == GCOLLTYPE.RECYCLING ? kColorGreyLight : Color(0xFFFFFFFF),
+                    padding: EdgeInsets.zero,
+                    alignment: Alignment.center,
+                    child: Text(
+                      "Переработка",
+                      style: TextStyle(
+                        color: state == GCOLLTYPE.RECYCLING ? Color(0xFFFFFFFF) : kColorGreyLight,
+                      ),
+                    ),
+                  ),
                 ),
               ),
               VerticalDivider(
@@ -350,17 +349,16 @@ class _MapFilterDetailScreenState extends State<MapFilterDetailScreen> {
               Expanded(
                 child: GestureDetector(
                   onTap: () {
-                    mapBloc.currentFilterModel.recType = "utilisation";
                     mapBloc.garbageCollBloc.pickEvent(GCOLLTYPE.UTILISATION);
                   },
                   child: Container(
-                      color: snapshot.data == GCOLLTYPE.UTILISATION ? kColorGreyLight : Color(0xFFFFFFFF),
+                      color: state == GCOLLTYPE.UTILISATION ? kColorGreyLight : Color(0xFFFFFFFF),
                       padding: EdgeInsets.zero,
                       alignment: Alignment.center,
                       child: Text(
                         "Утилизация",
                         style: TextStyle(
-                          color: snapshot.data == GCOLLTYPE.UTILISATION ? Color(0xFFFFFFFF) : kColorGreyLight,
+                          color: state == GCOLLTYPE.UTILISATION ? Color(0xFFFFFFFF) : kColorGreyLight,
                         ),
                       )),
                 ),
@@ -372,17 +370,16 @@ class _MapFilterDetailScreenState extends State<MapFilterDetailScreen> {
               Expanded(
                 child: GestureDetector(
                   onTap: () {
-                    mapBloc.currentFilterModel.recType = "charity";
                     mapBloc.garbageCollBloc.pickEvent(GCOLLTYPE.BENEFIT);
                   },
                   child: Container(
-                      color: snapshot.data == GCOLLTYPE.BENEFIT ? kColorGreyLight : Color(0xFFFFFFFF),
+                      color: state == GCOLLTYPE.BENEFIT ? kColorGreyLight : Color(0xFFFFFFFF),
                       padding: EdgeInsets.zero,
                       alignment: Alignment.center,
                       child: Text(
                         "Благо",
                         style: TextStyle(
-                          color: snapshot.data == GCOLLTYPE.BENEFIT ? Color(0xFFFFFFFF) : kColorGreyLight,
+                          color: state == GCOLLTYPE.BENEFIT ? Color(0xFFFFFFFF) : kColorGreyLight,
                         ),
                       )),
                 ),

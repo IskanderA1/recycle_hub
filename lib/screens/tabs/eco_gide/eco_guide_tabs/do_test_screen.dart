@@ -173,7 +173,6 @@ class EcoTestContinueButton extends StatelessWidget {
             borderRadius: BorderRadius.circular(kBorderRadius),
             color: Color(0xFF249507),
           ),
-          padding: EdgeInsets.all(15),
           child: Center(
             child: Text(
               btnText,

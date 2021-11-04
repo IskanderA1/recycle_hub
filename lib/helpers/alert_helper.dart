@@ -55,8 +55,7 @@ class AlertHelper {
     );
   }
 
-  static showInfoAlert(BuildContext context, String title, String message,
-      {Function onClick, String okButtonTitle = "OK"}) {
+  static showInfoAlert(BuildContext context, String title, String message, {Function onClick, String okButtonTitle = "OK"}) {
     showDialog<void>(
       context: context,
       barrierDismissible: false, // user must tap button!
@@ -81,8 +80,7 @@ class AlertHelper {
   }
 
   static showWelcomeInfo(BuildContext context, {String okButtonTitle = "OK"}) {
-    const partner =
-        "Зеленые пункты приема дают возможность начисления ЭкоКоинов";
+    const partner = "Зеленые пункты приема дают возможность начисления ЭкоКоинов";
     const notPartner = "Оранжевые не являются партнерами";
     const title = "Информация о пунктеприёма";
     showDialog<void>(
@@ -171,10 +169,7 @@ class AlertHelper {
                       children: [
                         Text(
                           "Ок",
-                          style: TextStyle(
-                              color: kColorWhite,
-                              fontFamily: 'GilroyMedium',
-                              fontSize: 16),
+                          style: TextStyle(color: kColorWhite, fontFamily: 'GilroyMedium', fontSize: 16),
                         ),
                       ],
                     ),
@@ -265,37 +260,32 @@ class AlertHelper {
                     ),
                   ],
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 16),
-                  child: CommonButton(
-                    height: 50,
-                    ontap: () {
-                      Navigator.pop(context);
-                    },
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          "Ок",
-                          style: TextStyle(
-                              color: kColorWhite,
-                              fontFamily: 'GilroyMedium',
-                              fontSize: 16),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
               ],
             ),
           ),
           actions: <Widget>[
-            /* TextButton(
-              child: Text(okButtonTitle),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ), */
+            Padding(
+              padding: const EdgeInsets.all(16),
+              child: CommonButton(
+                height: 50,
+                ontap: () {
+                  Navigator.pop(context);
+                },
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      "Ок",
+                      style: TextStyle(
+                        color: kColorWhite,
+                        fontFamily: 'GilroyMedium',
+                        fontSize: 16,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
           ],
         );
       },

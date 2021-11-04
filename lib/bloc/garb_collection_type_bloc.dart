@@ -1,23 +1,16 @@
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:rxdart/rxdart.dart';
 
 enum GCOLLTYPE { RECYCLING, UTILISATION, BENEFIT, unknown }
 
-class GarbageCollectionTypeBloc {
-  BehaviorSubject<GCOLLTYPE> _behaviorSubject = BehaviorSubject<GCOLLTYPE>();
-
-  //GCOLLTYPE defaultItem = GCOLLTYPE.RECYCLING;
-
-  Stream<GCOLLTYPE> get stream => _behaviorSubject.stream;
+class GarbageCollectionTypeCubit extends Cubit<GCOLLTYPE> {
+  GarbageCollectionTypeCubit() : super(GCOLLTYPE.unknown);
 
   pickEvent(GCOLLTYPE type) {
-    if (_behaviorSubject.hasValue &&  _behaviorSubject.value == type) {
-      _behaviorSubject.sink.add(GCOLLTYPE.unknown);
+    if (state == type) {
+      emit(GCOLLTYPE.unknown);
     } else {
-      _behaviorSubject.sink.add(type);
+      emit(type);
     }
-  }
-
-  close() {
-    _behaviorSubject.close();
   }
 }

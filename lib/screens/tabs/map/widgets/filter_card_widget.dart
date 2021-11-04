@@ -7,7 +7,7 @@ import 'package:recycle_hub/style/theme.dart';
 import 'package:recycle_hub/custom_icons.dart';
 import 'dialog_container.dart';
 
-class FilterCardWidget extends StatefulWidget {
+class FilterCardWidget extends StatelessWidget {
   final FilterType acceptType;
   final Function(FilterType type) onpressed;
   final Function(FilterType type) onUp;
@@ -26,56 +26,30 @@ class FilterCardWidget extends StatefulWidget {
   final double size;
 
   @override
-  FilterCardWidgetState createState() => FilterCardWidgetState();
-}
-
-class FilterCardWidgetState extends State<FilterCardWidget> {
-
-  bool isSelected;
-  
-  @override
-  void initState() {
-    super.initState();
-    isSelected = widget.isSelected;
-  }
-
-  @override
-  void didUpdateWidget(covariant FilterCardWidget oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if(widget.isSelected != oldWidget.isSelected){
-      setState(() {
-        isSelected = widget.isSelected;
-      });
-    }
-  }
-
-  @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        if (widget.tapable) {
+        if (tapable) {
           if (isSelected) {
-            widget.onUp(widget.acceptType);
-            setState(() {
-              isSelected = false;
-            });
+            onUp(acceptType);
           } else {
-            pressFunc();
+            onpressed(acceptType);
           }
         }
       },
       child: Container(
-          height: 60,
-          width: 100,
-          margin: EdgeInsets.all(10),
-          decoration: BoxDecoration(
-              border: Border.all(
-                color: isSelected ? kColorGreen : Color(0xFFF2F2F2),
-                width: 1,
-              ),
-              color: Color(0xFFF2F2F2),
-              borderRadius: BorderRadius.circular(kBorderRadius)),
-          child: Stack(children: [
+        height: 60,
+        width: 100,
+        margin: EdgeInsets.all(10),
+        decoration: BoxDecoration(
+            border: Border.all(
+              color: isSelected ? kColorGreen : Color(0xFFF2F2F2),
+              width: 1,
+            ),
+            color: Color(0xFFF2F2F2),
+            borderRadius: BorderRadius.circular(kBorderRadius)),
+        child: Stack(
+          children: [
             Align(
               alignment: Alignment.topRight,
               child: GestureDetector(
@@ -83,7 +57,7 @@ class FilterCardWidgetState extends State<FilterCardWidget> {
                   showDialog(
                       context: context,
                       builder: (context) {
-                        return DialogContainer(acceptType: widget.acceptType);
+                        return DialogContainer(acceptType: acceptType);
                       });
                 },
                 child: Padding(
@@ -105,31 +79,23 @@ class FilterCardWidgetState extends State<FilterCardWidget> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Icon(
-                    getIconData(widget.acceptType.varName),
-                    size: widget.size / 6,
+                    getIconData(acceptType.varName),
+                    size: size / 6,
                     color: isSelected ? kColorGreen : Color(0xFF616161),
                   ),
                   SizedBox(
                     height: 5,
                   ),
                   AutoSizeText(
-                    widget.acceptType.name,
-                    style: TextStyle(
-                        color: isSelected
-                            ? kColorGreen
-                            : Color(0xFF616161)),
+                    acceptType.name,
+                    style: TextStyle(color: isSelected ? kColorGreen : Color(0xFF616161)),
                   )
                 ],
               ),
             ),
-          ])),
+          ],
+        ),
+      ),
     );
-  }
-
-  void pressFunc() {
-    widget.onpressed(widget.acceptType);
-    setState(() {
-      isSelected = true;
-    });
   }
 }

@@ -1,23 +1,16 @@
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:rxdart/rxdart.dart';
 
 enum MODE { PAID, FREE, PARTNERS, unknown }
 
-class MarkerWorkModeBloc {
-  BehaviorSubject<MODE> _behaviorSubject = BehaviorSubject<MODE>();
-
-  //MODE defaultItem = MODE.PAID;
-
-  Stream<MODE> get stream => _behaviorSubject.stream;
+class MarkerWorkModeCubit extends Cubit<MODE> {
+  MarkerWorkModeCubit() : super(MODE.unknown);
 
   pickEvent(MODE type) {
-    if (_behaviorSubject.hasValue &&  _behaviorSubject.value == type) {
-      _behaviorSubject.sink.add(MODE.unknown);
+    if (state == type) {
+      emit(MODE.unknown);
     } else {
-      _behaviorSubject.sink.add(type);
+      emit(type);
     }
-  }
-
-  close() {
-    _behaviorSubject.close();
   }
 }
