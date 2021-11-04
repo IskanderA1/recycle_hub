@@ -29,10 +29,42 @@ class AlertHelper {
           fontWeight: FontWeight.w500,
         ),
       ),
-      duration: Duration(milliseconds: 2500),
+      duration: Duration(milliseconds: 1500),
     );
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
-    Future.delayed(Duration(milliseconds: 2500), () {
+    Future.delayed(Duration(milliseconds: 1500), () {
+      isShowing = false;
+    });
+  }
+   static void showSuccesMessage({BuildContext context, String message, Color backColor = kColorGreen}) {
+    if(isShowing){
+      return;
+    }
+    isShowing = true;
+    var snackBar = SnackBar(
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(
+        Radius.circular(kBorderRadius),
+      )),
+      backgroundColor: backColor,
+      elevation: 3.0,
+      margin: EdgeInsets.fromLTRB(30, 0, 30, 30),
+      behavior: SnackBarBehavior.floating,
+      content: Text(
+        message,
+        textAlign: TextAlign.center,
+        overflow: TextOverflow.visible,
+        style: TextStyle(
+          fontSize: 14,
+          fontFamily: 'Gillroy',
+          color: kColorWhite,
+          fontWeight: FontWeight.w500,
+        ),
+      ),
+      duration: Duration(milliseconds: 1500),
+    );
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    Future.delayed(Duration(milliseconds: 1500), () {
       isShowing = false;
     });
   }

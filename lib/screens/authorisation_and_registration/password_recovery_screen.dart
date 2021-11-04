@@ -39,52 +39,54 @@ class _PasswordRecoveryScreenState extends State<PasswordRecoveryScreen> {
                   onTap: () {
                     Navigator.of(context).pop();
                   },
-                  child: Icon(NavBarIcons.left),
+                  child: Icon(Icons.arrow_back, size: 24),
                 ),
               ),
-              body: Container(
-                height: ScreenUtil().screenHeight - 85,
-                width: ScreenUtil().screenWidth,
-                color: Color(0xFFF2F2F2),
-                child: Padding(
-                  padding: EdgeInsets.fromLTRB(16, 16, 16, 0),
-                  child: Container(
-                    padding: EdgeInsets.fromLTRB(16, 40, 16, 16),
-                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(kBorderRadius), color: kColorWhite),
-                    child: Column(
-                      children: [
-                        Text(
-                          "Создать новый пароль",
-                          textAlign: TextAlign.center,
-                          /* style: TextStyle(
-                              color: kColorBlack,
-                              fontFamily: "Gilroy",
-                              fontSize: 21,
-                              fontWeight: FontWeight.w700), */
-                        ),
-                        Spacer(
-                          flex: 2,
-                        ),
-                        _firstPasswordTF(),
-                        Spacer(
-                          flex: 1,
-                        ),
-                        _secondPasswordTF(),
-                        Spacer(
-                          flex: 1,
-                        ),
-                        Text(
-                          _isSimilarPasswords,
-                          style: TextStyle(color: kColorRegGoogle, fontFamily: "GilroyMedium", fontSize: 14),
-                        ),
-                        Spacer(
-                          flex: 2,
-                        ),
-                        _createButton(),
-                        Spacer(
-                          flex: 4,
-                        )
-                      ],
+              body: SingleChildScrollView(
+                child: Container(
+                  height: ScreenUtil().screenHeight - 85,
+                  width: ScreenUtil().screenWidth,
+                  color: Color(0xFFF2F2F2),
+                  child: Padding(
+                    padding: EdgeInsets.fromLTRB(16, 16, 16, 0),
+                    child: Container(
+                      padding: EdgeInsets.fromLTRB(16, 40, 16, 16),
+                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(kBorderRadius), color: kColorWhite),
+                      child: Column(
+                        children: [
+                          Text(
+                            "Создать новый пароль",
+                            textAlign: TextAlign.center,
+                            /* style: TextStyle(
+                                color: kColorBlack,
+                                fontFamily: "Gilroy",
+                                fontSize: 21,
+                                fontWeight: FontWeight.w700), */
+                          ),
+                          Spacer(
+                            flex: 2,
+                          ),
+                          _firstPasswordTF(),
+                          Spacer(
+                            flex: 1,
+                          ),
+                          _secondPasswordTF(),
+                          Spacer(
+                            flex: 1,
+                          ),
+                          Text(
+                            _isSimilarPasswords,
+                            style: TextStyle(color: kColorRegGoogle, fontFamily: "GilroyMedium", fontSize: 14),
+                          ),
+                          Spacer(
+                            flex: 2,
+                          ),
+                          _createButton(),
+                          Spacer(
+                            flex: 4,
+                          )
+                        ],
+                      ),
                     ),
                   ),
                 ),
@@ -102,7 +104,7 @@ class _PasswordRecoveryScreenState extends State<PasswordRecoveryScreen> {
           Align(
             alignment: Alignment.centerLeft,
             child: Text(
-              'Пароль',
+              'Новый пароль',
               style: TextStyle(fontSize: 14, color: Color(0xFF8D8D8D)),
             ),
           ),
@@ -147,7 +149,7 @@ class _PasswordRecoveryScreenState extends State<PasswordRecoveryScreen> {
           Align(
             alignment: Alignment.centerLeft,
             child: Text(
-              'Пароль',
+              'Подтвердите пароль',
               style: TextStyle(fontSize: 14, color: Color(0xFF8D8D8D)),
             ),
           ),

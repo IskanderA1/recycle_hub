@@ -55,7 +55,7 @@ class _MapFilterDetailScreenState extends State<MapFilterDetailScreen> {
             centerTitle: true,
             leading: GestureDetector(
               onTap: () {
-                mapBloc.add(MapEventFilter(filter: mapBloc.currentFilterModel));
+                // mapBloc.add(MapEventFilter(filter: mapBloc.currentFilterModel));
                 Navigator.pop(context);
               },
               child: Icon(

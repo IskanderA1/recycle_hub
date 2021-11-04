@@ -4,9 +4,12 @@ import 'package:flutter_svg_provider/flutter_svg_provider.dart';
 import 'package:recycle_hub/style/theme.dart';
 import 'second_custom_paint.dart';
 
+
+
 class Page2 extends StatelessWidget {
   static const _text =
       "Мы научимся правильной сортировке бытовых отходов и поможем нашей планете стать чище. Для этого в приложении мы разработали ЭкоГид, который поможет во всем разобраться";
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -21,11 +24,11 @@ class Page2 extends StatelessWidget {
           child: Image(
             width: ScreenUtil().screenWidth * 0.8,
             height: ScreenUtil().screenHeight * 0.3,
-            //color: Color(0xFFDBCCB6),
-            image: Svg('assets/icons/onboarding_2/People.svg'),
+            image: AssetImage('assets/icons/onboarding_2/People.png'),
+            // image: Svg('assets/icons/onboarding_2/People.svg'),
           ),
         ),
-        Spacer(flex: 2),
+        Spacer(flex: 1),
         Text(
           "Вместе",
           style: TextStyle(
@@ -34,7 +37,7 @@ class Page2 extends StatelessWidget {
               fontFamily: "Gilroy",
               fontWeight: FontWeight.w700),
         ),
-        Spacer(),
+        Spacer(flex: 1),
         Padding(
           padding: EdgeInsets.symmetric(horizontal: 20),
           child: Text(

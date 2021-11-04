@@ -130,15 +130,15 @@ class _CustomDrawerState extends State<CustomDrawer> {
                 size: 25,
               ),
             ),
-            _CommonDrawerCell(
-              onTap: () {},
-              title: "Как пользоваться",
-              icon: Icon(
-                svgIcons[3],
-                color: kColorGreyDark,
-                size: 25,
-              ),
-            ),
+            // _CommonDrawerCell(
+            //   onTap: () {},
+            //   title: "Как пользоваться",
+            //   icon: Icon(
+            //     svgIcons[3],
+            //     color: kColorGreyDark,
+            //     size: 25,
+            //   ),
+            // ),
             _CommonDrawerCell(
               onTap: () {
                 Navigator.push(

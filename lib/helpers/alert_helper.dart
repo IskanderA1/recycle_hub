@@ -100,6 +100,7 @@ class AlertHelper {
               borderRadius: BorderRadius.circular(kBorderRadius),
             ),
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
                   title,
@@ -110,49 +111,53 @@ class AlertHelper {
                     fontWeight: FontWeight.w700,
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 16),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      BallGreen(),
-                      Expanded(
-                        child: Padding(
-                          padding: EdgeInsets.only(left: 16),
-                          child: Text(
-                            partner,
-                            style: TextStyle(
-                              fontFamily: "Gilroy",
-                              fontSize: 18,
+                Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(top: 16),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          BallGreen(),
+                          Expanded(
+                            child: Padding(
+                              padding: EdgeInsets.only(left: 16),
+                              child: Text(
+                                partner,
+                                style: TextStyle(
+                                  fontFamily: "Gilroy",
+                                  fontSize: 18,
+                                ),
+                              ),
                             ),
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 8),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      BallGreen(
-                        color: kColorPink,
+                          )
+                        ],
                       ),
-                      Expanded(
-                        child: Padding(
-                          padding: EdgeInsets.only(left: 14),
-                          child: Text(
-                            notPartner,
-                            style: TextStyle(
-                              fontFamily: "Gilroy",
-                              fontSize: 18,
-                            ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 8),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          BallGreen(
+                            color: kColorPink,
                           ),
-                        ),
-                      )
-                    ],
-                  ),
+                          Expanded(
+                            child: Padding(
+                              padding: EdgeInsets.only(left: 14),
+                              child: Text(
+                                notPartner,
+                                style: TextStyle(
+                                  fontFamily: "Gilroy",
+                                  fontSize: 18,
+                                ),
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
                 Padding(
                   padding: const EdgeInsets.only(top: 16),
@@ -178,14 +183,7 @@ class AlertHelper {
               ],
             ),
           ),
-          actions: <Widget>[
-            /* TextButton(
-              child: Text(okButtonTitle),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ), */
-          ],
+          actions: <Widget>[],
         );
       },
     );
@@ -207,6 +205,7 @@ class AlertHelper {
               borderRadius: BorderRadius.circular(kBorderRadius),
             ),
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
                   "Информация о балансе",
@@ -217,48 +216,54 @@ class AlertHelper {
                     fontWeight: FontWeight.w700,
                   ),
                 ),
-                Container(
-                  height: 170,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(kBorderRadius),)),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Row(
+                Column(
+                  children: [
+                    Container(
+                      height: 170,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.all(
+                        Radius.circular(kBorderRadius),
+                      )),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          BallGreen(),
-                          SizedBox(
-                            width: 32,
+                          Row(
+                            children: [
+                              BallGreen(),
+                              SizedBox(
+                                width: 32,
+                              ),
+                              Expanded(
+                                child: Text(
+                                  'Зеленым цветом выделена информация о балансе разблокированных экокоинов.',
+                                  overflow: TextOverflow.visible,
+                                ),
+                              )
+                            ],
                           ),
-                          Expanded(
-                            child: Text(
-                              'Зеленым цветом выделена информация о балансе разблокированных экокоинов.',
-                              overflow: TextOverflow.visible,
+                          Padding(
+                            padding: const EdgeInsets.only(top: 16),
+                            child: Row(
+                              children: [
+                                BallGreen(
+                                  color: kColorRed,
+                                ),
+                                SizedBox(
+                                  width: 32,
+                                ),
+                                Expanded(
+                                  child: Text(
+                                    'Красным цветом выделена информация о балансе заблокированных экокоинов.',
+                                    overflow: TextOverflow.visible,
+                                  ),
+                                )
+                              ],
                             ),
                           )
                         ],
                       ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 16),
-                        child: Row(
-                          children: [
-                            BallGreen(
-                              color: kColorRed,
-                            ),
-                            SizedBox(
-                              width: 32,
-                            ),
-                            Expanded(
-                              child: Text(
-                                'Красным цветом выделена информация о балансе заблокированных экокоинов.',
-                                overflow: TextOverflow.visible,
-                              ),
-                            )
-                          ],
-                        ),
-                      )
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
                 Padding(
                   padding: const EdgeInsets.only(top: 16),

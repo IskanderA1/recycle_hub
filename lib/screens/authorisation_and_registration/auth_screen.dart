@@ -417,7 +417,7 @@ class _AuthScreenState extends State<AuthScreen> {
                     width: 10,
                   ),
                   Text(
-                    "ВКОНТАКТЕ",
+                    "Вконтакте",
                     style: TextStyle(color: kColorRegVK, fontSize: 13, fontFamily: 'Gilroy', fontWeight: FontWeight.w700),
                   )
                 ],

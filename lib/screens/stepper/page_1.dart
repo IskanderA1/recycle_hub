@@ -14,18 +14,17 @@ class Page1 extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Spacer(
-          flex: 6,
+          flex: 7,
         ),
         Container(
           padding: EdgeInsets.symmetric(horizontal: 80),
           child: Image(
-            width: ScreenUtil().screenWidth * 0.8,
+            width: ScreenUtil().screenWidth * 0.9,
             height: ScreenUtil().screenHeight * 0.3,
-            //color: Color(0xFFDBCCB6),
             image: Svg('assets/icons/onboarding_1/People.svg'),
           ),
         ),
-        Spacer(flex: 2),
+        Spacer(flex: 1),
         Text(
           "Привет!",
           style: TextStyle(
@@ -34,7 +33,7 @@ class Page1 extends StatelessWidget {
               fontFamily: "Gilroy",
               fontWeight: FontWeight.w700),
         ),
-        Spacer(),
+        Spacer(flex: 1),
         Padding(
           padding: EdgeInsets.symmetric(horizontal: 20),
           child: Text(

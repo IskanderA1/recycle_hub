@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:recycle_hub/elements/common_cell.dart';
+import 'package:recycle_hub/helpers/network_helper.dart';
 import 'package:recycle_hub/screens/tabs/map/widgets/loader_widget.dart';
 import 'about_developers_screen.dart';
 import 'package:package_info/package_info.dart';
@@ -56,21 +57,20 @@ class _AboutAppScreenState extends State<AboutAppScreen> {
                         CommonCell(
                           text: 'Условия и положения',
                           onTap: () {
-                            /* Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => BePartnerScreen(),
-                          ),
-                        ); */
+                            NetworkHelper.openUrl('https://recyclehub.ru/privacy/#/conditions/', context);
                           },
                         ),
                         CommonCell(
                           text: 'Политика конфеденциальности',
-                          onTap: () {},
+                          onTap: () {
+                            NetworkHelper.openUrl('https://recyclehub.ru/privacy/#/', context);
+                          },
                         ),
                         CommonCell(
                           text: 'Условия реферальной программы',
-                          onTap: () {},
+                          onTap: () {
+                            NetworkHelper.openUrl('https://recyclehub.ru/privacy/#/conditions/', context);
+                          },
                         ),
                         CommonCell(
                           text: 'О разработчиках',

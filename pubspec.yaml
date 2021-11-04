@@ -75,10 +75,20 @@ flutter:
     - assets/fonts/
     - assets/icons/
     - assets/icons/onboarding_1/People.svg
+
+
     - assets/icons/onboarding_1/Clouds.svg
     - assets/icons/onboarding_2/People.svg
+    - assets/icons/onboarding_2/People.png
+
     - assets/icons/onboarding_3/People.svg
     - assets/icons/onboarding_4/People.svg
+    - assets/icons/socials/vk.svg
+    - assets/icons/socials/fb.svg
+    - assets/icons/socials/in.svg
+    - assets/icons/socials/telegram.png
+
+
     - assets/svg/background.svg
     - assets/svg/logo_original.svg
     - assets/svg/logo_original.png
