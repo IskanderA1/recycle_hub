@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
+import 'package:recycle_hub/bloc/auth/auth_bloc.dart';
+import 'package:recycle_hub/screens/authorisation_and_registration/auth_screen.dart';
 import 'package:recycle_hub/screens/tabs/map/widgets/reoport_to_error_marker.dart';
 import 'package:recycle_hub/style/theme.dart';
 
@@ -13,13 +16,23 @@ class ReportButtonWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextButton(
       onPressed: () {
-        Navigator.of(context, rootNavigator: true).push(
+        if (GetIt.I.get<AuthBloc>().state is AuthStateLogedIn) {
+          Navigator.of(context, rootNavigator: true).push(
+            MaterialPageRoute(
+              builder: (context) {
+                return ReportToErrorMarkerScreen(markerId);
+              },
+            ),
+          );
+        }else{
+          Navigator.of(context, rootNavigator: true).push(
           MaterialPageRoute(
             builder: (context) {
-              return ReportToErrorMarkerScreen(markerId);
+              return AuthScreen();
             },
           ),
         );
+        }
       },
       child: Text(
         'Сообщить об ошибке',
