@@ -15,6 +15,7 @@ import 'package:recycle_hub/icons/user_profile_icons_icons.dart';
 import 'package:recycle_hub/model/user_model.dart';
 import 'package:recycle_hub/screens/authorisation_and_registration/auth_screen.dart';
 import 'package:recycle_hub/style/theme.dart';
+import 'package:recycle_hub/helpers/messager_helper.dart' as message;
 
 List<IconData> svgIcons = [
   UserProfileIcons.user,
@@ -99,10 +100,23 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   child: InkWell(
                     onTap: () {
                       if (GetIt.I.get<AuthBloc>().state.userModel.userType ==
-                          UserTypes.admin)
-                        GetIt.I
-                            .get<ProfileMenuCubit>()
-                            .moveTo(ProfileMenuStates.POINT_PROFILE);
+                              UserTypes.admin &&
+                          GetIt.I
+                                  .get<AuthBloc>()
+                                  .state
+                                  .userModel
+                                  .attachedRecPointId ==
+                              null) {
+                        message.AlertHelper.showMessage(
+                            message: "Не прикреплен пункт приема",
+                            context: context);
+                      } else {
+                        if (GetIt.I.get<AuthBloc>().state.userModel.userType ==
+                            UserTypes.admin)
+                          GetIt.I
+                              .get<ProfileMenuCubit>()
+                              .moveTo(ProfileMenuStates.POINT_PROFILE);
+                      }
                     },
                     child: Icon(
                       NavBarIcons.app_bar_suffix,

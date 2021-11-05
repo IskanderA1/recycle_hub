@@ -230,7 +230,7 @@ class ProductCell extends StatelessWidget {
                     style: const TextStyle(color: kColorBlack, fontSize: 14, fontWeight: FontWeight.w400, fontFamily: 'Gilroy'),
                   ),
                   Text(
-                    "${product.count} ЭкоКоинов",
+                    "${product.price} ЭкоКоинов",
                     style: const TextStyle(color: kColorBlack, fontSize: 14, fontWeight: FontWeight.bold, fontFamily: 'Gilroy'),
                   ),
                 ],
