@@ -22,7 +22,6 @@ class _AboutAppScreenState extends State<AboutAppScreen> {
 
   @override
   Widget build(BuildContext context) {
-    print('helloabdu');
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
