@@ -1,14 +1,12 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
-import 'package:mobx/mobx.dart';
 import 'package:recycle_hub/api/services/points_service.dart';
 import 'package:recycle_hub/bloc/auth/auth_bloc.dart';
 import 'package:recycle_hub/bloc/cubit/profile_menu_cubit.dart';
 import 'package:recycle_hub/bloc/filter_type_cubit.dart';
 import 'package:recycle_hub/elements/common_text_button.dart';
 import 'package:recycle_hub/helpers/messager_helper.dart';
-import 'package:recycle_hub/icons/app_bar_icons_icons.dart';
 import 'package:recycle_hub/model/map_models.dart/accept_types.dart';
 import 'package:recycle_hub/model/map_models.dart/marker.dart';
 import 'package:recycle_hub/model/user_model.dart';
@@ -44,6 +42,10 @@ class _EditPointProfileScreenState extends State<EditPointProfileScreen> {
   @override
   void initState() {
     _user = GetIt.I.get<AuthBloc>().state.userModel;
+    print('user $_user');
+    print('user ${_user.userType}');
+    print('user ${_user.attachedRecPointId}');
+
     if (_user.userType == UserTypes.admin && _user.attachedRecPointId != null) {
       loadPoint();
     }
@@ -57,6 +59,7 @@ class _EditPointProfileScreenState extends State<EditPointProfileScreen> {
     });
 
     var point = await PointsService().getPoint(_user.attachedRecPointId);
+    print('point $point');
     if (point != null) {
       fillByPoint(point);
     }
@@ -76,7 +79,9 @@ class _EditPointProfileScreenState extends State<EditPointProfileScreen> {
     _ppPartnerPhone.text = point.contacts.first;
     _ppDescription.text = point.description;
     _recycleTypes = GetIt.I.get<FilterTypeCubit>().state;
-    _pointRecycleTypes = _recycleTypes.where((element) => point.acceptTypes.contains(element.id)).toList();
+    _pointRecycleTypes = _recycleTypes
+        .where((element) => point.acceptTypes.contains(element.id))
+        .toList();
     _isPayback = point.getBonus;
     try {
       _photos = point.images.map((e) => File.fromUri(Uri.parse(e))).toList();
@@ -92,12 +97,12 @@ class _EditPointProfileScreenState extends State<EditPointProfileScreen> {
     });
     try {
       CustMarker marker = _point.copyWith(
-        name: _ppName.text,
-        address: _ppAddress.text,
-        acceptTypes: _pointRecycleTypes.map((e) => e.id).toList(),
-        contacts: [_ppAdminPhone.text, _ppPartnerPhone.text],
-        description: _ppDescription.text,
-      );
+          name: _ppName?.text,
+          address: _ppAddress?.text,
+          acceptTypes: _pointRecycleTypes.map((e) => e.id).toList(),
+          contacts: [_ppAdminPhone?.text, _ppPartnerPhone?.text],
+          description: _ppDescription?.text,
+          );
       await PointsService().sendPointInfo(marker, _photos);
     } catch (e) {
       AlertHelper.showMessage(context: context, message: e.toString());
@@ -133,7 +138,10 @@ class _EditPointProfileScreenState extends State<EditPointProfileScreen> {
                 padding: EdgeInsets.fromLTRB(16, 16, 16, 0),
                 child: Container(
                   padding: EdgeInsets.all(16),
-                  decoration: BoxDecoration(color: kColorWhite, borderRadius: BorderRadius.vertical(top: Radius.circular(16))),
+                  decoration: BoxDecoration(
+                      color: kColorWhite,
+                      borderRadius:
+                          BorderRadius.vertical(top: Radius.circular(16))),
                   child: ListView(
                     controller: scrollController,
                     shrinkWrap: true,
@@ -150,7 +158,8 @@ class _EditPointProfileScreenState extends State<EditPointProfileScreen> {
                         labelText: 'Адрес пункта приема',
                         controller: _ppAddress,
                       ),
-                      Text('Выдает экокоины', style: Theme.of(context).textTheme.headline6),
+                      Text('Выдает экокоины',
+                          style: Theme.of(context).textTheme.headline6),
                       Padding(
                           padding: EdgeInsets.only(top: 16),
                           child: CheckBoxCell(
@@ -175,7 +184,8 @@ class _EditPointProfileScreenState extends State<EditPointProfileScreen> {
                           )),
                       Padding(
                         padding: const EdgeInsets.only(top: 8.0),
-                        child: Text('Принимают на переработку', style: Theme.of(context).textTheme.headline6),
+                        child: Text('Принимают на переработку',
+                            style: Theme.of(context).textTheme.headline6),
                       ),
                       Padding(
                         padding: EdgeInsets.only(top: 8),
@@ -187,11 +197,14 @@ class _EditPointProfileScreenState extends State<EditPointProfileScreen> {
                               return Padding(
                                 padding: const EdgeInsets.only(top: 8),
                                 child: CheckBoxCell(
-                                  isSelected: _pointRecycleTypes.contains(_recycleTypes[i]),
+                                  isSelected: _pointRecycleTypes
+                                      .contains(_recycleTypes[i]),
                                   text: _recycleTypes[i].name,
                                   onTap: () {
-                                    if (_pointRecycleTypes.contains(_recycleTypes[i])) {
-                                      _pointRecycleTypes.remove(_recycleTypes[i]);
+                                    if (_pointRecycleTypes
+                                        .contains(_recycleTypes[i])) {
+                                      _pointRecycleTypes
+                                          .remove(_recycleTypes[i]);
                                     } else {
                                       _pointRecycleTypes.add(_recycleTypes[i]);
                                     }
@@ -201,10 +214,10 @@ class _EditPointProfileScreenState extends State<EditPointProfileScreen> {
                               );
                             }),
                       ),
-                      SimpleTextField(
-                        labelText: 'E-mail администратора',
-                        controller: _ppEmail,
-                      ),
+                      // SimpleTextField(
+                      //   labelText: 'E-mail администратора',
+                      //   controller: _ppEmail,
+                      // ),
                       SimpleTextField(
                         labelText: 'Телефон администратора',
                         controller: _ppAdminPhone,
@@ -237,7 +250,8 @@ class _EditPointProfileScreenState extends State<EditPointProfileScreen> {
                             Expanded(
                               child: Text(
                                 'Ваш запрос будет отправлен модератору',
-                                style: TextStyle(fontSize: 14, fontFamily: 'GilroyMedium'),
+                                style: TextStyle(
+                                    fontSize: 14, fontFamily: 'GilroyMedium'),
                               ),
                             )
                           ],
@@ -247,6 +261,7 @@ class _EditPointProfileScreenState extends State<EditPointProfileScreen> {
                         padding: const EdgeInsets.only(bottom: 80, top: 16),
                         child: CommonTextButton(
                           text: 'Сохранить изменения',
+                          textColor: kColorWhite,
                           ontap: () {
                             savePoint();
                           },
