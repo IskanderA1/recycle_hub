@@ -4,17 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:intl/intl.dart';
 import 'package:recycle_hub/api/services/store_service.dart';
-import 'package:recycle_hub/api/services/user_service.dart';
 import 'package:recycle_hub/bloc/cubit/profile_menu_cubit.dart';
-import 'package:recycle_hub/bloc/store/store_bloc.dart';
 import 'package:recycle_hub/helpers/messager_helper.dart';
-import 'package:recycle_hub/icons/app_bar_icons_icons.dart';
 import 'package:recycle_hub/model/purchase.dart';
-import 'package:recycle_hub/screens/tabs/map/widgets/loader_widget.dart';
 import 'purchase_detail_screen.dart';
-import 'package:recycle_hub/bloc/profile_bloc/profile_bloc.dart';
 import 'package:recycle_hub/style/theme.dart';
-import '../../../model/transactions/user_transaction_model.dart';
 
 class MyPurchasesScreen extends StatefulWidget {
   @override
@@ -163,7 +157,7 @@ class PurchaseCell extends StatelessWidget {
                       Spacer(),
                       Flexible(
                         child: AutoSizeText(
-                          purchase.daysRest < 0 ? 'Просрочено ' + dateFormat.format(purchase.dateTo) : "${purchase.daysRest}",
+                          purchase.daysRest < 0 ? 'Просрочено ' + dateFormat.format(purchase.dateTo) : "${purchase.daysRest} дней",
                           maxLines: 1,
                           textAlign: TextAlign.end,
                           overflow: TextOverflow.visible,
@@ -200,7 +194,7 @@ class PurchaseCell extends StatelessWidget {
             if (purchase.image != null && purchase.image.isNotEmpty)
               Expanded(
                 child: Image.network(
-                  'https://cdn2.zp.ru/job/attaches/2020/07/be/76/be764d2d5dd2a062333610f7ba880d56.jpg',
+                  purchase.image,
                   height: 80,
                   width: 80,
                 ),

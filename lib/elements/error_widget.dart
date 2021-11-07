@@ -13,7 +13,22 @@ class CustomErrorWidget extends StatelessWidget {
         width: double.infinity,
         color: kColorWhite,
         child: Center(
-          child: Text(message ?? "Ошибка"),
+          child: Padding(
+            padding: const EdgeInsets.all(32.0),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Center(
+                    child: Container(
+                      child: Text(message ?? "Ошибка",
+                      textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
         ),
       ),
     );

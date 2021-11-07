@@ -4,18 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:recycle_hub/api/request/api_error.dart';
 import 'package:recycle_hub/api/services/store_service.dart';
 
-import 'package:recycle_hub/bloc/profile_bloc/profile_bloc.dart';
 import 'package:recycle_hub/bloc/profile_bloc/store_bloc.dart';
 import 'package:recycle_hub/bloc/store/store_bloc.dart';
 import 'package:recycle_hub/elements/error_widget.dart';
 import 'package:recycle_hub/helpers/messager_helper.dart';
-import 'package:recycle_hub/icons/app_bar_icons_icons.dart';
 import 'package:recycle_hub/model/product.dart';
 import 'package:recycle_hub/screens/tabs/map/widgets/loader_widget.dart';
-import 'package:recycle_hub/screens/tabs/profile/purchase_detail_screen.dart';
 import 'package:recycle_hub/style/theme.dart';
 
 class StoreScreen extends StatefulWidget {
@@ -40,7 +36,8 @@ class _StoreScreenState extends State<StoreScreen> {
     storeBloc.add(StoreEventInit());
     _storeSub = storeBloc.stream.listen((state) {
       if (state is StoreStateBought) {
-        AlertHelper.showInfoAlert(context, "Товар куплен", 'Товар добавлен в ваши покупки, Вы можете посмотреть свою покупку в раздале "Мои покупки"');
+        AlertHelper.showInfoAlert(context, "Товар куплен",
+            'Товар добавлен в ваши покупки, Вы можете посмотреть свою покупку в раздале "Мои покупки"');
       }
     });
     super.initState();
@@ -78,6 +75,11 @@ class _StoreScreenState extends State<StoreScreen> {
             if (state is StoreStateLoading) {
               return LoaderWidget();
             } else if (state is StoreStateError) {
+              if(state.message=='Больше нет монет'){
+                return CustomErrorWidget(
+                message: 'ُУ вас не достаточно ЭкоКоинов, чтобы приобрести этот купон',
+              );
+              }
               return CustomErrorWidget(
                 message: state.message,
               );
@@ -102,14 +104,17 @@ class _StoreScreenState extends State<StoreScreen> {
                             Expanded(
                               child: GestureDetector(
                                 onTap: () {
-                                  storeTabBarBloc.mapEventToState(StoreStates.SERVICES);
+                                  storeTabBarBloc
+                                      .mapEventToState(StoreStates.SERVICES);
                                   setState(() {
                                     _selected = 0;
                                   });
                                 },
                                 child: Container(
                                   decoration: BoxDecoration(
-                                    color: _selected == 0 ? kColorGreen : kColorWhite,
+                                    color: _selected == 0
+                                        ? kColorGreen
+                                        : kColorWhite,
                                     borderRadius: BorderRadius.only(
                                       topLeft: Radius.circular(4),
                                       bottomLeft: Radius.circular(4),
@@ -119,7 +124,9 @@ class _StoreScreenState extends State<StoreScreen> {
                                     child: Text(
                                       "Услуги",
                                       style: TextStyle(
-                                        color: _selected == 0 ? kColorWhite : kColorGreen,
+                                        color: _selected == 0
+                                            ? kColorWhite
+                                            : kColorGreen,
                                       ),
                                     ),
                                   ),
@@ -133,20 +140,27 @@ class _StoreScreenState extends State<StoreScreen> {
                             Expanded(
                               child: GestureDetector(
                                 onTap: () {
-                                  storeTabBarBloc.mapEventToState(StoreStates.TOEAT);
+                                  storeTabBarBloc
+                                      .mapEventToState(StoreStates.TOEAT);
                                   setState(() {
                                     _selected = 1;
                                   });
                                 },
                                 child: Container(
                                   decoration: BoxDecoration(
-                                      color: _selected == 1 ? kColorGreen : kColorWhite,
-                                      borderRadius: BorderRadius.only(topRight: Radius.circular(4), bottomRight: Radius.circular(4))),
+                                      color: _selected == 1
+                                          ? kColorGreen
+                                          : kColorWhite,
+                                      borderRadius: BorderRadius.only(
+                                          topRight: Radius.circular(4),
+                                          bottomRight: Radius.circular(4))),
                                   child: Center(
                                     child: Text(
                                       "Товары",
                                       style: TextStyle(
-                                        color: _selected == 1 ? kColorWhite : kColorGreen,
+                                        color: _selected == 1
+                                            ? kColorWhite
+                                            : kColorGreen,
                                       ),
                                     ),
                                   ),
@@ -164,7 +178,8 @@ class _StoreScreenState extends State<StoreScreen> {
                       child: StreamBuilder(
                         stream: storeTabBarBloc.subject,
                         initialData: storeTabBarBloc.defaultState,
-                        builder: (BuildContext context, AsyncSnapshot<StoreStates> snapshot) {
+                        builder: (BuildContext context,
+                            AsyncSnapshot<StoreStates> snapshot) {
                           if (snapshot.hasData) {
                             if (snapshot.data == StoreStates.SERVICES) {
                               var list = StoreService().products;
@@ -175,7 +190,8 @@ class _StoreScreenState extends State<StoreScreen> {
                                   return ProductCell(
                                     product: list[index],
                                     callBack: () {
-                                      storeBloc.add(StoreEventBuy(product: list[index]));
+                                      storeBloc.add(
+                                          StoreEventBuy(product: list[index]));
                                     },
                                   );
                                 },
@@ -207,13 +223,16 @@ class ProductCell extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(kBorderRadius)),
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(kBorderRadius)),
       child: Container(
-        decoration: BoxDecoration(color: kColorWhite, borderRadius: BorderRadius.all(Radius.circular(15))),
+        decoration: BoxDecoration(
+            color: kColorWhite,
+            borderRadius: BorderRadius.all(Radius.circular(15))),
         child: Padding(
           padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.end,
+            // mainAxisAlignment: MainAxisAlignment.end,
             children: [
               if (product.image != null && product.image.isNotEmpty)
                 Image.network(
@@ -221,19 +240,31 @@ class ProductCell extends StatelessWidget {
                   height: 100,
                   width: 100,
                 ),
-              if (product.image != null && product.image.isNotEmpty) Spacer(),
-              Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    product.name,
-                    style: const TextStyle(color: kColorBlack, fontSize: 14, fontWeight: FontWeight.w400, fontFamily: 'Gilroy'),
-                  ),
-                  Text(
-                    "${product.price} ЭкоКоинов",
-                    style: const TextStyle(color: kColorBlack, fontSize: 14, fontWeight: FontWeight.bold, fontFamily: 'Gilroy'),
-                  ),
-                ],
+              if (product.image != null && product.image.isNotEmpty)
+                Spacer(),
+              Flexible(
+                flex: 5,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      product.name,
+                      style: const TextStyle(
+                          color: kColorBlack,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w400,
+                          fontFamily: 'Gilroy'),
+                    ),
+                    Text(
+                      "${product.price} ЭкоКоинов",
+                      style: const TextStyle(
+                          color: kColorBlack,
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                          fontFamily: 'Gilroy'),
+                    ),
+                  ],
+                ),
               ),
               Spacer(),
               InkWell(
